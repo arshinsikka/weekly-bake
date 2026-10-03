@@ -1,0 +1,101 @@
+shop_id_or_name,district,item_name,flavour,format,price_sgd,price_confidence,launch_month,is_limited_time,source_type,source_url,source_date,is_seasonal
+Rise Bakehouse,Potong Pasir,Apple Cinnamon Hojicha Cake Slice,apple cinnamon hojicha,cake,10.50,exact,2026-09,yes,brand_website,https://risebakehouse.sg/,2026-09-05,no
+Rise Bakehouse,Potong Pasir,Apple Crumble Pie Teacake,apple crumble,cake,8.50,exact,2026-09,yes,brand_website,https://risebakehouse.sg/,2026-09-05,no
+Rise Bakehouse,Potong Pasir,Brown Butter Apple Pie Latte,brown butter apple pie,drink,8.50,exact,2026-09,yes,brand_website,https://risebakehouse.sg/,2026-09-05,no
+Rise Bakehouse,Potong Pasir,Honey Apple Cranberry Iced Tea,honey apple cranberry,drink,8.00,ambiguous,2026-09,yes,brand_website,https://risebakehouse.sg/,2026-09-05,no
+Plain Vanilla Bakery,Tiong Bahru,S'mores Cupcake,chocolate marshmallow graham cracker,cake,4.80,exact,2026-09,yes,brand_website,https://plainvanilla.com.sg/,2026-09-09,no
+Plain Vanilla Bakery,Tiong Bahru,Chocolate Chip Cookie Dough Cupcake,chocolate chip cookie dough,cake,4.80,exact,2026-09,yes,brand_website,https://plainvanilla.com.sg/,2026-09-09,no
+Beard Papa's,Downtown Core,Milo Dinosaur Cream Puff,milo chocolate malt,pastry,3.80,exact,2026-09,yes,media,https://lobang.guru.sg/,2026-09-02,no
+Beard Papa's,Downtown Core,Milo Pie Cream Puff,milo chocolate malt,pastry,4.00,exact,2026-09,yes,media,https://lobang.guru.sg/,2026-09-02,no
+Beard Papa's,Downtown Core,Milo Chocolate Langue de Chat,milo chocolate,pastry,4.20,exact,2026-09,yes,media,https://lobang.guru.sg/,2026-09-02,no
+Beard Papa's,Downtown Core,Chrysanthemum Osmanthus Cream Puff,chrysanthemum osmanthus,pastry,3.80,ambiguous,2026-09,yes,media,https://greatdeals.com.sg/,2026-09-15,no
+Starbucks,Orchard,Roasted Macadamia Oatmilk Iced Shaken Latte,roasted macadamia,drink,8.40,exact,2026-09,yes,media,https://littlebigreddot.com/,2026-09-19,no
+Starbucks,Orchard,Roasted Macadamia Cold Foam Iced Americano,roasted macadamia,drink,7.90,exact,2026-09,yes,media,https://littlebigreddot.com/,2026-09-19,no
+Starbucks,Orchard,Roasted Macadamia Oatmilk Frappuccino,roasted macadamia,drink,8.90,exact,2026-09,yes,media,https://littlebigreddot.com/,2026-09-19,no
+Starbucks,Orchard,Black Pepper Chicken Pie,black pepper chicken,savoury,7.20,ambiguous,2026-09,yes,media,https://littlebigreddot.com/,2026-09-19,no
+Starbucks,Orchard,Beef Rendang Shepherd's Pie,beef rendang,savoury,7.90,ambiguous,2026-09,yes,media,https://littlebigreddot.com/,2026-09-19,no
+Starbucks,Orchard,Taro Salted Egg Tart,taro salted egg,pastry,5.20,ambiguous,2026-09,yes,media,https://littlebigreddot.com/,2026-09-19,no
+Starbucks,Orchard,Milo Crunch Cake,milo chocolate,cake,7.90,ambiguous,2026-09,yes,media,https://littlebigreddot.com/,2026-09-19,no
+Starbucks,Orchard,Salted Caramel Speculoos Cheesecake,salted caramel speculoos,cake,8.20,ambiguous,2026-09,yes,media,https://littlebigreddot.com/,2026-09-19,no
+Cedele,Raffles Place,Lychee Rose Cake,lychee rose,cake,60.00,exact,2026-09,yes,brand_website,https://cedele.com/,2026-09-07,no
+Cedele,Raffles Place,Hidden Red Dragon Yuzu Marble Cheesecake,dragonfruit yuzu,cake,60.00,exact,2026-09,yes,brand_website,https://cedele.com/,2026-09-07,no
+Cedele,Raffles Place,Choc Banana Espresso Cake,chocolate banana espresso,cake,60.00,exact,2026-09,yes,brand_website,https://cedele.com/,2026-09-07,no
+Marymount Bakehouse,Upper Thomson,4 Cheese Asparagus Sourdough Pie,four cheese asparagus,savoury,18.90,exact,2026-09,no,media,https://timeout.com/singapore/,2026-09-08,no
+Marymount Bakehouse,Upper Thomson,Corn and Crab Chowder Levain Pie,sweet corn crab chowder,savoury,20.50,exact,2026-09,no,media,https://timeout.com/singapore/,2026-09-08,no
+Marymount Bakehouse,Upper Thomson,Beef Tartare on Bone Marrow,beef tartare bone marrow,savoury,30.00,exact,2026-09,no,media,https://timeout.com/singapore/,2026-09-08,no
+Marymount Bakehouse,Upper Thomson,Brown Butter Pasta with Seabass,brown butter seabass,savoury,28.00,exact,2026-09,no,media,https://timeout.com/singapore/,2026-09-08,no
+Cedric Grolet,Orchard,Raspberry Lime Mooncake,raspberry lime,pastry,26.00,exact,2026-09,yes,media,https://theurbanlist.com/,2026-09-02,yes
+Cedric Grolet,Orchard,Passion Fruit Coconut Mooncake,passion fruit coconut,pastry,26.00,exact,2026-09,yes,media,https://theurbanlist.com/,2026-09-02,yes
+Cedric Grolet,Orchard,Lemon Vanilla Mooncake,lemon vanilla,pastry,26.00,exact,2026-09,yes,media,https://theurbanlist.com/,2026-09-02,yes
+Cedric Grolet,Orchard,Cherry Matcha Mooncake,cherry matcha,pastry,26.00,exact,2026-09,yes,media,https://theurbanlist.com/,2026-09-02,yes
+Cedric Grolet,Orchard,Hazelnut Chocolate-Shell Mooncake,hazelnut chocolate praline,pastry,28.00,exact,2026-09,yes,media,https://theurbanlist.com/,2026-09-02,yes
+Tiong Bahru Bakery,Bukit Merah,Black Sesame Matcha Danish,black sesame matcha,pastry,7.50,exact,2026-09,no,media,https://lifestyleasia.com/,2026-09-12,no
+Tiong Bahru Bakery,Bukit Merah,Chocolate Banana Pain Suisse,chocolate banana,pastry,7.50,exact,2026-09,no,media,https://lifestyleasia.com/,2026-09-12,no
+Tiong Bahru Bakery,Bukit Merah,Kouign Amann Soft-Serve,caramelised pastry soft serve,other,5.50,exact,2026-09,no,media,https://lifestyleasia.com/,2026-09-12,no
+Tiong Bahru Bakery,Bukit Merah,Nori Furikake Scone,nori furikake seaweed,pastry,4.80,exact,2026-09,no,media,https://lifestyleasia.com/,2026-09-12,no
+La Levain,Jalan Besar,Pandan Kaya Toast with Eggs,pandan kaya,pastry,6.80,exact,2026-08,yes,brand_website,https://lalevain.com/,2026-08-01,no
+La Levain,Jalan Besar,Sourdough Kaya Toast with Eggs,kaya butter,pastry,7.50,exact,2026-08,yes,brand_website,https://lalevain.com/,2026-08-01,no
+La Levain,Jalan Besar,Pandan Chiffon Cake,pandan coconut,cake,8.50,exact,2026-08,yes,brand_website,https://lalevain.com/,2026-08-01,no
+La Levain,Jalan Besar,Ondeh Ondeh Cake,gula melaka pandan coconut,cake,9.80,exact,2026-08,yes,brand_website,https://lalevain.com/,2026-08-01,no
+La Levain,Jalan Besar,Pandan Mochi Taro Tart,pandan mochi taro,pastry,9.80,exact,2026-08,yes,brand_website,https://lalevain.com/,2026-08-01,no
+La Levain,Jalan Besar,Creamy Taro Latte,taro milk,drink,6.80,exact,2026-08,yes,brand_website,https://lalevain.com/,2026-08-01,no
+La Levain,Jalan Besar,Chocolate Lotus Pistachio Mooncake,chocolate pistachio,pastry,18.00,ambiguous,2026-08,yes,media,https://timeout.com/singapore/,2026-08-25,yes
+La Levain,Jalan Besar,Mixed Berry Raspberry Rose Mooncake,mixed berry raspberry rose,pastry,18.00,ambiguous,2026-08,yes,media,https://timeout.com/singapore/,2026-08-25,yes
+La Levain,Jalan Besar,Uji Matcha Valrhona Yuzu Mooncake,uji matcha yuzu chocolate,pastry,19.00,ambiguous,2026-08,yes,media,https://timeout.com/singapore/,2026-08-25,yes
+Cat & the Fiddle,Toa Payoh,Lychee Rose Baked Mooncake,lychee rose,pastry,18.00,ambiguous,2026-08,yes,brand_website,https://catandthefiddle.com/,2026-08-10,yes
+Cat & the Fiddle,Toa Payoh,Pistachio Mochi Baked Mooncake,pistachio mochi,pastry,19.50,ambiguous,2026-08,yes,brand_website,https://catandthefiddle.com/,2026-08-10,yes
+Cat & the Fiddle,Toa Payoh,Dark Chocolate Hazelnut Mooncake,dark chocolate hazelnut,pastry,18.50,ambiguous,2026-08,yes,brand_website,https://catandthefiddle.com/,2026-08-10,yes
+Cat & the Fiddle,Toa Payoh,MSW Durian Snowskin Mooncake,mao shan wang durian,pastry,21.50,ambiguous,2026-08,yes,brand_website,https://catandthefiddle.com/,2026-08-10,yes
+Tiong Bahru Bakery,Downtown Core,Satay White Chocolate Kouign Amann,satay white chocolate,pastry,6.00,exact,2026-08,yes,media,https://hungrygowhere.com/,2026-08-01,no
+Tiong Bahru Bakery,Downtown Core,Satay Beef Croissant,satay beef,savoury,12.00,exact,2026-08,yes,media,https://hungrygowhere.com/,2026-08-01,no
+Tiong Bahru Bakery,Downtown Core,Nasi Sambal Danish,sambal coconut rice,savoury,5.00,exact,2026-08,yes,media,https://hungrygowhere.com/,2026-08-01,no
+Tiong Bahru Bakery,Downtown Core,Milo Dinosaur Shio Pan,milo chocolate malt,pastry,4.80,exact,2026-08,yes,media,https://hungrygowhere.com/,2026-08-01,no
+Tiong Bahru Bakery,Downtown Core,Teh C Shio Pan,teh c milk tea,pastry,4.80,exact,2026-08,yes,media,https://hungrygowhere.com/,2026-08-01,no
+BreadTalk,Novena,Johnsonville Cheddar Margherita Sausage Bun,cheddar sausage tomato basil,pastry,3.60,exact,2026-08,yes,brand_website,https://breadtalk.com.sg/,2026-08-12,no
+BreadTalk,Novena,Johnsonville Pepper It Up Sausage Bun,cheddar sausage black pepper,pastry,3.60,exact,2026-08,yes,brand_website,https://breadtalk.com.sg/,2026-08-12,no
+BreadTalk,Novena,All-New Hanjuku Cheese Cake,cream cheese hanjuku,cake,3.80,exact,2026-08,no,brand_website,https://breadtalk.com.sg/,2026-08-12,no
+BreadTalk,Novena,Red Cheddar and Gouda Cheese Toast,cheddar gouda cheese,pastry,4.80,exact,2026-08,no,brand_website,https://breadtalk.com.sg/,2026-08-12,no
+BreadTalk,Novena,Thye Moh Chan Teochew Yam Mooncake,teochew yam lotus,pastry,11.80,exact,2026-08,yes,brand_website,https://breadtalk.com.sg/,2026-08-15,yes
+Toast Box,Bedok,Teochew Yam Double Yolk Mooncake,teochew yam salted egg,pastry,11.80,exact,2026-08,yes,brand_website,https://toastbox.com.sg/,2026-08-10,yes
+Chateraise,Jurong East,Shine Muscat Roll Cake Cup,shine muscat grape,cake,5.80,exact,2026-08,yes,brand_website,https://chateraisesg.getz.co/,2026-08-01,no
+Chateraise,Jurong East,Shine Muscat Tart,shine muscat grape,pastry,6.50,exact,2026-08,yes,brand_website,https://chateraisesg.getz.co/,2026-08-01,no
+Chateraise,Jurong East,Cantaloupe Souffle Cheesecake,japanese red melon,cake,5.80,exact,2026-08,yes,brand_website,https://chateraisesg.getz.co/,2026-08-01,no
+Chateraise,Jurong East,Red Bean Paste Salted Yolk Mooncake,adzuki red bean salted yolk,pastry,11.25,exact,2026-08,yes,brand_website,https://chateraisesg.getz.co/,2026-08-01,yes
+Chateraise,Jurong East,Matcha White Lotus Mooncake,uji matcha white lotus,pastry,11.25,exact,2026-08,yes,brand_website,https://chateraisesg.getz.co/,2026-08-01,yes
+Sonder Cafe & Bakery,Kallang,Teochew Yam Snowskin Mooncake,taro orh nee,pastry,14.50,ambiguous,2026-08,yes,brand_website,https://sonderbywb.cococart.co/,2026-08-15,yes
+Sonder Cafe & Bakery,Kallang,Injeolmi Mochi Cake,injeolmi roasted soybean,cake,65.00,exact,2026-08,yes,brand_website,https://sonderbywb.cococart.co/,2026-08-15,no
+Bloomsbury Bakers,Kallang,Kaya Butter Toast Cake,kaya butter toast,cake,58.00,exact,2026-08,yes,other,https://facebook.com/,2026-08-02,no
+Bloomsbury Bakers,Kallang,National Day Merlion Coffee Cake,nanyang kopi,cake,55.00,exact,2026-08,yes,other,https://facebook.com/,2026-08-02,yes
+Plain Vanilla Bakery,Tiong Bahru,Sea Salt Pandan Kaya Cupcake,pandan kaya,cake,4.80,exact,2026-07,yes,media,https://everydayonsales.com/,2026-07-01,no
+Plain Vanilla Bakery,Tiong Bahru,Chocolate Rice Cupcake,chocolate rice,cake,4.80,exact,2026-07,yes,media,https://everydayonsales.com/,2026-07-01,no
+Starbucks,Orchard,Starbucks Kopi Siew Dai,nanyang kopi,drink,4.90,exact,2026-07,yes,media,https://msgt.com.sg/,2026-07-15,no
+Starbucks,Orchard,Kaya Toast Coffee Frappuccino,kaya toast coffee,drink,8.50,exact,2026-07,yes,media,https://msgt.com.sg/,2026-07-15,no
+Starbucks,Orchard,Kaya Toast Latte Hot,kaya toast,drink,7.90,exact,2026-07,yes,media,https://msgt.com.sg/,2026-07-15,no
+Starbucks,Orchard,Kaya Toast Latte Iced,kaya toast,drink,8.20,exact,2026-07,yes,media,https://msgt.com.sg/,2026-07-15,no
+Starbucks,Orchard,Cempedak Tart,cempedak jackfruit,pastry,6.90,ambiguous,2026-07,yes,media,https://singpromos.com/,2026-07-20,no
+Starbucks,Orchard,Kaya Pistachio Cake,kaya pistachio,cake,7.90,ambiguous,2026-07,yes,media,https://singpromos.com/,2026-07-20,no
+Starbucks,Orchard,Kueh Salat Cheesecake,pandan coconut glutinous rice,cake,7.90,ambiguous,2026-07,yes,media,https://singpromos.com/,2026-07-20,no
+Cedele,Raffles Place,Kueh Salat Latte,pandan butterfly pea espresso,drink,7.50,ambiguous,2026-07,yes,brand_website,https://cedele.com/,2026-07-19,no
+Cedele,Raffles Place,Blue Pea Pandan Coconut Cake,blue pea pandan coconut,cake,8.80,ambiguous,2026-07,yes,brand_website,https://cedele.com/,2026-07-19,no
+Cedele,Raffles Place,Garlic Cheese Ciabatta,garlic cheese butter,pastry,5.50,ambiguous,2026-07,yes,brand_website,https://cedele.com/,2026-07-19,no
+Cat & the Fiddle,Toa Payoh,Ice Kacang Cheesecake,red bean gula melaka rose,cake,6.90,exact,2026-07,yes,media,https://greatdeals.com.sg/,2026-07-08,no
+Cat & the Fiddle,Toa Payoh,Raspberry Ripple Cheesecake,raspberry vanilla,cake,6.90,exact,2026-07,yes,media,https://greatdeals.com.sg/,2026-07-08,no
+Délifrance,Toa Payoh,Beef Rendang Pie,beef rendang,savoury,9.50,exact,2026-07,yes,brand_website,https://delifrance.com.sg/,2026-07-15,no
+Délifrance,Toa Payoh,Milo Dinosaur Frappe,milo chocolate malt,drink,8.90,exact,2026-07,yes,brand_website,https://delifrance.com.sg/,2026-07-15,no
+Délifrance,Toa Payoh,Strawberry Milo Frappe,strawberry milo,drink,8.90,exact,2026-07,yes,brand_website,https://delifrance.com.sg/,2026-07-15,no
+Délifrance,Toa Payoh,Coconut Milo Frappe,coconut milo,drink,8.90,exact,2026-07,yes,brand_website,https://delifrance.com.sg/,2026-07-15,no
+Origin + Bloom,Downtown Core,Milano Ciabatta Sandwich,italian cold cuts provolone,savoury,16.00,ambiguous,2026-07,yes,brand_website,https://marinabaysands.com/,2026-07-05,no
+Origin + Bloom,Downtown Core,Speculoos Latte,spiced speculoos caramel,drink,8.50,exact,2026-07,no,brand_website,https://marinabaysands.com/,2026-07-05,no
+Origin + Bloom,Downtown Core,Ambarella Whole Cake,tropical ambarella plum,cake,68.00,exact,2026-07,no,brand_website,https://marinabaysands.com/,2026-07-05,no
+Origin + Bloom,Downtown Core,Mango Shortcake,fresh mango cream,cake,65.00,exact,2026-07,no,brand_website,https://marinabaysands.com/,2026-07-05,no
+Keong Saik Bakery,Kallang,Mini Truffle Potato Clairssant,truffle potato cheddar,pastry,8.00,exact,2026-07,no,media,https://eatbook.sg/,2026-07-02,no
+Keong Saik Bakery,Kallang,Iced Kaya Latte,espresso kaya pandan cold foam,drink,9.50,exact,2026-07,no,media,https://eatbook.sg/,2026-07-02,no
+Keong Saik Bakery,Kallang,Matcha Yuzu Iced Latte,ceremonial matcha yuzu,drink,9.00,exact,2026-07,no,media,https://eatbook.sg/,2026-07-02,no
+Old Seng Choong,Orchard,Coffee Creme Brulee Tart,nanyang kopi custard,pastry,4.50,exact,2026-07,yes,media,https://superadrianme.com/,2026-07-01,no
+Gokoku Japanese Bakery,Jurong West,Chilli Crab Komeko Pan,chilli crab,pastry,4.50,exact,2026-07,yes,media,https://littledayout.com/,2026-07-22,no
+Bibik Violet,River Valley,Durian Chendol,mao shan wang durian chendol,other,12.00,ambiguous,2026-07,yes,media,https://superadrianme.com/,2026-07-24,no
+Bibik Violet,River Valley,Sago Gula Melaka MSW Durian Pengat,durian pengat gula melaka,other,12.50,ambiguous,2026-07,yes,media,https://superadrianme.com/,2026-07-24,no
+Bibik Violet,River Valley,Pulut Tai Tai with Durian Kaya,blue pea glutinous rice durian kaya,other,11.00,ambiguous,2026-07,yes,media,https://superadrianme.com/,2026-07-24,no
+Tous Les Jours,Orchard,Twist Garlic Pastry,garlic butter,pastry,2.80,exact,2026-07,no,media,https://eatbook.sg/,2026-07-10,no
+Tous Les Jours,Orchard,Coffee & Cream Bun,coffee custard,pastry,2.50,exact,2026-07,no,media,https://eatbook.sg/,2026-07-10,no
+Tous Les Jours,Orchard,Strawbrulee Layer Tart,strawberry creme brulee,pastry,5.20,exact,2026-07,no,media,https://eatbook.sg/,2026-07-10,no

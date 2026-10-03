@@ -1,0 +1,71 @@
+shop_id,shop_name,district,address,postal_code,outlet_count,outlet_count_source,own_website,instagram_handle,oddle_url,menu_found,best_source_tier
+bearded_bella_tp,Bearded Bella,Tanjong Pagar / Duxton,8 Craig Rd,089668,2,own_website,https://www.beardedbella.com,@beardedbella,https://eats.oddle.me/menus/bearded-bella,yes,1
+equate_coffee_orchard,Equate Coffee,Orchard / Somerset,181 Orchard Rd #01-17A Orchard Central,238896,2,own_website,https://equate.sg,@equatecoffee,,yes,1
+plain_vanilla_telok_ayer,Plain Vanilla Bakery,Telok Ayer / Amoy,134 Telok Ayer St,068600,6,own_website,https://plainvanilla.com.sg,@pvbakery,https://eats.oddle.me/menus/plain-vanilla,yes,1
+tiong_bahru_bakery_dempsey,Tiong Bahru Bakery,Holland Village / Dempsey,70E Loewen Rd,248845,17,own_website,https://www.tiongbahrubakery.com,@tiongbahrubakery,https://eats.oddle.me/menus/tiong-bahru-bakery-plaza-singapura,yes,1
+nassim_hill_bakery,Nassim Hill Bakery Bistro Bar,Orchard / Somerset,56 Tanglin Rd #01-03,247964,2,own_website,https://nassimhill.com.sg,@nassimhillbakery,https://eats.oddle.me/menus/nassim-hill-bakery-bistro-bar,yes,1
+drips_bakery_cafe_orchard,Drips Bakery Cafe,Orchard / Somerset,391 Orchard Rd #B2-31 Ngee Ann City,238872,2,own_website,https://www.drips.com.sg,@dripsbakerycafe,https://eats.oddle.me/menus/drips-bakery-whole-cakes-pre-order,yes,1
+the_weirdoughs_serangoon,The Weirdoughs,Serangoon Gardens / Kovan,80 Serangoon Garden Way,555976,1,own_website,https://theweirdoughs.com,@theweirdoughssg,https://eats.oddle.me/menus/the-weirdoughs,yes,1
+baker_and_cook_bukit_timah,Baker & Cook,Bukit Timah / Sixth Avenue,77 Hillcrest Rd,288949,12,own_website,https://www.bakerandcook.biz,@bakerandcooksg,https://eats.oddle.me/menus/baker-and-cook,yes,1
+columbus_coffee_co,Columbus Coffee Co.,Upper Thomson,220 Upper Thomson Rd,574352,1,own_website,https://www.columbuscoffeeco.com,@columbuscoffeeco,,yes,1
+two_men_bagel_house_novena,Two Men Bagel House,Novena / Balestier,103 Irrawaddy Rd #01-04 Royal Square,329566,4,own_website,https://www.twomenbagel.com,@twomenbagelhouse,,yes,1
+common_man_coffee_roasters_rv,Common Man Coffee Roasters,River Valley / Robertson Quay,22 Martin Rd #01-00,239058,5,own_website,https://commonmancoffeeroasters.com,@commonmancoffee,https://eats.oddle.me/menus/common-man-coffee-roasters,yes,1
+da_paolo_gastronomia_holland,Da Paolo Gastronomia,Holland Village / Dempsey,44 Jln Merah Saga #01-56,278116,9,own_website,https://www.dapaolo.com.sg,@dapaolosg,https://eats.oddle.me/menus/da-paolo-gastronomia,yes,1
+starter_lab_robertson,Starter Lab,River Valley / Robertson Quay,721 Havelock Rd,169645,1,own_website,https://www.starterlab.com.sg,@starterlab.sg,,yes,1
+boulangerie_asuka,Boulangerie Asuka,Queenstown / Alexandra,370 Alexandra Rd #B1-24 Anchorpoint,159953,1,google_maps,,@boulangerieasuka,,yes,2
+cugini_trattoria_bakery,Cugini Bakehouse,Telok Ayer / Amoy,37 Club St,069417,1,google_maps,,@cuginisg,,no,
+koki_bakery_duxton,Koki Bakery & Brew Bar,Tanjong Pagar / Duxton,60A Duxton Rd #02-01,089524,1,instagram,,@koki.brewbar,,stale_only,2
+alice_boulangerie_tp,Alice Boulangerie,Tanjong Pagar / Duxton,12 Gopeng St #01-05 Icon Village,078877,1,own_website,https://www.aliceboulangerie.com.sg,@aliceboulangerie,,yes,1
+the_glasshouse_neil,The Glasshouse,Tanjong Pagar / Duxton,136 Neil Rd,088865,2,own_website,https://theglasshousesg.com,@theglasshousesg,,yes,1
+nesuto_tras,Nesuto Patisserie,Tanjong Pagar / Duxton,53 Tras St,078992,2,own_website,https://www.nesuto.com,@dear.nesuto,https://eats.oddle.me/menus/nesuto,yes,1
+butter_tgt_duxton,butter tgt,Tanjong Pagar / Duxton,76A Duxton Rd,089535,1,instagram,,@buttertgt,,stale_only,2
+bakers_bench_bakery,Baker's Bench Bakery,Tanjong Pagar / Duxton,6 Bukit Pasoh Rd,089820,1,own_website,https://bakersbenchbakery.com,@bakersbenchbakery,,yes,1
+earlybird_cafe,Earlybird Cafe,Bugis / Kampong Glam / Haji Lane,17 Jln Pinang,199149,1,own_website,https://earlybirdcafesg.com,@earlybirdcafesg,,yes,1
+symmetry_bugis,Symmetry,Bugis / Kampong Glam / Haji Lane,9 Jln Kubor #01-01,199206,1,own_website,https://symmetry.com.sg,@symmetryspot,,yes,1
+tarik_cafe_arab_st,Tarik,Bugis / Kampong Glam / Haji Lane,92 Arab St,199788,1,instagram,,@tarik.singapore,,stale_only,2
+brotherbird_coffeehouse_bali,Brotherbird Coffeehouse,Bugis / Kampong Glam / Haji Lane,32 Bali Ln,189868,2,own_website,https://brotherbird.com.sg,@brotherbird_bakehouse,,yes,1
+konditori_artisan_bakes,Konditori Artisan Bakes,Bugis / Kampong Glam / Haji Lane,33 Bussorah St,199451,1,own_website,https://konditori.oddle.me,@konditorisg,https://eats.oddle.me/menus/konditori-artisan-bakes,yes,1
+fika_swedish_cafe,Fika Swedish Cafe & Bistro,Bugis / Kampong Glam / Haji Lane,257 Beach Rd,199539,1,own_website,https://fika.org.sg,@fikacafesg,https://eats.oddle.me/menus/fika-swedish-cafe-and-bistro,yes,1
+monochrome_boutique,Monochrome Boutique Cafe,Bugis / Kampong Glam / Haji Lane,216 Syed Alwi Rd,207749,1,instagram,,@monochrome.singapore,,stale_only,2
+all_things_delicious_arab_st,All Things Delicious,Bugis / Kampong Glam / Haji Lane,34 Arab St #01-01,199733,1,own_website,https://allthingsdelicious.com.sg,@allthingsdelicioussg,https://eats.oddle.me/menus/all-things-delicious,yes,1
+tiong_bahru_bakery_holland_v,Tiong Bahru Bakery,Holland Village / Dempsey,7 Chip Bee Gdns,277200,17,own_website,https://www.tiongbahrubakery.com,@tiongbahrubakery,,yes,1
+baker_and_cook_holland_v,Baker & Cook,Holland Village / Dempsey,44 Jln Merah Saga #01-56,278116,12,own_website,https://www.bakerandcook.biz,@bakerandcooksg,,yes,1
+burnt_ends_bakery_dempsey,Burnt Ends Bakery,Holland Village / Dempsey,7 Dempsey Rd #01-01,249671,1,own_website,https://bakery.burntends.com.sg,@burntends.bakery.sg,,yes,1
+chye_seng_huat_hardware_robertson,Chye Seng Huat Hardware,River Valley / Robertson Quay,150 Robertson Quay,238245,1,own_website,https://cshhcoffee.com,@cshhcoffee,,no,
+ps_cafe_dempsey,PS.Cafe,Holland Village / Dempsey,28B Harding Rd,249549,12,own_website,https://www.pscafe.com,@pscafe,https://eats.oddle.me/menus/pscafe,yes,1
+merci_marcel_club_st,Merci Marcel,Telok Ayer / Amoy,98 Club St,069467,4,own_website,https://mercimarcelgroup.com,@mercimarcel,https://eats.oddle.me/menus/merci-marcel,yes,1
+free_the_robot_telok_ayer,Free The Robot,Telok Ayer / Amoy,118 Telok Ayer St,068587,1,own_website,https://www.robotscoffeebar.com,@free.the.robot,,yes,1
+sarnies_telok_ayer,Sarnies,Telok Ayer / Amoy,136 Telok Ayer St,068601,2,own_website,https://sarnies.com,@sarnies.sg,,yes,1
+french_fold_telok_ayer,French Fold,Telok Ayer / Amoy,204 Telok Ayer St,068640,2,own_website,https://mercimarcelgroup.com/french-fold,@frenchfold,https://eats.oddle.me/menus/french-fold,yes,1
+pantler_river_valley,Pantler,River Valley / Robertson Quay,474 River Valley Rd,248356,1,own_website,https://pantler.com.sg,@pantler,,yes,1
+kwaasong_bakehouse_telok_ayer,Kwaasong Bakehouse,Telok Ayer / Amoy,13 Lor Telok,049026,1,instagram,,@kwaasong.bakehouse,,yes,2
+chu_and_co_serangoon,Chu and Co,Serangoon Gardens / Kovan,15 Lichfield Rd,556835,1,instagram,,@chuand.co,,yes,2
+apollo_coffee_bar_serangoon,Apollo Coffee Bar,Serangoon Gardens / Kovan,65 Serangoon Garden Way,555961,1,own_website,https://www.apollocoffeebar.com,@apollocoffeebar,,yes,1
+lola_cafe_kovan,Lola's Cafe,Serangoon Gardens / Kovan,5 Simon Rd,545893,2,own_website,https://www.lolascafe.com.sg,@lolascafesg,,yes,1
+plain_vanilla_serangoon,Plain Vanilla Bakery,Serangoon Gardens / Kovan,10 Maju Ave,556688,6,own_website,https://plainvanilla.com.sg,@pvbakery,,yes,1
+the_bread_rack_kovan,The Bread Rack,Serangoon Gardens / Kovan,9 Yio Chu Kang Rd #01-55 Space@Kovan,545523,1,google_maps,,@thebreadracksg,,yes,2
+clump_coffee_serangoon,Clump Coffee,Serangoon Gardens / Kovan,2 Kensington Park Rd,557253,1,instagram,,@clumpcoffee,,no,
+bakery_brera_empress,Bakery Brera,Bukit Timah / Sixth Avenue,8 Empress Rd #01-122,260008,2,own_website,https://www.bakerybrera.com,@bakerybrera,https://eats.oddle.me/menus/bakery-brera,yes,1
+crown_bakery_bukit_timah,Crown Bakery & Cafe,Bukit Timah / Sixth Avenue,557 Bukit Timah Rd #01-03 Crown Centre,269694,1,own_website,https://www.crownbakery.com.sg,@crownbakery,,yes,1
+micro_bakery_red_house_sixth_ave,Micro Bakery Kitchen,Bukit Timah / Sixth Avenue,10 Jalan Serene #01-05 Serene Centre,258748,2,own_website,https://www.microbakerykitchen.com,@microbakerykitchen,,yes,1
+carpenters_and_cook_beauty_world,Carpenter and Cook,Bukit Timah / Sixth Avenue,19 Lor Kilat #01-06,598120,1,own_website,https://carpenterandcook.com,@carpenterandcook,https://eats.oddle.me/menus/carpenter-and-cook,yes,1
+plain_vanilla_cluny_court,Plain Vanilla Bakery,Bukit Timah / Sixth Avenue,501 Bukit Timah Rd #01-06 Cluny Court,259760,6,own_website,https://plainvanilla.com.sg,@pvbakery,,yes,1
+little_farms_cafe_valley_point,Little Farms Cafe,River Valley / Robertson Quay,491 River Valley Rd #01-25 Valley Point,248371,5,own_website,https://littlefarms.com,@littlefarms,https://eats.oddle.me/menus/little-farms,yes,1
+hello_arigato_upper_thomson,Hello Arigato,Upper Thomson,227 Upper Thomson Rd,574359,4,own_website,https://www.helloarigato.com,@helloarigato.sg,,yes,1
+one_man_coffee_thomson,One Man Coffee,Upper Thomson,215R Upper Thomson Rd,574349,2,own_website,https://www.onemancoffee.com.sg,@onemancoffee,,yes,1
+pueblo_cafe_upper_thomson,Pueblo Cafe,Upper Thomson,244F Upper Thomson Rd,574369,1,instagram,,@pueblocafesg,,stale_only,2
+woodcraft_bakehouse_thomson,Woodcraft Bakehouse,Upper Thomson,244P Upper Thomson Rd,574369,1,google_maps,,@woodcraftbakehouse,,no,
+da_paolo_gastronomia_novena,Da Paolo Gastronomia,Novena / Balestier,238 Thomson Rd #01-72 Velocity,307683,9,own_website,https://www.dapaolo.com.sg,@dapaolosg,,yes,1
+slow_bakes_balestier,Slow Bakes,Novena / Balestier,30 Ah Hood Rd #01-05,329979,2,instagram,,@slowbakes.sg,,no,
+whisk_and_paddle_novena,Whisk & Paddle,Novena / Balestier,103 Irrawaddy Rd #02-01 Royal Square,329566,2,own_website,https://whiskandpaddle.com.sg,@whiskandpaddlesg,,yes,1
+tiong_bahru_bakery_centrepoint,Tiong Bahru Bakery,Orchard / Somerset,176 Orchard Rd #01-21 The Centrepoint,238843,17,own_website,https://www.tiongbahrubakery.com,@tiongbahrubakery,,yes,1
+hvala_somerset,Hvala,Orchard / Somerset,111 Somerset Rd #01-10 TripleOne Somerset,238164,3,own_website,https://hvala.com.sg,@hvala_sg,https://eats.oddle.me/menus/hvala,yes,1
+alchemist_design_orchard,Alchemist,Orchard / Somerset,250 Orchard Rd #03-01 Design Orchard,238905,7,own_website,https://alchemist.com.sg,@alchemist.sg,,yes,1
+cafe_melba_goodman,Cafe Melba,East Coast / Siglap,90 Goodman Rd Block N #01-56,439053,2,own_website,https://www.cafemelba.com.sg,@cafemelbasingapore,https://eats.oddle.me/menus/cafe-melba-goodman-arts-centre,yes,1
+five_oars_coffee_roasters_ec,Five Oars Coffee Roasters,East Coast / Siglap,6 Upper East Coast Rd,455200,2,own_website,https://focr.sg,@focr.sg,,yes,1
+baker_and_cook_swan_lake,Baker & Cook,East Coast / Siglap,1 Swan Lake Ave,455700,12,own_website,https://www.bakerandcook.biz,@bakerandcooksg,,yes,1
+patisserie_cle_siglap,Patisserie CLE,East Coast / Siglap,79 Lucky Heights,467627,2,own_website,https://patisseriecle.com,@patisserie.cle,https://eats.oddle.me/menus/patisserie-cle,yes,1
+black_and_ink_swan_lake,Black & Ink,East Coast / Siglap,29 Swan Lake Ave,455718,1,instagram,,@blackandink,,stale_only,2
+creme_maison_bakery_tai_seng,Creme Maison Bakery,Serangoon Gardens / Kovan,30 Tai Seng St #08-03C,534013,1,own_website,https://crememaison.com,@crememaisonbakery,https://eats.oddle.me/menus/creme-maison-bakery,yes,1
+anchorpoint_common_man,Common Man Coffee Roasters,Queenstown / Alexandra,370 Alexandra Rd #01-09 Anchorpoint,159953,5,own_website,https://commonmancoffeeroasters.com,@commonmancoffee,,yes,1
+tiong_bahru_bakery_tanglin,Tiong Bahru Bakery,River Valley / Robertson Quay,56 Tanglin Rd #01-01,247964,17,own_website,https://www.tiongbahrubakery.com,@tiongbahrubakery,,yes,1

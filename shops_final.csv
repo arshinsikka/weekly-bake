@@ -1,0 +1,53 @@
+shop_id,shop_name,district,address,postal_code,outlet_count,outlet_count_source,own_website,instagram_handle,oddle_url,menu_found,best_source_tier
+tiong_bahru_bakery,Tiong Bahru Bakery (Eng Hoon),Tiong Bahru,56 Eng Hoon Street #01-70,160056,17,https://tiongbahrubakery.com/pages/locations,https://tiongbahrubakery.com,@tiongbahrubakery,https://tiongbahrubakeryplazasing.oddle.me/en_SG,yes,1
+plain_vanilla_tiong_bahru,Plain Vanilla Bakery,Tiong Bahru,1D Yong Siak Street,168641,6,https://plainvanilla.com.sg/pages/stores,https://plainvanilla.com.sg,@pvbakery,,yes,1
+blob_tiong_bahru,blob,Tiong Bahru,38 Kim Tian Road,168604,1,https://danielfooddiary.com/2026/09/11/bakeries/,,@blob.sg,,yes,3
+drips_bakery_cafe,Drips Bakery Cafe,Tiong Bahru,82 Tiong Poh Road #01-05,160082,2,unclear,https://www.drips.com.sg,@dripsbakerycafe,,stale_only,
+merci_marcel_tiong_bahru,Merci Marcel (Tiong Bahru),Tiong Bahru,56 Eng Hoon Street #01-68,160056,3,https://mercimarcel.com,https://mercimarcel.com,@mercimarcel,https://mercimarcel.oddle.me/en_SG,yes,1
+micro_bakery_kitchen_tiong_bahru,Micro Bakery Kitchen (Tiong Bahru),Tiong Bahru,78 Yong Siak Street #01-12,163078,2,https://www.microbakerykitchen.com,https://www.microbakerykitchen.com,@microbakerykitchen,,yes,1
+caffe_pralet,Caffe Pralet,Tiong Bahru,17 Eng Hoon Street #01-04,169767,1,https://caffepralet.com.sg,https://caffepralet.com.sg,@caffepraletsg,,yes,1
+tianns,TIANN'S,Tiong Bahru,71 Seng Poh Road #01-35,160071,1,https://tianns.com.sg,https://tianns.com.sg,@tiannssg,,yes,1
+flock_cafe,Flock Cafe,Tiong Bahru,78 Moh Guan Terrace #01-25,162078,1,https://flockcafe.com.sg,https://flockcafe.com.sg,@flockcafe,,stale_only,
+little_rogue_coffee,Little Rogue Coffee,Tiong Bahru,27 Yong Siak Street,168654,1,unclear,,@littleroguecoffee,,stale_only,
+binge_tiong_bahru,Binge,Tiong Bahru,61 Seng Poh Lane #01-03,160061,1,https://danielfooddiary.com/2025/10/24/tiongbahrucafessg/,,@binge.sg,,stale_only,
+glass_roasters_tiong_bahru,Glass Roasters,Tiong Bahru,57 Eng Hoon Street #01-88,160057,2,unclear,,@glassroasterssg,,stale_only,
+happy_oven_tiong_bahru,Happy Oven,Tiong Bahru,40 Beo Crescent #01-08,160040,1,https://happyoven.com.sg,https://happyoven.com.sg,@happyovensg,https://happyoven.oddle.me/en_SG,yes,1
+tiong_hoe_specialty_coffee,Tiong Hoe Specialty Coffee,Tiong Bahru,18 Jalan Membina #02-01,164018,3,https://tionghoe.com,https://tionghoe.com,@tionghoespecialtycoffee,,yes,1
+sunday_morning_coffee_shop,Sunday Morning Coffee Shop,Tiong Bahru,115 Bukit Merah View #01-85,151115,1,unclear,,@sundaymorningcoffeeshop,,no,
+forty_hands,Forty Hands,Tiong Bahru,78 Yong Siak Street,163078,0,https://thesmartlocal.com/read/tiong-bahru-cafes/,,,,no,
+chin_mee_chin_confectionery,Chin Mee Chin Confectionery,Katong / Joo Chiat,204 East Coast Road,428903,2,https://www.chinmeechin.sg/menu,https://www.chinmeechin.sg,@chinmeechin.sg,,yes,1
+bastille_bakery,Bastille Bakery,Katong / Joo Chiat,261 Joo Chiat Road,427515,1,https://ordinarypatrons.com/2026/07/04/bastille-bakery-cafe-in-joo-chiat/,https://bastillebakery.com,@bastillebakery,,yes,3
+petit_pain,Petit Pain,Katong / Joo Chiat,17 Joo Chiat Place,427747,1,https://therantingpanda.com/2026/09/10/food-scoops-cafes-to-check-out-in-joo-chiat-and-katong-guide-to-your-coffee-and-brunch-fix-in-east-coast/,,@petitpain.sg,,yes,2
+174_bingo,174 Bingo,Katong / Joo Chiat,174 Joo Chiat Road,427445,1,https://wheretoeat.com.sg/pet-friendly-cafes-in-katong-and-joo-chiat/,,@174bingo,,yes,2
+awfully_chocolate_bakery_cafe,Awfully Chocolate Bakery & Cafe,Katong / Joo Chiat,131 East Coast Road,428816,15,https://www.awfullychocolate.com,https://www.acbakerycafe.com,@awfullychocolatesg,https://awfullychocolate.oddle.me/en_SG,yes,1
+plain_vanilla_east_coast,Plain Vanilla East Coast,Katong / Joo Chiat,199 East Coast Road,428902,6,https://plainvanilla.com.sg/pages/stores,https://plainvanilla.com.sg,@pvbakery,,yes,1
+tiong_bahru_bakery_joo_chiat,Tiong Bahru Bakery (Joo Chiat),Katong / Joo Chiat,7 Crane Road,429356,17,https://tiongbahrubakery.com/pages/locations,https://tiongbahrubakery.com,@tiongbahrubakery,https://tiongbahrubakeryplazasing.oddle.me/en_SG,yes,1
+micro_bakery_red_house,Micro Bakery Kitchen (Red House),Katong / Joo Chiat,63 East Coast Road #01-06,428776,2,https://www.microbakerykitchen.com,https://www.microbakerykitchen.com,@microbakerykitchen,,yes,1
+bread_and_hearth_katong,Bread & Hearth (Katong),Katong / Joo Chiat,30 East Coast Road #02-27 Katong V,428751,2,unclear,,@breadandhearth,https://breadhearth.oddle.me/en_SG,yes,1
+common_man_coffee_roasters_joo_chiat,Common Man Coffee Roasters (Joo Chiat),Katong / Joo Chiat,185 Joo Chiat Road,427456,5,https://commonmancoffeeroasters.com,https://commonmancoffeeroasters.com,@commonmancoffee,https://commonmancoffeeroasters.oddle.me/en_SG,yes,1
+pelle_and_pepe,Pelle and Pepe,Katong / Joo Chiat,201 Joo Chiat Road,427472,1,unclear,,@pelleandpepe,,stale_only,
+olsen_bakehouse,Olsen Bakehouse,Katong / Joo Chiat,301 Joo Chiat Road,427552,1,https://www.olsenbakehouse.com,https://www.olsenbakehouse.com,@olsenbakehouse,,yes,1
+prairie_by_craftsmen_joo_chiat,Prairie by Craftsmen,Katong / Joo Chiat,462 Joo Chiat Road,427674,4,https://craftsmencoffee.com,https://craftsmencoffee.com,@prairie.bycraftsmen,,yes,2
+big_short_coffee,Big Short Coffee,Katong / Joo Chiat,2 Fowlie Road #01-01,428505,1,https://coffeemenuz.com/big-short-coffee-menu-singapore/,,@bigshortcoffee,,yes,2
+janie_the_bakery,Janie The Bakery,Katong / Joo Chiat,865 Mountbatten Road #02-72 Katong Shopping Centre,437844,1,https://janiethebakery.com,https://janiethebakery.com,@janiethebakery,,stale_only,
+accompany_coffee,Accompany Coffee,Katong / Joo Chiat,292 Joo Chiat Road,427544,1,https://danielfooddiary.com/2026/09/01/cafessep2026/,,@accompanycoffeesg,,yes,3
+pull_by_tpg,PULL by TPG,Katong / Joo Chiat,60 Joo Chiat Road #01-03,427726,1,https://danielfooddiary.com/2026/09/01/cafessep2026/,,@pullbytpg,,yes,3
+the_neptune,The Neptune,Katong / Joo Chiat,237 East Coast Road,428930,1,unclear,,@theneptunesg,,stale_only,
+kings_cart_coffee_factory,Kings Cart Coffee Factory,Katong / Joo Chiat,328 Joo Chiat Road #01-05,427585,1,https://kingscartcoffee.com,https://kingscartcoffee.com,@kingscartcoffee,,yes,1
+le_petit_katong,Le Petit Katong,Katong / Joo Chiat,30 East Coast Road #01-11 Katong V,428751,1,unclear,,@lepetitkatong,,stale_only,
+boms_and_buns,Boms & Buns,Katong / Joo Chiat,462 Joo Chiat Road,427674,1,unclear,,@bomsnbuns,,stale_only,
+la_levain,La Levain,Jalan Besar,23 Hamilton Road,209193,2,https://www.lalevain.com,https://www.lalevain.com,@lalevain.sg,https://lalevain.oddle.me/en_SG,yes,1
+keong_saik_bakery_bendemeer,Keong Saik Bakery,Jalan Besar,70 Bendemeer Road #01-03 Luzerne,339940,2,https://www.keongsaikbakery.com/about.php,https://www.keongsaikbakery.com,@keongsaikbakery,https://keongsaikbakery.oddle.me/en_SG,yes,1
+chye_seng_huat_hardware,Chye Seng Huat Hardware,Jalan Besar,150 Tyrwhitt Road,207563,1,https://cshhcoffee.com,https://cshhcoffee.com,@cshhcoffee,https://papapalheta.oddle.me/en_SG,yes,1
+apartment_coffee,Apartment Coffee,Jalan Besar,139 Tyrwhitt Road,207557,1,https://apartmentcoffee.co,https://apartmentcoffee.co,@apartmentcoffee,,yes,1
+lucid,Lucid,Jalan Besar,38 Hamilton Road,209208,1,https://www.lucid.sg,https://www.lucid.sg,@lucid.space,,yes,1
+two_bakers,Two Bakers,Jalan Besar,88 Horne Road,209083,2,https://two-bakers.com,https://two-bakers.com,@twobakersbakery,https://twobakers.oddle.me/en_SG,yes,1
+asylum_coffeehouse,Asylum Coffeehouse,Jalan Besar,311 Jalan Besar,208970,1,https://asylumcoffeesg.com,https://asylumcoffeesg.com,@asylumcoffeesg,,stale_only,
+moonchild,Moonchild,Jalan Besar,351 Jalan Besar #01-01,208988,1,https://singaporemenus.org/menu/moonchild-menu/,,@moonchild.cafe,,yes,2
+lola_faye_cafe,Lola Faye Cafe,Jalan Besar,35 Hamilton Road,209204,1,unclear,,@lolafayecafe,,stale_only,
+breaditation_bakery,Breaditation Bakery,Jalan Besar,123 Desker Road,209641,1,https://danielfooddiary.com/2025/06/21/breaditationbakery/,,@breaditation,,stale_only,
+habitat_coffee,Habitat Coffee,Jalan Besar,803 King George's Avenue #01-242/244,200803,1,https://habitatcoffee.com.sg,https://habitatcoffee.com.sg,@habitatcoffee,,yes,1
+antea_social,Antea Social,Jalan Besar,9 Tyrwhitt Road,207528,1,https://anteasocial.com.sg,https://anteasocial.com.sg,@anteasocial,,yes,1
+brawn_and_brains_hamilton,Brawn & Brains Coffee (Hamilton),Jalan Besar,16 Hamilton Road #01-06,209186,2,https://brawnandbrains.sg,https://brawnandbrains.sg,@brawnandbrains.sg,https://brawnandbrains.oddle.me/en_SG,yes,1
+the_french_american_bakery,The French American Bakery,Jalan Besar,49 Haji Lane,189242,1,https://thefrenchamericanbakery.oddle.me/en_SG,,@thefrenchamericanbakery,https://thefrenchamericanbakery.oddle.me/en_SG,yes,1
+windowsill_pies_horne_rd,Windowsill Pies (Horne Road),Jalan Besar,78 Horne Road,209078,0,https://windowsillpies.sg/pages/about,https://windowsillpies.sg,@windowsillpies,,stale_only,

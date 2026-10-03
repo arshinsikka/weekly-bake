@@ -1,0 +1,1820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Weekly Bake</title>
+<meta name="description" content="Prices and menu moves for Singapore cafe and bakery operators.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23FFFFFF'/%3E%3Cpath d='M5 7l5 18 6-12 6 12 5-18' fill='none' stroke='%231B5E4A' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://www.onemap.gov.sg" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" integrity="sha512-h9FcoyWjHcOcmEVkxOfTLnmZFWIH0iZhZT1H2TbOq55xssQGEJHEaIm+PgoUaZbRvQTNTluNOEfb1ZRy6D3BOw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+<style>
+:root{
+  --paper:#FFFFFF;
+  --ink:#1C2420;
+  --body:#3D453F;
+  --muted:#6E7570;
+  --rule:#E2E4E0;
+  --brand:#1B5E4A;
+  --high:#A03D22;
+
+  --f-display:"Fraunces",Georgia,serif;
+  --f-text:"Archivo",system-ui,-apple-system,sans-serif;
+
+  --s13:13px; --s15:15px; --s17:17px; --s21:21px;
+  --s26:26px; --s33:33px; --s42:42px; --s54:54px;
+
+  --gap-section:72px;
+  --maxw:1080px;
+  --pad:28px;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--paper); color:var(--body);
+  font-family:var(--f-text); font-size:var(--s17); line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:var(--f-display); color:var(--ink); font-weight:500; margin:0; line-height:1.15}
+p{margin:0}
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 var(--pad)}
+.num{font-variant-numeric:tabular-nums}
+.measure{max-width:68ch}
+
+a{color:var(--brand); text-decoration:underline; text-underline-offset:2px}
+:focus-visible{outline:2px solid var(--brand); outline-offset:3px; border-radius:2px}
+
+button{font-family:inherit; font-size:inherit; color:inherit; background:none; border:none; padding:0; cursor:pointer}
+
+/* ---------- masthead ---------- */
+.masthead{padding:22px 0 18px; border-bottom:1px solid var(--rule)}
+.masthead .wrap{display:flex; align-items:baseline; justify-content:space-between; gap:16px; flex-wrap:wrap}
+.wordmark{font-family:var(--f-display); font-weight:600; font-size:var(--s21); color:var(--ink); letter-spacing:-.01em}
+.masthead .tag{font-size:14px; color:var(--muted)}
+
+/* ---------- hero ---------- */
+.hero{padding:28px 0 var(--gap-section)}
+.hero h1{font-size:clamp(26px,2.7vw,34px); line-height:1.15; letter-spacing:-.015em}
+.hero .lede{font-size:var(--s15)}
+/* desktop: copy across the top, map on the left, finder panel down the right.
+   The last row takes up the slack, so a tall map never stretches the panel. */
+.hero-layout{
+  display:grid; grid-template-columns:minmax(0,3fr) minmax(0,2fr); column-gap:40px;
+  grid-template-rows:auto auto auto auto 1fr;
+  grid-template-areas:"head head" "lede lede" "map tabs" "map find" "map sign";
+}
+.hero h1{grid-area:head}
+.hero .lede{grid-area:lede; margin:10px 0 22px}
+.itemtabs{grid-area:tabs}
+.mapcol{grid-area:map; min-width:0}
+.finder{grid-area:find; min-width:0}
+.herosignup{grid-area:sign; min-width:0}
+
+.hero .itemtabs{margin:0 0 16px; padding-top:14px; border-top:2px solid var(--ink)}
+.viewbar{margin:0 0 12px; padding-top:16px}
+.herosignup{margin-top:24px; padding-top:20px; border-top:1px solid var(--rule)}
+.herosignup .signup{margin-top:0}
+/* the panel is narrow, so the field gives way before the button wraps. Desktop
+   only: in the phone's column layout a flex-basis would become a height. */
+@media (min-width:861px){ .herosignup .signup input[type=email]{flex:1 1 150px} }
+
+/* ---------- map ---------- */
+.mapframe{position:relative}
+.map{
+  height:clamp(340px, calc(100vh - 320px), 540px);
+  background:#F4F5F3; border:1px solid var(--rule);
+  position:relative; z-index:0; isolation:isolate;
+}
+/* one finger belongs to the page. Leaflet would otherwise claim every touch. */
+.map.leaflet-container{touch-action:pan-x pan-y !important; font-family:var(--f-text); font-size:var(--s13)}
+.maphint{
+  position:absolute; inset:0; z-index:5; display:flex; align-items:center; justify-content:center;
+  padding:20px; text-align:center; pointer-events:none;
+  background:rgba(28,36,32,.55); color:#fff; font-size:var(--s17); font-weight:500;
+  opacity:0; transition:opacity .2s linear;
+}
+.maphint.on{opacity:1}
+@media (prefers-reduced-motion:reduce){ .maphint{transition:none} }
+.mapcaption{margin-top:12px; font-size:var(--s15); color:var(--body)}
+.mapnote{font-size:var(--s13); color:var(--muted); margin-top:8px}
+
+.pinwrap{background:none; border:none; overflow:visible}
+.pinwrap:focus{outline:none}
+.pin{position:absolute; left:0; top:0; --off:0}
+.pin-dot{
+  position:absolute; width:11px; height:11px; border-radius:50%;
+  background:var(--ink); border:1.5px solid var(--paper);
+  transform:translate(calc(-50% + var(--off) * 11px), -50%);
+}
+/* a dot is too small to tap, so it carries a larger invisible target */
+.pin-dot::after{content:""; position:absolute; inset:-9px}
+.pin-label{
+  display:none; position:absolute; white-space:nowrap;
+  font:500 13px/1 var(--f-text); font-variant-numeric:tabular-nums;
+  padding:5px 7px; border-radius:3px;
+  color:var(--ink); background:var(--paper); border:1px solid var(--rule);
+  transform:translate(-50%, calc(-50% + var(--off) * 26px));
+}
+.map.labels .pin-dot{display:none}
+.map.labels .pin-label{display:block}
+.pin.hi .pin-dot{background:var(--high)}
+.pin.hi .pin-label{color:var(--high)}
+.pin.me .pin-dot{background:var(--brand); width:15px; height:15px}
+.pin.me .pin-label{background:var(--brand); border-color:var(--brand); color:var(--paper)}
+.pinwrap:focus-visible .pin-dot,.pinwrap:focus-visible .pin-label{outline:2px solid var(--brand); outline-offset:2px}
+
+.map .leaflet-popup-content-wrapper{border-radius:3px}
+.map .leaflet-popup-content{margin:12px 14px; font-size:var(--s13); line-height:1.45; color:var(--body)}
+.pop-name{display:block; font-size:var(--s15); font-weight:600; color:var(--ink)}
+.pop-price{display:block; margin-top:4px; font-size:var(--s15); font-weight:600; color:var(--ink); font-variant-numeric:tabular-nums}
+.pop-price.hi{color:var(--high)}
+.pop-date{display:block; color:var(--muted)}
+
+/* ---------- find your shop ---------- */
+.combo{position:relative}
+.combo input{width:100%}
+.combolist{
+  position:absolute; left:0; right:0; top:calc(100% + 4px); z-index:30;
+  margin:0; padding:4px 0; list-style:none; max-height:264px; overflow-y:auto;
+  background:var(--paper); border:1px solid var(--rule); border-radius:3px;
+}
+.combolist li{padding:8px 13px; cursor:pointer}
+.combolist li[aria-selected=true],.combolist li:hover{background:rgba(27,94,74,.08)}
+.optname{display:block; font-size:var(--s15); color:var(--ink); font-weight:500}
+.optsub{display:block; font-size:var(--s13); color:var(--muted)}
+.notfound{margin-top:16px}
+.notfound .hint{margin:0 0 14px}
+.notfound select{width:100%; margin-bottom:14px}
+.result{margin-top:20px}
+.resultline{font-family:var(--f-display); font-weight:500; font-size:var(--s21); line-height:1.3; color:var(--ink)}
+.resultline .linkbtn{font-family:var(--f-text)}
+
+.signup{margin-top:30px; display:flex; gap:10px; flex-wrap:wrap}
+input[type=email],input[type=number],input[type=text],select{
+  font-family:inherit; font-size:var(--s15); color:var(--ink);
+  background:var(--paper); border:1px solid var(--rule); border-radius:3px;
+  padding:11px 13px; min-width:0;
+}
+input::placeholder{color:var(--muted)}
+input[type=email]{flex:1 1 240px; max-width:420px}
+.btn{
+  background:var(--brand); color:#fff; font-weight:500; font-size:var(--s15);
+  padding:12px 20px; border-radius:3px; border:1px solid var(--brand);
+}
+.btn:hover{filter:brightness(.92)}
+.btn:disabled{opacity:.6; cursor:default; filter:none}
+.fineprint{margin-top:12px; font-size:var(--s13); color:var(--muted)}
+.formnote{margin-top:12px; font-size:var(--s15); color:var(--brand); font-weight:500}
+.formnote.bad{color:var(--high)}
+.formdone{font-size:var(--s17); color:var(--brand); font-weight:500; max-width:46ch}
+
+/* ---------- rank finder ---------- */
+.finder h2{font-size:var(--s21); margin-bottom:14px}
+.field-label{display:block; font-size:var(--s15); color:var(--muted); margin-bottom:8px}
+.choices{display:flex; flex-wrap:wrap; gap:8px 18px; margin:16px 0 22px}
+.choice{
+  font-size:var(--s15); color:var(--muted); padding:3px 0;
+  border-bottom:2px solid transparent;
+}
+.choice:hover{color:var(--ink)}
+.choice[aria-pressed=true]{color:var(--ink); font-weight:500; border-bottom-color:var(--brand)}
+
+.moneyrow{display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap}
+.moneywrap{position:relative; flex:1 1 150px}
+.moneywrap .dollar{position:absolute; left:13px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:var(--s15); pointer-events:none}
+.moneywrap input{width:100%; padding-left:26px}
+
+.verdict{margin-top:4px}
+.strip{margin-top:20px}
+.strip svg{display:block; width:100%; height:76px; overflow:visible}
+.axis{display:flex; justify-content:space-between; font-size:var(--s13); color:var(--muted); margin-top:6px}
+.hint{font-size:var(--s15); color:var(--muted); margin-top:14px}
+.outliernote{font-size:var(--s13); color:var(--muted); margin-top:10px}
+.consequence{margin-top:18px; font-size:var(--s15)}
+.consequence p + p{margin-top:6px}
+
+#reader-marker{transform-box:view-box; transform-origin:0 0; transition:transform .4s cubic-bezier(.22,.61,.36,1)}
+@media (prefers-reduced-motion:reduce){ #reader-marker{transition:none} }
+
+/* ---------- sections ---------- */
+section.band{padding:var(--gap-section) 0}
+.sec-head h2{font-size:var(--s33); letter-spacing:-.01em}
+.sec-head p{margin-top:12px; font-size:var(--s17); max-width:62ch}
+.sec-head{margin-bottom:30px}
+
+/* ---------- tables ---------- */
+.tablewrap{overflow-x:auto; -webkit-overflow-scrolling:touch}
+table{border-collapse:collapse; width:100%; min-width:520px; font-size:var(--s15)}
+caption{text-align:left; font-size:var(--s13); color:var(--muted); padding-bottom:10px}
+th,td{text-align:left; padding:13px 16px 13px 0; border-bottom:1px solid var(--rule); vertical-align:top}
+th{color:var(--muted); font-weight:500; font-size:var(--s13); white-space:nowrap; border-bottom-color:var(--ink)}
+td.n,th.n{text-align:right; font-variant-numeric:tabular-nums}
+tr > *:last-child{padding-right:0}
+th.n .sortbtn{justify-content:flex-end; width:100%}
+thead th{position:relative}
+.sortbtn{display:inline-flex; align-items:center; gap:5px; color:var(--muted); font-size:var(--s13); font-weight:500; padding:2px 0}
+.sortbtn:hover{color:var(--ink)}
+th[aria-sort] .sortbtn{color:var(--ink)}
+.caret{font-size:10px; line-height:1}
+tbody tr:last-child td{border-bottom:1px solid var(--rule)}
+td.item{color:var(--ink); font-weight:500}
+td.mid{color:var(--ink); font-weight:600}
+td.soft{color:var(--muted)}
+td.hi{color:var(--high); font-weight:600}
+.tablefoot{margin-top:18px; display:flex; gap:16px; align-items:center; flex-wrap:wrap}
+.linkbtn{font-size:var(--s15); color:var(--brand); font-weight:500; text-decoration:underline; text-underline-offset:3px}
+.count{font-size:var(--s13); color:var(--muted)}
+.filterbar{display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:22px}
+.filterbar input[type=text]{flex:1 1 260px; max-width:360px}
+/* three short columns fit a phone without the sideways scroll wider tables need */
+#named-table{min-width:0}
+.filterrow{display:flex; gap:8px 18px; flex-wrap:wrap; align-items:baseline; margin-bottom:14px}
+.filterrow .lbl{font-size:var(--s13); color:var(--muted); min-width:52px}
+
+/* ---------- charts ---------- */
+.chart{margin-top:8px}
+.chart svg{display:block; width:100%; overflow:visible}
+.chartnote{margin-top:16px; font-size:var(--s13); color:var(--muted); max-width:60ch}
+
+/* ---------- tab module ---------- */
+.tabmodule{padding-top:56px}
+.tabbar{position:sticky; top:0; z-index:20; background:var(--paper)}
+.tabbar .wrap{position:relative}
+.tabstrip{
+  display:flex; gap:28px; align-items:flex-end;
+  padding:4px 0 5px; border-bottom:1px solid var(--rule);
+  overflow-x:auto; overflow-y:hidden;
+  scrollbar-width:none; -ms-overflow-style:none;
+  -webkit-overflow-scrolling:touch;
+}
+.tabstrip::-webkit-scrollbar{display:none}
+.tabstrip [role=tab]{
+  flex:0 0 auto; white-space:nowrap;
+  font-family:var(--f-text); font-weight:500; font-size:16px; line-height:1.3;
+  color:var(--muted); padding:10px 0 9px; border-bottom:2px solid transparent;
+}
+.tabstrip [role=tab]:hover{color:var(--ink)}
+.tabstrip [role=tab][aria-selected=true]{color:var(--ink); border-bottom-color:var(--brand)}
+/* the fade tells a narrow screen there are more tabs off to the right;
+   it sits above the hairline and must never swallow a click */
+.tabbar .wrap::after{
+  content:""; position:absolute; top:0; right:var(--pad); bottom:6px; width:48px;
+  background:linear-gradient(to right, rgba(255,255,255,0), var(--paper));
+  pointer-events:none; opacity:0; transition:opacity .15s linear;
+}
+.tabbar.more-right .wrap::after{opacity:1}
+@media (prefers-reduced-motion:reduce){ .tabbar .wrap::after{transition:none} }
+
+section.tabpanel{padding-top:44px}
+/* hidden="until-found" leaves the element in flow with a zero-height subtree,
+   so its own padding would still show as a gap. display:none panels are
+   unaffected by this. Never set display here or until-found stops working. */
+section.tabpanel[hidden]{padding-top:0; padding-bottom:0}
+
+.tolink{margin-top:16px}
+
+/* ---------- waitlist ---------- */
+.waitlist{background:rgba(27,94,74,.055); padding:var(--gap-section) 0}
+.waitlist h2{font-size:var(--s33)}
+.waitlist .intro{margin-top:14px; font-size:var(--s17); max-width:60ch}
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:34px 48px; margin:40px 0}
+.grid2 h3{font-size:var(--s17); font-family:var(--f-text); font-weight:600; color:var(--ink)}
+.grid2 p{margin-top:6px; font-size:var(--s15); color:var(--body); max-width:42ch}
+.price-line{font-family:var(--f-display); font-weight:500; font-size:var(--s26); color:var(--ink); margin-bottom:16px}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--rule); padding:36px 0 44px}
+.footgrid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:22px 40px}
+footer h3{font-family:var(--f-text); font-size:var(--s13); font-weight:600; color:var(--ink); margin-bottom:4px}
+footer .blk p{font-size:var(--s13); line-height:1.5}
+.colophon{margin-top:28px; padding-top:16px; border-top:1px solid var(--rule); display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; font-size:var(--s13); color:var(--muted)}
+
+.loading{padding:80px 0; color:var(--muted)}
+.dataerr{padding:26px; border:1px solid var(--high); border-radius:3px; color:var(--ink); margin:40px 0}
+.dataerr code{font-family:ui-monospace,Menlo,monospace; font-size:14px; background:rgba(0,0,0,.05); padding:2px 5px; border-radius:2px}
+
+@media (max-width:860px){
+  :root{--gap-section:48px; --pad:20px}
+  .tabmodule{padding-top:40px}
+  section.tabpanel{padding-top:32px}
+  /* phone order: headline, item tabs, map, find your shop, then the pitch and signup */
+  .hero{padding:24px 0 var(--gap-section)}
+  .hero-layout{display:flex; flex-direction:column}
+  .hero h1{order:1}
+  .hero .itemtabs{order:2; margin:16px 0 0; padding-top:0; border-top:none}
+  .mapcol{order:3}
+  .finder{order:4; margin-top:28px}
+  .hero .lede{order:5; margin:32px 0 0; padding-top:20px; border-top:1px solid var(--rule)}
+  .herosignup{order:6; margin-top:16px; padding-top:0; border-top:none}
+  .viewbar{padding-top:12px; margin-bottom:10px}
+  /* the map runs edge to edge */
+  .mapframe{margin:0 calc(-1 * var(--pad))}
+  .map{height:55vh; height:55svh; min-height:300px; border-left:none; border-right:none}
+  .grid2{grid-template-columns:1fr; gap:28px}
+  .footgrid{grid-template-columns:1fr; gap:18px}
+  .masthead .wrap{display:block}
+  .masthead .tag{display:block; margin-top:6px}
+}
+@media (max-width:420px){
+  :root{--pad:16px}
+  body{font-size:16px}
+  .signup{flex-direction:column; align-items:stretch}
+  /* column flex turns flex-basis into a height, so reset it explicitly */
+  .signup input[type=email]{flex:0 0 auto; width:100%; max-width:none}
+  .signup .btn{width:100%}
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <span class="wordmark">The Weekly Bake</span>
+    <span class="tag">Prices and menu moves for Singapore cafe and bakery operators</span>
+  </div>
+</header>
+
+<div id="app" class="wrap loading">Loading the latest figures&hellip;</div>
+
+<template id="page-tpl">
+<main>
+  <!-- HERO: headline, then the map with the finder panel beside it -->
+  <section class="hero">
+    <div class="wrap hero-layout">
+      <h1 id="hero-headline"></h1>
+      <p class="lede">Every Monday morning we send what Singapore's cafes and bakeries are charging, what they have just put on the menu, and who is discounting. It takes two minutes to read and it costs nothing.</p>
+
+      <div class="choices itemtabs" id="finder-items" role="group" aria-label="Choose an item"></div>
+
+      <!-- MAP, with the named-prices list behind the toggle -->
+      <div class="mapcol" id="map-col">
+        <div class="choices viewbar" id="view-toggle" role="group" aria-label="Show prices as">
+          <button type="button" class="choice" data-view="map" aria-pressed="true">Map</button>
+          <button type="button" class="choice" data-view="list" aria-pressed="false">List view</button>
+        </div>
+        <div id="map-view">
+          <div class="mapframe">
+            <div class="map" id="map" role="region" aria-label="Map of cafe prices"></div>
+            <div class="maphint" id="map-hint" aria-hidden="true"></div>
+          </div>
+          <p class="mapnote" id="map-note" hidden></p>
+        </div>
+        <div id="list-view" hidden="until-found">
+          <div class="filterbar">
+            <label class="field-label" for="named-filter" style="margin:0">Filter by cafe or district</label>
+            <input type="text" id="named-filter" placeholder="Try a name or a district">
+          </div>
+          <div class="tablewrap">
+            <table id="named-table">
+              <thead><tr>
+                <th scope="col" data-key="shop_name"><button class="sortbtn" type="button">Cafe<span class="caret"></span></button></th>
+                <th scope="col" data-key="district"><button class="sortbtn" type="button">District<span class="caret"></span></button></th>
+                <th scope="col" class="n" data-key="price"><button class="sortbtn" type="button">Price<span class="caret"></span></button></th>
+              </tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div class="tablefoot">
+            <button class="linkbtn" id="named-more" type="button"></button>
+            <span class="count" id="named-count"></span>
+          </div>
+        </div>
+        <p class="mapcaption" id="map-caption"></p>
+      </div>
+
+      <!-- FIND YOUR SHOP -->
+      <div class="finder">
+        <h2>Where do your prices sit?</h2>
+        <div class="shopfind">
+          <label class="field-label" for="shop-input">Find your shop</label>
+          <div class="combo">
+            <input type="text" id="shop-input" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="shop-list" autocomplete="off" spellcheck="false" placeholder="Start typing its name">
+            <ul class="combolist" id="shop-list" role="listbox" aria-label="Shops" hidden></ul>
+          </div>
+        </div>
+        <div class="notfound" id="shop-notfound" hidden>
+          <p class="hint">We do not have a shop by that name yet. Choose your district and enter your price instead.</p>
+          <form id="finder-form" novalidate>
+            <label class="field-label" for="finder-district">Your district</label>
+            <select id="finder-district" required><option value="">Choose a district</option></select>
+            <label class="field-label" for="finder-price">What do you charge?</label>
+            <div class="moneyrow">
+              <span class="moneywrap">
+                <span class="dollar">$</span>
+                <input type="number" id="finder-price" step="0.01" min="0" inputmode="decimal" placeholder="4.20" required>
+              </span>
+              <button class="btn" type="submit">Show me</button>
+            </div>
+          </form>
+        </div>
+        <div class="verdict">
+          <div class="result" id="finder-result" aria-live="polite" hidden>
+            <p class="resultline" id="result-line"></p>
+            <div class="consequence" id="finder-consequence" hidden></div>
+          </div>
+          <p class="hint" id="finder-hint">Find your shop to see where you land.</p>
+          <div class="strip">
+            <svg id="strip-svg" viewBox="0 0 600 76" preserveAspectRatio="none" role="img" aria-labelledby="strip-desc"></svg>
+            <p id="strip-desc" class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></p>
+            <div class="axis"><span class="num" id="axis-low"></span><span class="num" id="axis-high"></span></div>
+            <p class="outliernote" id="strip-outlier" hidden></p>
+          </div>
+          <p class="tolink" id="finder-tolink"><button class="linkbtn" type="button" id="finder-to-table"></button></p>
+        </div>
+      </div>
+
+      <div class="herosignup">
+        <form class="signup" id="news-form" novalidate>
+          <label class="visually-hidden" for="news-email" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Email address</label>
+          <input type="email" id="news-email" placeholder="you@yourcafe.sg" required>
+          <button class="btn" type="submit">Get Monday's email</button>
+        </form>
+        <p class="fineprint">No account needed. Unsubscribe in one click. We never pass your address on.</p>
+        <p class="formnote" id="news-note" hidden></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DATA TABS -->
+  <div class="tabmodule" id="data-tabs">
+    <div class="tabbar" id="tabbar">
+      <div class="wrap">
+        <div class="tabstrip" id="tabstrip" role="tablist" aria-label="Price and menu data">
+          <button type="button" role="tab" id="tab-what-things-cost" aria-controls="panel-what-things-cost" aria-selected="true" tabindex="0">What things cost</button>
+          <button type="button" role="tab" id="tab-whats-launching" aria-controls="panel-whats-launching" aria-selected="false" tabindex="-1">What&rsquo;s launching</button>
+          <button type="button" role="tab" id="tab-whos-discounting" aria-controls="panel-whos-discounting" aria-selected="false" tabindex="-1">Who&rsquo;s discounting</button>
+        </div>
+      </div>
+    </div>
+
+  <!-- PRICE TABLE -->
+  <section class="band tabpanel" id="panel-what-things-cost" role="tabpanel" aria-labelledby="tab-what-things-cost">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>What every item costs</h2>
+        <p id="price-sub"></p>
+      </div>
+      <div class="tablewrap">
+        <table id="price-table">
+          <thead><tr>
+            <th scope="col" data-key="display_name"><button class="sortbtn" type="button">Item<span class="caret"></span></button></th>
+            <th scope="col" class="n" data-key="shop_count"><button class="sortbtn" type="button">Shops<span class="caret"></span></button></th>
+            <th scope="col" class="n" data-key="low"><button class="sortbtn" type="button">Cheapest<span class="caret"></span></button></th>
+            <th scope="col" class="n" data-key="median"><button class="sortbtn" type="button">Most charge<span class="caret"></span></button></th>
+            <th scope="col" class="n" data-key="high"><button class="sortbtn" type="button">Dearest<span class="caret"></span></button></th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- LAUNCHES -->
+  <section class="band tabpanel" id="panel-whats-launching" role="tabpanel" aria-labelledby="tab-whats-launching" hidden="until-found">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>What other cafes have been putting on</h2>
+        <p id="launch-sub"></p>
+      </div>
+      <div class="chart"><svg id="launch-svg" role="img" aria-labelledby="launch-desc"></svg>
+      <p id="launch-desc" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></p></div>
+      <div style="margin-top:34px">
+        <div class="filterrow" id="who-filter" role="group" aria-label="Filter by operator size"><span class="lbl">Who</span></div>
+        <div class="filterrow" id="month-filter" role="group" aria-label="Filter by month"><span class="lbl">Month</span></div>
+        <div class="filterrow" id="type-filter" role="group" aria-label="Filter by type"><span class="lbl">Type</span></div>
+      </div>
+      <div class="tablewrap">
+        <table id="launch-table">
+          <thead><tr>
+            <th scope="col" data-key="item_name"><button class="sortbtn" type="button">Item<span class="caret"></span></button></th>
+            <th scope="col" data-key="shop"><button class="sortbtn" type="button">Cafe<span class="caret"></span></button></th>
+            <th scope="col" data-key="flavour"><button class="sortbtn" type="button">Flavour<span class="caret"></span></button></th>
+            <th scope="col" class="n" data-key="price"><button class="sortbtn" type="button">Price<span class="caret"></span></button></th>
+            <th scope="col" data-key="launch_month"><button class="sortbtn" type="button">Month<span class="caret"></span></button></th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="tablefoot">
+        <button class="linkbtn" id="launch-more" type="button"></button>
+        <span class="count" id="launch-count"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROMOS -->
+  <section class="band tabpanel" id="panel-whos-discounting" role="tabpanel" aria-labelledby="tab-whos-discounting" hidden="until-found">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Who is discounting, and how</h2>
+        <p id="promo-sub"></p>
+      </div>
+      <div class="choices" id="promo-tabs" role="group" aria-label="Filter offers"></div>
+      <div class="tablewrap">
+        <table id="promo-table">
+          <thead><tr>
+            <th scope="col" data-key="brand_name"><button class="sortbtn" type="button">Brand<span class="caret"></span></button></th>
+            <th scope="col" data-key="offer_text"><button class="sortbtn" type="button">Offer<span class="caret"></span></button></th>
+            <th scope="col" data-key="promo_type"><button class="sortbtn" type="button">Type<span class="caret"></span></button></th>
+            <th scope="col" data-key="end_date"><button class="sortbtn" type="button">Ends<span class="caret"></span></button></th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="tablefoot">
+        <button class="linkbtn" id="promo-more" type="button"></button>
+        <span class="count" id="promo-count"></span>
+      </div>
+      <p class="chartnote">Hotel restaurants and afternoon teas are excluded. They are not competing for the same customer.</p>
+    </div>
+  </section>
+
+  </div>
+  <!-- /DATA TABS -->
+
+  <!-- WAITLIST -->
+  <section class="waitlist">
+    <div class="wrap">
+      <h2>See your own shop in this data, every week</h2>
+      <p class="intro">The weekly email tells you what the market is doing. The paid version tells you what it means for your shop specifically, updated every week without you doing anything.</p>
+      <div class="grid2">
+        <div><h3>Where you rank, item by item</h3><p>Your position across every cafe we track, not just an average to compare against.</p></div>
+        <div><h3>Whether a flavour has reached your street</h3><p>Pandan might be at nine shops island-wide and only one in your district.</p></div>
+        <div><h3>What sells near you that you do not carry</h3><p>A ranked list of the gaps, ordered by how many neighbours have filled them.</p></div>
+        <div><h3>Tell me when something changes</h3><p>Pick your competitors and we email you when one of them moves a price.</p></div>
+      </div>
+      <p class="price-line">$20 a month when we launch</p>
+      <form class="signup" id="wait-form" novalidate style="margin-top:0">
+        <label for="wait-email" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Email address</label>
+        <input type="email" id="wait-email" placeholder="you@yourcafe.sg" required>
+        <button class="btn" type="submit">Join the waitlist</button>
+      </form>
+      <p class="fineprint">Nothing to pay now. We will ask before we ever charge you.</p>
+      <p class="formnote" id="wait-note" hidden></p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <div class="footgrid">
+      <div class="blk"><h3>Where the numbers come from</h3><p>We read menus published by the cafes themselves, their online ordering pages, and two government registers. We do not scrape delivery apps and we do not buy social listening, so everything here is either public or sent to us by the shop.</p></div>
+      <div class="blk"><h3>What is coming</h3><p>From November we will start reporting which items got discounted soon after launching and which quietly disappeared. That needs a few months of watching the same shops, which is exactly what we are doing now.</p></div>
+      <div class="blk"><h3>When we get it wrong</h3><p>Every mistake we publish goes on the corrections page with the date and stays there. If a price of yours is wrong, reply to any email and we will fix it in the next issue.</p></div>
+      </div>
+      <div class="colophon"><span id="colophon-left" class="num"></span><span>Made in Singapore by four NUS students</span></div>
+    </div>
+  </footer>
+</main>
+</template>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" integrity="sha512-puJW3E/qXDqYp9IfhAI54BJEaWIfloJ7JWs7OeD5i6ruC9JZL1gERT1wjtwXFlh7CjE7ZJ+/vcRZRkIYIb6p4g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+"use strict";
+
+const SUPABASE_URL = "https://ybcnzkzgyoghkqsxnqkl.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InliY256a3pneW9naGtxc3hucWtsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4ODc0MzAsImV4cCI6MjEwNTQ2MzQzMH0.koP33NN4VcbzyBtfBoAT9Gbwd0ayU03-5tW6YZOZr4A";
+
+const SB_HEADERS = {
+  "apikey": SUPABASE_KEY,
+  "Authorization": "Bearer " + SUPABASE_KEY,
+  "Content-Type": "application/json",
+  "Prefer": "return=minimal"
+};
+
+/* One id per tab, held in memory only. No localStorage, no sessionStorage,
+   so it does not survive a reload and nothing is written to the device. */
+const SESSION_ID = Math.random().toString(36).slice(2) + "-" + Date.now().toString(36);
+
+/* Analytics. Fire and forget: a failure here must never surface to the reader
+   or interrupt anything on the page. */
+function track(eventName, props){
+  try{
+    const payload = JSON.stringify({
+      name: String(eventName),
+      props: props || {},
+      session_id: SESSION_ID
+    });
+    let sent = false;
+    if(navigator.sendBeacon){
+      try{
+        // sendBeacon cannot set headers, so the key rides in the query string
+        sent = navigator.sendBeacon(
+          SUPABASE_URL + "/rest/v1/events?apikey=" + encodeURIComponent(SUPABASE_KEY),
+          new Blob([payload], {type: "application/json"}));
+      }catch(_){ sent = false; }
+    }
+    if(!sent){
+      fetch(SUPABASE_URL + "/rest/v1/events", {
+        method: "POST", keepalive: true, headers: SB_HEADERS, body: payload
+      }).catch(() => {});
+    }
+  }catch(_){ /* swallowed on purpose */ }
+}
+
+/* time_on_page and scroll_depth */
+const PAGE_OPENED = Date.now();
+const DEPTHS_SEEN = new Set();
+function watchScrollDepth(){
+  const check = () => {
+    const doc = document.documentElement;
+    const full = doc.scrollHeight - window.innerHeight;
+    const pct = full <= 0 ? 100 : ((window.scrollY / full) * 100);
+    [25, 50, 75, 100].forEach(mark => {
+      if(pct >= mark - 0.5 && !DEPTHS_SEEN.has(mark)){
+        DEPTHS_SEEN.add(mark);
+        track("scroll_depth", {percent: mark});
+      }
+    });
+  };
+  window.addEventListener("scroll", check, {passive: true});
+  check();
+}
+window.addEventListener("pagehide", () => {
+  track("time_on_page", {seconds: Math.round((Date.now() - PAGE_OPENED) / 1000)});
+}, {once: true});
+
+/* SVGs are drawn at native pixel scale so their labels never scale with a
+   viewBox. Every chart redraws when its container changes width. */
+function boxWidth(el, fallback){
+  const w = el.getBoundingClientRect().width;
+  return w > 40 ? Math.round(w) : fallback;
+}
+const REDRAWERS = [];
+function onResize(fn){ REDRAWERS.push(fn); }
+let rzTimer = null;
+window.addEventListener("resize", () => {
+  clearTimeout(rzTimer);
+  rzTimer = setTimeout(() => REDRAWERS.forEach(f => f()), 120);
+});
+
+const money = n => "$" + Number(n).toFixed(2);
+const MONTH_NAMES = {"01":"January","02":"February","03":"March","04":"April","05":"May","06":"June",
+                     "07":"July","08":"August","09":"September","10":"October","11":"November","12":"December"};
+const monthLabel = m => (MONTH_NAMES[String(m).slice(5,7)] || m);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const median = arr => {
+  const a=[...arr].sort((x,y)=>x-y), h=Math.floor(a.length/2);
+  return a.length%2 ? a[h] : (a[h-1]+a[h])/2;
+};
+
+let DATA = null;
+
+fetch("site_data.json", {cache:"no-store"})
+  .then(r => { if(!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+  .then(d => { DATA = d; render(d); })
+  .catch(err => {
+    document.getElementById("app").className = "wrap";
+    document.getElementById("app").innerHTML =
+      '<div class="dataerr"><strong>site_data.json could not be loaded.</strong>' +
+      '<p style="margin-top:10px">This page reads every figure from <code>site_data.json</code> at runtime, ' +
+      'so it needs to be served over http rather than opened straight off disk. From this folder run ' +
+      '<code>python3 -m http.server 8000</code> and open <code>http://localhost:8000/</code>.</p>' +
+      '<p style="margin-top:10px;color:var(--muted);font-size:14px">' + esc(err.message) + '</p></div>';
+  });
+
+/* ======================== TOP LEVEL TABS ========================
+   All three panels stay in the DOM whatever is showing, so every launch and
+   offer stays indexable and findable. Inactive panels are hidden with
+   hidden="until-found" where the browser supports it, which lets find-in-page
+   open the tab it lands in, and with a plain hidden attribute where it does
+   not. Nothing is rebuilt on a switch, so every filter, sort and expanded
+   state simply survives. */
+const TABS = ["what-things-cost","whats-launching","whos-discounting"];
+const DEFAULT_TAB = TABS[0];
+let activeTab = DEFAULT_TAB;
+
+/* Links from before the redesign still land somewhere sensible. The named
+   prices moved into the map's list view and the district chart is gone, so
+   #who-charges-what opens the list and #by-district gets the default tab. */
+const LIST_HASH = "who-charges-what";
+function routeHash(){
+  const slug = (location.hash || "").replace("#", "");
+  return {tab: TABS.indexOf(slug) === -1 ? DEFAULT_TAB : slug, list: slug === LIST_HASH};
+}
+
+const UNTIL_FOUND = "onbeforematch" in document.documentElement;
+const tabBtn = slug => document.getElementById("tab-" + slug);
+const tabPanel = slug => document.getElementById("panel-" + slug);
+
+/* A chart drawn inside a hidden panel measures zero and renders broken, so
+   each one is marked dirty while it is out of sight and redrawn the first
+   time its tab is opened, not on every switch. */
+const PANEL_CHARTS = {};
+function registerPanelChart(slug, draw){ PANEL_CHARTS[slug] = {draw: draw, dirty: true}; }
+function panelShown(slug){
+  const c = PANEL_CHARTS[slug];
+  if(c && c.dirty){ c.draw(); c.dirty = false; }
+}
+
+/* measured off rects, not offsetLeft: the buttons' offsetParent is the
+   padded .wrap, so offsetLeft and scrollLeft are in different origins */
+function scrollTabIntoView(btn){
+  const strip = document.getElementById("tabstrip");
+  if(!strip || !btn) return;
+  const s = strip.getBoundingClientRect(), b = btn.getBoundingClientRect();
+  if(b.left < s.left) strip.scrollLeft += b.left - s.left - 16;
+  else if(b.right > s.right) strip.scrollLeft += b.right - s.right + 16;
+}
+
+function scrollToModule(smooth){
+  const el = document.getElementById("data-tabs");
+  if(!el) return;
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  el.scrollIntoView({behavior: (smooth && !reduce) ? "smooth" : "auto", block: "start"});
+}
+
+function activateTab(slug, opts){
+  opts = opts || {};
+  if(TABS.indexOf(slug) === -1) slug = DEFAULT_TAB;
+  const prev = activeTab;
+  activeTab = slug;
+
+  TABS.forEach(t => {
+    const btn = tabBtn(t), panel = tabPanel(t), on = (t === slug);
+    btn.setAttribute("aria-selected", String(on));
+    btn.tabIndex = on ? 0 : -1;
+    if(on) panel.removeAttribute("hidden");
+    else panel.setAttribute("hidden", UNTIL_FOUND ? "until-found" : "");
+  });
+
+  scrollTabIntoView(tabBtn(slug));
+  panelShown(slug);
+  updateStripFade();
+
+  if(prev !== slug){
+    if(opts.push !== false) history.pushState({tab: slug}, "", "#" + slug);
+    if(opts.track !== false) track("tab_changed", {tab: slug, from: prev});
+  }
+  if(opts.focus) tabBtn(slug).focus();
+  if(opts.scroll) scrollToModule(opts.smooth);
+}
+
+function updateStripFade(){
+  const strip = document.getElementById("tabstrip"), bar = document.getElementById("tabbar");
+  if(!strip || !bar) return;
+  bar.classList.toggle("more-right",
+    strip.scrollWidth - strip.clientWidth - strip.scrollLeft > 2);
+}
+
+function buildTabs(){
+  const strip = document.getElementById("tabstrip");
+
+  TABS.forEach((slug, i) => {
+    tabBtn(slug).addEventListener("click", () => activateTab(slug));
+    /* find-in-page landing inside a hidden panel reveals it by itself, so the
+       tab bar has to catch up rather than fight it */
+    tabPanel(slug).addEventListener("beforematch", () => {
+      activateTab(slug, {push: false});
+    });
+  });
+
+  strip.addEventListener("keydown", e => {
+    let next = null;
+    const i = TABS.indexOf(activeTab);
+    if(e.key === "ArrowRight") next = TABS[(i + 1) % TABS.length];
+    else if(e.key === "ArrowLeft") next = TABS[(i - 1 + TABS.length) % TABS.length];
+    else if(e.key === "Home") next = TABS[0];
+    else if(e.key === "End") next = TABS[TABS.length - 1];
+    if(!next) return;
+    e.preventDefault();
+    activateTab(next, {focus: true});
+  });
+
+  strip.addEventListener("scroll", updateStripFade, {passive: true});
+  onResize(updateStripFade);
+
+  window.addEventListener("popstate", () => {
+    const to = routeHash();
+    activateTab(to.tab, {push: false});
+    if(to.list) setView("list", {track: false, scroll: true, smooth: false});
+  });
+
+  const deep = routeHash();
+  if(deep.tab !== activeTab){
+    activateTab(deep.tab, {push: false, track: false});
+    scrollToModule(false);
+  } else {
+    history.replaceState({tab: activeTab}, "", location.href);
+    panelShown(activeTab);
+    updateStripFade();
+    if(deep.list) setView("list", {track: false, scroll: true, smooth: false});
+  }
+}
+
+/* ============================ RENDER ============================ */
+function render(d){
+  const app = document.getElementById("app");
+  app.className = "";
+  app.replaceWith(document.getElementById("page-tpl").content.cloneNode(true));
+
+  buildHero(d);
+  buildFinder(d);
+  buildNamed(d);
+  buildViewToggle();
+  buildMap(d);
+  drawCaption(d);
+  buildPriceTable(d);
+  buildLaunches(d);
+  buildPromos(d);
+  buildFooter(d);
+  wireForms();
+  watchScrollDepth();
+
+  registerPanelChart("whats-launching", () => redrawLaunchChart());
+  buildTabs();
+
+  onResize(() => {
+    drawStrip(d);
+    if(map && viewMode === "map") map.invalidateSize();
+    // a hidden panel cannot be measured, so it waits its turn instead
+    Object.keys(PANEL_CHARTS).forEach(slug => {
+      if(slug === activeTab){ PANEL_CHARTS[slug].draw(); PANEL_CHARTS[slug].dirty = false; }
+      else PANEL_CHARTS[slug].dirty = true;
+    });
+  });
+
+  track("page_view", {generated_at: d.meta.generated_at});
+}
+
+/* ---------- hero ---------- */
+function buildHero(d){
+  document.getElementById("hero-headline").textContent =
+    "You can see your own prices. Now see what " + d.meta.shops_with_prices + " other cafes charge.";
+}
+
+/* ---------- item labels, derived from the data ---------- */
+function itemLabel(d, key){
+  const row = d.price_table.find(r => r.item_canonical === key);
+  return row ? row.display_name : key;
+}
+function itemNoun(d, key){
+  return itemLabel(d, key).split(",")[0].toLowerCase();
+}
+function itemPhrase(d, key){
+  const parts = itemLabel(d, key).split(",").map(x => x.trim());
+  return (parts.length > 1 ? parts[1] + " " + parts[0] : parts[0]).toLowerCase();
+}
+const WORDS = ["zero","one","two","three","four","five","six","seven","eight","nine","ten",
+  "eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen","twenty"];
+const inWords = n => WORDS[n] || String(n);
+
+/* ---------- the selected item and the reader ----------
+   One item is selected at a time and the map, the list view, the strip, the
+   caption and the result all follow it. */
+const FINDER_ITEMS = ["croissant_plain","flat_white","latte","matcha_latte"];
+let finderItem = "croissant_plain";
+/* who is asking: {shopId} once they pick their shop from the data, or
+   {price, district} when it is not in the data and they type a price */
+let reader = null;
+let readerPrice = null;      // the price the strip marks
+let markerSettled = false;   // the slide plays once per result, not on resize
+const MIN_NEIGHBOURS = 3;    // fewer other shops than this and a district is not ranked
+const SHOPS = new Map();     // every shop with a price for at least one finder item
+
+const byId = id => document.getElementById(id);
+const reduceMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const priceRow = (d, key) => d.price_table.find(r => r.item_canonical === key) || {};
+
+function indexShops(d){
+  FINDER_ITEMS.forEach(k => (d.named_prices[k] || []).forEach(r => {
+    if(!SHOPS.has(r.shop_id)){
+      SHOPS.set(r.shop_id, {shop_id: r.shop_id, shop_name: r.shop_name, district: r.district,
+                            address: r.address || "", lat: r.lat, lng: r.lng, items: []});
+    }
+    SHOPS.get(r.shop_id).items.push(k);
+  }));
+}
+
+let setItem = () => {};
+function buildFinder(d){
+  indexShops(d);
+  const items = FINDER_ITEMS.filter(k => d.named_prices[k]);
+  if(items.indexOf(finderItem) === -1) finderItem = items[0];
+
+  const box = byId("finder-items");
+  items.forEach(k => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "choice"; b.textContent = itemLabel(d, k);
+    b.dataset.val = k;
+    b.setAttribute("aria-pressed", String(k === finderItem));
+    b.addEventListener("click", () => setItem(k));
+    box.appendChild(b);
+  });
+
+  setItem = k => {
+    if(k === finderItem || !d.named_prices[k]) return;
+    finderItem = k; markerSettled = false;
+    box.querySelectorAll(".choice").forEach(x =>
+      x.setAttribute("aria-pressed", String(x.dataset.val === k)));
+    // a typed price was for the previous item, so it does not carry across
+    if(reader && !reader.shopId){ reader = null; byId("finder-price").value = ""; }
+    drawPins(d);
+    drawCaption(d);
+    setNamedItem();
+    updateToTable(d);
+    showResult(d);
+    track("map_item_changed", {item: k});
+    track("tab_changed", {section:"rank_finder", item:k});
+  };
+
+  const sel = byId("finder-district");
+  d.meta.districts.forEach(name => {
+    const o = document.createElement("option");
+    o.value = name; o.textContent = name;
+    sel.appendChild(o);
+  });
+
+  byId("finder-to-table").addEventListener("click", () => {
+    track("rank_finder_to_table", {item: finderItem});
+    setView("list", {scroll: true});
+  });
+
+  byId("finder-form").addEventListener("submit", e => {
+    e.preventDefault();
+    const v = parseFloat(byId("finder-price").value);
+    if(!sel.value){ sel.focus(); return; }
+    if(!isFinite(v) || v <= 0){ byId("finder-price").focus(); return; }
+    reader = {price: v, district: sel.value};
+    markerSettled = false;
+    track("rank_finder_submitted", {item:finderItem});
+    drawPins(d);
+    showResult(d);
+  });
+
+  // the result offers other items when a shop has no price for this one
+  byId("result-line").addEventListener("click", e => {
+    const b = e.target.closest("[data-item]");
+    if(b) setItem(b.dataset.item);
+  });
+
+  buildShopSearch(d);
+  updateToTable(d);
+  showResult(d);
+}
+
+function updateToTable(d){
+  byId("finder-to-table").textContent =
+    `See all ${d.named_prices[finderItem].length} cafes and where they sit`;
+}
+
+/* ---------- find your shop ----------
+   What is typed here never leaves the page. Analytics only learns whether a
+   shop was found. */
+function buildShopSearch(d){
+  const input = byId("shop-input"), list = byId("shop-list"), nf = byId("shop-notfound");
+  const all = [...SHOPS.values()].sort((a,b) => a.shop_name.localeCompare(b.shop_name));
+  let matches = [], active = -1, missTimer = null, missSent = false;
+
+  function close(){
+    list.hidden = true; active = -1;
+    input.setAttribute("aria-expanded", "false");
+    input.removeAttribute("aria-activedescendant");
+  }
+  function setActive(i){
+    active = i;
+    list.querySelectorAll("li").forEach((li, n) => li.setAttribute("aria-selected", String(n === i)));
+    if(i < 0){ input.removeAttribute("aria-activedescendant"); return; }
+    const li = byId("shop-opt-" + i);
+    input.setAttribute("aria-activedescendant", li.id);
+    li.scrollIntoView({block: "nearest"});
+  }
+  function paint(){
+    const q = input.value.trim().toLowerCase();
+    clearTimeout(missTimer);
+    const name = s => s.shop_name.toLowerCase();
+    matches = q ? all.filter(s => name(s).startsWith(q))
+                    .concat(all.filter(s => !name(s).startsWith(q) && name(s).includes(q))) : [];
+    if(!matches.length){
+      close();
+      const miss = q.length >= 2;
+      nf.hidden = !miss;
+      if(!miss){ missSent = false; return; }
+      // once per miss, and only after they stop typing
+      if(!missSent) missTimer = setTimeout(() => { missSent = true; track("shop_search", {found: false}); }, 900);
+      return;
+    }
+    nf.hidden = true; missSent = false;
+    list.innerHTML = matches.map((s, i) =>
+      `<li role="option" id="shop-opt-${i}" aria-selected="false" data-i="${i}">` +
+      `<span class="optname">${esc(s.shop_name)}</span>` +
+      `<span class="optsub">${esc([s.address, s.district].filter(Boolean).join(", "))}</span></li>`).join("");
+    list.hidden = false; active = -1;
+    input.setAttribute("aria-expanded", "true");
+    input.removeAttribute("aria-activedescendant");
+  }
+  function choose(s){
+    input.value = s.shop_name;
+    close(); nf.hidden = true; missSent = false; clearTimeout(missTimer);
+    reader = {shopId: s.shop_id};
+    markerSettled = false;
+    track("shop_search", {found: true});
+    drawPins(d);
+    showResult(d);
+    flyToShop(s);
+  }
+
+  input.addEventListener("input", () => {
+    // editing the name lets go of whoever was found before
+    if(reader){ reader = null; drawPins(d); showResult(d); }
+    paint();
+  });
+  input.addEventListener("focus", () => { if(!reader && input.value.trim()) paint(); });
+  input.addEventListener("blur", () => setTimeout(close, 120));
+  input.addEventListener("keydown", e => {
+    if(e.key === "ArrowDown" || e.key === "ArrowUp"){
+      if(list.hidden){ paint(); if(list.hidden) return; }
+      e.preventDefault();
+      const n = matches.length;
+      setActive(e.key === "ArrowDown" ? (active + 1) % n : (active - 1 + n) % n);
+    } else if(e.key === "Enter"){
+      if(!list.hidden && active >= 0){ e.preventDefault(); choose(matches[active]); }
+      else if(!list.hidden && matches.length === 1){ e.preventDefault(); choose(matches[0]); }
+      else if(!nf.hidden){ e.preventDefault(); byId("finder-district").focus(); }
+    } else if(e.key === "Escape"){
+      close();
+    }
+  });
+  // keep focus in the field while an option is being picked
+  list.addEventListener("pointerdown", e => e.preventDefault());
+  list.addEventListener("click", e => {
+    const li = e.target.closest("li[data-i]");
+    if(li) choose(matches[Number(li.dataset.i)]);
+  });
+}
+
+function drawStrip(d){
+  const rows = d.named_prices[finderItem];
+  const main = rows.filter(r => !r.is_outlier);
+  const outs = rows.filter(r => r.is_outlier).sort((a,b) => a.price - b.price);
+  const prices = main.map(r => r.price);
+  const lo = Math.min(...prices), hi = Math.max(...prices);
+  const med = median(prices);
+
+  const el = document.getElementById("strip-svg");
+  const W = boxWidth(el.parentElement, 420);
+  const H = 76, PADX = 12, base = 56, span = (hi - lo) || 1;
+  const TICK_MAX = 28, MED_H = 36, READER_H = 40;
+  // outliers sit in their own zone past a break line, so one distant shop
+  // cannot squash the range everybody else actually trades in
+  const ZONE = outs.length ? 46 : 0;
+  const axisRight = W - PADX - ZONE;
+  const x = p => PADX + ((p - lo) / span) * (axisRight - PADX);
+  const outX = i => axisRight + 20 + (outs.length > 1 ? (i / (outs.length - 1)) * 18 : 9);
+
+  const counts = new Map();
+  prices.forEach(p => counts.set(p, (counts.get(p)||0) + 1));
+  const maxCount = Math.max(...counts.values());
+
+  let svg = "";
+  counts.forEach((c, p) => {
+    const h = 8 + (c / maxCount) * (TICK_MAX - 8);
+    svg += `<rect x="${(x(p)-1).toFixed(2)}" y="${(base-h).toFixed(2)}" width="2" height="${h.toFixed(2)}" fill="var(--rule)"></rect>`;
+  });
+  svg += `<line x1="${PADX}" y1="${base}" x2="${axisRight}" y2="${base}" stroke="var(--rule)" stroke-width="1"></line>`;
+
+  svg += `<rect x="${(x(med)-1).toFixed(2)}" y="${base-MED_H}" width="2" height="${MED_H}" fill="var(--ink)"></rect>`;
+  const medLabelX = Math.min(Math.max(x(med), 52), axisRight - 40);
+  svg += `<text x="${medLabelX.toFixed(2)}" y="${base+15}" fill="var(--muted)" font-family="Archivo,sans-serif" font-size="11" text-anchor="middle" style="font-variant-numeric:tabular-nums">most charge ${money(med)}</text>`;
+
+  if(outs.length){
+    svg += `<line x1="${axisRight + 10}" y1="${base - 30}" x2="${axisRight + 10}" y2="${base + 4}" stroke="var(--rule)" stroke-width="1"></line>`;
+    outs.forEach((o, i) => {
+      svg += `<rect x="${(outX(i)-1).toFixed(2)}" y="${base-16}" width="2" height="16" fill="var(--muted)"></rect>`;
+    });
+  }
+
+  let targetX = null;
+  if(readerPrice !== null){
+    if(outs.length && readerPrice > hi){
+      // beyond the main range: the reader belongs in the outlier zone
+      targetX = outX(outs.length - 1) + (outs.length > 1 ? 0 : 0);
+    } else {
+      targetX = x(Math.min(Math.max(readerPrice, lo), hi));
+    }
+    svg += `<g id="reader-marker" transform="translate(0,0)">
+      <rect x="-1.5" y="${base-READER_H}" width="3" height="${READER_H}" fill="var(--brand)"></rect>
+      <text x="0" y="${base-READER_H-5}" fill="var(--brand)" font-family="Archivo,sans-serif" font-size="12" font-weight="600" text-anchor="middle" style="font-variant-numeric:tabular-nums">${money(readerPrice)}</text>
+    </g>`;
+  }
+
+  el.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  el.setAttribute("preserveAspectRatio", "xMinYMin meet");
+  el.innerHTML = svg;
+
+  document.getElementById("axis-low").textContent = money(lo);
+  document.getElementById("axis-high").textContent = money(hi);
+  // the high label marks the end of the axis, not the end of the outlier zone
+  document.querySelector(".axis").style.paddingRight = ZONE ? (ZONE - 4) + "px" : "0";
+
+  const noteEl = document.getElementById("strip-outlier");
+  if(outs.length === 1){
+    noteEl.textContent = `One shop charges ${money(outs[0].price)}, well outside the rest. Shown on the right.`;
+  } else if(outs.length > 1){
+    noteEl.textContent = `${outs.length} shops charge between ${money(outs[0].price)} and ${money(outs[outs.length-1].price)}, well outside the rest. Shown on the right.`;
+  } else {
+    noteEl.textContent = "";
+  }
+  noteEl.hidden = outs.length === 0;
+
+  document.getElementById("strip-desc").textContent =
+    `Price distribution for ${itemNoun(d, finderItem)} across ${main.length} cafes, from ${money(lo)} to ${money(hi)}, most charge ${money(med)}.` +
+    (outs.length ? ` ${outs.length} further shop${outs.length>1?"s":""} shown separately as outliers.` : "");
+
+  if(targetX !== null){
+    const marker = document.getElementById("reader-marker");
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const slide = !reduce && !markerSettled;
+    marker.style.transition = slide ? "" : "none";
+    marker.style.transform = "translateX(0px)";
+    void marker.getBoundingClientRect();
+    marker.style.transform = "translateX(" + targetX.toFixed(2) + "px)";
+    if(slide) markerSettled = true;
+    if(!slide && !reduce) setTimeout(() => { marker.style.transition = ""; }, 0);
+  }
+}
+
+/* ---------- the result ----------
+   Rank counts the shops charging strictly more, plus one, so the dearest shop
+   is 1st and shops on the same price share a rank. */
+function rankPhrase(rank, tied){
+  if(rank === 1) return tied ? "joint most expensive" : "the most expensive";
+  return (tied ? "joint " : "") + ordinal(rank) + " most expensive";
+}
+
+function showResult(d){
+  const rows = d.named_prices[finderItem];
+  const box = byId("finder-result"), line = byId("result-line");
+  const cons = byId("finder-consequence"), hint = byId("finder-hint");
+  readerPrice = null;
+
+  if(!reader){
+    box.hidden = true; hint.hidden = false;
+    drawStrip(d);
+    return;
+  }
+  hint.hidden = true; box.hidden = false;
+
+  let v, district, selfId = null;
+  if(reader.shopId){
+    const shop = SHOPS.get(reader.shopId);
+    const own = rows.find(r => r.shop_id === reader.shopId);
+    if(!own){
+      const offers = shop.items.map(k =>
+        `<button type="button" class="linkbtn" data-item="${esc(k)}">${esc(itemLabel(d, k))}</button>`);
+      const last = offers.pop();
+      line.innerHTML = `We do not have a ${esc(itemPhrase(d, finderItem))} price for ${esc(shop.shop_name)} yet. ` +
+        `Switch to ${offers.length ? offers.join(", ") + " or " : ""}${last} to see where you sit.`;
+      cons.hidden = true;
+      drawStrip(d);
+      return;
+    }
+    v = own.price; district = own.district; selfId = own.shop_id;
+  } else {
+    v = reader.price; district = reader.district;
+  }
+
+  const others = rows.filter(r => r.shop_id !== selfId);
+  const rankIn = list => list.filter(r => r.price > v).length + 1;
+  const tiedIn = list => list.some(r => r.price === v);
+  const near = others.filter(r => r.district === district);
+  const national = rankIn(others);
+  let local = null;
+
+  let text = `You charge ${money(v)}. That is ${rankPhrase(national, tiedIn(others))} of ${others.length + 1} island-wide`;
+  if(near.length < MIN_NEIGHBOURS){
+    text += ". " + (near.length === 0 ? `No other shops in ${district} sell this so far.`
+                  : near.length === 1 ? `Only 1 other shop in ${district} sells this so far.`
+                  : `Only ${near.length} other shops in ${district} sell this so far.`);
+  } else {
+    local = rankIn(near);
+    text += `, and ${rankPhrase(local, tiedIn(near))} of ${near.length + 1} in ${district}.`;
+  }
+  line.textContent = text;
+
+  const dearer = others.filter(r => r.price > v);
+  const med = median(rows.map(r => r.price));
+  const parts = [];
+  if(dearer.length){
+    const top = rows.reduce((a, b) => (b.price > a.price ? b : a));
+    parts.push(`${dearer.length} ${dearer.length === 1 ? "cafe charges" : "cafes charge"} more than you. The dearest is ${money(top.price)} at ${esc(top.shop_name)}.`);
+  } else {
+    parts.push("No cafe in our data charges more than you.");
+  }
+  if(v >= med){
+    parts.push("You are charging above the middle of the market.");
+  } else {
+    parts.push(`Moving to the middle of the market would add ${money(med - v)} per ${itemNoun(d, finderItem)}.`);
+  }
+  cons.innerHTML = parts.map(p => `<p>${p}</p>`).join("");
+  cons.hidden = false;
+
+  // ranks only: neither the price nor the shop goes anywhere
+  track("rank_result", {item: finderItem, national_rank: national, district_rank: local});
+  track("rank_finder_result", {item: finderItem, rank: rows.filter(r => r.price < v).length + 1, of: rows.length});
+
+  readerPrice = v;
+  drawStrip(d);
+}
+
+function ordinal(n){
+  const s = ["th","st","nd","rd"], v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+}
+
+/* ---------- map caption: the spread, per item ---------- */
+function drawCaption(d){
+  const rows = d.named_prices[finderItem];
+  const clean = rows.filter(r => !r.is_outlier).map(r => r.price);
+  const outs = rows.length - clean.length;
+  const lo = Math.min(...clean), hi = Math.max(...clean);
+  const gap = Math.round((hi / lo - 1) * 100);
+  const phrase = itemPhrase(d, finderItem);
+  const kind = priceRow(d, finderItem).format || "item";
+  const outlier = outs === 0 ? "" :
+    `${inWords(outs)} excluded as ${outs === 1 ? "an outlier" : "outliers"}, `;
+  byId("map-caption").textContent =
+    `${/^[aeiou]/.test(phrase) ? "An" : "A"} ${phrase} costs ${money(lo)} at one cafe and ${money(hi)} at another. ` +
+    `Same ${kind}, ${rows.length} shops, ${outlier}${gap}% apart.`;
+}
+
+/* ---------- map ---------- */
+let map = null, pinLayer = null;
+let viewMode = "map";
+const LABEL_ZOOM = 14;       // dots below this, price labels from here up
+const FOUND_ZOOM = 16;
+
+/* The basemap. This was meant to be CARTO Positron, but CARTO now answers every
+   keyless request, on every endpoint, with an "API KEY REQUIRED" watermark tile.
+   OneMap's Grey style is the closest keyless equivalent and only covers
+   Singapore, hence the bounds. To go back to CARTO once there is a key:
+     url "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?api_key=...",
+     subdomains "abcd", maxZoom 20, no bounds, and the attribution
+     (c) OpenStreetMap contributors (c) CARTO. */
+const BASEMAP = {
+  url: "https://www.onemap.gov.sg/maps/tiles/Grey/{z}/{x}/{y}.png",
+  minZoom: 11, maxZoom: 19,
+  bounds: [[1.144, 103.585], [1.494, 104.122]],
+  attribution: '<img src="https://www.onemap.gov.sg/web-assets/images/logo/om_logo.png" alt="" style="height:16px;width:16px;vertical-align:-3px"> ' +
+               '<a href="https://www.onemap.gov.sg/" target="_blank" rel="noopener noreferrer">OneMap</a> &copy; contributors | ' +
+               '<a href="https://www.sla.gov.sg/" target="_blank" rel="noopener noreferrer">Singapore Land Authority</a>'
+};
+
+function recordedOn(iso){
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || "");
+  return m ? `Recorded ${Number(m[3])} ${MONTH_NAMES[m[2]]} ${m[1]}` : "Date not recorded";
+}
+
+let hintTimer = null;
+function showMapHint(text){
+  const el = byId("map-hint");
+  el.textContent = text;
+  el.classList.add("on");
+  clearTimeout(hintTimer);
+  hintTimer = setTimeout(() => el.classList.remove("on"), 1400);
+}
+
+function buildMap(d){
+  const el = byId("map");
+  const unplaced = new Set();
+  const placed = [];
+  FINDER_ITEMS.forEach(k => (d.named_prices[k] || []).forEach(r => {
+    if(r.lat == null || r.lng == null) unplaced.add(r.shop_id);
+    else placed.push([r.lat, r.lng]);
+  }));
+
+  if(!window.L || !placed.length){
+    // no map library or nothing to place: the list still has every price
+    byId("view-toggle").hidden = true;
+    setView("list", {track: false});
+    return;
+  }
+
+  const touchFirst = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+  map = L.map(el, {dragging: !touchFirst, minZoom: BASEMAP.minZoom, maxZoom: BASEMAP.maxZoom,
+                   maxBounds: BASEMAP.bounds, maxBoundsViscosity: 1});
+  map.attributionControl.setPrefix('<a href="https://leafletjs.com">Leaflet</a>');
+  L.tileLayer(BASEMAP.url, {
+    minZoom: BASEMAP.minZoom, maxZoom: BASEMAP.maxZoom, bounds: BASEMAP.bounds,
+    // flying to a shop passes through zoom levels nobody looks at. Without
+    // this, tiles for each are requested and then abandoned mid-flight.
+    updateWhenZooming: false, updateWhenIdle: true,
+    attribution: BASEMAP.attribution
+  }).addTo(map);
+
+  // every item opens on the same frame, so switching item never moves the map
+  map.fitBounds(L.latLngBounds(placed).pad(0.06));
+
+  const syncLabels = () => el.classList.toggle("labels", map.getZoom() >= LABEL_ZOOM);
+  map.on("zoom zoomend", syncLabels);
+  syncLabels();
+
+  /* One finger scrolls the page and two move the map. A finger never drags the
+     map, a mouse always can, and the pinch handler pans as well as zooms. */
+  el.addEventListener("pointerdown", e => {
+    if(e.pointerType === "touch") map.dragging.disable();
+    else map.dragging.enable();
+  }, true);
+  let touchFrom = null;
+  el.addEventListener("touchstart", e => {
+    touchFrom = e.touches.length === 1 ? {x: e.touches[0].clientX, y: e.touches[0].clientY} : null;
+  }, {passive: true});
+  el.addEventListener("touchmove", e => {
+    if(e.touches.length !== 1 || !touchFrom) return;
+    const t = e.touches[0];
+    if(Math.hypot(t.clientX - touchFrom.x, t.clientY - touchFrom.y) > 12) showMapHint("Use two fingers to move the map");
+  }, {passive: true});
+
+  /* The wheel scrolls the page unless Ctrl or Cmd is held. Stopping the event
+     here keeps it from Leaflet without cancelling the page scroll. */
+  const zoomKey = /Mac|iPhone|iPad/.test(navigator.platform || "") ? "⌘" : "Ctrl";
+  el.addEventListener("wheel", e => {
+    if(e.ctrlKey || e.metaKey) return;
+    e.stopImmediatePropagation();
+    showMapHint(`Hold ${zoomKey} and scroll to zoom the map`);
+  }, {capture: true, passive: true});
+
+  pinLayer = L.layerGroup().addTo(map);
+  drawPins(d);
+
+  if(unplaced.size){
+    const note = byId("map-note");
+    note.textContent = `${unplaced.size} ${unplaced.size === 1 ? "cafe is" : "cafes are"} missing from the map because we could not place the postal code. Every cafe is in the list view.`;
+    note.hidden = false;
+  }
+}
+
+function drawPins(d){
+  if(!map) return;
+  pinLayer.clearLayers();
+  const rows = d.named_prices[finderItem].filter(r => r.lat != null && r.lng != null);
+  const med = priceRow(d, finderItem).median;
+  const mine = reader && reader.shopId;
+
+  // shops sharing a building share a coordinate, so their pins are fanned out
+  // on screen. The coordinate itself is never moved.
+  const spots = new Map();
+  rows.forEach(r => {
+    const key = r.lat + "," + r.lng;
+    if(!spots.has(key)) spots.set(key, []);
+    spots.get(key).push(r);
+  });
+
+  spots.forEach(group => group.forEach((r, i) => {
+    const me = r.shop_id === mine;
+    const hi = r.price > med * 1.4;            // same rule as the price table
+    const off = i - (group.length - 1) / 2;
+    const marker = L.marker([r.lat, r.lng], {
+      icon: L.divIcon({
+        className: "pinwrap", iconSize: [0, 0],
+        html: `<span class="pin${hi ? " hi" : ""}${me ? " me" : ""}" style="--off:${off}">` +
+              `<span class="pin-dot"></span><span class="pin-label">${money(r.price)}</span></span>`
+      }),
+      title: `${r.shop_name}, ${money(r.price)}`,
+      zIndexOffset: me ? 1000 : 0,
+      riseOnHover: true
+    });
+    marker.bindPopup(
+      `<span class="pop-name">${esc(r.shop_name)}</span>${esc(r.district)}` +
+      `<span class="pop-price${hi ? " hi" : ""}">${money(r.price)}</span>` +
+      `<span class="pop-date">${esc(recordedOn(r.observed_date))}</span>`,
+      {offset: [0, -8], maxWidth: 240});
+    marker.on("popupopen", () => track("pin_opened", {shop_id: r.shop_id, item: finderItem}));
+    marker.addTo(pinLayer);
+  }));
+}
+
+function flyToShop(shop){
+  if(!map || viewMode !== "map" || shop.lat == null || shop.lng == null) return;
+  const zoom = Math.max(map.getZoom(), FOUND_ZOOM);
+  if(reduceMotion()) map.setView([shop.lat, shop.lng], zoom, {animate: false});
+  else map.flyTo([shop.lat, shop.lng], zoom, {duration: 0.9});
+}
+
+/* ---------- map or list ----------
+   Both stay in the DOM. The list keeps its sort, filter and expanded state
+   because nothing is rebuilt on a switch, and find-in-page can still reach a
+   shop name while the map is showing. */
+function setView(mode, opts){
+  opts = opts || {};
+  const changed = mode !== viewMode;
+  viewMode = mode;
+  const mapEl = byId("map-view"), listEl = byId("list-view");
+  mapEl.hidden = mode !== "map";
+  if(mode === "list") listEl.removeAttribute("hidden");
+  else listEl.setAttribute("hidden", UNTIL_FOUND ? "until-found" : "");
+  byId("view-toggle").querySelectorAll(".choice").forEach(b =>
+    b.setAttribute("aria-pressed", String(b.dataset.view === mode)));
+
+  if(mode === "map" && map){
+    map.invalidateSize();
+    // catch up with a shop that was found while the list was showing
+    const shop = reader && reader.shopId && SHOPS.get(reader.shopId);
+    if(shop && shop.lat != null && shop.lng != null){
+      map.setView([shop.lat, shop.lng], Math.max(map.getZoom(), FOUND_ZOOM), {animate: false});
+    }
+  }
+  if(changed && opts.track !== false) track("list_view_toggled", {view: mode});
+  if(opts.scroll){
+    byId("map-col").scrollIntoView({behavior: (opts.smooth === false || reduceMotion()) ? "auto" : "smooth", block: "start"});
+  }
+}
+
+function buildViewToggle(){
+  byId("view-toggle").querySelectorAll(".choice").forEach(b =>
+    b.addEventListener("click", () => setView(b.dataset.view)));
+  byId("list-view").addEventListener("beforematch", () => setView("list", {track: false}));
+}
+
+/* ---------- generic sortable table ---------- */
+function makeSortable(tableId, getRows, renderRow, initial){
+  const table = document.getElementById(tableId);
+  const tbody = table.querySelector("tbody");
+  let sortKey = initial.key, sortDir = initial.dir;
+
+  function paint(){
+    const rows = getRows();
+    rows.sort((a,b) => {
+      const av = a[sortKey], bv = b[sortKey];
+      let c;
+      if(typeof av === "number" && typeof bv === "number") c = av - bv;
+      else if(av == null) c = 1;
+      else if(bv == null) c = -1;
+      else c = String(av).localeCompare(String(bv));
+      return sortDir === "asc" ? c : -c;
+    });
+    tbody.innerHTML = rows.map(renderRow).join("");
+    table.querySelectorAll("th").forEach(th => {
+      const caret = th.querySelector(".caret");
+      if(th.dataset.key === sortKey){
+        th.setAttribute("aria-sort", sortDir === "asc" ? "ascending" : "descending");
+        if(caret) caret.textContent = sortDir === "asc" ? "▲" : "▼";
+      } else {
+        th.removeAttribute("aria-sort");
+        if(caret) caret.textContent = "";
+      }
+    });
+  }
+
+  table.querySelectorAll("th[data-key]").forEach(th => {
+    const btn = th.querySelector(".sortbtn");
+    btn.addEventListener("click", () => {
+      const k = th.dataset.key;
+      if(k === sortKey) sortDir = sortDir === "asc" ? "desc" : "asc";
+      else { sortKey = k; sortDir = "asc"; }
+      paint();
+      track("table_sorted", {table:tableId, key:k, dir:sortDir});
+    });
+  });
+
+  paint();
+  return paint;
+}
+
+/* ---------- price table ---------- */
+function buildPriceTable(d){
+  document.getElementById("price-sub").textContent =
+    `${d.price_table.length} items, priced across ${d.meta.shops_with_prices} cafes and bakeries. Click a column heading to sort.`;
+
+  makeSortable("price-table",
+    () => d.price_table.slice(),
+    r => {
+      const flagged = r.high > r.median * 1.4;   // dearest well clear of the middle
+      return `<tr>
+        <td class="item">${esc(r.display_name)}</td>
+        <td class="n soft">${r.shop_count}</td>
+        <td class="n soft">${money(r.low)}</td>
+        <td class="n mid">${money(r.median)}</td>
+        <td class="n ${flagged ? "hi" : "soft"}">${money(r.high)}</td>
+      </tr>`;
+    },
+    {key:"shop_count", dir:"desc"});
+}
+
+/* ---------- named prices: the map's list view ---------- */
+let setNamedItem = () => {};
+function buildNamed(d){
+  let expanded = false;
+  let filter = "";
+  const LIMIT = 15;
+
+  /* the list follows the item picked above the map. The text filter and sort
+     are left exactly as they were. */
+  setNamedItem = () => { expanded = false; repaint(); };
+
+  function matching(){
+    const f = filter.trim().toLowerCase();
+    return d.named_prices[finderItem].filter(r =>
+      !f || r.shop_name.toLowerCase().includes(f) || r.district.toLowerCase().includes(f));
+  }
+
+  const paint = makeSortable("named-table",
+    () => { const m = matching(); return expanded ? m.slice() : m.slice(0, LIMIT); },
+    r => `<tr>
+        <td class="item">${esc(r.shop_name)}</td>
+        <td class="soft">${esc(r.district)}</td>
+        <td class="n mid">${money(r.price)}</td>
+      </tr>`,
+    {key:"price", dir:"asc"});
+
+  const moreBtn = document.getElementById("named-more");
+  const countEl = document.getElementById("named-count");
+
+  function repaint(){
+    const total = matching().length;
+    moreBtn.hidden = total <= LIMIT;
+    moreBtn.textContent = expanded ? "Show fewer" : `Show all ${total}`;
+    countEl.textContent = total === 0
+      ? "No cafes match that filter."
+      : `Showing ${expanded ? total : Math.min(LIMIT, total)} of ${total}`;
+    paint();
+  }
+
+  moreBtn.addEventListener("click", () => { expanded = !expanded; repaint(); });
+  document.getElementById("named-filter").addEventListener("input", e => {
+    filter = e.target.value; expanded = false; repaint();
+  });
+  repaint();
+}
+
+/* ---------- launches ---------- */
+function buildLaunches(d){
+  const list = d.launches_list;
+  const months = [...new Set(list.map(r => r.launch_month))].sort();
+  const formats = [...new Set(list.map(r => r.format))].sort();
+  // the reader runs a handful of shops, so independents are the default view
+  let who = "independent", month = "all", type = "all", expanded = false;
+  const LIMIT = 20;
+
+  document.getElementById("launch-sub").textContent =
+    `${list.length} new items over the last ${inWords(months.length)} months at named shops, with prices. ` +
+    `Large chains are filtered out by default because they price differently from a neighbourhood cafe. ` +
+    `Seasonal mooncakes and National Day specials are excluded, since the calendar drives those rather than demand, ` +
+    `and so is hotel F&B.`;
+
+  // Hotel F&B is already dropped upstream, so All = Independents + Chains.
+  // The chart reads from this too.
+  const byWho = () => list.filter(r =>
+    who === "all" || (who === "chain" ? r.is_chain : !r.is_chain));
+
+  function chips(container, opts, get, set, onPick){
+    const box = document.getElementById(container);
+    opts.forEach(([val, label]) => {
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "choice"; b.textContent = label; b.dataset.val = val;
+      b.setAttribute("aria-pressed", String(get() === val));
+      b.addEventListener("click", () => {
+        set(val); expanded = false;
+        box.querySelectorAll(".choice").forEach(x =>
+          x.setAttribute("aria-pressed", String(x.dataset.val === val)));
+        if(onPick) onPick();
+        repaint();
+        track("tab_changed", {section:"launches", filter:container, value:val});
+      });
+      box.appendChild(b);
+    });
+  }
+
+  chips("who-filter", [["all","All"], ["independent","Independents and small groups"], ["chain","Chains"]],
+        () => who, v => who = v, () => drawLaunchChart(d, byWho()));
+  chips("month-filter", [["all","All"], ...months.map(m => [m, monthLabel(m)])],
+        () => month, v => month = v);
+  chips("type-filter", [["all","All"], ...formats.map(f => [f, f.charAt(0).toUpperCase() + f.slice(1)])],
+        () => type, v => type = v);
+
+  function matching(){
+    return byWho().filter(r => (month === "all" || r.launch_month === month)
+                            && (type === "all" || r.format === type));
+  }
+
+  const paint = makeSortable("launch-table",
+    () => { const m = matching(); return expanded ? m.slice() : m.slice(0, LIMIT); },
+    r => `<tr>
+      <td class="item">${esc(r.item_name)}</td>
+      <td>${esc(r.shop)}</td>
+      <td class="soft">${esc(r.flavour)}</td>
+      <td class="n mid">${r.price == null ? "&mdash;" : money(r.price)}</td>
+      <td class="soft">${monthLabel(r.launch_month)}</td>
+    </tr>`,
+    {key:"launch_month", dir:"desc"});
+
+  const moreBtn = document.getElementById("launch-more");
+  const countEl = document.getElementById("launch-count");
+  function repaint(){
+    const total = matching().length;
+    moreBtn.hidden = total <= LIMIT;
+    moreBtn.textContent = expanded ? "Show fewer" : "Show more";
+    countEl.textContent = total === 0
+      ? "No launches match those filters."
+      : `Showing ${expanded ? total : Math.min(LIMIT, total)} of ${total}`;
+    paint();
+  }
+  moreBtn.addEventListener("click", () => { expanded = !expanded; repaint(); });
+
+  redrawLaunchChart = () => drawLaunchChart(d, byWho());
+  drawLaunchChart(d, byWho());
+  repaint();
+}
+
+let redrawLaunchChart = () => {};
+
+const MIN_SEGMENTS = 3;   // below this a month is stated as a number, not drawn
+function drawLaunchChart(d, rows){
+  // counts come from the rows actually in scope, so the chart tracks the Who filter
+  const order = d.format_split.map(f => f.format);
+  const months = [...new Set(d.launches_list.map(r => r.launch_month))].sort();
+  const countOf = (m, f) => rows.filter(r => r.launch_month === m && r.format === f).length;
+  const totals = months.map(m => rows.filter(r => r.launch_month === m).length);
+  const maxTotal = Math.max(...totals, 1);
+
+  const el = document.getElementById("launch-svg");
+  const W = boxWidth(el.parentElement, 900);
+  const narrow = W < 620;
+  const TOP = 12, BOT = narrow ? 46 + order.length * 14 : 46;
+  const H = (narrow ? 210 : 280) + (narrow ? order.length * 14 : 0);
+  const plotH = H - TOP - BOT;
+  const sideLabel = !narrow;
+  const slot = W / months.length;
+  const colW = Math.min(narrow ? 66 : 120, slot * (sideLabel ? 0.34 : 0.46));
+  const ops = [0.85, 0.62, 0.42, 0.24, 0.14];
+
+  let svg = "";
+  months.forEach((m, mi) => {
+    const cx = slot * mi + slot/2;
+    const x = sideLabel ? cx - colW * 0.85 : cx - colW/2;
+    const total = totals[mi];
+
+    if(total < MIN_SEGMENTS){
+      // too few to draw legibly, so say the number instead of drawing slivers
+      svg += `<text x="${cx.toFixed(2)}" y="${(TOP + plotH - 6).toFixed(2)}" text-anchor="middle" fill="var(--ink)" font-family="Archivo,sans-serif" font-size="21" style="font-variant-numeric:tabular-nums">${total}</text>`;
+    } else {
+      let y = TOP + plotH;
+      let lastLabelY = Infinity;
+      order.forEach((f, fi) => {
+        const c = countOf(m, f);
+        if(!c) return;
+        const h = (c / maxTotal) * plotH;
+        y -= h;
+        svg += `<rect x="${x.toFixed(2)}" y="${y.toFixed(2)}" width="${colW.toFixed(2)}" height="${h.toFixed(2)}" fill="var(--brand)" opacity="${ops[fi % ops.length]}"></rect>`;
+        if(h >= 16){
+          svg += `<text x="${(x + colW/2).toFixed(2)}" y="${(y + h/2 + 5).toFixed(2)}" text-anchor="middle" fill="#fff" font-family="Archivo,sans-serif" font-size="13" font-weight="600" style="font-variant-numeric:tabular-nums">${c}</text>`;
+        }
+        if(sideLabel){
+          let ly = y + h/2 + 4;
+          if(lastLabelY - ly < 14) ly = lastLabelY - 14;
+          lastLabelY = ly;
+          svg += `<text x="${(x + colW + 9).toFixed(2)}" y="${ly.toFixed(2)}" fill="var(--muted)" font-family="Archivo,sans-serif" font-size="12">${esc(f)} ${c}</text>`;
+        }
+      });
+    }
+
+    svg += `<text x="${cx.toFixed(2)}" y="${TOP + plotH + 22}" text-anchor="middle" fill="var(--ink)" font-family="Archivo,sans-serif" font-size="14">${monthLabel(m)}</text>`;
+    svg += `<text x="${cx.toFixed(2)}" y="${TOP + plotH + 39}" text-anchor="middle" fill="var(--muted)" font-family="Archivo,sans-serif" font-size="12" style="font-variant-numeric:tabular-nums">${total} ${total === 1 ? "launch" : "launches"}</text>`;
+    if(narrow && total >= MIN_SEGMENTS){
+      order.forEach((f, fi) => {
+        const c = countOf(m, f);
+        if(!c) return;
+        svg += `<text x="${cx.toFixed(2)}" y="${TOP + plotH + 57 + fi * 14}" text-anchor="middle" fill="var(--muted)" font-family="Archivo,sans-serif" font-size="11" style="font-variant-numeric:tabular-nums">${esc(f)} ${c}</text>`;
+      });
+    }
+  });
+
+  el.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  el.setAttribute("preserveAspectRatio", "xMinYMin meet");
+  el.style.height = H + "px";
+  el.innerHTML = svg;
+  document.getElementById("launch-desc").textContent =
+    "Launches per month by format: " + months.map((m,i) => `${monthLabel(m)} ${totals[i]}`).join(", ") + ".";
+}
+
+/* ---------- promos ---------- */
+function buildPromos(d){
+  const s = d.promos_summary;
+  const bundles = s.by_promo_type.bundle || 0;
+  document.getElementById("promo-sub").textContent =
+    `${s.total} offers are running right now. ${bundles} of them are bundles rather than price cuts, ` +
+    `which protects the menu price while still moving volume.`;
+  // s.total already has hotel F&B removed upstream
+
+  const types = Object.keys(s.by_promo_type);
+  const LABELS = {bundle:"Bundles", price_cut:"Price cuts"};
+  let current = "all", expanded = false;
+  const LIMIT = 12;
+
+  const tabs = document.getElementById("promo-tabs");
+  const add = (val, label) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "choice"; b.textContent = label; b.dataset.val = val;
+    b.setAttribute("aria-pressed", String(val === current));
+    b.addEventListener("click", () => {
+      current = val; expanded = false;
+      tabs.querySelectorAll(".choice").forEach(x =>
+        x.setAttribute("aria-pressed", String(x.dataset.val === val)));
+      repaint();
+      track("tab_changed", {section:"promos", value:val});
+    });
+    tabs.appendChild(b);
+  };
+  add("all", "All");
+  types.forEach(t => add(t, LABELS[t] || t));
+
+  function matching(){
+    return d.promos_list.filter(r => current === "all" || r.promo_type === current);
+  }
+
+  const paint = makeSortable("promo-table",
+    () => { const m = matching(); return expanded ? m.slice() : m.slice(0, LIMIT); },
+    r => `<tr>
+      <td class="item">${esc(r.brand_name)}</td>
+      <td>${esc(r.offer_text)}</td>
+      <td class="soft">${esc((LABELS[r.promo_type] || r.promo_type).replace(/s$/,""))}</td>
+      <td class="soft num">${esc(r.end_date)}</td>
+    </tr>`,
+    {key:"end_date", dir:"asc"});
+
+  const moreBtn = document.getElementById("promo-more");
+  const countEl = document.getElementById("promo-count");
+  function repaint(){
+    const total = matching().length;
+    moreBtn.hidden = total <= LIMIT;
+    moreBtn.textContent = expanded ? "Show fewer" : "Show more";
+    countEl.textContent = `Showing ${expanded ? total : Math.min(LIMIT, total)} of ${total}`;
+    paint();
+  }
+  moreBtn.addEventListener("click", () => { expanded = !expanded; repaint(); });
+  repaint();
+}
+
+/* ---------- footer ---------- */
+function buildFooter(d){
+  document.getElementById("colophon-left").textContent =
+    `${d.meta.shops_with_prices} cafes and bakeries, ${d.meta.districts_count} districts, last updated ${d.meta.generated_at}`;
+}
+
+/* ---------- forms ---------- */
+const SIGNUP_DONE = {
+  newsletter_hero:    "You are on the list. The first issue lands Monday.",
+  waitlist:           "You are on the waitlist. We will email you before we launch."
+};
+const isEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+
+function bindSignup(formId, inputId, noteId, source, evt){
+  const form = document.getElementById(formId);
+  const input = document.getElementById(inputId);
+  const note = document.getElementById(noteId);
+  const btn = form.querySelector("button[type=submit]");
+  const btnLabel = btn.textContent;
+
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    note.hidden = true;
+    const email = input.value.trim();
+
+    if(!isEmail(email)){
+      // nothing is sent until the address is plausible
+      note.className = "formnote bad";
+      note.textContent = "That does not look like an email address";
+      note.hidden = false;
+      input.focus();
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = "Sending";
+
+    try{
+      const res = await fetch(SUPABASE_URL + "/rest/v1/signups", {
+        method: "POST",
+        headers: SB_HEADERS,
+        body: JSON.stringify({email: email, source: source})
+      });
+      if(!res.ok) throw new Error("HTTP " + res.status);
+
+      // the form goes away so the confirmation is the only thing left to read
+      const done = document.createElement("p");
+      done.className = "formdone";
+      done.textContent = SIGNUP_DONE[source];
+      form.replaceWith(done);
+      note.hidden = true;
+      track(evt, {position: source});
+    }catch(err){
+      // whatever they typed stays in the field
+      btn.disabled = false;
+      btn.textContent = btnLabel;
+      note.className = "formnote bad";
+      note.textContent = "That did not save. Try again, or email us at hello@theweeklybake.sg";
+      note.hidden = false;
+    }
+  });
+}
+
+function wireForms(){
+  bindSignup("news-form", "news-email", "news-note", "newsletter_hero", "newsletter_submitted");
+  bindSignup("wait-form", "wait-email", "wait-note", "waitlist", "waitlist_submitted");
+}
+</script>
+</body>
+</html>

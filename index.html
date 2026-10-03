@@ -64,18 +64,20 @@ button{font-family:inherit; font-size:inherit; color:inherit; background:none; b
    The last row takes up the slack, so a tall map never stretches the panel. */
 .hero-layout{
   display:grid; grid-template-columns:minmax(0,3fr) minmax(0,2fr); column-gap:40px;
-  grid-template-rows:auto auto auto auto 1fr;
-  grid-template-areas:"head head" "lede lede" "map tabs" "map find" "map sign";
+  grid-template-rows:auto auto auto 1fr;
+  grid-template-areas:"head head" "lede lede" "map find" "map sign";
 }
 .hero h1{grid-area:head}
 .hero .lede{grid-area:lede; margin:10px 0 22px}
-.itemtabs{grid-area:tabs}
 .mapcol{grid-area:map; min-width:0}
-.finder{grid-area:find; min-width:0}
+.finder{grid-area:find; min-width:0; border-top:2px solid var(--ink); padding-top:16px}
 .herosignup{grid-area:sign; min-width:0}
 
-.hero .itemtabs{margin:0 0 16px; padding-top:14px; border-top:2px solid var(--ink)}
-.viewbar{margin:0 0 12px; padding-top:16px}
+/* the item tabs drive the map, so they sit on its top edge with the view toggle */
+.mapbar{display:flex; align-items:flex-end; justify-content:space-between; gap:10px 24px; margin:0 0 12px; padding-top:16px}
+.mapbar .choices{margin:0}
+.itemwrap{position:relative; min-width:0}
+.viewbar{flex:0 0 auto; flex-wrap:nowrap}
 .herosignup{margin-top:24px; padding-top:20px; border-top:1px solid var(--rule)}
 .herosignup .signup{margin-top:0}
 /* the panel is narrow, so the field gives way before the button wraps. Desktop
@@ -90,6 +92,11 @@ button{font-family:inherit; font-size:inherit; color:inherit; background:none; b
   position:relative; z-index:0; isolation:isolate;
 }
 /* one finger belongs to the page. Leaflet would otherwise claim every touch. */
+/* at half zoom steps scaled tiles meet on half pixels and a hairline of
+   background shows through. Blending the tiles additively inside their own
+   layer makes the two half-covered edges add up to a whole one. */
+.map .leaflet-layer{isolation:isolate}
+.map .leaflet-tile{mix-blend-mode:plus-lighter}
 .map.leaflet-container{touch-action:pan-x pan-y !important; font-family:var(--f-text); font-size:var(--s13)}
 .maphint{
   position:absolute; inset:0; z-index:5; display:flex; align-items:center; justify-content:center;
@@ -146,9 +153,14 @@ button{font-family:inherit; font-size:inherit; color:inherit; background:none; b
 .combolist li[aria-selected=true],.combolist li:hover{background:rgba(27,94,74,.08)}
 .optname{display:block; font-size:var(--s15); color:var(--ink); font-weight:500}
 .optsub{display:block; font-size:var(--s13); color:var(--muted)}
-.notfound{margin-top:16px}
-.notfound .hint{margin:0 0 14px}
-.notfound select{width:100%; margin-bottom:14px}
+.notfound{margin-top:10px}
+.notfound .hint{margin:0}
+.quick{margin-top:18px}
+.quickrow{display:flex; gap:10px; flex-wrap:wrap; align-items:stretch}
+.quickrow .moneywrap{flex:1 1 84px}
+.quickrow select{flex:2 1 150px}
+.gaps{margin-top:16px; padding-top:14px; border-top:1px solid var(--rule); font-size:var(--s15)}
+.gaps p + p{margin-top:6px}
 .result{margin-top:20px}
 .resultline{font-family:var(--f-display); font-weight:500; font-size:var(--s21); line-height:1.3; color:var(--ink)}
 .resultline .linkbtn{font-family:var(--f-text)}
@@ -267,7 +279,7 @@ td.hi{color:var(--high); font-weight:600}
   pointer-events:none; opacity:0; transition:opacity .15s linear;
 }
 .tabbar.more-right .wrap::after{opacity:1}
-@media (prefers-reduced-motion:reduce){ .tabbar .wrap::after{transition:none} }
+@media (prefers-reduced-motion:reduce){ .tabbar .wrap::after, .itemwrap::after{transition:none} }
 
 section.tabpanel{padding-top:44px}
 /* hidden="until-found" leaves the element in flow with a zero-height subtree,
@@ -288,7 +300,8 @@ section.tabpanel[hidden]{padding-top:0; padding-bottom:0}
 
 /* ---------- footer ---------- */
 footer{border-top:1px solid var(--rule); padding:36px 0 44px}
-.footgrid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:22px 40px}
+.footgrid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:22px 40px}
+.footline{margin-top:22px; font-size:var(--s13)}
 footer h3{font-family:var(--f-text); font-size:var(--s13); font-weight:600; color:var(--ink); margin-bottom:4px}
 footer .blk p{font-size:var(--s13); line-height:1.5}
 .colophon{margin-top:28px; padding-top:16px; border-top:1px solid var(--rule); display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; font-size:var(--s13); color:var(--muted)}
@@ -305,12 +318,23 @@ footer .blk p{font-size:var(--s13); line-height:1.5}
   .hero{padding:24px 0 var(--gap-section)}
   .hero-layout{display:flex; flex-direction:column}
   .hero h1{order:1}
-  .hero .itemtabs{order:2; margin:16px 0 0; padding-top:0; border-top:none}
   .mapcol{order:3}
   .finder{order:4; margin-top:28px}
+  /* item tabs become one scrolling strip with the tab bar's fade; the view
+     toggle drops to its own row */
+  .mapbar{display:block}
+  .itemtabs{flex-wrap:nowrap; overflow-x:auto; overflow-y:hidden; scrollbar-width:none; -ms-overflow-style:none; -webkit-overflow-scrolling:touch}
+  .itemtabs::-webkit-scrollbar{display:none}
+  .itemtabs .choice{flex:0 0 auto; white-space:nowrap}
+  .itemwrap::after{
+    content:""; position:absolute; top:0; right:0; bottom:0; width:48px;
+    background:linear-gradient(to right, rgba(255,255,255,0), var(--paper));
+    pointer-events:none; opacity:0; transition:opacity .15s linear;
+  }
+  .itemwrap.more-right::after{opacity:1}
+  .mapbar .viewbar{margin-top:12px}
   .hero .lede{order:5; margin:32px 0 0; padding-top:20px; border-top:1px solid var(--rule)}
   .herosignup{order:6; margin-top:16px; padding-top:0; border-top:none}
-  .viewbar{padding-top:12px; margin-bottom:10px}
   /* the map runs edge to edge */
   .mapframe{margin:0 calc(-1 * var(--pad))}
   .map{height:55vh; height:55svh; min-height:300px; border-left:none; border-right:none}
@@ -348,13 +372,16 @@ footer .blk p{font-size:var(--s13); line-height:1.5}
       <h1 id="hero-headline"></h1>
       <p class="lede">Every Monday morning we send what Singapore's cafes and bakeries are charging, what they have just put on the menu, and who is discounting. It takes two minutes to read and it costs nothing.</p>
 
-      <div class="choices itemtabs" id="finder-items" role="group" aria-label="Choose an item"></div>
-
       <!-- MAP, with the named-prices list behind the toggle -->
       <div class="mapcol" id="map-col">
-        <div class="choices viewbar" id="view-toggle" role="group" aria-label="Show prices as">
-          <button type="button" class="choice" data-view="map" aria-pressed="true">Map</button>
-          <button type="button" class="choice" data-view="list" aria-pressed="false">List view</button>
+        <div class="mapbar">
+          <div class="itemwrap" id="item-wrap">
+            <div class="choices itemtabs" id="finder-items" role="group" aria-label="Choose an item"></div>
+          </div>
+          <div class="choices viewbar" id="view-toggle" role="group" aria-label="Show prices as">
+            <button type="button" class="choice" data-view="map" aria-pressed="true">Map</button>
+            <button type="button" class="choice" data-view="list" aria-pressed="false">List view</button>
+          </div>
         </div>
         <div id="map-view">
           <div class="mapframe">
@@ -397,26 +424,26 @@ footer .blk p{font-size:var(--s13); line-height:1.5}
           </div>
         </div>
         <div class="notfound" id="shop-notfound" hidden>
-          <p class="hint">We do not have a shop by that name yet. Choose your district and enter your price instead.</p>
-          <form id="finder-form" novalidate>
-            <label class="field-label" for="finder-district">Your district</label>
-            <select id="finder-district" required><option value="">Choose a district</option></select>
-            <label class="field-label" for="finder-price">What do you charge?</label>
-            <div class="moneyrow">
-              <span class="moneywrap">
-                <span class="dollar">$</span>
-                <input type="number" id="finder-price" step="0.01" min="0" inputmode="decimal" placeholder="4.20" required>
-              </span>
-              <button class="btn" type="submit">Show me</button>
-            </div>
-          </form>
+          <p class="hint">We do not have a shop by that name yet. Enter your price below instead.</p>
         </div>
+        <form class="quick" id="finder-form" novalidate>
+          <label class="field-label" for="finder-price">Or just enter your price</label>
+          <div class="quickrow">
+            <span class="moneywrap">
+              <span class="dollar">$</span>
+              <input type="number" id="finder-price" step="0.01" min="0" inputmode="decimal" placeholder="4.20" required>
+            </span>
+            <label for="finder-district" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Your area</label>
+            <select id="finder-district"><option value="">Your area (optional)</option></select>
+            <button class="btn" type="submit">Show me</button>
+          </div>
+        </form>
         <div class="verdict">
           <div class="result" id="finder-result" aria-live="polite" hidden>
             <p class="resultline" id="result-line"></p>
             <div class="consequence" id="finder-consequence" hidden></div>
+            <div class="gaps" id="finder-gaps" hidden></div>
           </div>
-          <p class="hint" id="finder-hint">Find your shop to see where you land.</p>
           <div class="strip">
             <svg id="strip-svg" viewBox="0 0 600 76" preserveAspectRatio="none" role="img" aria-labelledby="strip-desc"></svg>
             <p id="strip-desc" class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></p>
@@ -563,8 +590,8 @@ footer .blk p{font-size:var(--s13); line-height:1.5}
       <div class="footgrid">
       <div class="blk"><h3>Where the numbers come from</h3><p>We read menus published by the cafes themselves, their online ordering pages, and two government registers. We do not scrape delivery apps and we do not buy social listening, so everything here is either public or sent to us by the shop.</p></div>
       <div class="blk"><h3>What is coming</h3><p>From November we will start reporting which items got discounted soon after launching and which quietly disappeared. That needs a few months of watching the same shops, which is exactly what we are doing now.</p></div>
-      <div class="blk"><h3>When we get it wrong</h3><p>Every mistake we publish goes on the corrections page with the date and stays there. If a price of yours is wrong, reply to any email and we will fix it in the next issue.</p></div>
       </div>
+      <p class="footline">Your shop listed? Reply to any email to correct or remove it.</p>
       <div class="colophon"><span id="colophon-left" class="num"></span><span>Made in Singapore by four NUS students</span></div>
     </div>
   </footer>
@@ -655,6 +682,18 @@ const money = n => "$" + Number(n).toFixed(2);
 const MONTH_NAMES = {"01":"January","02":"February","03":"March","04":"April","05":"May","06":"June",
                      "07":"July","08":"August","09":"September","10":"October","11":"November","12":"December"};
 const monthLabel = m => (MONTH_NAMES[String(m).slice(5,7)] || m);
+/* "2026-09-19" -> "19 Sep 2026", taken apart as text so no time zone can move it */
+function shortDate(iso){
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || "");
+  return m ? `${Number(m[3])} ${MONTH_NAMES[m[2]].slice(0, 3)} ${m[1]}` : "";
+}
+/* one date when every price was recorded the same day, otherwise the range */
+function recordedSpan(dates){
+  const seen = dates.filter(Boolean).sort();
+  if(!seen.length) return "";
+  const first = seen[0], last = seen[seen.length - 1];
+  return first === last ? shortDate(first) : `${shortDate(first)} to ${shortDate(last)}`;
+}
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const median = arr => {
   const a=[...arr].sort((x,y)=>x-y), h=Math.floor(a.length/2);
@@ -868,7 +907,8 @@ const inWords = n => WORDS[n] || String(n);
 const FINDER_ITEMS = ["croissant_plain","flat_white","latte","matcha_latte"];
 let finderItem = "croissant_plain";
 /* who is asking: {shopId} once they pick their shop from the data, or
-   {price, district} when it is not in the data and they type a price */
+   {price, district} when they just type a price. district is "" when they
+   leave the area out, and then only the island-wide rank is given. */
 let reader = null;
 let readerPrice = null;      // the price the strip marks
 let markerSettled = false;   // the slide plays once per result, not on resize
@@ -936,8 +976,10 @@ function buildFinder(d){
   byId("finder-form").addEventListener("submit", e => {
     e.preventDefault();
     const v = parseFloat(byId("finder-price").value);
-    if(!sel.value){ sel.focus(); return; }
     if(!isFinite(v) || v <= 0){ byId("finder-price").focus(); return; }
+    // the price path replaces whichever shop was found before
+    byId("shop-input").value = "";
+    byId("shop-notfound").hidden = true;
     reader = {price: v, district: sel.value};
     markerSettled = false;
     track("rank_finder_submitted", {item:finderItem});
@@ -950,6 +992,13 @@ function buildFinder(d){
     const b = e.target.closest("[data-item]");
     if(b) setItem(b.dataset.item);
   });
+
+  // narrow screens scroll the item tabs sideways; the fade says there are more
+  const wrap = byId("item-wrap");
+  const fade = () => wrap.classList.toggle("more-right", box.scrollWidth - box.clientWidth - box.scrollLeft > 2);
+  box.addEventListener("scroll", fade, {passive: true});
+  onResize(fade);
+  fade();
 
   buildShopSearch(d);
   updateToTable(d);
@@ -1009,21 +1058,27 @@ function buildShopSearch(d){
   function choose(s){
     input.value = s.shop_name;
     close(); nf.hidden = true; missSent = false; clearTimeout(missTimer);
+    byId("finder-price").value = "";
+    byId("finder-district").value = "";
     reader = {shopId: s.shop_id};
     markerSettled = false;
     track("shop_search", {found: true});
     drawPins(d);
     showResult(d);
+    showGaps(d, s);
     flyToShop(s);
   }
 
+  // a close left over from a blur must not shut a list opened since
+  let blurTimer = null;
   input.addEventListener("input", () => {
+    clearTimeout(blurTimer);
     // editing the name lets go of whoever was found before
     if(reader){ reader = null; drawPins(d); showResult(d); }
     paint();
   });
-  input.addEventListener("focus", () => { if(!reader && input.value.trim()) paint(); });
-  input.addEventListener("blur", () => setTimeout(close, 120));
+  input.addEventListener("focus", () => { clearTimeout(blurTimer); if(!reader && input.value.trim()) paint(); });
+  input.addEventListener("blur", () => { blurTimer = setTimeout(close, 120); });
   input.addEventListener("keydown", e => {
     if(e.key === "ArrowDown" || e.key === "ArrowUp"){
       if(list.hidden){ paint(); if(list.hidden) return; }
@@ -1033,7 +1088,7 @@ function buildShopSearch(d){
     } else if(e.key === "Enter"){
       if(!list.hidden && active >= 0){ e.preventDefault(); choose(matches[active]); }
       else if(!list.hidden && matches.length === 1){ e.preventDefault(); choose(matches[0]); }
-      else if(!nf.hidden){ e.preventDefault(); byId("finder-district").focus(); }
+      else if(!nf.hidden){ e.preventDefault(); byId("finder-price").focus(); }
     } else if(e.key === "Escape"){
       close();
     }
@@ -1148,15 +1203,17 @@ function rankPhrase(rank, tied){
 function showResult(d){
   const rows = d.named_prices[finderItem];
   const box = byId("finder-result"), line = byId("result-line");
-  const cons = byId("finder-consequence"), hint = byId("finder-hint");
+  const cons = byId("finder-consequence");
   readerPrice = null;
+  // the neighbour block belongs to a found shop and is drawn when one is picked
+  if(!reader || !reader.shopId) byId("finder-gaps").hidden = true;
 
   if(!reader){
-    box.hidden = true; hint.hidden = false;
+    box.hidden = true;
     drawStrip(d);
     return;
   }
-  hint.hidden = true; box.hidden = false;
+  box.hidden = false;
 
   let v, district, selfId = null;
   if(reader.shopId){
@@ -1185,7 +1242,9 @@ function showResult(d){
   let local = null;
 
   let text = `You charge ${money(v)}. That is ${rankPhrase(national, tiedIn(others))} of ${others.length + 1} island-wide`;
-  if(near.length < MIN_NEIGHBOURS){
+  if(!district){
+    text += ".";                      // price only: no area, so no district line
+  } else if(near.length < MIN_NEIGHBOURS){
     text += ". " + (near.length === 0 ? `No other shops in ${district} sell this so far.`
                   : near.length === 1 ? `Only 1 other shop in ${district} sells this so far.`
                   : `Only ${near.length} other shops in ${district} sell this so far.`);
@@ -1220,6 +1279,33 @@ function showResult(d){
   drawStrip(d);
 }
 
+/* ---------- what your neighbours sell ----------
+   Only for a shop found in the data, because only those have a recorded menu.
+   An item is a gap when the shop has no recorded price for it, at least two
+   other shops in its district do, and at least half of them do. */
+const MAX_GAPS = 3;
+function showGaps(d, shop){
+  const box = byId("finder-gaps");
+  const menus = d.shop_items || [];
+  const mine = menus.find(m => m.shop_id === shop.shop_id);
+  const others = menus.filter(m => m.district === shop.district && m.shop_id !== shop.shop_id);
+  if(!mine || others.length < MIN_NEIGHBOURS){ box.hidden = true; return; }
+
+  const gaps = d.price_table
+    .filter(row => mine.items.indexOf(row.item_canonical) === -1)
+    .map(row => ({key: row.item_canonical,
+                  count: others.filter(m => m.items.indexOf(row.item_canonical) !== -1).length}))
+    .filter(g => g.count >= 2 && g.count * 2 >= others.length)
+    .sort((a, b) => b.count - a.count)        // stable, so ties keep the table's order
+    .slice(0, MAX_GAPS);
+
+  box.innerHTML = gaps.length
+    ? gaps.map(g => `<p>${g.count} of the ${others.length} other shops in ${esc(shop.district)} sell ${esc(itemPhrase(d, g.key))}. It isn't on your menu as we recorded it.</p>`).join("")
+    : `<p>Among the ${d.price_table.length} items we track, you already carry what most of ${esc(shop.district)} sells.</p>`;
+  box.hidden = false;
+  track("neighbour_gaps_shown", {count: gaps.length});
+}
+
 function ordinal(n){
   const s = ["th","st","nd","rd"], v = n % 100;
   return n + (s[(v - 20) % 10] || s[v] || s[0]);
@@ -1234,15 +1320,20 @@ function drawCaption(d){
   const gap = Math.round((hi / lo - 1) * 100);
   const phrase = itemPhrase(d, finderItem);
   const kind = priceRow(d, finderItem).format || "item";
+  const recorded = recordedSpan(rows.map(r => r.observed_date));
   const outlier = outs === 0 ? "" :
     `${inWords(outs)} excluded as ${outs === 1 ? "an outlier" : "outliers"}, `;
   byId("map-caption").textContent =
     `${/^[aeiou]/.test(phrase) ? "An" : "A"} ${phrase} costs ${money(lo)} at one cafe and ${money(hi)} at another. ` +
-    `Same ${kind}, ${rows.length} shops, ${outlier}${gap}% apart.`;
+    `Same ${kind}, ${rows.length} shops, ${outlier}${gap}% apart.` +
+    (recorded ? ` Prices recorded ${recorded}.` : "");
 }
 
 /* ---------- map ---------- */
 let map = null, pinLayer = null;
+let fitToItem = () => {};    // frames the selected item's pins
+let awaitingFit = false;
+let fenceMap = () => {};     // re-derives the zoom-out limit from the map's current size
 let viewMode = "map";
 const LABEL_ZOOM = 14;       // dots below this, price labels from here up
 const FOUND_ZOOM = 16;
@@ -1256,7 +1347,10 @@ const FOUND_ZOOM = 16;
      (c) OpenStreetMap contributors (c) CARTO. */
 const BASEMAP = {
   url: "https://www.onemap.gov.sg/maps/tiles/Grey/{z}/{x}/{y}.png",
-  minZoom: 11, maxZoom: 19,
+  /* OneMap draws an inset box (Pedra Branca) and coordinate labels on its
+     zoom 11 and 12 tiles only. Wider views are drawn from the zoom 13 tiles
+     scaled down, so neither can appear at any zoom. */
+  minNativeZoom: 13, maxZoom: 19,
   bounds: [[1.144, 103.585], [1.494, 104.122]],
   attribution: '<img src="https://www.onemap.gov.sg/web-assets/images/logo/om_logo.png" alt="" style="height:16px;width:16px;vertical-align:-3px"> ' +
                '<a href="https://www.onemap.gov.sg/" target="_blank" rel="noopener noreferrer">OneMap</a> &copy; contributors | ' +
@@ -1264,8 +1358,8 @@ const BASEMAP = {
 };
 
 function recordedOn(iso){
-  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || "");
-  return m ? `Recorded ${Number(m[3])} ${MONTH_NAMES[m[2]]} ${m[1]}` : "Date not recorded";
+  const when = shortDate(iso);
+  return when ? "Recorded " + when : "Date not recorded";
 }
 
 let hintTimer = null;
@@ -1294,19 +1388,34 @@ function buildMap(d){
   }
 
   const touchFirst = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
-  map = L.map(el, {dragging: !touchFirst, minZoom: BASEMAP.minZoom, maxZoom: BASEMAP.maxZoom,
-                   maxBounds: BASEMAP.bounds, maxBoundsViscosity: 1});
+  map = L.map(el, {dragging: !touchFirst, zoomSnap: 0.5, maxZoom: BASEMAP.maxZoom, maxBoundsViscosity: 1});
   map.attributionControl.setPrefix('<a href="https://leafletjs.com">Leaflet</a>');
   L.tileLayer(BASEMAP.url, {
-    minZoom: BASEMAP.minZoom, maxZoom: BASEMAP.maxZoom, bounds: BASEMAP.bounds,
+    minNativeZoom: BASEMAP.minNativeZoom, maxZoom: BASEMAP.maxZoom, bounds: BASEMAP.bounds,
     // flying to a shop passes through zoom levels nobody looks at. Without
     // this, tiles for each are requested and then abandoned mid-flight.
-    updateWhenZooming: false, updateWhenIdle: true,
+    updateWhenZooming: false, updateWhenIdle: true, keepBuffer: 1,
     attribution: BASEMAP.attribution
   }).addTo(map);
 
-  // every item opens on the same frame, so switching item never moves the map
-  map.fitBounds(L.latLngBounds(placed).pad(0.06));
+  /* The map opens fitted to the selected item's pins. It cannot be zoomed out
+     past the view that holds every item's pins, or dragged far from them. */
+  const everyPin = L.latLngBounds(placed);
+  const EDGE = 16;             // pixels kept clear between the outermost pin and the map edge
+  fenceMap = () => {
+    map.setMinZoom(map.getBoundsZoom(everyPin, false, L.point(EDGE * 2, EDGE * 2)));
+    map.setMaxBounds(everyPin.pad(0.5));
+  };
+  fenceMap();
+  onResize(() => { if(viewMode === "map"){ map.invalidateSize(); fenceMap(); } });
+  fitToItem = () => {
+    const pts = d.named_prices[finderItem].filter(r => r.lat != null && r.lng != null).map(r => [r.lat, r.lng]);
+    map.fitBounds(L.latLngBounds(pts.length ? pts : placed), {padding: [EDGE, EDGE], animate: false});
+  };
+  // an old #who-charges-what link opens on the list, where the map has no size
+  // to fit against yet. It is fitted the first time it is shown instead.
+  awaitingFit = el.offsetWidth === 0;
+  if(!awaitingFit) fitToItem();
 
   const syncLabels = () => el.classList.toggle("labels", map.getZoom() >= LABEL_ZOOM);
   map.on("zoom zoomend", syncLabels);
@@ -1374,7 +1483,7 @@ function drawPins(d){
               `<span class="pin-dot"></span><span class="pin-label">${money(r.price)}</span></span>`
       }),
       title: `${r.shop_name}, ${money(r.price)}`,
-      zIndexOffset: me ? 1000 : 0,
+      zIndexOffset: me ? 1000 : hi ? 500 : 0,   // a high price is never hidden under a neighbour
       riseOnHover: true
     });
     marker.bindPopup(
@@ -1411,6 +1520,8 @@ function setView(mode, opts){
 
   if(mode === "map" && map){
     map.invalidateSize();
+    fenceMap();
+    if(awaitingFit){ awaitingFit = false; fitToItem(); }
     // catch up with a shop that was found while the list was showing
     const shop = reader && reader.shopId && SHOPS.get(reader.shopId);
     if(shop && shop.lat != null && shop.lng != null){
@@ -1749,9 +1860,17 @@ function buildPromos(d){
 }
 
 /* ---------- footer ---------- */
+// every recorded date behind a price on the page: the table rows carry their
+// earliest and latest, the named prices carry their own
+function allRecordedDates(d){
+  const dates = [];
+  d.price_table.forEach(r => dates.push(r.observed_from, r.observed_to));
+  Object.keys(d.named_prices).forEach(k => d.named_prices[k].forEach(r => dates.push(r.observed_date)));
+  return dates;
+}
 function buildFooter(d){
   document.getElementById("colophon-left").textContent =
-    `${d.meta.shops_with_prices} cafes and bakeries, ${d.meta.districts_count} districts, last updated ${d.meta.generated_at}`;
+    `${d.meta.shops_with_prices} cafes and bakeries, ${d.meta.districts_count} districts, prices recorded ${recordedSpan(allRecordedDates(d))}`;
 }
 
 /* ---------- forms ---------- */

@@ -36,7 +36,9 @@
       "shop_count": 71,
       "low": 3.8,
       "median": 4.2,
-      "high": 7.5
+      "high": 7.5,
+      "observed_from": "2026-09-19",
+      "observed_to": "2026-09-19"
     },
     {
       "item_canonical": "flat_white",
@@ -45,7 +47,9 @@
       "shop_count": 81,
       "low": 5.0,
       "median": 5.5,
-      "high": 6.5
+      "high": 6.5,
+      "observed_from": "2026-09-19",
+      "observed_to": "2026-09-19"
     },
     {
       "item_canonical": "latte",
@@ -54,7 +58,9 @@
       "shop_count": 77,
       "low": 5.5,
       "median": 5.8,
-      "high": 6.5
+      "high": 6.5,
+      "observed_from": "2026-09-19",
+      "observed_to": "2026-09-19"
     },
     {
       "item_canonical": "matcha_latte",
@@ -63,7 +69,9 @@
       "shop_count": 27,
       "low": 6.5,
       "median": 6.8,
-      "high": 9.0
+      "high": 9.0,
+      "observed_from": "2026-09-19",
+      "observed_to": "2026-09-19"
     },
     {
       "item_canonical": "cappuccino",
@@ -72,7 +80,9 @@
       "shop_count": 60,
       "low": 5.5,
       "median": 5.8,
-      "high": 6.5
+      "high": 6.5,
+      "observed_from": "2026-09-19",
+      "observed_to": "2026-09-19"
     },
     {
       "item_canonical": "americano",
@@ -81,7 +91,9 @@
       "shop_count": 81,
       "low": 4.5,
       "median": 5.0,
-      "high": 7.0
+      "high": 7.0,
+      "observed_from": "2026-09-19",
+      "observed_to": "2026-09-19"
     },
     {
       "item_canonical": "espresso",
@@ -90,7 +102,9 @@
       "shop_count": 33,
       "low": 3.8,
       "median": 4.0,
-      "high": 4.5
+      "high": 4.5,
+      "observed_from": "2026-09-19",
+      "observed_to": "2026-09-19"
     },
     {
       "item_canonical": "croissant_filled",
@@ -99,7 +113,9 @@
       "shop_count": 68,
       "low": 4.2,
       "median": 5.2,
-      "high": 12.0
+      "high": 12.0,
+      "observed_from": "2026-09-19",
+      "observed_to": "2026-09-19"
     },
     {
       "item_canonical": "kouign_amann",
@@ -108,7 +124,9 @@
       "shop_count": 24,
       "low": 4.6,
       "median": 5.5,
-      "high": 6.5
+      "high": 6.5,
+      "observed_from": "2026-09-19",
+      "observed_to": "2026-09-19"
     }
   ],
   "named_prices": {
@@ -3665,6 +3683,1095 @@
       }
     ]
   },
+  "shop_items": [
+    {
+      "shop_id": "174_bingo",
+      "district": "Katong / Joo Chiat",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "americano"
+      ]
+    },
+    {
+      "shop_id": "accompany_coffee",
+      "district": "Katong / Joo Chiat",
+      "items": [
+        "flat_white",
+        "matcha_latte",
+        "americano"
+      ]
+    },
+    {
+      "shop_id": "alchemist_design_orchard",
+      "district": "Orchard / Somerset",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "espresso",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "alice_boulangerie_tp",
+      "district": "Tanjong Pagar / Duxton",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "croissant_filled",
+        "kouign_amann"
+      ]
+    },
+    {
+      "shop_id": "all_things_delicious_arab_st",
+      "district": "Bugis / Kampong Glam / Haji Lane",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "anchorpoint_common_man",
+      "district": "Queenstown / Alexandra",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "croissant_filled",
+        "kouign_amann"
+      ]
+    },
+    {
+      "shop_id": "antea_social",
+      "district": "Jalan Besar",
+      "items": [
+        "matcha_latte"
+      ]
+    },
+    {
+      "shop_id": "apartment_coffee",
+      "district": "Jalan Besar",
+      "items": [
+        "flat_white",
+        "matcha_latte",
+        "americano",
+        "espresso"
+      ]
+    },
+    {
+      "shop_id": "apollo_coffee_bar_serangoon",
+      "district": "Serangoon Gardens / Kovan",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "matcha_latte",
+        "cappuccino",
+        "americano",
+        "espresso",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "awfully_chocolate_bakery_cafe",
+      "district": "Katong / Joo Chiat",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "baker_and_cook_bukit_timah",
+      "district": "Bukit Timah / Sixth Avenue",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "espresso",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "baker_and_cook_holland_v",
+      "district": "Holland Village / Dempsey",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "baker_and_cook_swan_lake",
+      "district": "East Coast / Siglap",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "bakers_bench_bakery",
+      "district": "Tanjong Pagar / Duxton",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "americano",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "bakery_brera_empress",
+      "district": "Bukit Timah / Sixth Avenue",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "americano",
+        "croissant_filled",
+        "kouign_amann"
+      ]
+    },
+    {
+      "shop_id": "bastille_bakery",
+      "district": "Katong / Joo Chiat",
+      "items": [
+        "latte",
+        "americano",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "bearded_bella_tp",
+      "district": "Tanjong Pagar / Duxton",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "matcha_latte",
+        "cappuccino",
+        "americano",
+        "espresso",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "big_short_coffee",
+      "district": "Katong / Joo Chiat",
+      "items": [
+        "flat_white",
+        "latte",
+        "matcha_latte",
+        "espresso"
+      ]
+    },
+    {
+      "shop_id": "blob_tiong_bahru",
+      "district": "Tiong Bahru",
+      "items": []
+    },
+    {
+      "shop_id": "boulangerie_asuka",
+      "district": "Queenstown / Alexandra",
+      "items": [
+        "croissant_plain",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "brawn_and_brains_hamilton",
+      "district": "Jalan Besar",
+      "items": [
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano"
+      ]
+    },
+    {
+      "shop_id": "bread_and_hearth_katong",
+      "district": "Katong / Joo Chiat",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "brotherbird_coffeehouse_bali",
+      "district": "Bugis / Kampong Glam / Haji Lane",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "americano",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "burnt_ends_bakery_dempsey",
+      "district": "Holland Village / Dempsey",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "americano",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "cafe_melba_goodman",
+      "district": "East Coast / Siglap",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "espresso",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "caffe_pralet",
+      "district": "Tiong Bahru",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "matcha_latte",
+        "cappuccino",
+        "americano"
+      ]
+    },
+    {
+      "shop_id": "carpenters_and_cook_beauty_world",
+      "district": "Bukit Timah / Sixth Avenue",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "chin_mee_chin_confectionery",
+      "district": "Katong / Joo Chiat",
+      "items": []
+    },
+    {
+      "shop_id": "chu_and_co_serangoon",
+      "district": "Serangoon Gardens / Kovan",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "americano",
+        "croissant_filled",
+        "kouign_amann"
+      ]
+    },
+    {
+      "shop_id": "chye_seng_huat_hardware",
+      "district": "Jalan Besar",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "espresso",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "columbus_coffee_co",
+      "district": "Upper Thomson",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "matcha_latte",
+        "cappuccino",
+        "americano",
+        "espresso",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "common_man_coffee_roasters_joo_chiat",
+      "district": "Katong / Joo Chiat",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "espresso",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "common_man_coffee_roasters_rv",
+      "district": "River Valley / Robertson Quay",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "espresso",
+        "croissant_filled",
+        "kouign_amann"
+      ]
+    },
+    {
+      "shop_id": "creme_maison_bakery_tai_seng",
+      "district": "Serangoon Gardens / Kovan",
+      "items": []
+    },
+    {
+      "shop_id": "crown_bakery_bukit_timah",
+      "district": "Bukit Timah / Sixth Avenue",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "da_paolo_gastronomia_holland",
+      "district": "Holland Village / Dempsey",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "espresso",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "da_paolo_gastronomia_novena",
+      "district": "Novena / Balestier",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "drips_bakery_cafe_orchard",
+      "district": "Orchard / Somerset",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "croissant_filled",
+        "kouign_amann"
+      ]
+    },
+    {
+      "shop_id": "earlybird_cafe",
+      "district": "Bugis / Kampong Glam / Haji Lane",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "matcha_latte",
+        "cappuccino",
+        "americano",
+        "espresso",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "equate_coffee_orchard",
+      "district": "Orchard / Somerset",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "matcha_latte",
+        "cappuccino",
+        "americano",
+        "espresso",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "fika_swedish_cafe",
+      "district": "Bugis / Kampong Glam / Haji Lane",
+      "items": [
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano"
+      ]
+    },
+    {
+      "shop_id": "five_oars_coffee_roasters_ec",
+      "district": "East Coast / Siglap",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "matcha_latte",
+        "cappuccino",
+        "americano",
+        "espresso",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "free_the_robot_telok_ayer",
+      "district": "Telok Ayer / Amoy",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "espresso",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "french_fold_telok_ayer",
+      "district": "Telok Ayer / Amoy",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "espresso",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "habitat_coffee",
+      "district": "Jalan Besar",
+      "items": [
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "espresso"
+      ]
+    },
+    {
+      "shop_id": "happy_oven_tiong_bahru",
+      "district": "Tiong Bahru",
+      "items": []
+    },
+    {
+      "shop_id": "hello_arigato_upper_thomson",
+      "district": "Upper Thomson",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "matcha_latte",
+        "americano"
+      ]
+    },
+    {
+      "shop_id": "hvala_somerset",
+      "district": "Orchard / Somerset",
+      "items": [
+        "matcha_latte"
+      ]
+    },
+    {
+      "shop_id": "keong_saik_bakery_bendemeer",
+      "district": "Jalan Besar",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "matcha_latte",
+        "cappuccino",
+        "americano",
+        "croissant_filled",
+        "kouign_amann"
+      ]
+    },
+    {
+      "shop_id": "kings_cart_coffee_factory",
+      "district": "Katong / Joo Chiat",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "konditori_artisan_bakes",
+      "district": "Bugis / Kampong Glam / Haji Lane",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "croissant_filled",
+        "kouign_amann"
+      ]
+    },
+    {
+      "shop_id": "kwaasong_bakehouse_telok_ayer",
+      "district": "Telok Ayer / Amoy",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "americano",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "la_levain",
+      "district": "Jalan Besar",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "matcha_latte",
+        "cappuccino",
+        "americano",
+        "espresso",
+        "croissant_filled",
+        "kouign_amann"
+      ]
+    },
+    {
+      "shop_id": "little_farms_cafe_valley_point",
+      "district": "River Valley / Robertson Quay",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "lola_cafe_kovan",
+      "district": "Serangoon Gardens / Kovan",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "matcha_latte",
+        "cappuccino",
+        "americano",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "lucid",
+      "district": "Jalan Besar",
+      "items": [
+        "latte",
+        "americano"
+      ]
+    },
+    {
+      "shop_id": "merci_marcel_club_st",
+      "district": "Telok Ayer / Amoy",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "espresso",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "merci_marcel_tiong_bahru",
+      "district": "Tiong Bahru",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "matcha_latte",
+        "cappuccino",
+        "americano",
+        "espresso",
+        "croissant_filled",
+        "kouign_amann"
+      ]
+    },
+    {
+      "shop_id": "micro_bakery_kitchen_tiong_bahru",
+      "district": "Tiong Bahru",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "matcha_latte",
+        "cappuccino",
+        "americano",
+        "espresso",
+        "croissant_filled",
+        "kouign_amann"
+      ]
+    },
+    {
+      "shop_id": "micro_bakery_red_house",
+      "district": "Katong / Joo Chiat",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "americano",
+        "croissant_filled",
+        "kouign_amann"
+      ]
+    },
+    {
+      "shop_id": "micro_bakery_red_house_sixth_ave",
+      "district": "Bukit Timah / Sixth Avenue",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "americano",
+        "croissant_filled",
+        "kouign_amann"
+      ]
+    },
+    {
+      "shop_id": "moonchild",
+      "district": "Jalan Besar",
+      "items": [
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "espresso"
+      ]
+    },
+    {
+      "shop_id": "nassim_hill_bakery",
+      "district": "Orchard / Somerset",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "nesuto_tras",
+      "district": "Tanjong Pagar / Duxton",
+      "items": [
+        "flat_white",
+        "latte",
+        "matcha_latte",
+        "americano"
+      ]
+    },
+    {
+      "shop_id": "olsen_bakehouse",
+      "district": "Katong / Joo Chiat",
+      "items": []
+    },
+    {
+      "shop_id": "one_man_coffee_thomson",
+      "district": "Upper Thomson",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "espresso",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "pantler_river_valley",
+      "district": "River Valley / Robertson Quay",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "patisserie_cle_siglap",
+      "district": "East Coast / Siglap",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "americano",
+        "croissant_filled",
+        "kouign_amann"
+      ]
+    },
+    {
+      "shop_id": "petit_pain",
+      "district": "Katong / Joo Chiat",
+      "items": [
+        "croissant_plain",
+        "croissant_filled",
+        "kouign_amann"
+      ]
+    },
+    {
+      "shop_id": "plain_vanilla_cluny_court",
+      "district": "Bukit Timah / Sixth Avenue",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "plain_vanilla_east_coast",
+      "district": "Katong / Joo Chiat",
+      "items": [
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano"
+      ]
+    },
+    {
+      "shop_id": "plain_vanilla_serangoon",
+      "district": "Serangoon Gardens / Kovan",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "plain_vanilla_telok_ayer",
+      "district": "Telok Ayer / Amoy",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "matcha_latte",
+        "cappuccino",
+        "americano",
+        "espresso",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "plain_vanilla_tiong_bahru",
+      "district": "Tiong Bahru",
+      "items": [
+        "flat_white",
+        "latte",
+        "matcha_latte",
+        "cappuccino",
+        "americano",
+        "espresso"
+      ]
+    },
+    {
+      "shop_id": "prairie_by_craftsmen_joo_chiat",
+      "district": "Katong / Joo Chiat",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "americano",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "ps_cafe_dempsey",
+      "district": "Holland Village / Dempsey",
+      "items": [
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "espresso"
+      ]
+    },
+    {
+      "shop_id": "pull_by_tpg",
+      "district": "Katong / Joo Chiat",
+      "items": [
+        "latte",
+        "americano"
+      ]
+    },
+    {
+      "shop_id": "sarnies_telok_ayer",
+      "district": "Telok Ayer / Amoy",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "matcha_latte",
+        "cappuccino",
+        "americano",
+        "espresso",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "starter_lab_robertson",
+      "district": "River Valley / Robertson Quay",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "espresso",
+        "croissant_filled",
+        "kouign_amann"
+      ]
+    },
+    {
+      "shop_id": "symmetry_bugis",
+      "district": "Bugis / Kampong Glam / Haji Lane",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "the_bread_rack_kovan",
+      "district": "Serangoon Gardens / Kovan",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "americano",
+        "croissant_filled",
+        "kouign_amann"
+      ]
+    },
+    {
+      "shop_id": "the_french_american_bakery",
+      "district": "Jalan Besar",
+      "items": [
+        "croissant_plain",
+        "croissant_filled",
+        "kouign_amann"
+      ]
+    },
+    {
+      "shop_id": "the_glasshouse_neil",
+      "district": "Tanjong Pagar / Duxton",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "matcha_latte",
+        "cappuccino",
+        "americano",
+        "espresso",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "the_weirdoughs_serangoon",
+      "district": "Serangoon Gardens / Kovan",
+      "items": [
+        "croissant_plain"
+      ]
+    },
+    {
+      "shop_id": "tianns",
+      "district": "Tiong Bahru",
+      "items": [
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano"
+      ]
+    },
+    {
+      "shop_id": "tiong_bahru_bakery",
+      "district": "Tiong Bahru",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "matcha_latte",
+        "cappuccino",
+        "americano",
+        "espresso",
+        "croissant_filled",
+        "kouign_amann"
+      ]
+    },
+    {
+      "shop_id": "tiong_bahru_bakery_centrepoint",
+      "district": "Orchard / Somerset",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "croissant_filled",
+        "kouign_amann"
+      ]
+    },
+    {
+      "shop_id": "tiong_bahru_bakery_dempsey",
+      "district": "Holland Village / Dempsey",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "matcha_latte",
+        "cappuccino",
+        "americano",
+        "espresso",
+        "croissant_filled",
+        "kouign_amann"
+      ]
+    },
+    {
+      "shop_id": "tiong_bahru_bakery_holland_v",
+      "district": "Holland Village / Dempsey",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "croissant_filled",
+        "kouign_amann"
+      ]
+    },
+    {
+      "shop_id": "tiong_bahru_bakery_joo_chiat",
+      "district": "Katong / Joo Chiat",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "americano",
+        "croissant_filled",
+        "kouign_amann"
+      ]
+    },
+    {
+      "shop_id": "tiong_bahru_bakery_tanglin",
+      "district": "River Valley / Robertson Quay",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "croissant_filled",
+        "kouign_amann"
+      ]
+    },
+    {
+      "shop_id": "tiong_hoe_specialty_coffee",
+      "district": "Tiong Bahru",
+      "items": [
+        "flat_white",
+        "latte",
+        "matcha_latte",
+        "cappuccino",
+        "americano",
+        "espresso"
+      ]
+    },
+    {
+      "shop_id": "two_bakers",
+      "district": "Jalan Besar",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "matcha_latte",
+        "cappuccino",
+        "americano",
+        "croissant_filled"
+      ]
+    },
+    {
+      "shop_id": "two_men_bagel_house_novena",
+      "district": "Novena / Balestier",
+      "items": [
+        "flat_white",
+        "latte",
+        "americano"
+      ]
+    },
+    {
+      "shop_id": "whisk_and_paddle_novena",
+      "district": "Novena / Balestier",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "croissant_filled"
+      ]
+    }
+  ],
   "flavours": [
     {
       "flavour": "milo chocolate malt",

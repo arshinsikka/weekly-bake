@@ -180,6 +180,10 @@ for item, display in ITEMS:
              "shop_count": len(chosen)}
     entry.update(stats([p for p, _, _, _ in chosen.values()]) if chosen
                  else {"low": None, "median": None, "high": None})
+    # when the prices behind this row were recorded, earliest to latest
+    seen_dates = sorted(s for _, _, _, s in chosen.values() if s)
+    entry["observed_from"] = seen_dates[0] if seen_dates else None
+    entry["observed_to"] = seen_dates[-1] if seen_dates else None
     price_table.append(entry)
 
 for item in NAMED_ITEMS:
@@ -201,6 +205,16 @@ for item in NAMED_ITEMS:
             "is_outlier": note.lower().startswith("outlier"),
         })
     named_prices[item] = sorted(rows, key=lambda r: (r["price"], r["shop_name"]))
+
+# Which of the tracked items each shop has a recorded price for. Every shop with
+# a recorded menu is listed, including those selling none of the tracked items,
+# so "N of the M other shops in the district" counts against the right M.
+shop_items = [
+    {"shop_id": shop_id,
+     "district": shop_meta.get(shop_id, {}).get("district", ""),
+     "items": [item for item, _ in ITEMS if shop_id in picked[item]]}
+    for shop_id in sorted({r["shop_id"] for r in menu if r["price_sgd"].strip()})
+]
 
 for item in DISTRICT_ITEMS:
     buckets = defaultdict(list)
@@ -299,6 +313,7 @@ site_data = {
     "price_table": price_table,
     "named_prices": named_prices,
     "by_district": by_district,
+    "shop_items": shop_items,
     "flavours": flavours,
     "launches_list": launches_list,
     "format_split": format_split,

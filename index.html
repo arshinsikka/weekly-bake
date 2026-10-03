@@ -1250,7 +1250,7 @@ function showResult(d){
                   : `Only ${near.length} other shops in ${district} sell this so far.`);
   } else {
     local = rankIn(near);
-    text += `, and ${rankPhrase(local, tiedIn(near))} of ${near.length + 1} in ${district}.`;
+    text += `, and ${rankPhrase(local, tiedIn(near))} of the ${near.length + 1} shops in ${district} that sell it.`;
   }
   line.textContent = text;
 
@@ -1300,7 +1300,7 @@ function showGaps(d, shop){
     .slice(0, MAX_GAPS);
 
   box.innerHTML = gaps.length
-    ? gaps.map(g => `<p>${g.count} of the ${others.length} other shops in ${esc(shop.district)} sell ${esc(itemPhrase(d, g.key))}. It isn't on your menu as we recorded it.</p>`).join("")
+    ? gaps.map(g => `<p>${g.count} of the ${others.length} other shops we track in ${esc(shop.district)} sell ${esc(itemPhrase(d, g.key))}. It isn't on your menu as we recorded it.</p>`).join("")
     : `<p>Among the ${d.price_table.length} items we track, you already carry what most of ${esc(shop.district)} sells.</p>`;
   box.hidden = false;
   track("neighbour_gaps_shown", {count: gaps.length});

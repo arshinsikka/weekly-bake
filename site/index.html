@@ -2174,14 +2174,23 @@ function drawLaunchChart(d, rows){
 
 /* ---------- promos ---------- */
 function buildPromos(d){
-  const s = d.promos_summary;
-  const bundles = s.by_promo_type.bundle || 0;
+  /* Only offers still running show. An offer ends at the close of its end
+     date, so it stays through that day and goes the day after. Today is the
+     reader's own date, read when the page loads, so the list stays right
+     between rebuilds. An offer with no end date stays, and says so. Hotel F&B
+     is already removed upstream. */
+  const now = new Date();
+  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+  const live = d.promos_list
+    .filter(r => !r.end_date || r.end_date >= today)
+    .map(r => Object.assign({}, r, {end_date: r.end_date || null}));   // no date sorts last
+  const bundles = live.filter(r => r.promo_type === "bundle").length;
   document.getElementById("promo-sub").textContent =
-    `${s.total} offers are running now. ${bundles} of them are bundles, not price cuts. ` +
+    `${live.length} ${live.length === 1 ? "offer is" : "offers are"} running now. ` +
+    `${bundles} of them ${bundles === 1 ? "is a bundle, not a price cut" : "are bundles, not price cuts"}. ` +
     `A bundle sells more and keeps the menu price the same.`;
-  // s.total already has hotel F&B removed upstream
 
-  const types = Object.keys(s.by_promo_type);
+  const types = [...new Set(live.map(r => r.promo_type))].sort();
   const LABELS = {bundle:"Bundles", price_cut:"Price cuts"};
   let current = "all", expanded = false;
   const LIMIT = 12;
@@ -2204,7 +2213,7 @@ function buildPromos(d){
   types.forEach(t => add(t, LABELS[t] || t));
 
   function matching(){
-    return d.promos_list.filter(r => current === "all" || r.promo_type === current);
+    return live.filter(r => current === "all" || r.promo_type === current);
   }
 
   const paint = makeSortable("promo-table",
@@ -2213,7 +2222,7 @@ function buildPromos(d){
       <td class="item">${esc(r.brand_name)}</td>
       <td>${esc(r.offer_text)}</td>
       <td class="soft">${esc((LABELS[r.promo_type] || r.promo_type).replace(/s$/,""))}</td>
-      <td class="soft num">${esc(r.end_date)}</td>
+      <td class="soft num">${r.end_date ? esc(r.end_date) : "No end date given"}</td>
     </tr>`,
     {key:"end_date", dir:"asc"});
 

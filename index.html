@@ -760,6 +760,47 @@ function track(eventName, props){
   }catch(_){ /* swallowed on purpose */ }
 }
 
+/* Where the visit came from, read once as the page loads. src is the tag on
+   our own links (?src=newsletter); anything that is not a short plain tag is
+   dropped, so nothing personal can ride in on it. ref is the referring site's
+   host name only, never its full address. The tag is then taken out of the
+   address bar, hash kept, so a copied link does not carry it to someone else. */
+const VISIT = (() => {
+  let src = null, ref = null;
+  try{
+    const url = new URL(location.href);
+    const tag = url.searchParams.get("src");
+    if(tag !== null){
+      if(/^[A-Za-z0-9_-]{1,40}$/.test(tag)) src = tag.toLowerCase();
+      url.searchParams.delete("src");
+      history.replaceState(history.state, "", url.pathname + url.search + url.hash);
+    }
+  }catch(_){ /* the page works the same without it */ }
+  try{ if(document.referrer) ref = new URL(document.referrer).hostname || null; }catch(_){ ref = null; }
+  const w = window.innerWidth;
+  return {src: src, ref: ref,
+          device: w < 768 ? "phone" : w <= 1100 ? "tablet" : "desktop",
+          // lets the dashboard drop preview and localhost visits
+          host: location.hostname};
+})();
+
+/* visit_end: how long the tab was actually in view, sent once, the first time
+   the visitor leaves or hides it. Phones often never fire pagehide, so the
+   tab being hidden counts as leaving too. */
+let visibleSince = document.visibilityState === "visible" ? Date.now() : null;
+let visibleMs = 0, visitEnded = false;
+function endVisit(){
+  if(visitEnded) return;
+  visitEnded = true;
+  if(visibleSince !== null) visibleMs += Date.now() - visibleSince;
+  track("visit_end", {seconds_visible: Math.round(visibleMs / 1000)});
+}
+document.addEventListener("visibilitychange", () => {
+  if(document.visibilityState === "hidden") endVisit();
+  else if(visibleSince === null) visibleSince = Date.now();   // opened in a background tab
+});
+window.addEventListener("pagehide", endVisit);
+
 /* time_on_page and scroll_depth */
 const PAGE_OPENED = Date.now();
 const DEPTHS_SEEN = new Set();
@@ -1016,7 +1057,8 @@ function render(d){
     });
   });
 
-  track("page_view", {generated_at: d.meta.generated_at});
+  track("page_view", {generated_at: d.meta.generated_at, src: VISIT.src, ref: VISIT.ref,
+                      device: VISIT.device, host: VISIT.host});
 }
 
 /* ---------- hero ---------- */

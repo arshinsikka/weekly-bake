@@ -743,20 +743,12 @@ function track(eventName, props){
       props: props || {},
       session_id: SESSION_ID
     });
-    let sent = false;
-    if(navigator.sendBeacon){
-      try{
-        // sendBeacon cannot set headers, so the key rides in the query string
-        sent = navigator.sendBeacon(
-          SUPABASE_URL + "/rest/v1/events?apikey=" + encodeURIComponent(SUPABASE_KEY),
-          new Blob([payload], {type: "application/json"}));
-      }catch(_){ sent = false; }
-    }
-    if(!sent){
-      fetch(SUPABASE_URL + "/rest/v1/events", {
-        method: "POST", keepalive: true, headers: SB_HEADERS, body: payload
-      }).catch(() => {});
-    }
+    // fetch, never sendBeacon: a beacon always sends cookies, and Supabase
+    // answers every site ("*"), a pair the browser refuses, so each beacon
+    // was dropped before it left. keepalive lets the request outlive the page.
+    fetch(SUPABASE_URL + "/rest/v1/events", {
+      method: "POST", keepalive: true, credentials: "omit", headers: SB_HEADERS, body: payload
+    }).catch(() => {});
   }catch(_){ /* swallowed on purpose */ }
 }
 

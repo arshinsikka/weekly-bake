@@ -2,3 +2,4 @@ __pycache__/
 wave3_parts/
 review_screenshots/
 *.log
+.env

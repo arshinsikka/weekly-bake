@@ -2,8 +2,10 @@
 """Apply the pain-suisse format fix and build site_data.json from the merged CSVs.
 
 Shops and menu items come from the merged shops_all.csv / menu_items_all.csv.
-Coordinates come from shops_geo.csv, which geocode_shops.py writes; run that
-first whenever shops_all.csv gains a shop or a postal code changes.
+Both files are append-only: the last row for a shop_id is the shop as it is
+now, and the rows with the latest observed_date for a shop and item are its
+current price. Older rows stay in the file as history and are never counted.
+Coordinates come from shops_geo.csv and shops_geo_wave3.csv (wave 3 wins).
 Original scraped CSVs are never touched.
 """
 
@@ -12,6 +14,7 @@ import datetime
 import json
 import re
 import statistics
+import unicodedata
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -53,6 +56,8 @@ def brand_key(name):
     return re.sub(r"\s*\(.*?\)", "", name).strip().lower()
 
 BASIS_PREFERENCE = ["takeaway", "dine_in", "online_order"]
+# menu_found values for a shop that is kept on file but takes no part in prices
+NOT_TRADING = {"closed", "temporarily_closed", "removed"}
 
 ITEMS = [
     ("croissant_plain", "Croissant, plain"),
@@ -67,6 +72,29 @@ ITEMS = [
 ]
 NAMED_ITEMS = ["croissant_plain", "flat_white", "latte", "matcha_latte"]
 DISTRICT_ITEMS = ["croissant_plain", "flat_white"]
+# one product per shop, whatever the menu calls it; every other item is told
+# apart by its wording. merge_wave3.py uses the same key.
+SINGLE_PRODUCT = {i for i, _ in ITEMS} - {"croissant_filled", "kouign_amann"}
+
+
+def norm(text):
+    t = unicodedata.normalize("NFKD", text or "")
+    t = "".join(c for c in t if not unicodedata.combining(c)).casefold()
+    return re.sub(r"[^a-z0-9]+", " ", t).strip()
+
+
+def item_key(r):
+    k = (r["shop_id"], r["item_canonical"], r["size"], r["hot_or_iced"], r["price_basis"])
+    return k if r["item_canonical"] in SINGLE_PRODUCT else k + (norm(r["menu_wording"]),)
+
+
+def counts(row):
+    """A row the map, ranks, medians and tables may use: an exact price for an
+    item on sale now. Rows recorded before wave 3 carry no availability note
+    and were all on the menu when recorded, so they count."""
+    note = row.get("price_note", "")
+    return (row["price_confidence"] == "exact"
+            and (note.startswith("availability: available") or "availability:" not in note))
 
 
 def read(name):
@@ -98,15 +126,26 @@ write("launches_clean.csv", launch_fields, launches)
 
 
 # ---------------------------------------------------------------- load rest
-_, shops = read("shops_all.csv")
-_, menu = read("menu_items_all.csv")
+_, shop_history = read("shops_all.csv")
+_, menu_history = read("menu_items_all.csv")
 _, promos = read("promos_clean.csv")
 
-shop_meta = {s["shop_id"]: s for s in shops}
+shop_meta = {s["shop_id"]: s for s in shop_history}        # last row per shop wins
+shops = [s for s in shop_meta.values() if s["menu_found"] != "removed"]
+not_trading = {k for k, s in shop_meta.items() if s["menu_found"] in NOT_TRADING}
+
+# current rows: the latest observed_date for each shop and item
+latest = {}
+for r in menu_history:
+    k = item_key(r)
+    latest[k] = max(latest.get(k, ""), r["observed_date"])
+menu_current = [r for r in menu_history if r["observed_date"] == latest[item_key(r)]]
+# and of those, the ones that count
+menu = [r for r in menu_current if counts(r) and r["shop_id"] not in not_trading]
 
 # lat/lng per shop, or None where the postal code had no exact OneMap match.
 # A shop missing from shops_geo.csv altogether is treated the same way.
-_, geo_rows = read("shops_geo.csv")
+geo_rows = read("shops_geo.csv")[1] + read("shops_geo_wave3.csv")[1]
 shop_geo = {
     g["shop_id"]: (float(g["lat"]), float(g["lng"]))
     for g in geo_rows
@@ -211,6 +250,7 @@ for item in NAMED_ITEMS:
 # so "N of the M other shops in the district" counts against the right M.
 shop_items = [
     {"shop_id": shop_id,
+     "shop_name": shop_meta.get(shop_id, {}).get("shop_name", shop_id),
      "district": shop_meta.get(shop_id, {}).get("district", ""),
      "items": [item for item, _ in ITEMS if shop_id in picked[item]]}
     for shop_id in sorted({r["shop_id"] for r in menu if r["price_sgd"].strip()})
@@ -266,6 +306,7 @@ launches_list = [
      "price": round(float(r["price_sgd"]), 2) if r["price_sgd"].strip() else None,
      "price_confidence": r["price_confidence"],
      "launch_month": r["launch_month"],
+     "first_seen": r.get("first_seen", ""),
      "is_chain": brand_key(r["shop_id_or_name"]) in CHAINS,
      "venue_type": "hotel" if is_hotel(r["shop_id_or_name"], r["source_url"], r.get("source_type", "")) else "independent_or_chain"}
     for r in non_seasonal
@@ -304,7 +345,12 @@ site_data = {
         "launches_hotel_excluded": len(hotel_launches),
         "launches_listed": len(non_seasonal),
         "promos_total": len(promos_kept),
+        "menu_rows_on_file": len(menu_history),
+        "menu_rows_current": len(menu_current),
+        "menu_rows_counted": len(menu),
         "price_selection_rule": (
+            "Only current rows count: the latest observed_date for a shop and "
+            "item, with an exact price, for an item on sale now. "
             "One price per shop per item. Where a shop lists the item under "
             "several price_basis values, takeaway wins, then dine_in, then "
             "online_order; within the winning basis the cheapest product is used."
@@ -345,6 +391,12 @@ def rule(title):
 rule("FIX: pain suisse -> pastry (launches_clean.csv)")
 print(f"  rows changed from other to pastry : {pain_suisse_fixed}")
 print("  left as other: soft-serve, dessert bowl, traditional dessert")
+
+rule("MENU ROWS")
+print(f"  on file {len(menu_history)}; current (latest per shop and item) {len(menu_current)}; "
+      f"counted (exact price, available) {len(menu)}")
+print(f"  shops on file {len(shops)}; with a counted price {len({r['shop_id'] for r in menu})}; "
+      f"not trading {len(not_trading)}")
 
 rule("PRICE TABLE (one price per shop; takeaway > dine_in > online_order)")
 print(f"  {'item':<22}{'display':<24}{'shops':>6}{'low':>8}{'median':>8}{'high':>8}"

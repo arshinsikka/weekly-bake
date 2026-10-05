@@ -1,8 +1,8 @@
 {
   "meta": {
-    "generated_at": "2026-10-03",
-    "shops_total": 121,
-    "shops_with_prices": 95,
+    "generated_at": "2026-10-05",
+    "shops_total": 301,
+    "shops_with_prices": 97,
     "districts": [
       "Bugis / Kampong Glam / Haji Lane",
       "Bukit Timah / Sixth Avenue",
@@ -21,129 +21,119 @@
       "Upper Thomson"
     ],
     "districts_count": 15,
-    "launches_total": 100,
-    "launches_excluding_seasonal": 82,
+    "launches_total": 151,
+    "launches_excluding_seasonal": 133,
     "launches_hotel_excluded": 4,
-    "launches_listed": 78,
-    "promos_total": 26,
-    "price_selection_rule": "One price per shop per item. Where a shop lists the item under several price_basis values, takeaway wins, then dine_in, then online_order; within the winning basis the cheapest product is used."
+    "launches_listed": 129,
+    "promos_total": 32,
+    "menu_rows_on_file": 8675,
+    "menu_rows_current": 8634,
+    "menu_rows_counted": 6927,
+    "price_selection_rule": "Only current rows count: the latest observed_date for a shop and item, with an exact price, for an item on sale now. One price per shop per item. Where a shop lists the item under several price_basis values, takeaway wins, then dine_in, then online_order; within the winning basis the cheapest product is used."
   },
   "price_table": [
     {
       "item_canonical": "croissant_plain",
       "display_name": "Croissant, plain",
       "format": "pastry",
-      "shop_count": 71,
+      "shop_count": 67,
       "low": 3.8,
-      "median": 4.2,
-      "high": 7.5,
+      "median": 4.4,
+      "high": 5.0,
       "observed_from": "2026-09-19",
-      "observed_to": "2026-09-19"
+      "observed_to": "2026-10-04"
     },
     {
       "item_canonical": "flat_white",
       "display_name": "Flat white",
       "format": "drink",
-      "shop_count": 81,
-      "low": 5.0,
-      "median": 5.5,
-      "high": 6.5,
+      "shop_count": 77,
+      "low": 5.5,
+      "median": 5.8,
+      "high": 7.09,
       "observed_from": "2026-09-19",
-      "observed_to": "2026-09-19"
+      "observed_to": "2026-10-04"
     },
     {
       "item_canonical": "latte",
       "display_name": "Latte",
       "format": "drink",
-      "shop_count": 77,
+      "shop_count": 76,
       "low": 5.5,
       "median": 5.8,
-      "high": 6.5,
+      "high": 7.09,
       "observed_from": "2026-09-19",
-      "observed_to": "2026-09-19"
+      "observed_to": "2026-10-04"
     },
     {
       "item_canonical": "matcha_latte",
       "display_name": "Matcha latte",
       "format": "drink",
-      "shop_count": 27,
+      "shop_count": 34,
       "low": 6.5,
-      "median": 6.8,
-      "high": 9.0,
+      "median": 7.0,
+      "high": 8.99,
       "observed_from": "2026-09-19",
-      "observed_to": "2026-09-19"
+      "observed_to": "2026-10-04"
     },
     {
       "item_canonical": "cappuccino",
       "display_name": "Cappuccino",
       "format": "drink",
-      "shop_count": 60,
+      "shop_count": 70,
       "low": 5.5,
-      "median": 5.8,
-      "high": 6.5,
+      "median": 6.0,
+      "high": 8.39,
       "observed_from": "2026-09-19",
-      "observed_to": "2026-09-19"
+      "observed_to": "2026-10-04"
     },
     {
       "item_canonical": "americano",
       "display_name": "Americano / long black",
       "format": "drink",
-      "shop_count": 81,
+      "shop_count": 76,
       "low": 4.5,
       "median": 5.0,
-      "high": 7.0,
+      "high": 7.63,
       "observed_from": "2026-09-19",
-      "observed_to": "2026-09-19"
+      "observed_to": "2026-10-04"
     },
     {
       "item_canonical": "espresso",
       "display_name": "Espresso",
       "format": "drink",
-      "shop_count": 33,
-      "low": 3.8,
+      "shop_count": 47,
+      "low": 3.5,
       "median": 4.0,
-      "high": 4.5,
+      "high": 6.59,
       "observed_from": "2026-09-19",
-      "observed_to": "2026-09-19"
+      "observed_to": "2026-10-04"
     },
     {
       "item_canonical": "croissant_filled",
       "display_name": "Croissant, filled",
       "format": "pastry",
-      "shop_count": 68,
-      "low": 4.2,
-      "median": 5.2,
-      "high": 12.0,
+      "shop_count": 65,
+      "low": 4.5,
+      "median": 5.5,
+      "high": 58.0,
       "observed_from": "2026-09-19",
-      "observed_to": "2026-09-19"
+      "observed_to": "2026-10-04"
     },
     {
       "item_canonical": "kouign_amann",
       "display_name": "Kouign-amann",
       "format": "pastry",
-      "shop_count": 24,
-      "low": 4.6,
-      "median": 5.5,
-      "high": 6.5,
+      "shop_count": 22,
+      "low": 5.0,
+      "median": 5.7,
+      "high": 8.15,
       "observed_from": "2026-09-19",
-      "observed_to": "2026-09-19"
+      "observed_to": "2026-10-04"
     }
   ],
   "named_prices": {
     "croissant_plain": [
-      {
-        "shop_id": "boulangerie_asuka",
-        "shop_name": "Boulangerie Asuka",
-        "district": "Queenstown / Alexandra",
-        "address": "370 Alexandra Rd #B1-24 Anchorpoint",
-        "lat": 1.288614690305858,
-        "lng": 103.8050099645917,
-        "price": 3.8,
-        "price_basis": "takeaway",
-        "observed_date": "2026-09-19",
-        "note": "",
-        "is_outlier": false
-      },
       {
         "shop_id": "bread_and_hearth_katong",
         "shop_name": "Bread & Hearth (Katong)",
@@ -158,19 +148,6 @@
         "is_outlier": false
       },
       {
-        "shop_id": "petit_pain",
-        "shop_name": "Petit Pain",
-        "district": "Katong / Joo Chiat",
-        "address": "17 Joo Chiat Place",
-        "lat": 1.313443845813766,
-        "lng": 103.9001536456407,
-        "price": 3.8,
-        "price_basis": "takeaway",
-        "observed_date": "2026-09-19",
-        "note": "",
-        "is_outlier": false
-      },
-      {
         "shop_id": "konditori_artisan_bakes",
         "shop_name": "Konditori Artisan Bakes",
         "district": "Bugis / Kampong Glam / Haji Lane",
@@ -178,19 +155,6 @@
         "lat": 1.301750128505258,
         "lng": 103.8596621672353,
         "price": 3.9,
-        "price_basis": "online_order",
-        "observed_date": "2026-09-19",
-        "note": "",
-        "is_outlier": false
-      },
-      {
-        "shop_id": "bakery_brera_empress",
-        "shop_name": "Bakery Brera",
-        "district": "Bukit Timah / Sixth Avenue",
-        "address": "8 Empress Rd #01-122",
-        "lat": 1.316411900981759,
-        "lng": 103.805373811937,
-        "price": 4.0,
         "price_basis": "online_order",
         "observed_date": "2026-09-19",
         "note": "",
@@ -236,16 +200,16 @@
         "is_outlier": false
       },
       {
-        "shop_id": "kwaasong_bakehouse_telok_ayer",
-        "shop_name": "Kwaasong Bakehouse",
+        "shop_id": "joe_dough_068912",
+        "shop_name": "Joe & Dough",
         "district": "Telok Ayer / Amoy",
-        "address": "13 Lor Telok",
-        "lat": 1.286711865193686,
-        "lng": 103.8484390102222,
+        "address": "168 Robinson Road #36-01 Capital Tower",
+        "lat": 1.277630732608236,
+        "lng": 103.847572724879,
         "price": 4.0,
-        "price_basis": "takeaway",
-        "observed_date": "2026-09-19",
-        "note": "",
+        "price_basis": "online_order",
+        "observed_date": "2026-10-04",
+        "note": "availability: available; read from the menu page by eye; own pickup ordering page for JOE & DOUGH CAPITAL TOWER",
         "is_outlier": false
       },
       {
@@ -275,16 +239,16 @@
         "is_outlier": false
       },
       {
-        "shop_id": "the_bread_rack_kovan",
-        "shop_name": "The Bread Rack",
-        "district": "Serangoon Gardens / Kovan",
-        "address": "9 Yio Chu Kang Rd #01-55 Space@Kovan",
-        "lat": 1.35466521890966,
-        "lng": 103.876883622562,
+        "shop_id": "lunar_rabbit_boulangerie_hamilton",
+        "shop_name": "The Lunar Rabbit Boulangerie",
+        "district": "Jalan Besar",
+        "address": "16 Hamilton Road #01-02",
+        "lat": 1.311404151351209,
+        "lng": 103.8612984068119,
         "price": 4.0,
-        "price_basis": "takeaway",
-        "observed_date": "2026-09-19",
-        "note": "",
+        "price_basis": "online_order",
+        "observed_date": "2026-10-04",
+        "note": "availability: available",
         "is_outlier": false
       },
       {
@@ -359,19 +323,6 @@
         "address": "17 Eng Hoon Street #01-04",
         "lat": 1.283505894837439,
         "lng": 103.8344927525353,
-        "price": 4.2,
-        "price_basis": "takeaway",
-        "observed_date": "2026-09-19",
-        "note": "",
-        "is_outlier": false
-      },
-      {
-        "shop_id": "chu_and_co_serangoon",
-        "shop_name": "Chu and Co",
-        "district": "Serangoon Gardens / Kovan",
-        "address": "15 Lichfield Rd",
-        "lat": 1.364588804953842,
-        "lng": 103.869994847831,
         "price": 4.2,
         "price_basis": "takeaway",
         "observed_date": "2026-09-19",
@@ -613,6 +564,19 @@
         "is_outlier": false
       },
       {
+        "shop_id": "bakery_brera_empress",
+        "shop_name": "Bakery Brera",
+        "district": "Bukit Timah / Sixth Avenue",
+        "address": "8 Empress Rd #01-122",
+        "lat": 1.316411900981759,
+        "lng": 103.805373811937,
+        "price": 4.4,
+        "price_basis": "online_order",
+        "observed_date": "2026-10-04",
+        "note": "availability: available",
+        "is_outlier": false
+      },
+      {
         "shop_id": "tiong_bahru_bakery_dempsey",
         "shop_name": "Tiong Bahru Bakery",
         "district": "Holland Village / Dempsey",
@@ -659,19 +623,6 @@
         "lat": 1.305611664830487,
         "lng": 103.8229629409393,
         "price": 4.4,
-        "price_basis": "dine_in",
-        "observed_date": "2026-09-19",
-        "note": "",
-        "is_outlier": false
-      },
-      {
-        "shop_id": "174_bingo",
-        "shop_name": "174 Bingo",
-        "district": "Katong / Joo Chiat",
-        "address": "174 Joo Chiat Road",
-        "lat": 1.312654286094428,
-        "lng": 103.8998261337243,
-        "price": 4.5,
         "price_basis": "dine_in",
         "observed_date": "2026-09-19",
         "note": "",
@@ -727,6 +678,19 @@
         "price_basis": "dine_in",
         "observed_date": "2026-09-19",
         "note": "",
+        "is_outlier": false
+      },
+      {
+        "shop_id": "bastille_bakery",
+        "shop_name": "Bastille Bakery",
+        "district": "Katong / Joo Chiat",
+        "address": "261 Joo Chiat Road",
+        "lat": 1.310521102482215,
+        "lng": 103.9017328239674,
+        "price": 4.5,
+        "price_basis": "dine_in",
+        "observed_date": "2026-10-04",
+        "note": "availability: available; price is inside a menu image or PDF on https://www.bastille.com.sg/dine.html; PDF titled 'DINE-IN / TAKE AWAY MENU'; dine page states 'No service charge'",
         "is_outlier": false
       },
       {
@@ -907,8 +871,8 @@
         "lng": 103.8229629409393,
         "price": 4.5,
         "price_basis": "online_order",
-        "observed_date": "2026-09-19",
-        "note": "",
+        "observed_date": "2026-10-04",
+        "note": "availability: available",
         "is_outlier": false
       },
       {
@@ -951,16 +915,16 @@
         "is_outlier": false
       },
       {
-        "shop_id": "the_french_american_bakery",
-        "shop_name": "The French American Bakery",
-        "district": "Jalan Besar",
-        "address": "49 Haji Lane",
-        "lat": 1.301061578244272,
-        "lng": 103.8587518017124,
-        "price": 4.6,
+        "shop_id": "drips_bakery_cafe",
+        "shop_name": "Drips Bakery Cafe",
+        "district": "Tiong Bahru",
+        "address": "71 Seng Poh Road #01-37",
+        "lat": 1.284246551934091,
+        "lng": 103.8325036270693,
+        "price": 4.8,
         "price_basis": "online_order",
-        "observed_date": "2026-09-19",
-        "note": "Oddle applies a platform markup over in-store price",
+        "observed_date": "2026-10-04",
+        "note": "availability: available; captured 2026-10-04; Oddle blocked our requests on the stage 2 re-run; pre-order store",
         "is_outlier": false
       },
       {
@@ -1040,35 +1004,9 @@
         "observed_date": "2026-09-19",
         "note": "",
         "is_outlier": false
-      },
-      {
-        "shop_id": "prairie_by_craftsmen_joo_chiat",
-        "shop_name": "Prairie by Craftsmen",
-        "district": "Katong / Joo Chiat",
-        "address": "462 Joo Chiat Road",
-        "lat": 1.306197088221452,
-        "lng": 103.9045887908767,
-        "price": 7.5,
-        "price_basis": "dine_in",
-        "observed_date": "2026-09-19",
-        "note": "Outlier, highest plain croissant in dataset, from Chope listing, may be a plated item rather than counter price",
-        "is_outlier": true
       }
     ],
     "flat_white": [
-      {
-        "shop_id": "174_bingo",
-        "shop_name": "174 Bingo",
-        "district": "Katong / Joo Chiat",
-        "address": "174 Joo Chiat Road",
-        "lat": 1.312654286094428,
-        "lng": 103.8998261337243,
-        "price": 5.0,
-        "price_basis": "dine_in",
-        "observed_date": "2026-09-19",
-        "note": "",
-        "is_outlier": false
-      },
       {
         "shop_id": "alchemist_design_orchard",
         "shop_name": "Alchemist",
@@ -1161,19 +1099,6 @@
         "is_outlier": false
       },
       {
-        "shop_id": "big_short_coffee",
-        "shop_name": "Big Short Coffee",
-        "district": "Katong / Joo Chiat",
-        "address": "2 Fowlie Road #01-01",
-        "lat": 1.307561081016846,
-        "lng": 103.9034796413063,
-        "price": 5.5,
-        "price_basis": "dine_in",
-        "observed_date": "2026-09-19",
-        "note": "",
-        "is_outlier": false
-      },
-      {
         "shop_id": "brawn_and_brains_hamilton",
         "shop_name": "Brawn & Brains Coffee (Hamilton)",
         "district": "Jalan Besar",
@@ -1221,19 +1146,6 @@
         "lng": 103.7736379994818,
         "price": 5.5,
         "price_basis": "dine_in",
-        "observed_date": "2026-09-19",
-        "note": "",
-        "is_outlier": false
-      },
-      {
-        "shop_id": "chu_and_co_serangoon",
-        "shop_name": "Chu and Co",
-        "district": "Serangoon Gardens / Kovan",
-        "address": "15 Lichfield Rd",
-        "lat": 1.364588804953842,
-        "lng": 103.869994847831,
-        "price": 5.5,
-        "price_basis": "takeaway",
         "observed_date": "2026-09-19",
         "note": "",
         "is_outlier": false
@@ -1343,19 +1255,6 @@
         "is_outlier": false
       },
       {
-        "shop_id": "kwaasong_bakehouse_telok_ayer",
-        "shop_name": "Kwaasong Bakehouse",
-        "district": "Telok Ayer / Amoy",
-        "address": "13 Lor Telok",
-        "lat": 1.286711865193686,
-        "lng": 103.8484390102222,
-        "price": 5.5,
-        "price_basis": "takeaway",
-        "observed_date": "2026-09-19",
-        "note": "",
-        "is_outlier": false
-      },
-      {
         "shop_id": "lola_cafe_kovan",
         "shop_name": "Lola's Cafe",
         "district": "Serangoon Gardens / Kovan",
@@ -1382,38 +1281,12 @@
         "is_outlier": false
       },
       {
-        "shop_id": "moonchild",
-        "shop_name": "Moonchild",
-        "district": "Jalan Besar",
-        "address": "351 Jalan Besar #01-01",
-        "lat": 1.312386526193034,
-        "lng": 103.859366874523,
-        "price": 5.5,
-        "price_basis": "dine_in",
-        "observed_date": "2026-09-19",
-        "note": "",
-        "is_outlier": false
-      },
-      {
         "shop_id": "one_man_coffee_thomson",
         "shop_name": "One Man Coffee",
         "district": "Upper Thomson",
         "address": "215R Upper Thomson Rd",
         "lat": 1.352223667748493,
         "lng": 103.8349952683674,
-        "price": 5.5,
-        "price_basis": "dine_in",
-        "observed_date": "2026-09-19",
-        "note": "",
-        "is_outlier": false
-      },
-      {
-        "shop_id": "patisserie_cle_siglap",
-        "shop_name": "Patisserie CLE",
-        "district": "East Coast / Siglap",
-        "address": "79 Lucky Heights",
-        "lat": 1.318412980378821,
-        "lng": 103.9415828132246,
         "price": 5.5,
         "price_basis": "dine_in",
         "observed_date": "2026-09-19",
@@ -1481,19 +1354,6 @@
         "lng": 103.827867813504,
         "price": 5.5,
         "price_basis": "dine_in",
-        "observed_date": "2026-09-19",
-        "note": "",
-        "is_outlier": false
-      },
-      {
-        "shop_id": "the_bread_rack_kovan",
-        "shop_name": "The Bread Rack",
-        "district": "Serangoon Gardens / Kovan",
-        "address": "9 Yio Chu Kang Rd #01-55 Space@Kovan",
-        "lat": 1.35466521890966,
-        "lng": 103.876883622562,
-        "price": 5.5,
-        "price_basis": "takeaway",
         "observed_date": "2026-09-19",
         "note": "",
         "is_outlier": false
@@ -1811,6 +1671,19 @@
         "is_outlier": false
       },
       {
+        "shop_id": "flock_cafe",
+        "shop_name": "Flock Cafe",
+        "district": "Tiong Bahru",
+        "address": "78 Moh Guan Terrace #01-25",
+        "lat": 1.283633272988163,
+        "lng": 103.8304925145505,
+        "price": 6.0,
+        "price_basis": "online_order",
+        "observed_date": "2026-10-04",
+        "note": "availability: available; captured 2026-10-04; Oddle blocked our requests on the stage 2 re-run",
+        "is_outlier": false
+      },
+      {
         "shop_id": "french_fold_telok_ayer",
         "shop_name": "French Fold",
         "district": "Telok Ayer / Amoy",
@@ -1941,6 +1814,19 @@
         "is_outlier": false
       },
       {
+        "shop_id": "patisserie_cle_siglap",
+        "shop_name": "Patisserie CLE",
+        "district": "East Coast / Siglap",
+        "address": "79 Lucky Heights",
+        "lat": 1.318412980378821,
+        "lng": 103.9415828132246,
+        "price": 6.0,
+        "price_basis": "dine_in",
+        "observed_date": "2026-10-04",
+        "note": "availability: available; price is inside a menu image or PDF on https://patisserie-cle.com/pages/dine-in-menu; menu add ons: Espresso shot $1; Oat Milk $1; Ice $1",
+        "is_outlier": false
+      },
+      {
         "shop_id": "plain_vanilla_tiong_bahru",
         "shop_name": "Plain Vanilla Bakery",
         "district": "Tiong Bahru",
@@ -1960,19 +1846,6 @@
         "address": "199 East Coast Road",
         "lat": 1.307273190495872,
         "lng": 103.9065765795765,
-        "price": 6.0,
-        "price_basis": "dine_in",
-        "observed_date": "2026-09-19",
-        "note": "",
-        "is_outlier": false
-      },
-      {
-        "shop_id": "prairie_by_craftsmen_joo_chiat",
-        "shop_name": "Prairie by Craftsmen",
-        "district": "Katong / Joo Chiat",
-        "address": "462 Joo Chiat Road",
-        "lat": 1.306197088221452,
-        "lng": 103.9045887908767,
         "price": 6.0,
         "price_basis": "dine_in",
         "observed_date": "2026-09-19",
@@ -2045,19 +1918,6 @@
         "is_outlier": false
       },
       {
-        "shop_id": "accompany_coffee",
-        "shop_name": "Accompany Coffee",
-        "district": "Katong / Joo Chiat",
-        "address": "292 Joo Chiat Road",
-        "lat": 1.310013350344182,
-        "lng": 103.901813120364,
-        "price": 6.5,
-        "price_basis": "dine_in",
-        "observed_date": "2026-09-19",
-        "note": "",
-        "is_outlier": false
-      },
-      {
         "shop_id": "awfully_chocolate_bakery_cafe",
         "shop_name": "Awfully Chocolate Bakery & Cafe",
         "district": "Katong / Joo Chiat",
@@ -2068,6 +1928,19 @@
         "price_basis": "online_order",
         "observed_date": "2026-09-19",
         "note": "",
+        "is_outlier": false
+      },
+      {
+        "shop_id": "bastille_bakery",
+        "shop_name": "Bastille Bakery",
+        "district": "Katong / Joo Chiat",
+        "address": "261 Joo Chiat Road",
+        "lat": 1.310521102482215,
+        "lng": 103.9017328239674,
+        "price": 6.5,
+        "price_basis": "dine_in",
+        "observed_date": "2026-10-04",
+        "note": "availability: available; price is inside a menu image or PDF on https://www.bastille.com.sg/dine.html; PDF titled 'DINE-IN / TAKE AWAY MENU'; dine page states 'No service charge'; Ice +$1.0; Oat Milk +$1.0",
         "is_outlier": false
       },
       {
@@ -2107,6 +1980,32 @@
         "price_basis": "dine_in",
         "observed_date": "2026-09-19",
         "note": "",
+        "is_outlier": false
+      },
+      {
+        "shop_id": "joe_dough_068912",
+        "shop_name": "Joe & Dough",
+        "district": "Telok Ayer / Amoy",
+        "address": "168 Robinson Road #36-01 Capital Tower",
+        "lat": 1.277630732608236,
+        "lng": 103.847572724879,
+        "price": 6.8,
+        "price_basis": "online_order",
+        "observed_date": "2026-10-04",
+        "note": "availability: available; read from the menu page by eye; own pickup ordering page for JOE & DOUGH CAPITAL TOWER",
+        "is_outlier": false
+      },
+      {
+        "shop_id": "the_living_cafe_269758",
+        "shop_name": "The Living Cafe",
+        "district": "Bukit Timah / Sixth Avenue",
+        "address": "779 Bukit Timah Road",
+        "lat": 1.33102187928368,
+        "lng": 103.7962645087327,
+        "price": 7.09,
+        "price_basis": "dine_in",
+        "observed_date": "2026-10-04",
+        "note": "availability: available; page states prices exclude GST; price is inside a menu image or PDF on https://thelivingcafe.com/pages/main-menu; menu states 'All prices are subject to GST and service charge'; menu states service charge (rate not stated); menu dated 20th March 2026 (image file name 'TLC Updated Menu 20th March 2026'); menu: Iced Drinks +1; Extra Shot +2; plant milk choice (almond, oat, coconut, soy); listed: 6.50; plus: GST 9%; service charge stated without a rate, not added",
         "is_outlier": false
       }
     ],
@@ -2385,38 +2284,12 @@
         "is_outlier": false
       },
       {
-        "shop_id": "moonchild",
-        "shop_name": "Moonchild",
-        "district": "Jalan Besar",
-        "address": "351 Jalan Besar #01-01",
-        "lat": 1.312386526193034,
-        "lng": 103.859366874523,
-        "price": 5.5,
-        "price_basis": "dine_in",
-        "observed_date": "2026-09-19",
-        "note": "",
-        "is_outlier": false
-      },
-      {
         "shop_id": "one_man_coffee_thomson",
         "shop_name": "One Man Coffee",
         "district": "Upper Thomson",
         "address": "215R Upper Thomson Rd",
         "lat": 1.352223667748493,
         "lng": 103.8349952683674,
-        "price": 5.5,
-        "price_basis": "dine_in",
-        "observed_date": "2026-09-19",
-        "note": "",
-        "is_outlier": false
-      },
-      {
-        "shop_id": "patisserie_cle_siglap",
-        "shop_name": "Patisserie CLE",
-        "district": "East Coast / Siglap",
-        "address": "79 Lucky Heights",
-        "lat": 1.318412980378821,
-        "lng": 103.9415828132246,
         "price": 5.5,
         "price_basis": "dine_in",
         "observed_date": "2026-09-19",
@@ -2697,19 +2570,6 @@
         "is_outlier": false
       },
       {
-        "shop_id": "big_short_coffee",
-        "shop_name": "Big Short Coffee",
-        "district": "Katong / Joo Chiat",
-        "address": "2 Fowlie Road #01-01",
-        "lat": 1.307561081016846,
-        "lng": 103.9034796413063,
-        "price": 6.0,
-        "price_basis": "dine_in",
-        "observed_date": "2026-09-19",
-        "note": "",
-        "is_outlier": false
-      },
-      {
         "shop_id": "burnt_ends_bakery_dempsey",
         "shop_name": "Burnt Ends Bakery",
         "district": "Holland Village / Dempsey",
@@ -2801,6 +2661,19 @@
         "is_outlier": false
       },
       {
+        "shop_id": "flock_cafe",
+        "shop_name": "Flock Cafe",
+        "district": "Tiong Bahru",
+        "address": "78 Moh Guan Terrace #01-25",
+        "lat": 1.283633272988163,
+        "lng": 103.8304925145505,
+        "price": 6.0,
+        "price_basis": "online_order",
+        "observed_date": "2026-10-04",
+        "note": "availability: available; captured 2026-10-04; Oddle blocked our requests on the stage 2 re-run",
+        "is_outlier": false
+      },
+      {
         "shop_id": "french_fold_telok_ayer",
         "shop_name": "French Fold",
         "district": "Telok Ayer / Amoy",
@@ -2874,8 +2747,8 @@
         "lng": 103.9034656121438,
         "price": 6.0,
         "price_basis": "dine_in",
-        "observed_date": "2026-09-19",
-        "note": "",
+        "observed_date": "2026-10-04",
+        "note": "availability: available; price is inside a menu image or PDF on https://www.microbakerykitchen.com/tiongbahru; brand-wide page; not specific to this outlet; Tiong Bahru outlet menu; menu states prices are GST inclusive; menu dated April 2026 (image filename); add ice +1; milk alternative: oat / soy +1; extra shot +1",
         "is_outlier": false
       },
       {
@@ -2887,8 +2760,8 @@
         "lng": 103.830422937143,
         "price": 6.0,
         "price_basis": "dine_in",
-        "observed_date": "2026-09-19",
-        "note": "",
+        "observed_date": "2026-10-04",
+        "note": "availability: available; price is inside a menu image or PDF on https://www.microbakerykitchen.com/tiongbahru; brand-wide page; not specific to this outlet; Tiong Bahru outlet menu; menu states prices are GST inclusive; menu dated April 2026 (image filename); add ice +1; milk alternative: oat / soy +1; extra shot +1",
         "is_outlier": false
       },
       {
@@ -2918,19 +2791,6 @@
         "is_outlier": false
       },
       {
-        "shop_id": "pull_by_tpg",
-        "shop_name": "PULL by TPG",
-        "district": "Katong / Joo Chiat",
-        "address": "60 Joo Chiat Road #01-03",
-        "lat": 1.314728819135836,
-        "lng": 103.898383226749,
-        "price": 6.0,
-        "price_basis": "dine_in",
-        "observed_date": "2026-09-19",
-        "note": "",
-        "is_outlier": false
-      },
-      {
         "shop_id": "pantler_river_valley",
         "shop_name": "Pantler",
         "district": "River Valley / Robertson Quay",
@@ -2941,6 +2801,19 @@
         "price_basis": "dine_in",
         "observed_date": "2026-09-19",
         "note": "",
+        "is_outlier": false
+      },
+      {
+        "shop_id": "patisserie_cle_siglap",
+        "shop_name": "Patisserie CLE",
+        "district": "East Coast / Siglap",
+        "address": "79 Lucky Heights",
+        "lat": 1.318412980378821,
+        "lng": 103.9415828132246,
+        "price": 6.0,
+        "price_basis": "dine_in",
+        "observed_date": "2026-10-04",
+        "note": "availability: available; price is inside a menu image or PDF on https://patisserie-cle.com/pages/dine-in-menu; menu add ons: Espresso shot $1; Oat Milk $1; Ice $1",
         "is_outlier": false
       },
       {
@@ -2963,19 +2836,6 @@
         "address": "199 East Coast Road",
         "lat": 1.307273190495872,
         "lng": 103.9065765795765,
-        "price": 6.0,
-        "price_basis": "dine_in",
-        "observed_date": "2026-09-19",
-        "note": "",
-        "is_outlier": false
-      },
-      {
-        "shop_id": "prairie_by_craftsmen_joo_chiat",
-        "shop_name": "Prairie by Craftsmen",
-        "district": "Katong / Joo Chiat",
-        "address": "462 Joo Chiat Road",
-        "lat": 1.306197088221452,
-        "lng": 103.9045887908767,
         "price": 6.0,
         "price_basis": "dine_in",
         "observed_date": "2026-09-19",
@@ -3061,19 +2921,6 @@
         "is_outlier": false
       },
       {
-        "shop_id": "bastille_bakery",
-        "shop_name": "Bastille Bakery",
-        "district": "Katong / Joo Chiat",
-        "address": "261 Joo Chiat Road",
-        "lat": 1.310521102482215,
-        "lng": 103.9017328239674,
-        "price": 6.5,
-        "price_basis": "dine_in",
-        "observed_date": "2026-09-19",
-        "note": "",
-        "is_outlier": false
-      },
-      {
         "shop_id": "common_man_coffee_roasters_joo_chiat",
         "shop_name": "Common Man Coffee Roasters (Joo Chiat)",
         "district": "Katong / Joo Chiat",
@@ -3084,6 +2931,19 @@
         "price_basis": "online_order",
         "observed_date": "2026-09-19",
         "note": "",
+        "is_outlier": false
+      },
+      {
+        "shop_id": "joe_dough_068912",
+        "shop_name": "Joe & Dough",
+        "district": "Telok Ayer / Amoy",
+        "address": "168 Robinson Road #36-01 Capital Tower",
+        "lat": 1.277630732608236,
+        "lng": 103.847572724879,
+        "price": 6.5,
+        "price_basis": "online_order",
+        "observed_date": "2026-10-04",
+        "note": "availability: available; read from the menu page by eye; own pickup ordering page for JOE & DOUGH CAPITAL TOWER",
         "is_outlier": false
       },
       {
@@ -3110,6 +2970,32 @@
         "price_basis": "dine_in",
         "observed_date": "2026-09-19",
         "note": "",
+        "is_outlier": false
+      },
+      {
+        "shop_id": "hello_arigato_upper_thomson",
+        "shop_name": "Hello Arigato",
+        "district": "Upper Thomson",
+        "address": "227 Upper Thomson Rd",
+        "lat": 1.352803732959309,
+        "lng": 103.8343928035838,
+        "price": 6.54,
+        "price_basis": "dine_in",
+        "observed_date": "2026-10-04",
+        "note": "availability: available; page states prices exclude GST; price is inside a menu image or PDF on https://www.helloarigato.com/upperthomson; Upper Thomson day menu (PDF linked as 'VIEW DAY MENU' on own site); menu states all prices are before service charge & GST; Change to Oat Milk +1; Change to Iced +1; Add Extra Shot +1; listed: 6.00; plus: GST 9%; service charge stated without a rate, not added",
+        "is_outlier": false
+      },
+      {
+        "shop_id": "the_living_cafe_269758",
+        "shop_name": "The Living Cafe",
+        "district": "Bukit Timah / Sixth Avenue",
+        "address": "779 Bukit Timah Road",
+        "lat": 1.33102187928368,
+        "lng": 103.7962645087327,
+        "price": 7.09,
+        "price_basis": "dine_in",
+        "observed_date": "2026-10-04",
+        "note": "availability: available; page states prices exclude GST; price is inside a menu image or PDF on https://thelivingcafe.com/pages/main-menu; menu states 'All prices are subject to GST and service charge'; menu states service charge (rate not stated); menu dated 20th March 2026 (image file name 'TLC Updated Menu 20th March 2026'); menu: Iced Drinks +1; Extra Shot +2; plant milk choice (almond, oat, coconut, soy); listed: 6.50; plus: GST 9%; service charge stated without a rate, not added",
         "is_outlier": false
       }
     ],
@@ -3323,19 +3209,6 @@
         "is_outlier": false
       },
       {
-        "shop_id": "accompany_coffee",
-        "shop_name": "Accompany Coffee",
-        "district": "Katong / Joo Chiat",
-        "address": "292 Joo Chiat Road",
-        "lat": 1.310013350344182,
-        "lng": 103.901813120364,
-        "price": 7.0,
-        "price_basis": "dine_in",
-        "observed_date": "2026-09-19",
-        "note": "",
-        "is_outlier": false
-      },
-      {
         "shop_id": "apartment_coffee",
         "shop_name": "Apartment Coffee",
         "district": "Jalan Besar",
@@ -3440,6 +3313,19 @@
         "is_outlier": false
       },
       {
+        "shop_id": "joe_dough_068912",
+        "shop_name": "Joe & Dough",
+        "district": "Telok Ayer / Amoy",
+        "address": "168 Robinson Road #36-01 Capital Tower",
+        "lat": 1.277630732608236,
+        "lng": 103.847572724879,
+        "price": 7.3,
+        "price_basis": "online_order",
+        "observed_date": "2026-10-04",
+        "note": "availability: available; read from the menu page by eye; own pickup ordering page for JOE & DOUGH CAPITAL TOWER",
+        "is_outlier": false
+      },
+      {
         "shop_id": "merci_marcel_tiong_bahru",
         "shop_name": "Merci Marcel (Tiong Bahru)",
         "district": "Tiong Bahru",
@@ -3453,16 +3339,107 @@
         "is_outlier": false
       },
       {
-        "shop_id": "big_short_coffee",
-        "shop_name": "Big Short Coffee",
+        "shop_id": "tiong_bahru_bakery_holland_v",
+        "shop_name": "Tiong Bahru Bakery",
+        "district": "Holland Village / Dempsey",
+        "address": "7 Chip Bee Gdns",
+        "lat": 1.315751736322738,
+        "lng": 103.7796311166626,
+        "price": 7.8,
+        "price_basis": "online_order",
+        "observed_date": "2026-10-04",
+        "note": "availability: available; brand-wide page; not specific to this outlet",
+        "is_outlier": false
+      },
+      {
+        "shop_id": "tiong_bahru_bakery_centrepoint",
+        "shop_name": "Tiong Bahru Bakery",
+        "district": "Orchard / Somerset",
+        "address": "176 Orchard Rd #01-21 The Centrepoint",
+        "lat": 1.301978346321908,
+        "lng": 103.8397590432698,
+        "price": 7.8,
+        "price_basis": "online_order",
+        "observed_date": "2026-10-04",
+        "note": "availability: available; brand-wide page; not specific to this outlet",
+        "is_outlier": false
+      },
+      {
+        "shop_id": "tiong_bahru_bakery_tanglin",
+        "shop_name": "Tiong Bahru Bakery",
+        "district": "River Valley / Robertson Quay",
+        "address": "56 Tanglin Rd #01-01",
+        "lat": 1.305611664830487,
+        "lng": 103.8229629409393,
+        "price": 7.8,
+        "price_basis": "online_order",
+        "observed_date": "2026-10-04",
+        "note": "availability: available; brand-wide page; not specific to this outlet",
+        "is_outlier": false
+      },
+      {
+        "shop_id": "tiong_bahru_bakery_joo_chiat",
+        "shop_name": "Tiong Bahru Bakery (Joo Chiat)",
         "district": "Katong / Joo Chiat",
-        "address": "2 Fowlie Road #01-01",
-        "lat": 1.307561081016846,
-        "lng": 103.9034796413063,
-        "price": 9.0,
+        "address": "7 Crane Road",
+        "lat": 1.312492628007427,
+        "lng": 103.8992194795693,
+        "price": 7.8,
+        "price_basis": "online_order",
+        "observed_date": "2026-10-04",
+        "note": "availability: available; brand-wide page; not specific to this outlet",
+        "is_outlier": false
+      },
+      {
+        "shop_id": "baker_and_cook_bukit_timah",
+        "shop_name": "Baker & Cook",
+        "district": "Bukit Timah / Sixth Avenue",
+        "address": "77 Hillcrest Rd",
+        "lat": 1.331535536998492,
+        "lng": 103.8075188171624,
+        "price": 8.75,
         "price_basis": "dine_in",
-        "observed_date": "2026-09-19",
-        "note": "",
+        "observed_date": "2026-10-04",
+        "note": "availability: available; page states prices exclude GST; price is inside a menu image or PDF on https://www.bakerandcook.com/; brand-wide page; not specific to this outlet; menu states prices subject to 10% service charge and prevailing taxes; PDF filename dated 27072026; regular menu (cover shows Hillcrest Rd shop); Upsize to large +1; Make it iced +1; listed: 7.30; plus: service charge 10%, GST 9%",
+        "is_outlier": false
+      },
+      {
+        "shop_id": "baker_and_cook_holland_v",
+        "shop_name": "Baker & Cook",
+        "district": "Holland Village / Dempsey",
+        "address": "44 Jln Merah Saga #01-56",
+        "lat": 1.311921954250856,
+        "lng": 103.796844037126,
+        "price": 8.75,
+        "price_basis": "dine_in",
+        "observed_date": "2026-10-04",
+        "note": "availability: available; page states prices exclude GST; price is inside a menu image or PDF on https://www.bakerandcook.com/; brand-wide page; not specific to this outlet; menu states prices subject to 10% service charge and prevailing taxes; PDF filename dated 27072026; regular menu (cover shows Hillcrest Rd shop); Upsize to large +1; Make it iced +1; listed: 7.30; plus: service charge 10%, GST 9%",
+        "is_outlier": false
+      },
+      {
+        "shop_id": "baker_and_cook_swan_lake",
+        "shop_name": "Baker & Cook",
+        "district": "East Coast / Siglap",
+        "address": "1 Swan Lake Ave",
+        "lat": 1.320930519077701,
+        "lng": 103.9242622373383,
+        "price": 8.75,
+        "price_basis": "dine_in",
+        "observed_date": "2026-10-04",
+        "note": "availability: available; page states prices exclude GST; price is inside a menu image or PDF on https://www.bakerandcook.com/; brand-wide page; not specific to this outlet; menu states prices subject to 10% service charge and prevailing taxes; PDF filename dated 27072026; regular menu (cover shows Hillcrest Rd shop); Upsize to large +1; Make it iced +1; listed: 7.30; plus: service charge 10%, GST 9%",
+        "is_outlier": false
+      },
+      {
+        "shop_id": "nassim_hill_bakery",
+        "shop_name": "Nassim Hill Bakery Bistro Bar",
+        "district": "Orchard / Somerset",
+        "address": "56 Tanglin Rd #01-03",
+        "lat": 1.305611664830487,
+        "lng": 103.8229629409393,
+        "price": 8.99,
+        "price_basis": "dine_in",
+        "observed_date": "2026-10-04",
+        "note": "availability: available; page states prices exclude GST; price is inside a menu image or PDF on https://www.nassimhill.com.sg/menu; menu states 'All prices are subject to 10% service charge and prevailing GST'; menu states 10% service charge; PDF file name NH_brunch_may2026; listed: 7.50; plus: service charge 10%, GST 9%",
         "is_outlier": false
       }
     ]
@@ -3480,7 +3457,7 @@
         "district": "Bukit Timah / Sixth Avenue",
         "shop_count": 6,
         "low": 4.0,
-        "median": 4.1,
+        "median": 4.2,
         "high": 4.5
       },
       {
@@ -3501,15 +3478,15 @@
         "district": "Jalan Besar",
         "shop_count": 5,
         "low": 4.0,
-        "median": 4.5,
-        "high": 4.6
+        "median": 4.2,
+        "high": 4.5
       },
       {
         "district": "Katong / Joo Chiat",
-        "shop_count": 9,
+        "shop_count": 7,
         "low": 3.8,
         "median": 4.5,
-        "high": 7.5
+        "high": 5.0
       },
       {
         "district": "Novena / Balestier",
@@ -3527,9 +3504,9 @@
       },
       {
         "district": "Queenstown / Alexandra",
-        "shop_count": 2,
-        "low": 3.8,
-        "median": 4.15,
+        "shop_count": 1,
+        "low": 4.5,
+        "median": 4.5,
         "high": 4.5
       },
       {
@@ -3541,8 +3518,8 @@
       },
       {
         "district": "Serangoon Gardens / Kovan",
-        "shop_count": 6,
-        "low": 4.0,
+        "shop_count": 4,
+        "low": 4.2,
         "median": 4.2,
         "high": 4.5
       },
@@ -3562,9 +3539,9 @@
       },
       {
         "district": "Tiong Bahru",
-        "shop_count": 4,
+        "shop_count": 5,
         "low": 4.2,
-        "median": 4.65,
+        "median": 4.8,
         "high": 5.0
       },
       {
@@ -3585,16 +3562,16 @@
       },
       {
         "district": "Bukit Timah / Sixth Avenue",
-        "shop_count": 6,
+        "shop_count": 7,
         "low": 5.5,
         "median": 5.5,
-        "high": 5.5
+        "high": 7.09
       },
       {
         "district": "East Coast / Siglap",
         "shop_count": 4,
         "low": 5.5,
-        "median": 5.75,
+        "median": 6.0,
         "high": 6.0
       },
       {
@@ -3606,15 +3583,15 @@
       },
       {
         "district": "Jalan Besar",
-        "shop_count": 8,
+        "shop_count": 7,
         "low": 5.5,
-        "median": 5.9,
+        "median": 6.0,
         "high": 6.0
       },
       {
         "district": "Katong / Joo Chiat",
-        "shop_count": 11,
-        "low": 5.0,
+        "shop_count": 8,
+        "low": 5.8,
         "median": 6.0,
         "high": 6.5
       },
@@ -3648,7 +3625,7 @@
       },
       {
         "district": "Serangoon Gardens / Kovan",
-        "shop_count": 5,
+        "shop_count": 3,
         "low": 5.5,
         "median": 5.5,
         "high": 5.5
@@ -3664,12 +3641,12 @@
         "district": "Telok Ayer / Amoy",
         "shop_count": 6,
         "low": 5.5,
-        "median": 5.5,
-        "high": 6.0
+        "median": 5.75,
+        "high": 6.8
       },
       {
         "district": "Tiong Bahru",
-        "shop_count": 7,
+        "shop_count": 8,
         "low": 5.5,
         "median": 6.0,
         "high": 6.5
@@ -3685,25 +3662,8 @@
   },
   "shop_items": [
     {
-      "shop_id": "174_bingo",
-      "district": "Katong / Joo Chiat",
-      "items": [
-        "croissant_plain",
-        "flat_white",
-        "americano"
-      ]
-    },
-    {
-      "shop_id": "accompany_coffee",
-      "district": "Katong / Joo Chiat",
-      "items": [
-        "flat_white",
-        "matcha_latte",
-        "americano"
-      ]
-    },
-    {
       "shop_id": "alchemist_design_orchard",
+      "shop_name": "Alchemist",
       "district": "Orchard / Somerset",
       "items": [
         "croissant_plain",
@@ -3717,6 +3677,7 @@
     },
     {
       "shop_id": "alice_boulangerie_tp",
+      "shop_name": "Alice Boulangerie",
       "district": "Tanjong Pagar / Duxton",
       "items": [
         "croissant_plain",
@@ -3730,6 +3691,7 @@
     },
     {
       "shop_id": "all_things_delicious_arab_st",
+      "shop_name": "All Things Delicious",
       "district": "Bugis / Kampong Glam / Haji Lane",
       "items": [
         "croissant_plain",
@@ -3737,11 +3699,13 @@
         "latte",
         "cappuccino",
         "americano",
+        "espresso",
         "croissant_filled"
       ]
     },
     {
       "shop_id": "anchorpoint_common_man",
+      "shop_name": "Common Man Coffee Roasters",
       "district": "Queenstown / Alexandra",
       "items": [
         "croissant_plain",
@@ -3755,6 +3719,7 @@
     },
     {
       "shop_id": "antea_social",
+      "shop_name": "Antea Social",
       "district": "Jalan Besar",
       "items": [
         "matcha_latte"
@@ -3762,6 +3727,7 @@
     },
     {
       "shop_id": "apartment_coffee",
+      "shop_name": "Apartment Coffee",
       "district": "Jalan Besar",
       "items": [
         "flat_white",
@@ -3772,6 +3738,7 @@
     },
     {
       "shop_id": "apollo_coffee_bar_serangoon",
+      "shop_name": "Apollo Coffee Bar",
       "district": "Serangoon Gardens / Kovan",
       "items": [
         "croissant_plain",
@@ -3786,19 +3753,8 @@
     },
     {
       "shop_id": "awfully_chocolate_bakery_cafe",
+      "shop_name": "Awfully Chocolate Bakery & Cafe",
       "district": "Katong / Joo Chiat",
-      "items": [
-        "croissant_plain",
-        "flat_white",
-        "latte",
-        "cappuccino",
-        "americano",
-        "croissant_filled"
-      ]
-    },
-    {
-      "shop_id": "baker_and_cook_bukit_timah",
-      "district": "Bukit Timah / Sixth Avenue",
       "items": [
         "croissant_plain",
         "flat_white",
@@ -3810,27 +3766,51 @@
       ]
     },
     {
+      "shop_id": "baker_and_cook_bukit_timah",
+      "shop_name": "Baker & Cook",
+      "district": "Bukit Timah / Sixth Avenue",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "matcha_latte",
+        "cappuccino",
+        "americano",
+        "espresso",
+        "croissant_filled"
+      ]
+    },
+    {
       "shop_id": "baker_and_cook_holland_v",
+      "shop_name": "Baker & Cook",
       "district": "Holland Village / Dempsey",
       "items": [
         "croissant_plain",
         "flat_white",
         "latte",
+        "matcha_latte",
+        "cappuccino",
+        "espresso",
         "croissant_filled"
       ]
     },
     {
       "shop_id": "baker_and_cook_swan_lake",
+      "shop_name": "Baker & Cook",
       "district": "East Coast / Siglap",
       "items": [
         "croissant_plain",
         "flat_white",
         "latte",
+        "matcha_latte",
+        "cappuccino",
+        "espresso",
         "croissant_filled"
       ]
     },
     {
       "shop_id": "bakers_bench_bakery",
+      "shop_name": "Baker's Bench Bakery",
       "district": "Tanjong Pagar / Duxton",
       "items": [
         "croissant_plain",
@@ -3842,6 +3822,7 @@
     },
     {
       "shop_id": "bakery_brera_empress",
+      "shop_name": "Bakery Brera",
       "district": "Bukit Timah / Sixth Avenue",
       "items": [
         "croissant_plain",
@@ -3854,15 +3835,20 @@
     },
     {
       "shop_id": "bastille_bakery",
+      "shop_name": "Bastille Bakery",
       "district": "Katong / Joo Chiat",
       "items": [
-        "latte",
+        "croissant_plain",
+        "flat_white",
+        "cappuccino",
         "americano",
+        "espresso",
         "croissant_filled"
       ]
     },
     {
       "shop_id": "bearded_bella_tp",
+      "shop_name": "Bearded Bella",
       "district": "Tanjong Pagar / Duxton",
       "items": [
         "croissant_plain",
@@ -3877,39 +3863,37 @@
     },
     {
       "shop_id": "big_short_coffee",
+      "shop_name": "Big Short Coffee",
       "district": "Katong / Joo Chiat",
-      "items": [
-        "flat_white",
-        "latte",
-        "matcha_latte",
-        "espresso"
-      ]
-    },
-    {
-      "shop_id": "blob_tiong_bahru",
-      "district": "Tiong Bahru",
       "items": []
     },
     {
-      "shop_id": "boulangerie_asuka",
-      "district": "Queenstown / Alexandra",
-      "items": [
-        "croissant_plain",
-        "croissant_filled"
-      ]
+      "shop_id": "bloomsbury_bakers_330030",
+      "shop_name": "Bloomsbury Bakers",
+      "district": "Jalan Besar",
+      "items": []
+    },
+    {
+      "shop_id": "boms_and_buns",
+      "shop_name": "Boms & Buns",
+      "district": "Katong / Joo Chiat",
+      "items": []
     },
     {
       "shop_id": "brawn_and_brains_hamilton",
+      "shop_name": "Brawn & Brains Coffee (Hamilton)",
       "district": "Jalan Besar",
       "items": [
         "flat_white",
         "latte",
         "cappuccino",
-        "americano"
+        "americano",
+        "espresso"
       ]
     },
     {
       "shop_id": "bread_and_hearth_katong",
+      "shop_name": "Bread & Hearth (Katong)",
       "district": "Katong / Joo Chiat",
       "items": [
         "croissant_plain",
@@ -3922,6 +3906,7 @@
     },
     {
       "shop_id": "brotherbird_coffeehouse_bali",
+      "shop_name": "Brotherbird Coffeehouse",
       "district": "Bugis / Kampong Glam / Haji Lane",
       "items": [
         "croissant_plain",
@@ -3933,6 +3918,7 @@
     },
     {
       "shop_id": "burnt_ends_bakery_dempsey",
+      "shop_name": "Burnt Ends Bakery",
       "district": "Holland Village / Dempsey",
       "items": [
         "croissant_plain",
@@ -3944,6 +3930,7 @@
     },
     {
       "shop_id": "cafe_melba_goodman",
+      "shop_name": "Cafe Melba",
       "district": "East Coast / Siglap",
       "items": [
         "croissant_plain",
@@ -3957,6 +3944,7 @@
     },
     {
       "shop_id": "caffe_pralet",
+      "shop_name": "Caffe Pralet",
       "district": "Tiong Bahru",
       "items": [
         "croissant_plain",
@@ -3968,7 +3956,20 @@
       ]
     },
     {
+      "shop_id": "cake_inspiration_joo_chiat",
+      "shop_name": "Cake Inspiration",
+      "district": "Katong / Joo Chiat",
+      "items": []
+    },
+    {
+      "shop_id": "caro_patisserie_joo_chiat",
+      "shop_name": "Caro Patisserie",
+      "district": "Katong / Joo Chiat",
+      "items": []
+    },
+    {
       "shop_id": "carpenters_and_cook_beauty_world",
+      "shop_name": "Carpenter and Cook",
       "district": "Bukit Timah / Sixth Avenue",
       "items": [
         "croissant_plain",
@@ -3981,22 +3982,13 @@
     },
     {
       "shop_id": "chin_mee_chin_confectionery",
+      "shop_name": "Chin Mee Chin Confectionery",
       "district": "Katong / Joo Chiat",
       "items": []
     },
     {
-      "shop_id": "chu_and_co_serangoon",
-      "district": "Serangoon Gardens / Kovan",
-      "items": [
-        "croissant_plain",
-        "flat_white",
-        "americano",
-        "croissant_filled",
-        "kouign_amann"
-      ]
-    },
-    {
       "shop_id": "chye_seng_huat_hardware",
+      "shop_name": "Chye Seng Huat Hardware",
       "district": "Jalan Besar",
       "items": [
         "croissant_plain",
@@ -4010,6 +4002,7 @@
     },
     {
       "shop_id": "columbus_coffee_co",
+      "shop_name": "Columbus Coffee Co.",
       "district": "Upper Thomson",
       "items": [
         "croissant_plain",
@@ -4024,6 +4017,7 @@
     },
     {
       "shop_id": "common_man_coffee_roasters_joo_chiat",
+      "shop_name": "Common Man Coffee Roasters (Joo Chiat)",
       "district": "Katong / Joo Chiat",
       "items": [
         "croissant_plain",
@@ -4037,6 +4031,7 @@
     },
     {
       "shop_id": "common_man_coffee_roasters_rv",
+      "shop_name": "Common Man Coffee Roasters",
       "district": "River Valley / Robertson Quay",
       "items": [
         "croissant_plain",
@@ -4051,11 +4046,15 @@
     },
     {
       "shop_id": "creme_maison_bakery_tai_seng",
+      "shop_name": "Creme Maison Bakery",
       "district": "Serangoon Gardens / Kovan",
-      "items": []
+      "items": [
+        "croissant_filled"
+      ]
     },
     {
       "shop_id": "crown_bakery_bukit_timah",
+      "shop_name": "Crown Bakery & Cafe",
       "district": "Bukit Timah / Sixth Avenue",
       "items": [
         "croissant_plain",
@@ -4068,6 +4067,7 @@
     },
     {
       "shop_id": "da_paolo_gastronomia_holland",
+      "shop_name": "Da Paolo Gastronomia",
       "district": "Holland Village / Dempsey",
       "items": [
         "croissant_plain",
@@ -4081,6 +4081,7 @@
     },
     {
       "shop_id": "da_paolo_gastronomia_novena",
+      "shop_name": "Da Paolo Gastronomia",
       "district": "Novena / Balestier",
       "items": [
         "croissant_plain",
@@ -4092,7 +4093,18 @@
       ]
     },
     {
+      "shop_id": "drips_bakery_cafe",
+      "shop_name": "Drips Bakery Cafe",
+      "district": "Tiong Bahru",
+      "items": [
+        "croissant_plain",
+        "croissant_filled",
+        "kouign_amann"
+      ]
+    },
+    {
       "shop_id": "drips_bakery_cafe_orchard",
+      "shop_name": "Drips Bakery Cafe",
       "district": "Orchard / Somerset",
       "items": [
         "croissant_plain",
@@ -4106,6 +4118,7 @@
     },
     {
       "shop_id": "earlybird_cafe",
+      "shop_name": "Earlybird Cafe",
       "district": "Bugis / Kampong Glam / Haji Lane",
       "items": [
         "croissant_plain",
@@ -4120,6 +4133,7 @@
     },
     {
       "shop_id": "equate_coffee_orchard",
+      "shop_name": "Equate Coffee",
       "district": "Orchard / Somerset",
       "items": [
         "croissant_plain",
@@ -4134,6 +4148,7 @@
     },
     {
       "shop_id": "fika_swedish_cafe",
+      "shop_name": "Fika Swedish Cafe & Bistro",
       "district": "Bugis / Kampong Glam / Haji Lane",
       "items": [
         "flat_white",
@@ -4144,6 +4159,7 @@
     },
     {
       "shop_id": "five_oars_coffee_roasters_ec",
+      "shop_name": "Five Oars Coffee Roasters",
       "district": "East Coast / Siglap",
       "items": [
         "croissant_plain",
@@ -4157,7 +4173,20 @@
       ]
     },
     {
+      "shop_id": "flock_cafe",
+      "shop_name": "Flock Cafe",
+      "district": "Tiong Bahru",
+      "items": [
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "espresso"
+      ]
+    },
+    {
       "shop_id": "free_the_robot_telok_ayer",
+      "shop_name": "Free The Robot",
       "district": "Telok Ayer / Amoy",
       "items": [
         "croissant_plain",
@@ -4171,6 +4200,7 @@
     },
     {
       "shop_id": "french_fold_telok_ayer",
+      "shop_name": "French Fold",
       "district": "Telok Ayer / Amoy",
       "items": [
         "croissant_plain",
@@ -4184,6 +4214,7 @@
     },
     {
       "shop_id": "habitat_coffee",
+      "shop_name": "Habitat Coffee",
       "district": "Jalan Besar",
       "items": [
         "flat_white",
@@ -4195,28 +4226,55 @@
     },
     {
       "shop_id": "happy_oven_tiong_bahru",
+      "shop_name": "Happy Oven",
       "district": "Tiong Bahru",
       "items": []
     },
     {
       "shop_id": "hello_arigato_upper_thomson",
+      "shop_name": "Hello Arigato",
       "district": "Upper Thomson",
       "items": [
         "croissant_plain",
         "flat_white",
+        "latte",
         "matcha_latte",
-        "americano"
+        "cappuccino",
+        "americano",
+        "espresso"
       ]
     },
     {
       "shop_id": "hvala_somerset",
+      "shop_name": "Hvala",
       "district": "Orchard / Somerset",
       "items": [
         "matcha_latte"
       ]
     },
     {
+      "shop_id": "janie_the_bakery",
+      "shop_name": "Janie The Bakery",
+      "district": "Katong / Joo Chiat",
+      "items": []
+    },
+    {
+      "shop_id": "joe_dough_068912",
+      "shop_name": "Joe & Dough",
+      "district": "Telok Ayer / Amoy",
+      "items": [
+        "croissant_plain",
+        "flat_white",
+        "latte",
+        "matcha_latte",
+        "cappuccino",
+        "americano",
+        "croissant_filled"
+      ]
+    },
+    {
       "shop_id": "keong_saik_bakery_bendemeer",
+      "shop_name": "Keong Saik Bakery",
       "district": "Jalan Besar",
       "items": [
         "croissant_plain",
@@ -4225,12 +4283,14 @@
         "matcha_latte",
         "cappuccino",
         "americano",
+        "espresso",
         "croissant_filled",
         "kouign_amann"
       ]
     },
     {
       "shop_id": "kings_cart_coffee_factory",
+      "shop_name": "Kings Cart Coffee Factory",
       "district": "Katong / Joo Chiat",
       "items": [
         "croissant_plain",
@@ -4243,6 +4303,7 @@
     },
     {
       "shop_id": "konditori_artisan_bakes",
+      "shop_name": "Konditori Artisan Bakes",
       "district": "Bugis / Kampong Glam / Haji Lane",
       "items": [
         "croissant_plain",
@@ -4255,17 +4316,8 @@
       ]
     },
     {
-      "shop_id": "kwaasong_bakehouse_telok_ayer",
-      "district": "Telok Ayer / Amoy",
-      "items": [
-        "croissant_plain",
-        "flat_white",
-        "americano",
-        "croissant_filled"
-      ]
-    },
-    {
       "shop_id": "la_levain",
+      "shop_name": "La Levain",
       "district": "Jalan Besar",
       "items": [
         "croissant_plain",
@@ -4281,6 +4333,7 @@
     },
     {
       "shop_id": "little_farms_cafe_valley_point",
+      "shop_name": "Little Farms Cafe",
       "district": "River Valley / Robertson Quay",
       "items": [
         "croissant_plain",
@@ -4293,6 +4346,7 @@
     },
     {
       "shop_id": "lola_cafe_kovan",
+      "shop_name": "Lola's Cafe",
       "district": "Serangoon Gardens / Kovan",
       "items": [
         "croissant_plain",
@@ -4301,11 +4355,13 @@
         "matcha_latte",
         "cappuccino",
         "americano",
+        "espresso",
         "croissant_filled"
       ]
     },
     {
       "shop_id": "lucid",
+      "shop_name": "Lucid",
       "district": "Jalan Besar",
       "items": [
         "latte",
@@ -4313,7 +4369,18 @@
       ]
     },
     {
+      "shop_id": "lunar_rabbit_boulangerie_hamilton",
+      "shop_name": "The Lunar Rabbit Boulangerie",
+      "district": "Jalan Besar",
+      "items": [
+        "croissant_plain",
+        "croissant_filled",
+        "kouign_amann"
+      ]
+    },
+    {
       "shop_id": "merci_marcel_club_st",
+      "shop_name": "Merci Marcel",
       "district": "Telok Ayer / Amoy",
       "items": [
         "croissant_plain",
@@ -4327,6 +4394,7 @@
     },
     {
       "shop_id": "merci_marcel_tiong_bahru",
+      "shop_name": "Merci Marcel (Tiong Bahru)",
       "district": "Tiong Bahru",
       "items": [
         "croissant_plain",
@@ -4342,6 +4410,7 @@
     },
     {
       "shop_id": "micro_bakery_kitchen_tiong_bahru",
+      "shop_name": "Micro Bakery Kitchen (Tiong Bahru)",
       "district": "Tiong Bahru",
       "items": [
         "croissant_plain",
@@ -4357,53 +4426,52 @@
     },
     {
       "shop_id": "micro_bakery_red_house",
+      "shop_name": "Micro Bakery Kitchen (Red House)",
       "district": "Katong / Joo Chiat",
       "items": [
         "croissant_plain",
         "flat_white",
         "latte",
+        "cappuccino",
         "americano",
+        "espresso",
         "croissant_filled",
         "kouign_amann"
       ]
     },
     {
       "shop_id": "micro_bakery_red_house_sixth_ave",
+      "shop_name": "Micro Bakery Kitchen",
       "district": "Bukit Timah / Sixth Avenue",
       "items": [
         "croissant_plain",
         "flat_white",
         "latte",
+        "cappuccino",
         "americano",
+        "espresso",
         "croissant_filled",
         "kouign_amann"
       ]
     },
     {
-      "shop_id": "moonchild",
-      "district": "Jalan Besar",
-      "items": [
-        "flat_white",
-        "latte",
-        "cappuccino",
-        "americano",
-        "espresso"
-      ]
-    },
-    {
       "shop_id": "nassim_hill_bakery",
+      "shop_name": "Nassim Hill Bakery Bistro Bar",
       "district": "Orchard / Somerset",
       "items": [
         "croissant_plain",
         "flat_white",
         "latte",
+        "matcha_latte",
         "cappuccino",
         "americano",
+        "espresso",
         "croissant_filled"
       ]
     },
     {
       "shop_id": "nesuto_tras",
+      "shop_name": "Nesuto Patisserie",
       "district": "Tanjong Pagar / Duxton",
       "items": [
         "flat_white",
@@ -4413,12 +4481,20 @@
       ]
     },
     {
+      "shop_id": "nylon_coffee_080004",
+      "shop_name": "Nylon Coffee",
+      "district": "Tanjong Pagar / Duxton",
+      "items": []
+    },
+    {
       "shop_id": "olsen_bakehouse",
+      "shop_name": "Olsen Bakehouse",
       "district": "Katong / Joo Chiat",
       "items": []
     },
     {
       "shop_id": "one_man_coffee_thomson",
+      "shop_name": "One Man Coffee",
       "district": "Upper Thomson",
       "items": [
         "croissant_plain",
@@ -4432,6 +4508,7 @@
     },
     {
       "shop_id": "pantler_river_valley",
+      "shop_name": "Pantler",
       "district": "River Valley / Robertson Quay",
       "items": [
         "croissant_plain",
@@ -4444,27 +4521,22 @@
     },
     {
       "shop_id": "patisserie_cle_siglap",
+      "shop_name": "Patisserie CLE",
       "district": "East Coast / Siglap",
       "items": [
         "croissant_plain",
         "flat_white",
         "latte",
+        "cappuccino",
         "americano",
-        "croissant_filled",
-        "kouign_amann"
-      ]
-    },
-    {
-      "shop_id": "petit_pain",
-      "district": "Katong / Joo Chiat",
-      "items": [
-        "croissant_plain",
+        "espresso",
         "croissant_filled",
         "kouign_amann"
       ]
     },
     {
       "shop_id": "plain_vanilla_cluny_court",
+      "shop_name": "Plain Vanilla Bakery",
       "district": "Bukit Timah / Sixth Avenue",
       "items": [
         "croissant_plain",
@@ -4477,6 +4549,7 @@
     },
     {
       "shop_id": "plain_vanilla_east_coast",
+      "shop_name": "Plain Vanilla East Coast",
       "district": "Katong / Joo Chiat",
       "items": [
         "flat_white",
@@ -4487,6 +4560,7 @@
     },
     {
       "shop_id": "plain_vanilla_serangoon",
+      "shop_name": "Plain Vanilla Bakery",
       "district": "Serangoon Gardens / Kovan",
       "items": [
         "croissant_plain",
@@ -4499,6 +4573,7 @@
     },
     {
       "shop_id": "plain_vanilla_telok_ayer",
+      "shop_name": "Plain Vanilla Bakery",
       "district": "Telok Ayer / Amoy",
       "items": [
         "croissant_plain",
@@ -4513,6 +4588,7 @@
     },
     {
       "shop_id": "plain_vanilla_tiong_bahru",
+      "shop_name": "Plain Vanilla Bakery",
       "district": "Tiong Bahru",
       "items": [
         "flat_white",
@@ -4524,18 +4600,8 @@
       ]
     },
     {
-      "shop_id": "prairie_by_craftsmen_joo_chiat",
-      "district": "Katong / Joo Chiat",
-      "items": [
-        "croissant_plain",
-        "flat_white",
-        "latte",
-        "americano",
-        "croissant_filled"
-      ]
-    },
-    {
       "shop_id": "ps_cafe_dempsey",
+      "shop_name": "PS.Cafe",
       "district": "Holland Village / Dempsey",
       "items": [
         "flat_white",
@@ -4546,15 +4612,8 @@
       ]
     },
     {
-      "shop_id": "pull_by_tpg",
-      "district": "Katong / Joo Chiat",
-      "items": [
-        "latte",
-        "americano"
-      ]
-    },
-    {
       "shop_id": "sarnies_telok_ayer",
+      "shop_name": "Sarnies",
       "district": "Telok Ayer / Amoy",
       "items": [
         "croissant_plain",
@@ -4569,6 +4628,7 @@
     },
     {
       "shop_id": "starter_lab_robertson",
+      "shop_name": "Starter Lab",
       "district": "River Valley / Robertson Quay",
       "items": [
         "croissant_plain",
@@ -4583,6 +4643,7 @@
     },
     {
       "shop_id": "symmetry_bugis",
+      "shop_name": "Symmetry",
       "district": "Bugis / Kampong Glam / Haji Lane",
       "items": [
         "croissant_plain",
@@ -4594,27 +4655,14 @@
       ]
     },
     {
-      "shop_id": "the_bread_rack_kovan",
-      "district": "Serangoon Gardens / Kovan",
-      "items": [
-        "croissant_plain",
-        "flat_white",
-        "americano",
-        "croissant_filled",
-        "kouign_amann"
-      ]
-    },
-    {
       "shop_id": "the_french_american_bakery",
+      "shop_name": "The French American Bakery",
       "district": "Jalan Besar",
-      "items": [
-        "croissant_plain",
-        "croissant_filled",
-        "kouign_amann"
-      ]
+      "items": []
     },
     {
       "shop_id": "the_glasshouse_neil",
+      "shop_name": "The Glasshouse",
       "district": "Tanjong Pagar / Duxton",
       "items": [
         "croissant_plain",
@@ -4628,7 +4676,20 @@
       ]
     },
     {
+      "shop_id": "the_living_cafe_269758",
+      "shop_name": "The Living Cafe",
+      "district": "Bukit Timah / Sixth Avenue",
+      "items": [
+        "flat_white",
+        "latte",
+        "cappuccino",
+        "americano",
+        "espresso"
+      ]
+    },
+    {
       "shop_id": "the_weirdoughs_serangoon",
+      "shop_name": "The Weirdoughs",
       "district": "Serangoon Gardens / Kovan",
       "items": [
         "croissant_plain"
@@ -4636,16 +4697,19 @@
     },
     {
       "shop_id": "tianns",
+      "shop_name": "TIANN'S",
       "district": "Tiong Bahru",
       "items": [
         "flat_white",
         "latte",
         "cappuccino",
-        "americano"
+        "americano",
+        "espresso"
       ]
     },
     {
       "shop_id": "tiong_bahru_bakery",
+      "shop_name": "Tiong Bahru Bakery (Eng Hoon)",
       "district": "Tiong Bahru",
       "items": [
         "croissant_plain",
@@ -4661,11 +4725,13 @@
     },
     {
       "shop_id": "tiong_bahru_bakery_centrepoint",
+      "shop_name": "Tiong Bahru Bakery",
       "district": "Orchard / Somerset",
       "items": [
         "croissant_plain",
         "flat_white",
         "latte",
+        "matcha_latte",
         "cappuccino",
         "americano",
         "croissant_filled",
@@ -4674,6 +4740,7 @@
     },
     {
       "shop_id": "tiong_bahru_bakery_dempsey",
+      "shop_name": "Tiong Bahru Bakery",
       "district": "Holland Village / Dempsey",
       "items": [
         "croissant_plain",
@@ -4689,11 +4756,13 @@
     },
     {
       "shop_id": "tiong_bahru_bakery_holland_v",
+      "shop_name": "Tiong Bahru Bakery",
       "district": "Holland Village / Dempsey",
       "items": [
         "croissant_plain",
         "flat_white",
         "latte",
+        "matcha_latte",
         "cappuccino",
         "americano",
         "croissant_filled",
@@ -4702,11 +4771,14 @@
     },
     {
       "shop_id": "tiong_bahru_bakery_joo_chiat",
+      "shop_name": "Tiong Bahru Bakery (Joo Chiat)",
       "district": "Katong / Joo Chiat",
       "items": [
         "croissant_plain",
         "flat_white",
         "latte",
+        "matcha_latte",
+        "cappuccino",
         "americano",
         "croissant_filled",
         "kouign_amann"
@@ -4714,11 +4786,13 @@
     },
     {
       "shop_id": "tiong_bahru_bakery_tanglin",
+      "shop_name": "Tiong Bahru Bakery",
       "district": "River Valley / Robertson Quay",
       "items": [
         "croissant_plain",
         "flat_white",
         "latte",
+        "matcha_latte",
         "cappuccino",
         "americano",
         "croissant_filled",
@@ -4727,6 +4801,7 @@
     },
     {
       "shop_id": "tiong_hoe_specialty_coffee",
+      "shop_name": "Tiong Hoe Specialty Coffee",
       "district": "Tiong Bahru",
       "items": [
         "flat_white",
@@ -4739,6 +4814,7 @@
     },
     {
       "shop_id": "two_bakers",
+      "shop_name": "Two Bakers",
       "district": "Jalan Besar",
       "items": [
         "croissant_plain",
@@ -4752,6 +4828,7 @@
     },
     {
       "shop_id": "two_men_bagel_house_novena",
+      "shop_name": "Two Men Bagel House",
       "district": "Novena / Balestier",
       "items": [
         "flat_white",
@@ -4760,7 +4837,14 @@
       ]
     },
     {
+      "shop_id": "velvete_alexandra",
+      "shop_name": "Velveté",
+      "district": "Queenstown / Alexandra",
+      "items": []
+    },
+    {
       "shop_id": "whisk_and_paddle_novena",
+      "shop_name": "Whisk & Paddle",
       "district": "Novena / Balestier",
       "items": [
         "croissant_plain",
@@ -4770,6 +4854,12 @@
         "americano",
         "croissant_filled"
       ]
+    },
+    {
+      "shop_id": "windowsill_pies_great_world",
+      "shop_name": "Windowsill Pies",
+      "district": "River Valley / Robertson Quay",
+      "items": []
     }
   ],
   "flavours": [
@@ -4830,6 +4920,28 @@
         "2026-08": {
           "shops": 1,
           "items": 1
+        }
+      }
+    },
+    {
+      "flavour": "halloween",
+      "shop_count": 1,
+      "item_count": 29,
+      "by_month": {
+        "": {
+          "shops": 1,
+          "items": 29
+        }
+      }
+    },
+    {
+      "flavour": "",
+      "shop_count": 1,
+      "item_count": 19,
+      "by_month": {
+        "": {
+          "shops": 1,
+          "items": 19
         }
       }
     },
@@ -5296,6 +5408,17 @@
       }
     },
     {
+      "flavour": "lemon meringue",
+      "shop_count": 1,
+      "item_count": 1,
+      "by_month": {
+        "2026-09": {
+          "shops": 1,
+          "items": 1
+        }
+      }
+    },
+    {
       "flavour": "lychee rose",
       "shop_count": 1,
       "item_count": 1,
@@ -5417,6 +5540,17 @@
       }
     },
     {
+      "flavour": "ricotta chocolate chip",
+      "shop_count": 1,
+      "item_count": 1,
+      "by_month": {
+        "2026-09": {
+          "shops": 1,
+          "items": 1
+        }
+      }
+    },
+    {
       "flavour": "salted caramel speculoos",
       "shop_count": 1,
       "item_count": 1,
@@ -5455,6 +5589,17 @@
       "item_count": 1,
       "by_month": {
         "2026-08": {
+          "shops": 1,
+          "items": 1
+        }
+      }
+    },
+    {
+      "flavour": "sticky date toffee",
+      "shop_count": 1,
+      "item_count": 1,
+      "by_month": {
+        "2026-09": {
           "shops": 1,
           "items": 1
         }
@@ -5548,6 +5693,7 @@
       "price": 10.5,
       "price_confidence": "exact",
       "launch_month": "2026-09",
+      "first_seen": "",
       "is_chain": false,
       "venue_type": "independent_or_chain"
     },
@@ -5560,6 +5706,7 @@
       "price": 8.5,
       "price_confidence": "exact",
       "launch_month": "2026-09",
+      "first_seen": "",
       "is_chain": false,
       "venue_type": "independent_or_chain"
     },
@@ -5572,6 +5719,7 @@
       "price": 8.5,
       "price_confidence": "exact",
       "launch_month": "2026-09",
+      "first_seen": "",
       "is_chain": false,
       "venue_type": "independent_or_chain"
     },
@@ -5584,6 +5732,7 @@
       "price": 8.0,
       "price_confidence": "ambiguous",
       "launch_month": "2026-09",
+      "first_seen": "",
       "is_chain": false,
       "venue_type": "independent_or_chain"
     },
@@ -5596,6 +5745,7 @@
       "price": 4.8,
       "price_confidence": "exact",
       "launch_month": "2026-09",
+      "first_seen": "",
       "is_chain": false,
       "venue_type": "independent_or_chain"
     },
@@ -5608,6 +5758,7 @@
       "price": 4.8,
       "price_confidence": "exact",
       "launch_month": "2026-09",
+      "first_seen": "",
       "is_chain": false,
       "venue_type": "independent_or_chain"
     },
@@ -5620,6 +5771,7 @@
       "price": 3.8,
       "price_confidence": "exact",
       "launch_month": "2026-09",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -5632,6 +5784,7 @@
       "price": 4.0,
       "price_confidence": "exact",
       "launch_month": "2026-09",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -5644,6 +5797,7 @@
       "price": 4.2,
       "price_confidence": "exact",
       "launch_month": "2026-09",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -5656,6 +5810,7 @@
       "price": 3.8,
       "price_confidence": "ambiguous",
       "launch_month": "2026-09",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -5668,6 +5823,7 @@
       "price": 8.4,
       "price_confidence": "exact",
       "launch_month": "2026-09",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -5680,6 +5836,7 @@
       "price": 7.9,
       "price_confidence": "exact",
       "launch_month": "2026-09",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -5692,6 +5849,7 @@
       "price": 8.9,
       "price_confidence": "exact",
       "launch_month": "2026-09",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -5704,6 +5862,7 @@
       "price": 7.2,
       "price_confidence": "ambiguous",
       "launch_month": "2026-09",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -5716,6 +5875,7 @@
       "price": 7.9,
       "price_confidence": "ambiguous",
       "launch_month": "2026-09",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -5728,6 +5888,7 @@
       "price": 5.2,
       "price_confidence": "ambiguous",
       "launch_month": "2026-09",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -5740,6 +5901,7 @@
       "price": 7.9,
       "price_confidence": "ambiguous",
       "launch_month": "2026-09",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -5752,6 +5914,7 @@
       "price": 8.2,
       "price_confidence": "ambiguous",
       "launch_month": "2026-09",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -5764,6 +5927,7 @@
       "price": 60.0,
       "price_confidence": "exact",
       "launch_month": "2026-09",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -5776,6 +5940,7 @@
       "price": 60.0,
       "price_confidence": "exact",
       "launch_month": "2026-09",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -5788,6 +5953,7 @@
       "price": 60.0,
       "price_confidence": "exact",
       "launch_month": "2026-09",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -5800,6 +5966,7 @@
       "price": 18.9,
       "price_confidence": "exact",
       "launch_month": "2026-09",
+      "first_seen": "",
       "is_chain": false,
       "venue_type": "independent_or_chain"
     },
@@ -5812,6 +5979,7 @@
       "price": 20.5,
       "price_confidence": "exact",
       "launch_month": "2026-09",
+      "first_seen": "",
       "is_chain": false,
       "venue_type": "independent_or_chain"
     },
@@ -5824,6 +5992,7 @@
       "price": 30.0,
       "price_confidence": "exact",
       "launch_month": "2026-09",
+      "first_seen": "",
       "is_chain": false,
       "venue_type": "independent_or_chain"
     },
@@ -5836,6 +6005,7 @@
       "price": 28.0,
       "price_confidence": "exact",
       "launch_month": "2026-09",
+      "first_seen": "",
       "is_chain": false,
       "venue_type": "independent_or_chain"
     },
@@ -5848,6 +6018,7 @@
       "price": 7.5,
       "price_confidence": "exact",
       "launch_month": "2026-09",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -5860,6 +6031,7 @@
       "price": 7.5,
       "price_confidence": "exact",
       "launch_month": "2026-09",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -5872,6 +6044,7 @@
       "price": 5.5,
       "price_confidence": "exact",
       "launch_month": "2026-09",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -5884,6 +6057,7 @@
       "price": 4.8,
       "price_confidence": "exact",
       "launch_month": "2026-09",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -5896,6 +6070,7 @@
       "price": 6.8,
       "price_confidence": "exact",
       "launch_month": "2026-08",
+      "first_seen": "",
       "is_chain": false,
       "venue_type": "independent_or_chain"
     },
@@ -5908,6 +6083,7 @@
       "price": 7.5,
       "price_confidence": "exact",
       "launch_month": "2026-08",
+      "first_seen": "",
       "is_chain": false,
       "venue_type": "independent_or_chain"
     },
@@ -5920,6 +6096,7 @@
       "price": 8.5,
       "price_confidence": "exact",
       "launch_month": "2026-08",
+      "first_seen": "",
       "is_chain": false,
       "venue_type": "independent_or_chain"
     },
@@ -5932,6 +6109,7 @@
       "price": 9.8,
       "price_confidence": "exact",
       "launch_month": "2026-08",
+      "first_seen": "",
       "is_chain": false,
       "venue_type": "independent_or_chain"
     },
@@ -5944,6 +6122,7 @@
       "price": 9.8,
       "price_confidence": "exact",
       "launch_month": "2026-08",
+      "first_seen": "",
       "is_chain": false,
       "venue_type": "independent_or_chain"
     },
@@ -5956,6 +6135,7 @@
       "price": 6.8,
       "price_confidence": "exact",
       "launch_month": "2026-08",
+      "first_seen": "",
       "is_chain": false,
       "venue_type": "independent_or_chain"
     },
@@ -5968,6 +6148,7 @@
       "price": 6.0,
       "price_confidence": "exact",
       "launch_month": "2026-08",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -5980,6 +6161,7 @@
       "price": 12.0,
       "price_confidence": "exact",
       "launch_month": "2026-08",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -5992,6 +6174,7 @@
       "price": 5.0,
       "price_confidence": "exact",
       "launch_month": "2026-08",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -6004,6 +6187,7 @@
       "price": 4.8,
       "price_confidence": "exact",
       "launch_month": "2026-08",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -6016,6 +6200,7 @@
       "price": 4.8,
       "price_confidence": "exact",
       "launch_month": "2026-08",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -6028,6 +6213,7 @@
       "price": 3.6,
       "price_confidence": "exact",
       "launch_month": "2026-08",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -6040,6 +6226,7 @@
       "price": 3.6,
       "price_confidence": "exact",
       "launch_month": "2026-08",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -6052,6 +6239,7 @@
       "price": 3.8,
       "price_confidence": "exact",
       "launch_month": "2026-08",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -6064,6 +6252,7 @@
       "price": 4.8,
       "price_confidence": "exact",
       "launch_month": "2026-08",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -6076,6 +6265,7 @@
       "price": 5.8,
       "price_confidence": "exact",
       "launch_month": "2026-08",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -6088,6 +6278,7 @@
       "price": 6.5,
       "price_confidence": "exact",
       "launch_month": "2026-08",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -6100,6 +6291,7 @@
       "price": 5.8,
       "price_confidence": "exact",
       "launch_month": "2026-08",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -6112,6 +6304,7 @@
       "price": 65.0,
       "price_confidence": "exact",
       "launch_month": "2026-08",
+      "first_seen": "",
       "is_chain": false,
       "venue_type": "independent_or_chain"
     },
@@ -6124,6 +6317,7 @@
       "price": 58.0,
       "price_confidence": "exact",
       "launch_month": "2026-08",
+      "first_seen": "",
       "is_chain": false,
       "venue_type": "independent_or_chain"
     },
@@ -6136,6 +6330,7 @@
       "price": 4.8,
       "price_confidence": "exact",
       "launch_month": "2026-07",
+      "first_seen": "",
       "is_chain": false,
       "venue_type": "independent_or_chain"
     },
@@ -6148,6 +6343,7 @@
       "price": 4.8,
       "price_confidence": "exact",
       "launch_month": "2026-07",
+      "first_seen": "",
       "is_chain": false,
       "venue_type": "independent_or_chain"
     },
@@ -6160,6 +6356,7 @@
       "price": 4.9,
       "price_confidence": "exact",
       "launch_month": "2026-07",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -6172,6 +6369,7 @@
       "price": 8.5,
       "price_confidence": "exact",
       "launch_month": "2026-07",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -6184,6 +6382,7 @@
       "price": 7.9,
       "price_confidence": "exact",
       "launch_month": "2026-07",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -6196,6 +6395,7 @@
       "price": 8.2,
       "price_confidence": "exact",
       "launch_month": "2026-07",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -6208,6 +6408,7 @@
       "price": 6.9,
       "price_confidence": "ambiguous",
       "launch_month": "2026-07",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -6220,6 +6421,7 @@
       "price": 7.9,
       "price_confidence": "ambiguous",
       "launch_month": "2026-07",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -6232,6 +6434,7 @@
       "price": 7.9,
       "price_confidence": "ambiguous",
       "launch_month": "2026-07",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -6244,6 +6447,7 @@
       "price": 7.5,
       "price_confidence": "ambiguous",
       "launch_month": "2026-07",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -6256,6 +6460,7 @@
       "price": 8.8,
       "price_confidence": "ambiguous",
       "launch_month": "2026-07",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -6268,6 +6473,7 @@
       "price": 5.5,
       "price_confidence": "ambiguous",
       "launch_month": "2026-07",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -6280,6 +6486,7 @@
       "price": 6.9,
       "price_confidence": "exact",
       "launch_month": "2026-07",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -6292,6 +6499,7 @@
       "price": 6.9,
       "price_confidence": "exact",
       "launch_month": "2026-07",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -6304,6 +6512,7 @@
       "price": 9.5,
       "price_confidence": "exact",
       "launch_month": "2026-07",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -6316,6 +6525,7 @@
       "price": 8.9,
       "price_confidence": "exact",
       "launch_month": "2026-07",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -6328,6 +6538,7 @@
       "price": 8.9,
       "price_confidence": "exact",
       "launch_month": "2026-07",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -6340,6 +6551,7 @@
       "price": 8.9,
       "price_confidence": "exact",
       "launch_month": "2026-07",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -6352,6 +6564,7 @@
       "price": 8.0,
       "price_confidence": "exact",
       "launch_month": "2026-07",
+      "first_seen": "",
       "is_chain": false,
       "venue_type": "independent_or_chain"
     },
@@ -6364,6 +6577,7 @@
       "price": 9.5,
       "price_confidence": "exact",
       "launch_month": "2026-07",
+      "first_seen": "",
       "is_chain": false,
       "venue_type": "independent_or_chain"
     },
@@ -6376,6 +6590,7 @@
       "price": 9.0,
       "price_confidence": "exact",
       "launch_month": "2026-07",
+      "first_seen": "",
       "is_chain": false,
       "venue_type": "independent_or_chain"
     },
@@ -6388,6 +6603,7 @@
       "price": 4.5,
       "price_confidence": "exact",
       "launch_month": "2026-07",
+      "first_seen": "",
       "is_chain": false,
       "venue_type": "independent_or_chain"
     },
@@ -6400,6 +6616,7 @@
       "price": 4.5,
       "price_confidence": "exact",
       "launch_month": "2026-07",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -6412,6 +6629,7 @@
       "price": 12.0,
       "price_confidence": "ambiguous",
       "launch_month": "2026-07",
+      "first_seen": "",
       "is_chain": false,
       "venue_type": "independent_or_chain"
     },
@@ -6424,6 +6642,7 @@
       "price": 12.5,
       "price_confidence": "ambiguous",
       "launch_month": "2026-07",
+      "first_seen": "",
       "is_chain": false,
       "venue_type": "independent_or_chain"
     },
@@ -6436,6 +6655,7 @@
       "price": 11.0,
       "price_confidence": "ambiguous",
       "launch_month": "2026-07",
+      "first_seen": "",
       "is_chain": false,
       "venue_type": "independent_or_chain"
     },
@@ -6448,6 +6668,7 @@
       "price": 2.8,
       "price_confidence": "exact",
       "launch_month": "2026-07",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -6460,6 +6681,7 @@
       "price": 2.5,
       "price_confidence": "exact",
       "launch_month": "2026-07",
+      "first_seen": "",
       "is_chain": true,
       "venue_type": "independent_or_chain"
     },
@@ -6472,24 +6694,690 @@
       "price": 5.2,
       "price_confidence": "exact",
       "launch_month": "2026-07",
+      "first_seen": "",
       "is_chain": true,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Sticky Date Toffee",
+      "shop": "Boms & Buns",
+      "district": "Katong / Joo Chiat",
+      "flavour": "sticky date toffee",
+      "format": "pastry",
+      "price": 5.7,
+      "price_confidence": "exact",
+      "launch_month": "2026-09",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Ricotta Chocolate Chip",
+      "shop": "Boms & Buns",
+      "district": "Katong / Joo Chiat",
+      "flavour": "ricotta chocolate chip",
+      "format": "pastry",
+      "price": 5.2,
+      "price_confidence": "exact",
+      "launch_month": "2026-09",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Lemon Meringue",
+      "shop": "Boms & Buns",
+      "district": "Katong / Joo Chiat",
+      "flavour": "lemon meringue",
+      "format": "pastry",
+      "price": 5.45,
+      "price_confidence": "exact",
+      "launch_month": "2026-09",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Croque Champignons",
+      "shop": "The Lunar Rabbit Boulangerie",
+      "district": "Jalan Besar",
+      "flavour": "",
+      "format": "savoury",
+      "price": 14.5,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Jalapeno & Cheddar Crisps",
+      "shop": "The Lunar Rabbit Boulangerie",
+      "district": "Jalan Besar",
+      "flavour": "",
+      "format": "pastry",
+      "price": 5.5,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Jalapeno & Cheddar Sourdough Bagel",
+      "shop": "The Lunar Rabbit Boulangerie",
+      "district": "Jalan Besar",
+      "flavour": "",
+      "format": "pastry",
+      "price": 6.7,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Kinako Mochi Shio Pan",
+      "shop": "The Lunar Rabbit Boulangerie",
+      "district": "Jalan Besar",
+      "flavour": "",
+      "format": "pastry",
+      "price": 5.1,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Matcha Crookie",
+      "shop": "The Lunar Rabbit Boulangerie",
+      "district": "Jalan Besar",
+      "flavour": "",
+      "format": "pastry",
+      "price": 8.2,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Multigrain Sourdough Bagel",
+      "shop": "The Lunar Rabbit Boulangerie",
+      "district": "Jalan Besar",
+      "flavour": "",
+      "format": "pastry",
+      "price": 6.2,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Original Crookie",
+      "shop": "The Lunar Rabbit Boulangerie",
+      "district": "Jalan Besar",
+      "flavour": "",
+      "format": "pastry",
+      "price": 7.8,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Palmier Papillon",
+      "shop": "The Lunar Rabbit Boulangerie",
+      "district": "Jalan Besar",
+      "flavour": "",
+      "format": "pastry",
+      "price": 4.9,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Plain Bagel",
+      "shop": "The Lunar Rabbit Boulangerie",
+      "district": "Jalan Besar",
+      "flavour": "",
+      "format": "pastry",
+      "price": 5.0,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Scallion Miso Butter Roll",
+      "shop": "The Lunar Rabbit Boulangerie",
+      "district": "Jalan Besar",
+      "flavour": "",
+      "format": "savoury",
+      "price": 6.2,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Sea Salt Shio Pan",
+      "shop": "The Lunar Rabbit Boulangerie",
+      "district": "Jalan Besar",
+      "flavour": "",
+      "format": "pastry",
+      "price": 4.1,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Banana Cream Croissant",
+      "shop": "The Lunar Rabbit Boulangerie",
+      "district": "Jalan Besar",
+      "flavour": "",
+      "format": "pastry",
+      "price": 7.8,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Bunny Madeleine",
+      "shop": "The Lunar Rabbit Boulangerie",
+      "district": "Jalan Besar",
+      "flavour": "",
+      "format": "pastry",
+      "price": 5.5,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Chocolat Danish",
+      "shop": "The Lunar Rabbit Boulangerie",
+      "district": "Jalan Besar",
+      "flavour": "",
+      "format": "pastry",
+      "price": 6.9,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Croque Madame",
+      "shop": "The Lunar Rabbit Boulangerie",
+      "district": "Jalan Besar",
+      "flavour": "",
+      "format": "savoury",
+      "price": 14.5,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Croque Monsieur",
+      "shop": "The Lunar Rabbit Boulangerie",
+      "district": "Jalan Besar",
+      "flavour": "",
+      "format": "savoury",
+      "price": 14.5,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Just Cookies",
+      "shop": "The Lunar Rabbit Boulangerie",
+      "district": "Jalan Besar",
+      "flavour": "",
+      "format": "pastry",
+      "price": 11.9,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "The Lunar",
+      "shop": "The Lunar Rabbit Boulangerie",
+      "district": "Jalan Besar",
+      "flavour": "",
+      "format": "pastry",
+      "price": 7.0,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Truffle Shio Pan",
+      "shop": "The Lunar Rabbit Boulangerie",
+      "district": "Jalan Besar",
+      "flavour": "",
+      "format": "pastry",
+      "price": 4.6,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Witches' Pot Cake",
+      "shop": "Cake Inspiration",
+      "district": "Katong / Joo Chiat",
+      "flavour": "halloween",
+      "format": "cake",
+      "price": 160.0,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Masked Spirit Cake",
+      "shop": "Cake Inspiration",
+      "district": "Katong / Joo Chiat",
+      "flavour": "halloween",
+      "format": "cake",
+      "price": 120.0,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Ghost Cake",
+      "shop": "Cake Inspiration",
+      "district": "Katong / Joo Chiat",
+      "flavour": "halloween",
+      "format": "cake",
+      "price": 120.0,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Jack O' Lantern Pumpkin Cake",
+      "shop": "Cake Inspiration",
+      "district": "Katong / Joo Chiat",
+      "flavour": "halloween",
+      "format": "cake",
+      "price": 160.0,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Vintage Jack O Lantern Halloween Cake",
+      "shop": "Cake Inspiration",
+      "district": "Katong / Joo Chiat",
+      "flavour": "halloween",
+      "format": "cake",
+      "price": 120.0,
+      "price_confidence": "ambiguous",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Halloween Cupcakes set of 6pcs (orange and black)",
+      "shop": "Cake Inspiration",
+      "district": "Katong / Joo Chiat",
+      "flavour": "halloween",
+      "format": "cake",
+      "price": 50.0,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Black and Orange Flower Halloween Cupcake",
+      "shop": "Cake Inspiration",
+      "district": "Katong / Joo Chiat",
+      "flavour": "halloween",
+      "format": "cake",
+      "price": 10.0,
+      "price_confidence": "ambiguous",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Monster Eye Cupcake",
+      "shop": "Cake Inspiration",
+      "district": "Katong / Joo Chiat",
+      "flavour": "halloween",
+      "format": "cake",
+      "price": 10.0,
+      "price_confidence": "ambiguous",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Witches Hat Halloween Cupcake",
+      "shop": "Cake Inspiration",
+      "district": "Katong / Joo Chiat",
+      "flavour": "halloween",
+      "format": "cake",
+      "price": 10.0,
+      "price_confidence": "ambiguous",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Halloween Cupcakes Set of 6 pcs (purple and orange)",
+      "shop": "Cake Inspiration",
+      "district": "Katong / Joo Chiat",
+      "flavour": "halloween",
+      "format": "cake",
+      "price": 60.0,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Monster Themed Cupcakes Set of 6 (D06)",
+      "shop": "Cake Inspiration",
+      "district": "Katong / Joo Chiat",
+      "flavour": "halloween",
+      "format": "cake",
+      "price": 36.0,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Mummy Themed Cupcakes Set of 6 (D05)",
+      "shop": "Cake Inspiration",
+      "district": "Katong / Joo Chiat",
+      "flavour": "halloween",
+      "format": "cake",
+      "price": 8.0,
+      "price_confidence": "ambiguous",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Zombie Cupcakes Set of 6pcs(D04)",
+      "shop": "Cake Inspiration",
+      "district": "Katong / Joo Chiat",
+      "flavour": "halloween",
+      "format": "cake",
+      "price": 9.0,
+      "price_confidence": "ambiguous",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Graveyard Monster Cupcakes Set of 6pcs (D48)",
+      "shop": "Cake Inspiration",
+      "district": "Katong / Joo Chiat",
+      "flavour": "halloween",
+      "format": "cake",
+      "price": 9.0,
+      "price_confidence": "ambiguous",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Creepy Crawler Shooter Cups (set of 4pcs)",
+      "shop": "Cake Inspiration",
+      "district": "Katong / Joo Chiat",
+      "flavour": "halloween",
+      "format": "cake",
+      "price": 18.0,
+      "price_confidence": "ambiguous",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Spooky Cutie Macarons Set of 6 Pcs.",
+      "shop": "Cake Inspiration",
+      "district": "Katong / Joo Chiat",
+      "flavour": "halloween",
+      "format": "pastry",
+      "price": 25.0,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Eyeball Cake Pops Set of 6pcs",
+      "shop": "Cake Inspiration",
+      "district": "Katong / Joo Chiat",
+      "flavour": "halloween",
+      "format": "cake",
+      "price": 54.0,
+      "price_confidence": "ambiguous",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Halloween Marshmallow Brownie Bites Set of 12 pcs",
+      "shop": "Cake Inspiration",
+      "district": "Katong / Joo Chiat",
+      "flavour": "halloween",
+      "format": "cake",
+      "price": 65.0,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Spooky Cake Pop Trio (set of 6pcs)",
+      "shop": "Cake Inspiration",
+      "district": "Katong / Joo Chiat",
+      "flavour": "halloween",
+      "format": "cake",
+      "price": 50.0,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Halloween Cake Pops Set of 6pcs",
+      "shop": "Cake Inspiration",
+      "district": "Katong / Joo Chiat",
+      "flavour": "halloween",
+      "format": "cake",
+      "price": 54.0,
+      "price_confidence": "ambiguous",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Candy Corn Cake Pop",
+      "shop": "Cake Inspiration",
+      "district": "Katong / Joo Chiat",
+      "flavour": "halloween",
+      "format": "cake",
+      "price": 7.0,
+      "price_confidence": "ambiguous",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Frankenstein Cake Pop",
+      "shop": "Cake Inspiration",
+      "district": "Katong / Joo Chiat",
+      "flavour": "halloween",
+      "format": "cake",
+      "price": 7.0,
+      "price_confidence": "ambiguous",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Pumpkin Cake Pop",
+      "shop": "Cake Inspiration",
+      "district": "Katong / Joo Chiat",
+      "flavour": "halloween",
+      "format": "cake",
+      "price": 7.0,
+      "price_confidence": "ambiguous",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Haunted Treats Cookie",
+      "shop": "Cake Inspiration",
+      "district": "Katong / Joo Chiat",
+      "flavour": "halloween",
+      "format": "pastry",
+      "price": 60.0,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Jack o' lantern Cookie",
+      "shop": "Cake Inspiration",
+      "district": "Katong / Joo Chiat",
+      "flavour": "halloween",
+      "format": "pastry",
+      "price": 8.0,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Vamp Gingy Cookie",
+      "shop": "Cake Inspiration",
+      "district": "Katong / Joo Chiat",
+      "flavour": "halloween",
+      "format": "pastry",
+      "price": 6.0,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Coffin Cookie",
+      "shop": "Cake Inspiration",
+      "district": "Katong / Joo Chiat",
+      "flavour": "halloween",
+      "format": "pastry",
+      "price": 8.0,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Ghost Cookie",
+      "shop": "Cake Inspiration",
+      "district": "Katong / Joo Chiat",
+      "flavour": "halloween",
+      "format": "pastry",
+      "price": 6.0,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "item_name": "Severed Finger Cookies",
+      "shop": "Cake Inspiration",
+      "district": "Katong / Joo Chiat",
+      "flavour": "halloween",
+      "format": "pastry",
+      "price": 60.0,
+      "price_confidence": "exact",
+      "launch_month": "",
+      "first_seen": "2026-10-04",
+      "is_chain": false,
       "venue_type": "independent_or_chain"
     }
   ],
   "format_split": [
     {
       "format": "pastry",
-      "total": 26,
+      "total": 51,
       "by_month": {
+        "": 22,
         "2026-07": 8,
         "2026-08": 10,
-        "2026-09": 8
+        "2026-09": 11
       }
     },
     {
       "format": "cake",
-      "total": 23,
+      "total": 45,
       "by_month": {
+        "": 22,
         "2026-07": 7,
         "2026-08": 7,
         "2026-09": 9
@@ -6499,6 +7387,7 @@
       "format": "drink",
       "total": 16,
       "by_month": {
+        "": 0,
         "2026-07": 10,
         "2026-08": 1,
         "2026-09": 5
@@ -6506,8 +7395,9 @@
     },
     {
       "format": "savoury",
-      "total": 9,
+      "total": 13,
       "by_month": {
+        "": 4,
         "2026-07": 1,
         "2026-08": 2,
         "2026-09": 6
@@ -6517,6 +7407,7 @@
       "format": "other",
       "total": 4,
       "by_month": {
+        "": 0,
         "2026-07": 3,
         "2026-08": 0,
         "2026-09": 1
@@ -6524,15 +7415,15 @@
     }
   ],
   "promos_summary": {
-    "total": 26,
+    "total": 32,
     "hotel_excluded": 6,
     "by_promo_type": {
-      "bundle": 22,
-      "price_cut": 4
+      "bundle": 26,
+      "price_cut": 6
     },
     "by_is_chain": {
       "yes": 10,
-      "no": 16
+      "no": 22
     }
   },
   "promos_list": [
@@ -6716,6 +7607,48 @@
       "offer_text": "1-for-1 freshly made waffles from $1.80",
       "promo_type": "bundle",
       "end_date": "2026-10-15",
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "brand_name": "Flock Cafe",
+      "offer_text": "Free Cajun Fries for first-time customers with min spend $50, promo code WELCOME50",
+      "promo_type": "bundle",
+      "end_date": "",
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "brand_name": "Flock Cafe",
+      "offer_text": "Weekday Breakfast Ticket 8am-11am, $14-$15 with coffee or tea",
+      "promo_type": "bundle",
+      "end_date": "",
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "brand_name": "Flock Cafe",
+      "offer_text": "Weekday Lunch Ticket 11am-3pm, $15-$16 with drinks",
+      "promo_type": "bundle",
+      "end_date": "",
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "brand_name": "Flock Cafe",
+      "offer_text": "Weekday Dinner Ticket 6pm-8pm, $22-$26 with drinks",
+      "promo_type": "bundle",
+      "end_date": "",
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "brand_name": "Drips Bakery Cafe",
+      "offer_text": "$8 off $80 on first order with code 8OFF80",
+      "promo_type": "price_cut",
+      "end_date": "",
+      "venue_type": "independent_or_chain"
+    },
+    {
+      "brand_name": "Drips Bakery Cafe",
+      "offer_text": "Pick up and save 10%",
+      "promo_type": "price_cut",
+      "end_date": "",
       "venue_type": "independent_or_chain"
     }
   ]

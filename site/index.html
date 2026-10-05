@@ -121,6 +121,7 @@ button{font-family:inherit; font-size:inherit; color:inherit; background:none; b
 .maphint.on{opacity:1}
 @media (prefers-reduced-motion:reduce){ .maphint{transition:none} }
 .mapcaption{margin-top:12px; font-size:var(--s15); color:var(--body)}
+.mapadd{margin-top:8px; font-size:var(--s15)}
 .mapnote{font-size:var(--s13); color:var(--muted); margin-top:8px}
 
 .pinwrap{background:none; border:none; overflow:visible}
@@ -187,7 +188,7 @@ button{font-family:inherit; font-size:inherit; color:inherit; background:none; b
 .sheet .pop-price{font-size:var(--s21)}
 .sheetclose{position:absolute; top:14px; right:var(--pad)}
 @keyframes sheetup{from{transform:translateY(100%)} to{transform:none}}
-@media (prefers-reduced-motion:reduce){ .sheet{animation:none} }
+@media (prefers-reduced-motion:reduce){ .sheet, .uploadbox{animation:none} }
 
 /* ---------- find your shop ---------- */
 .combo{position:relative}
@@ -214,6 +215,18 @@ button{font-family:inherit; font-size:inherit; color:inherit; background:none; b
 .result{margin-top:20px}
 .resultline{font-family:var(--f-display); font-weight:500; font-size:var(--s21); line-height:1.3; color:var(--ink)}
 .resultline .linkbtn{font-family:var(--f-text)}
+
+/* ---------- add your shop: send a menu ---------- */
+.addshop{margin-top:10px}
+.uploadlink{display:inline-block; margin-top:14px}
+.uploadbox{position:relative; margin-top:20px; padding-top:16px; border-top:1px solid var(--rule)}
+.uploadbox h3{font-size:var(--s21); padding-right:64px}
+.uploadbox .sheetclose{top:16px; right:0}
+.uploadbox .field-label{margin-top:14px}
+.uploadbox input{display:block; width:100%; max-width:none}
+.uploadbox input[type=file]{font-family:inherit; font-size:var(--s15); color:var(--body)}
+.uploadbox .btn{margin-top:16px}
+.uploadbox .formdone{margin-top:14px}
 
 .signup{margin-top:30px; display:flex; gap:10px; flex-wrap:wrap}
 input[type=email],input[type=number],input[type=text],select{
@@ -383,6 +396,16 @@ footer .blk p{font-size:var(--s13); line-height:1.5}
   .finder.byprice .quick{display:block}
   .finder.byprice .shopfind, .finder.byprice .notfound{display:none}
   .deskonly{display:none}
+  /* the menu form opens from the bottom of the screen, like a pin */
+  .uploadbox{
+    position:fixed; left:0; right:0; bottom:0; z-index:60; margin:0;
+    background:var(--paper); border-top:2px solid var(--ink);
+    padding:14px var(--pad) calc(18px + env(safe-area-inset-bottom, 0px));
+    max-height:88vh; max-height:88svh; overflow-y:auto;
+    animation:sheetup .18s ease-out;
+  }
+  .uploadbox .sheetclose{top:14px; right:var(--pad)}
+  .uploadbox .btn{width:100%}
   /* the result stays short: the rest opens on request */
   .strip, .tolink{display:none}
   .morebtn{display:inline-block}
@@ -476,6 +499,7 @@ footer .blk p{font-size:var(--s13); line-height:1.5}
           </div>
         </div>
         <p class="mapcaption" id="map-caption"></p>
+        <p class="mapadd">Your shop is not on the map? <button type="button" class="linkbtn" id="map-add">Add it here</button>.</p>
       </div>
 
       <!-- FIND YOUR SHOP -->
@@ -491,6 +515,7 @@ footer .blk p{font-size:var(--s13); line-height:1.5}
         </div>
         <div class="notfound" id="shop-notfound" hidden>
           <p class="hint">We do not have this shop yet. Enter your price instead.</p>
+          <button type="button" class="btn addshop" id="add-shop">Add your shop</button>
         </div>
         <form class="quick" id="finder-form" novalidate>
           <label class="field-label" for="finder-price"><span class="deskonly">Not listed? </span><span id="price-label"></span></label>
@@ -512,6 +537,24 @@ footer .blk p{font-size:var(--s13); line-height:1.5}
             <p class="firstgap" id="result-first" hidden></p>
             <button type="button" class="linkbtn morebtn" id="result-more" aria-controls="result-rest" aria-expanded="false" hidden></button>
             <div class="consequence rest" id="result-rest" hidden></div>
+            <button type="button" class="linkbtn uploadlink" id="result-upload" hidden>Send us your menu to add more prices</button>
+          </div>
+          <div class="uploadbox" id="upload-box" role="group" aria-labelledby="upload-title" hidden>
+            <button type="button" class="linkbtn sheetclose" id="upload-close">Close</button>
+            <h3 id="upload-title">Add your shop</h3>
+            <form id="upload-form" novalidate>
+              <label class="field-label" for="up-shop">Shop name</label>
+              <input type="text" id="up-shop" autocomplete="organization">
+              <label class="field-label" for="up-email">Your email</label>
+              <input type="email" id="up-email" placeholder="you@yourcafe.sg" autocomplete="email">
+              <label class="field-label" for="up-files">Photo of your menu</label>
+              <input type="file" id="up-files" multiple accept="image/jpeg,image/png,image/webp,image/heic,image/heif,application/pdf,.jpg,.jpeg,.png,.webp,.heic,.heif,.pdf">
+              <p class="fineprint">Up to 3 files. Photo or PDF, under 10MB each.</p>
+              <button class="btn" type="submit">Send</button>
+              <p class="fineprint">We will email you your full ranking within a week.</p>
+              <p class="formnote" id="upload-note" aria-live="polite" hidden></p>
+            </form>
+            <p class="formdone" id="upload-done" hidden></p>
           </div>
           <div class="strip">
             <svg id="strip-svg" viewBox="0 0 600 76" preserveAspectRatio="none" role="img" aria-labelledby="strip-desc"></svg>
@@ -947,6 +990,7 @@ function render(d){
 
   buildHero(d);
   buildFinder(d);
+  buildUpload();
   buildNamed(d);
   buildViewToggle();
   wirePins();
@@ -1333,6 +1377,7 @@ function showResult(d){
   const box = byId("finder-result"), line = byId("result-line"), offers = byId("result-offers");
   readerPrice = null;
   offers.hidden = true;
+  byId("result-upload").hidden = true;
   // the neighbour lines belong to a found shop and are worked out when one is picked
   if(!reader || !reader.shopId) gapLines = [];
 
@@ -1348,6 +1393,8 @@ function showResult(d){
   if(reader.shopId){
     const shop = SHOPS.get(reader.shopId);
     const own = rows.find(r => r.shop_id === reader.shopId);
+    // a shop we know little about can send its menu
+    byId("result-upload").hidden = !(shop.items.length === 0 || shop.price_count < MIN_PRICES);
     if(!own){
       line.textContent = `We have no ${itemWords(finderItem)} price for this shop yet.`;
       const have = shop.items.slice(0, 3);
@@ -1409,6 +1456,111 @@ function showResult(d){
 
   readerPrice = v;
   drawStrip(d);
+}
+
+/* ---------- add your shop: send a menu ----------
+   The files go to a private bucket and one row records them. The key this page
+   holds may only add: it cannot list, read, change or delete anything, so each
+   file gets a name nobody else can have and the row is never read back. The
+   shop name and the email go to that row and nowhere else. */
+const MIN_PRICES = 5;        // a found shop with fewer counted prices is asked for its menu
+const UPLOAD_BUCKET = "menu-uploads";
+const UPLOAD_MAX_FILES = 3;
+const UPLOAD_MAX_BYTES = 10 * 1024 * 1024;
+const UPLOAD_TYPES = {jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", webp: "image/webp",
+                      heic: "image/heic", heif: "image/heif", pdf: "application/pdf"};
+const CONTACT_EMAIL = "arshin.sikka@u.nus.edu";
+const fileExt = f => (/\.([a-z0-9]+)$/i.exec(f.name || "") || [])[1];
+/* some phones give a HEIC photo no type, or a generic one, so the file name can stand in */
+function uploadType(f){
+  const known = Object.keys(UPLOAD_TYPES).map(k => UPLOAD_TYPES[k]);
+  if(known.indexOf(f.type) !== -1) return f.type;
+  if(f.type && f.type !== "application/octet-stream") return null;
+  return UPLOAD_TYPES[String(fileExt(f) || "").toLowerCase()] || null;
+}
+function uploadName(f, type){
+  const ext = Object.keys(UPLOAD_TYPES).find(k => UPLOAD_TYPES[k] === type);
+  const id = (window.crypto && crypto.randomUUID) ? crypto.randomUUID()
+           : Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
+  return `${Date.now()}-${id}.${ext}`;
+}
+
+let openUpload = () => {};
+function buildUpload(){
+  const box = byId("upload-box"), form = byId("upload-form");
+  const shop = byId("up-shop"), email = byId("up-email"), files = byId("up-files");
+  const note = byId("upload-note"), done = byId("upload-done");
+  const btn = form.querySelector("button[type=submit]");
+  const say = text => { note.className = "formnote bad"; note.textContent = text; note.hidden = false; };
+
+  openUpload = name => {
+    // after one menu is sent the form comes back empty for the next
+    if(!done.hidden){ form.reset(); done.hidden = true; form.hidden = false; }
+    note.hidden = true;
+    shop.value = name || "";
+    box.hidden = true; void box.offsetWidth; box.hidden = false;
+    if(!isPhone()) (shop.value ? email : shop).focus();
+    box.scrollIntoView({block: "nearest"});
+  };
+  const close = () => { box.hidden = true; };
+  byId("upload-close").addEventListener("click", close);
+  document.addEventListener("keydown", e => { if(e.key === "Escape") close(); });
+  byId("add-shop").addEventListener("click", () => openUpload(byId("shop-input").value.trim()));
+  // from under the map nobody has searched yet, so the name starts empty
+  byId("map-add").addEventListener("click", () => openUpload(""));
+  byId("result-upload").addEventListener("click", () => {
+    const found = reader && reader.shopId && SHOPS.get(reader.shopId);
+    openUpload(found ? found.shop_name : byId("shop-input").value.trim());
+  });
+
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    note.hidden = true;
+    const picked = [...files.files];
+    const types = picked.map(uploadType);
+    const who = email.value.trim(), name = shop.value.trim();
+
+    // nothing is sent until every part is right
+    if(!name){ say("Please add your shop name."); shop.focus(); return; }
+    if(!isEmail(who)){ say("Please check your email address."); email.focus(); return; }
+    if(!picked.length){ say("Please add a photo of your menu."); files.focus(); return; }
+    if(picked.length > UPLOAD_MAX_FILES){ say(`Please send ${UPLOAD_MAX_FILES} files or fewer.`); files.focus(); return; }
+    if(types.some(t => !t)){ say("Please use a photo or a PDF."); files.focus(); return; }
+    if(picked.some(f => f.size > UPLOAD_MAX_BYTES)){ say("This file is too big. Please use a photo under 10MB."); files.focus(); return; }
+
+    btn.disabled = true;
+    btn.textContent = "Sending...";
+    try{
+      const paths = [];
+      for(let i = 0; i < picked.length; i++){
+        const path = uploadName(picked[i], types[i]);
+        const up = await fetch(`${SUPABASE_URL}/storage/v1/object/${UPLOAD_BUCKET}/${path}`, {
+          method: "POST",
+          headers: {"apikey": SUPABASE_KEY, "Authorization": "Bearer " + SUPABASE_KEY,
+                    "Content-Type": types[i], "x-upsert": "false"},
+          body: picked[i]
+        });
+        if(!up.ok) throw new Error("upload HTTP " + up.status);
+        paths.push(path);
+      }
+      const row = await fetch(SUPABASE_URL + "/rest/v1/menu_uploads", {
+        method: "POST", headers: SB_HEADERS,
+        body: JSON.stringify({shop_name: name, email: who, file_paths: paths})
+      });
+      if(!row.ok) throw new Error("row HTTP " + row.status);
+
+      done.textContent = "Thank you. We will email your full ranking within a week.";
+      form.hidden = true;
+      done.hidden = false;
+      // the count only: neither the shop nor the address
+      track("menu_uploaded", {files: paths.length});
+    }catch(err){
+      // whatever they filled in stays in the form
+      say(`We could not send that. Please try again, or email us at ${CONTACT_EMAIL}.`);
+    }
+    btn.disabled = false;
+    btn.textContent = "Send";
+  });
 }
 
 /* ---------- what your neighbours sell ----------
@@ -2143,7 +2295,7 @@ function bindSignup(formId, inputId, noteId, source, evt){
       btn.disabled = false;
       btn.textContent = btnLabel;
       note.className = "formnote bad";
-      note.textContent = "We could not save that. Please try again, or email us at hello@theweeklybake.sg";
+      note.textContent = "We could not save that. Please try again, or email us at arshin.sikka@u.nus.edu";
       note.hidden = false;
     }
   });

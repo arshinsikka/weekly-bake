@@ -2,7 +2,7 @@
   "meta": {
     "generated_at": "2026-10-05",
     "shops_total": 301,
-    "shops_with_prices": 97,
+    "shops_with_prices": 96,
     "districts": [
       "Bugis / Kampong Glam / Haji Lane",
       "Bukit Timah / Sixth Avenue",
@@ -22,14 +22,19 @@
     ],
     "districts_count": 15,
     "launches_total": 151,
-    "launches_excluding_seasonal": 133,
+    "launches_excluding_seasonal": 126,
     "launches_hotel_excluded": 4,
-    "launches_listed": 129,
+    "launches_listed": 122,
     "promos_total": 32,
     "menu_rows_on_file": 8675,
     "menu_rows_current": 8634,
-    "menu_rows_counted": 6927,
-    "price_selection_rule": "Only current rows count: the latest observed_date for a shop and item, with an exact price, for an item on sale now. One price per shop per item. Where a shop lists the item under several price_basis values, takeaway wins, then dine_in, then online_order; within the winning basis the cheapest product is used."
+    "menu_rows_counted": 5916,
+    "menu_rows_not_counted": {
+      "menu: no": 573,
+      "seasonal: by name": 1,
+      "service charge rate unknown": 614
+    },
+    "price_selection_rule": "Only current rows count: the latest observed_date for a shop and item, with an exact price, for a menu item on sale now. Add-ons, surcharges, gifts, merchandise and groceries are not menu items, and a price with a service charge of unstated rate is left out. One price per shop per item. Where a shop lists the item under several price_basis values, takeaway wins, then dine_in, then online_order; within the winning basis the cheapest product is used."
   },
   "price_table": [
     {
@@ -47,10 +52,10 @@
       "item_canonical": "flat_white",
       "display_name": "Flat white",
       "format": "drink",
-      "shop_count": 77,
+      "shop_count": 76,
       "low": 5.5,
       "median": 5.8,
-      "high": 7.09,
+      "high": 6.8,
       "observed_from": "2026-09-19",
       "observed_to": "2026-10-04"
     },
@@ -58,10 +63,10 @@
       "item_canonical": "latte",
       "display_name": "Latte",
       "format": "drink",
-      "shop_count": 76,
+      "shop_count": 74,
       "low": 5.5,
       "median": 5.8,
-      "high": 7.09,
+      "high": 6.5,
       "observed_from": "2026-09-19",
       "observed_to": "2026-10-04"
     },
@@ -80,7 +85,7 @@
       "item_canonical": "cappuccino",
       "display_name": "Cappuccino",
       "format": "drink",
-      "shop_count": 70,
+      "shop_count": 68,
       "low": 5.5,
       "median": 6.0,
       "high": 8.39,
@@ -91,10 +96,10 @@
       "item_canonical": "americano",
       "display_name": "Americano / long black",
       "format": "drink",
-      "shop_count": 76,
+      "shop_count": 75,
       "low": 4.5,
       "median": 5.0,
-      "high": 7.63,
+      "high": 7.0,
       "observed_from": "2026-09-19",
       "observed_to": "2026-10-04"
     },
@@ -102,7 +107,7 @@
       "item_canonical": "espresso",
       "display_name": "Espresso",
       "format": "drink",
-      "shop_count": 47,
+      "shop_count": 43,
       "low": 3.5,
       "median": 4.0,
       "high": 6.59,
@@ -113,10 +118,10 @@
       "item_canonical": "croissant_filled",
       "display_name": "Croissant, filled",
       "format": "pastry",
-      "shop_count": 65,
+      "shop_count": 64,
       "low": 4.5,
       "median": 5.5,
-      "high": 58.0,
+      "high": 9.59,
       "observed_from": "2026-09-19",
       "observed_to": "2026-10-04"
     },
@@ -1994,19 +1999,6 @@
         "observed_date": "2026-10-04",
         "note": "availability: available; read from the menu page by eye; own pickup ordering page for JOE & DOUGH CAPITAL TOWER",
         "is_outlier": false
-      },
-      {
-        "shop_id": "the_living_cafe_269758",
-        "shop_name": "The Living Cafe",
-        "district": "Bukit Timah / Sixth Avenue",
-        "address": "779 Bukit Timah Road",
-        "lat": 1.33102187928368,
-        "lng": 103.7962645087327,
-        "price": 7.09,
-        "price_basis": "dine_in",
-        "observed_date": "2026-10-04",
-        "note": "availability: available; page states prices exclude GST; price is inside a menu image or PDF on https://thelivingcafe.com/pages/main-menu; menu states 'All prices are subject to GST and service charge'; menu states service charge (rate not stated); menu dated 20th March 2026 (image file name 'TLC Updated Menu 20th March 2026'); menu: Iced Drinks +1; Extra Shot +2; plant milk choice (almond, oat, coconut, soy); listed: 6.50; plus: GST 9%; service charge stated without a rate, not added",
-        "is_outlier": false
       }
     ],
     "latte": [
@@ -2971,32 +2963,6 @@
         "observed_date": "2026-09-19",
         "note": "",
         "is_outlier": false
-      },
-      {
-        "shop_id": "hello_arigato_upper_thomson",
-        "shop_name": "Hello Arigato",
-        "district": "Upper Thomson",
-        "address": "227 Upper Thomson Rd",
-        "lat": 1.352803732959309,
-        "lng": 103.8343928035838,
-        "price": 6.54,
-        "price_basis": "dine_in",
-        "observed_date": "2026-10-04",
-        "note": "availability: available; page states prices exclude GST; price is inside a menu image or PDF on https://www.helloarigato.com/upperthomson; Upper Thomson day menu (PDF linked as 'VIEW DAY MENU' on own site); menu states all prices are before service charge & GST; Change to Oat Milk +1; Change to Iced +1; Add Extra Shot +1; listed: 6.00; plus: GST 9%; service charge stated without a rate, not added",
-        "is_outlier": false
-      },
-      {
-        "shop_id": "the_living_cafe_269758",
-        "shop_name": "The Living Cafe",
-        "district": "Bukit Timah / Sixth Avenue",
-        "address": "779 Bukit Timah Road",
-        "lat": 1.33102187928368,
-        "lng": 103.7962645087327,
-        "price": 7.09,
-        "price_basis": "dine_in",
-        "observed_date": "2026-10-04",
-        "note": "availability: available; page states prices exclude GST; price is inside a menu image or PDF on https://thelivingcafe.com/pages/main-menu; menu states 'All prices are subject to GST and service charge'; menu states service charge (rate not stated); menu dated 20th March 2026 (image file name 'TLC Updated Menu 20th March 2026'); menu: Iced Drinks +1; Extra Shot +2; plant milk choice (almond, oat, coconut, soy); listed: 6.50; plus: GST 9%; service charge stated without a rate, not added",
-        "is_outlier": false
       }
     ],
     "matcha_latte": [
@@ -3562,10 +3528,10 @@
       },
       {
         "district": "Bukit Timah / Sixth Avenue",
-        "shop_count": 7,
+        "shop_count": 6,
         "low": 5.5,
         "median": 5.5,
-        "high": 7.09
+        "high": 5.5
       },
       {
         "district": "East Coast / Siglap",
@@ -4048,9 +4014,7 @@
       "shop_id": "creme_maison_bakery_tai_seng",
       "shop_name": "Creme Maison Bakery",
       "district": "Serangoon Gardens / Kovan",
-      "items": [
-        "croissant_filled"
-      ]
+      "items": []
     },
     {
       "shop_id": "crown_bakery_bukit_timah",
@@ -4237,11 +4201,8 @@
       "items": [
         "croissant_plain",
         "flat_white",
-        "latte",
         "matcha_latte",
-        "cappuccino",
-        "americano",
-        "espresso"
+        "americano"
       ]
     },
     {
@@ -4283,7 +4244,6 @@
         "matcha_latte",
         "cappuccino",
         "americano",
-        "espresso",
         "croissant_filled",
         "kouign_amann"
       ]
@@ -4355,7 +4315,6 @@
         "matcha_latte",
         "cappuccino",
         "americano",
-        "espresso",
         "croissant_filled"
       ]
     },
@@ -4479,12 +4438,6 @@
         "matcha_latte",
         "americano"
       ]
-    },
-    {
-      "shop_id": "nylon_coffee_080004",
-      "shop_name": "Nylon Coffee",
-      "district": "Tanjong Pagar / Duxton",
-      "items": []
     },
     {
       "shop_id": "olsen_bakehouse",
@@ -4679,13 +4632,7 @@
       "shop_id": "the_living_cafe_269758",
       "shop_name": "The Living Cafe",
       "district": "Bukit Timah / Sixth Avenue",
-      "items": [
-        "flat_white",
-        "latte",
-        "cappuccino",
-        "americano",
-        "espresso"
-      ]
+      "items": []
     },
     {
       "shop_id": "the_weirdoughs_serangoon",
@@ -4926,11 +4873,11 @@
     {
       "flavour": "halloween",
       "shop_count": 1,
-      "item_count": 29,
+      "item_count": 22,
       "by_month": {
         "": {
           "shops": 1,
-          "items": 29
+          "items": 22
         }
       }
     },
@@ -7037,45 +6984,6 @@
       "venue_type": "independent_or_chain"
     },
     {
-      "item_name": "Vintage Jack O Lantern Halloween Cake",
-      "shop": "Cake Inspiration",
-      "district": "Katong / Joo Chiat",
-      "flavour": "halloween",
-      "format": "cake",
-      "price": 120.0,
-      "price_confidence": "ambiguous",
-      "launch_month": "",
-      "first_seen": "2026-10-04",
-      "is_chain": false,
-      "venue_type": "independent_or_chain"
-    },
-    {
-      "item_name": "Halloween Cupcakes set of 6pcs (orange and black)",
-      "shop": "Cake Inspiration",
-      "district": "Katong / Joo Chiat",
-      "flavour": "halloween",
-      "format": "cake",
-      "price": 50.0,
-      "price_confidence": "exact",
-      "launch_month": "",
-      "first_seen": "2026-10-04",
-      "is_chain": false,
-      "venue_type": "independent_or_chain"
-    },
-    {
-      "item_name": "Black and Orange Flower Halloween Cupcake",
-      "shop": "Cake Inspiration",
-      "district": "Katong / Joo Chiat",
-      "flavour": "halloween",
-      "format": "cake",
-      "price": 10.0,
-      "price_confidence": "ambiguous",
-      "launch_month": "",
-      "first_seen": "2026-10-04",
-      "is_chain": false,
-      "venue_type": "independent_or_chain"
-    },
-    {
       "item_name": "Monster Eye Cupcake",
       "shop": "Cake Inspiration",
       "district": "Katong / Joo Chiat",
@@ -7083,32 +6991,6 @@
       "format": "cake",
       "price": 10.0,
       "price_confidence": "ambiguous",
-      "launch_month": "",
-      "first_seen": "2026-10-04",
-      "is_chain": false,
-      "venue_type": "independent_or_chain"
-    },
-    {
-      "item_name": "Witches Hat Halloween Cupcake",
-      "shop": "Cake Inspiration",
-      "district": "Katong / Joo Chiat",
-      "flavour": "halloween",
-      "format": "cake",
-      "price": 10.0,
-      "price_confidence": "ambiguous",
-      "launch_month": "",
-      "first_seen": "2026-10-04",
-      "is_chain": false,
-      "venue_type": "independent_or_chain"
-    },
-    {
-      "item_name": "Halloween Cupcakes Set of 6 pcs (purple and orange)",
-      "shop": "Cake Inspiration",
-      "district": "Katong / Joo Chiat",
-      "flavour": "halloween",
-      "format": "cake",
-      "price": 60.0,
-      "price_confidence": "exact",
       "launch_month": "",
       "first_seen": "2026-10-04",
       "is_chain": false,
@@ -7206,19 +7088,6 @@
       "venue_type": "independent_or_chain"
     },
     {
-      "item_name": "Halloween Marshmallow Brownie Bites Set of 12 pcs",
-      "shop": "Cake Inspiration",
-      "district": "Katong / Joo Chiat",
-      "flavour": "halloween",
-      "format": "cake",
-      "price": 65.0,
-      "price_confidence": "exact",
-      "launch_month": "",
-      "first_seen": "2026-10-04",
-      "is_chain": false,
-      "venue_type": "independent_or_chain"
-    },
-    {
       "item_name": "Spooky Cake Pop Trio (set of 6pcs)",
       "shop": "Cake Inspiration",
       "district": "Katong / Joo Chiat",
@@ -7226,19 +7095,6 @@
       "format": "cake",
       "price": 50.0,
       "price_confidence": "exact",
-      "launch_month": "",
-      "first_seen": "2026-10-04",
-      "is_chain": false,
-      "venue_type": "independent_or_chain"
-    },
-    {
-      "item_name": "Halloween Cake Pops Set of 6pcs",
-      "shop": "Cake Inspiration",
-      "district": "Katong / Joo Chiat",
-      "flavour": "halloween",
-      "format": "cake",
-      "price": 54.0,
-      "price_confidence": "ambiguous",
       "launch_month": "",
       "first_seen": "2026-10-04",
       "is_chain": false,
@@ -7375,9 +7231,9 @@
     },
     {
       "format": "cake",
-      "total": 45,
+      "total": 38,
       "by_month": {
-        "": 22,
+        "": 15,
         "2026-07": 7,
         "2026-08": 7,
         "2026-09": 9

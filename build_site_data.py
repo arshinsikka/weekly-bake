@@ -88,11 +88,20 @@ def item_key(r):
     return k if r["item_canonical"] in SINGLE_PRODUCT else k + (norm(r["menu_wording"]),)
 
 
+# price_note marks written by clean_wave3_tail.py. A row carrying one stays in
+# the file but is never counted: not a menu item (add-on, surcharge, gift,
+# merchandise...), seasonal by its name, or a price to which the menu adds a
+# service charge without giving the rate, so the price paid is not known.
+NOT_COUNTED = ("menu: no", "seasonal: by name", "service charge rate unknown")
+
+
 def counts(row):
-    """A row the map, ranks, medians and tables may use: an exact price for an
-    item on sale now. Rows recorded before wave 3 carry no availability note
-    and were all on the menu when recorded, so they count."""
+    """A row the map, ranks, medians and tables may use: an exact price for a
+    menu item on sale now. Rows recorded before wave 3 carry no availability
+    note and were all on the menu when recorded, so they count."""
     note = row.get("price_note", "")
+    if any(mark in note for mark in NOT_COUNTED):
+        return False
     return (row["price_confidence"] == "exact"
             and (note.startswith("availability: available") or "availability:" not in note))
 
@@ -348,9 +357,13 @@ site_data = {
         "menu_rows_on_file": len(menu_history),
         "menu_rows_current": len(menu_current),
         "menu_rows_counted": len(menu),
+        "menu_rows_not_counted": {mark: sum(1 for r in menu_current if mark in r["price_note"])
+                                  for mark in NOT_COUNTED},
         "price_selection_rule": (
             "Only current rows count: the latest observed_date for a shop and "
-            "item, with an exact price, for an item on sale now. "
+            "item, with an exact price, for a menu item on sale now. Add-ons, "
+            "surcharges, gifts, merchandise and groceries are not menu items, "
+            "and a price with a service charge of unstated rate is left out. "
             "One price per shop per item. Where a shop lists the item under "
             "several price_basis values, takeaway wins, then dine_in, then "
             "online_order; within the winning basis the cheapest product is used."
@@ -395,6 +408,9 @@ print("  left as other: soft-serve, dessert bowl, traditional dessert")
 rule("MENU ROWS")
 print(f"  on file {len(menu_history)}; current (latest per shop and item) {len(menu_current)}; "
       f"counted (exact price, available) {len(menu)}")
+for _mark in NOT_COUNTED:
+    print(f"  current rows never counted, '{_mark}': "
+          f"{sum(1 for r in menu_current if _mark in r['price_note'])}")
 print(f"  shops on file {len(shops)}; with a counted price {len({r['shop_id'] for r in menu})}; "
       f"not trading {len(not_trading)}")
 

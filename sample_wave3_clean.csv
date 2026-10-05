@@ -1,0 +1,41 @@
+shop_id,menu_wording,size,expected_price,source_url
+alice_boulangerie_tp,Wagyu Beef Cheek Risotto,unspecified,40.33,https://drive.google.com/file/d/16U1hh8pt-BeB6gBSE22YWZq1KXW8QUmF/view?usp=drive_link
+tiong_bahru_bakery_joo_chiat,Coffee Biscoff Shio Pan,regular,7.19,https://cdn.shopify.com/s/files/1/0666/4948/9462/files/TBB_MENU_DIGITAL_Sep26_WF.pdf?v=1790586335
+tiong_bahru_bakery_holland_v,Lychee Rose Soda,regular,9.00,https://tiongbahrubakeryplazasing.oddle.me/en_SG
+cake_inspiration_joo_chiat,Black Sesame Cake,whole,65.00,https://cake-inspiration.oddle.me/en_SG
+cake_inspiration_joo_chiat,Cool Mint Listerine Cake,unspecified,160.00,https://www.cake-inspiration.com/for-him-cakes
+bearded_bella_tp,Bacon,single,3.60,https://cdn.shopify.com/s/files/1/0909/0603/4491/files/November_2025_Bearded_Bella_Menu.pdf?v=1761635310
+bloomsbury_bakers_330030,I Love SG Cake,6_inch,90.00,https://www.bloomsburybakers.com/products/i-love-sg-cake?variant=51531942002872
+micro_bakery_kitchen_tiong_bahru,"avocado tartine (VG, N)",single,20.00,https://images.squarespace-cdn.com/content/v1/5c1b2d5ba9e02801f6c8a417/e5977140-a765-44f8-b454-50096ae67831/UPDATED+micro+RH+menu.png?format=2500w
+tiong_bahru_bakery_joo_chiat,Canelé,single,4.80,https://tiongbahrubakeryplazasing.oddle.me/en_SG
+tianns,Specialty Scrambled Eggs & Avocado,unspecified,31.70,https://tianns.com.sg/products/tiann-s-hamper?variant=44800735805590
+columbus_coffee_co,Breakfast Sammie,single,21.69,https://www.columbuscoffeeco.com/online-ordering
+tiong_bahru_bakery_joo_chiat,Rye Sourdough,whole,15.00,https://tiongbahrubakeryplazasing.oddle.me/en_SG
+tiong_bahru_bakery_tanglin,Pistachio Bombe,single,11.40,https://tiongbahrubakeryplazasing.oddle.me/en_SG
+plain_vanilla_serangoon,Roasted Cauliflower & Pomegranate Salad,750g,28.34,https://plainvanilla.com.sg/products/cauliflower-pomegranate-salad?variant=45317195989154
+micro_bakery_red_house_sixth_ave,chicken cheese sausage,single,6.00,https://images.squarespace-cdn.com/content/v1/5c1b2d5ba9e02801f6c8a417/e5977140-a765-44f8-b454-50096ae67831/UPDATED+micro+RH+menu.png?format=2500w
+plain_vanilla_telok_ayer,Best of Bakes Box,single,38.15,https://plainvanilla.com.sg/products/best-of-bakes-box
+tianns,Orange Marmalade Tea Cake,slice,7.00,https://tianns.com.sg/products/orange-marmalade-tea-cake?variant=46526269915286
+plain_vanilla_telok_ayer,Box of 12 Cupcakes - Chocolate Flavours,box_of_12,61.04,https://plainvanilla.com.sg/products/box-12-cupcakes-chocolate-ao
+nassim_hill_bakery,Asian BBQ Chicken Salad,single,29.98,https://www.nassimhill.com.sg/s/NH_brunch_may2026.pdf
+tiong_bahru_bakery,Mocha,reg,8.39,https://cdn.shopify.com/s/files/1/0666/4948/9462/files/TBB_MENU_DIGITAL_Sep26_WF.pdf?v=1790586335
+tiong_bahru_bakery,Chocolate Pecan Financier,single,4.80,https://cdn.shopify.com/s/files/1/0666/4948/9462/files/TBB_MENU_DIGITAL_Sep26_WF.pdf?v=1790586335
+the_living_cafe_269758,Cauliflower Humous,single,16.35,https://ucarecdn.com/0f46c4e5-5a35-405b-b444-96d680ac156b/-/format/auto/-/preview/3000x3000/-/quality/lighter/TLC%20Updated%20Menu%2020th%20March%202026-01.jpg
+plain_vanilla_tiong_bahru,Lemon Chia Seed Loaf,whole,45.78,https://plainvanilla.com.sg/products/lemon-chia-seed-loaf-slice-ao
+tiong_bahru_bakery_dempsey,Teh Tarik,regular,9.59,https://cdn.shopify.com/s/files/1/0666/4948/9462/files/TBB_MENU_DIGITAL_Sep26_WF.pdf?v=1790586335
+konditori_artisan_bakes,Pain Aux Raisin,single,6.00,https://www.konditori.sg/
+plain_vanilla_tiong_bahru,Box of 12 Cupcakes - Trio Flavour Selection,box_of_12,61.04,https://plainvanilla.com.sg/products/b12-cupcakes-trio-flavour-selection
+micro_bakery_red_house,mushroom,single,5.00,https://images.squarespace-cdn.com/content/v1/5c1b2d5ba9e02801f6c8a417/e5977140-a765-44f8-b454-50096ae67831/UPDATED+micro+RH+menu.png?format=2500w
+creme_maison_bakery_tai_seng,Halloween Mini Cupcakes,single,85.80,https://www.crememaison.com/product/halloween-mini-cupcakes/
+bastille_bakery,Chocolate Éclair,single,10.00,https://www.bastille.com.sg/Bastille_Menu.pdf
+cafe_melba_goodman,Fresh lemonade,single,9.81,https://images.squarespace-cdn.com/content/v1/56120223e4b0e1ea7533e421/21bb414a-c3a1-44c3-b624-16e2180f0380/CM1_Full+Menu_2026-03.jpg?format=2500w
+plain_vanilla_tiong_bahru,Loose Leaf Tea (Hot/Iced),regular,8.99,https://drive.google.com/file/d/1ymMQpOphhDpXRiLT-Lq-mVInA1p41PO9/view?usp=sharing
+creme_maison_bakery_tai_seng,Amber Koi – Longevity Cake,unspecified,168.80,https://www.crememaison.com/product/amber-koi-longevity-cake/
+nassim_hill_bakery,Hot Honey Triple Cheese Pizza,12_inch,39.57,https://nassimhill.oddle.me/en_SG
+tiong_bahru_bakery_holland_v,Sweet Chai Latte,regular,8.40,https://tiongbahrubakeryplazasing.oddle.me/en_SG
+happy_oven_tiong_bahru,SPIDER WEB BREAD (MIN 10 PIECES),box_of_10,1.20,https://www.happyoven.com.sg/menu
+hello_arigato_upper_thomson,Yuzu Honey Chicken Sando,single,17.44,https://drive.google.com/file/d/1dgB5jHUD80Sxk_cnqAnxUnREKagWYG4E/view?usp=drive_link
+plain_vanilla_east_coast,Breakfast Skillet,unspecified,26.38,https://drive.google.com/file/d/1J3TmSjpOTARayAwHZ2pOfLfpbRUcgtsV/view
+plain_vanilla_telok_ayer,White Batch Brew (2L),2l,42.51,https://plainvanilla.com.sg/products/white-batch-brew-2l
+nassim_hill_bakery,Dry Laksa Pasta,half,25.18,https://www.nassimhill.com.sg/s/NH_brunch_may2026.pdf
+creme_maison_bakery_tai_seng,Lissae Candy Wonderland,unspecified,195.80,https://www.crememaison.com/product/lissae-candy-wonderland/

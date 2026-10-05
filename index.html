@@ -447,10 +447,10 @@ footer .blk p{font-size:var(--s13); line-height:1.5}
               <div class="maphint" id="map-hint" aria-hidden="true"></div>
             </div>
             <ul class="legend" aria-label="What the pin colours mean">
-              <li><span class="key lo"></span>Cheaper than most</li>
-              <li><span class="key"></span>About normal</li>
-              <li><span class="key up"></span>More expensive than most</li>
-              <li><span class="key hi"></span>Much more expensive</li>
+              <li data-band="lo"><span class="key lo"></span>Cheaper than most</li>
+              <li data-band="mid"><span class="key"></span>About normal</li>
+              <li data-band="up"><span class="key up"></span>More expensive than most</li>
+              <li data-band="hi"><span class="key hi"></span>Much more expensive</li>
             </ul>
             <p class="mapnote" id="map-note" hidden></p>
           </div>
@@ -1001,7 +1001,7 @@ let FINDER_ITEMS = Object.keys(ITEM_NAMES);   // narrowed to the items the data 
 let finderItem = "croissant_plain";
 /* who is asking: {shopId} once they pick their shop from the data, or
    {price, district} when they just type a price. district is "" when they
-   leave the area out, and then only the Singapore-wide count is given. */
+   leave the area out, and then only the count across every tracked cafe is given. */
 let reader = null;
 let readerPrice = null;      // the price the strip marks
 let markerSettled = false;   // the slide plays once per result, not on resize
@@ -1121,6 +1121,7 @@ function updateItemWords(d){
   byId("finder-to-table").textContent =
     `See all ${d.named_prices[finderItem].length} cafes in a list`;
   byId("price-label").textContent = `Enter your ${itemWords(finderItem)} price`;
+  byId("to-price").textContent = `Not listed? Enter your ${itemWords(finderItem)} price`;
 }
 
 /* ---------- find your shop ----------
@@ -1309,7 +1310,7 @@ function drawStrip(d){
 }
 
 /* ---------- the result ----------
-   Two short sentences: how many cafes in Singapore charge more, then where
+   Two short sentences: how many of the cafes we track charge more, then where
    the reader stands in their own area. Shops on the same price share a place.
    Everything else waits behind "N more" on a phone. */
 let gapLines = [];           // what the neighbours sell, for a found shop
@@ -1371,9 +1372,9 @@ function showResult(d){
   const near = others.filter(r => r.district === district);
   let local = null;
 
-  let text = above === 0 ? "No cafe in Singapore charges more than you."
-           : above === 1 ? "1 cafe in Singapore charges more than you."
-           : `${above} cafes in Singapore charge more than you.`;
+  // never more than the data: the count is out of the shops we have a price from
+  let text = above === 0 ? "No cafe we track charges more than you."
+           : `${above} of the ${rows.length} cafes we track ${above === 1 ? "charges" : "charge"} more than you.`;
   if(!district){
     // price only: no area, so no second sentence
   } else if(near.length < MIN_NEIGHBOURS){
@@ -1687,6 +1688,10 @@ function drawPins(d){
     marker.on("click", () => openPin(r, b));
     marker.addTo(pinLayer);
   }));
+
+  // the legend names only the kinds of pin this item has on the map
+  const shown = new Set(rows.map(r => band(r.price)));
+  document.querySelectorAll(".legend [data-band]").forEach(li => { li.hidden = !shown.has(li.dataset.band); });
 }
 
 function flyToShop(shop){
@@ -1854,14 +1859,17 @@ function buildLaunches(d){
   const list = d.launches_list;
   list.forEach(r => { r.when = launchWhen(r); });
   const months = [...new Set(list.map(r => r.when))].sort();
-  const named = new Set(list.map(r => r.launch_month).filter(Boolean)).size;
+  // calendar months from the earliest launch to the latest, both counted
+  const ym = w => Number(w.slice(0, 4)) * 12 + Number(w.slice(5, 7));
+  const dated = months.filter(Boolean);
+  const span = dated.length ? ym(dated[dated.length - 1]) - ym(dated[0]) + 1 : 0;
   const formats = [...new Set(list.map(r => r.format))].sort();
   // the reader runs a handful of shops, so independents are the default view
   let who = "independent", month = "all", type = "all", expanded = false;
   const LIMIT = 20;
 
   document.getElementById("launch-sub").textContent =
-    `${list.length} new items with prices, from the last ${named} months. ` +
+    `${list.length} new items with prices, from the last ${span} ${span === 1 ? "month" : "months"}. ` +
     `Big chains are hidden at first, because they price differently from a small cafe. ` +
     `We leave out mooncakes and National Day items, because cafes sell those for the date and not because customers ask. ` +
     `We also leave out hotel restaurants.`;
@@ -2086,7 +2094,7 @@ function buildFooter(d){
 
 /* ---------- forms ---------- */
 const SIGNUP_DONE = {
-  newsletter_hero:    "You are on the list. The first email comes on Monday.",
+  newsletter_hero:    "You are on the list. Your first email comes this week.",
   waitlist:           "You are on the waitlist. We will email you before we start."
 };
 const isEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);

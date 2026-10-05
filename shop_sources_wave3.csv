@@ -1,0 +1,302 @@
+shop_id,group,part,is_new,address_source_url,rows_captured,no_price_reason
+tiong_bahru_bakery,c,auto,no,,195,
+tiong_bahru_bakery_joo_chiat,c,auto,no,,195,
+tiong_bahru_bakery_dempsey,c,auto,no,,195,
+tiong_bahru_bakery_holland_v,c,auto,no,,195,
+tiong_bahru_bakery_centrepoint,c,auto,no,,195,
+tiong_bahru_bakery_tanglin,c,auto,no,,195,
+tianns,c,auto,no,,274,
+174_bingo,c,auto,no,,0,No own website found (one web search: only blogs/aggregators; cafe is Instagram-only with a changing bake list).
+big_short_coffee,c,auto,no,,19,
+apartment_coffee,c,auto,no,,0,"Own site is a Shopify bean shop only (home, about, contact, journal, subscription); no cafe menu page, image or PDF linked. Shop products already captured by code."
+brawn_and_brains_hamilton,c,auto,no,,120,
+the_weirdoughs_serangoon,c,auto,no,,0,"Web search was unavailable (tool session limit), so the official site could not be searched for; theweirdoughs.com fails (SSL error on https, HTTP 500 on http; www also fails) and the Oddle page did not load."
+boulangerie_asuka,c,auto,no,,0,"One web search found no official website (only review/aggregator sites, which are not allowed sources); search returned nothing for Boulangerie Asuka at Anchorpoint."
+symmetry_bugis,c,auto,no,,36,
+ps_cafe_dempsey,c,auto,no,,69,
+chu_and_co_serangoon,c,auto,no,,0,"One web search found no official website (only review/aggregator sites, which are not allowed sources); no own-site menu for Chu and Co, 15 Lichfield Rd."
+carpenters_and_cook_beauty_world,c,auto,no,,0,"permanently closed per the shop's own site: Own site homepage carries a farewell notice: 'After 14 truly wonderful years, Carpenter and Cook has now closed its doors' (team continues at Neighbourly, Pandan Valley; baker plans to take over the space around mid-September). No menu on site; Oddle store does not exist."
+alchemist_design_orchard,c,auto,no,,0,"alchemist.com.sg redirects to alchemist.global, a Shopify bean/merch shop; store pages (stores list, The Heeren page) show address and hours only, no drinks menu or prices. Design Orchard (250 Orchard Rd #03-01) is NOT in the site's Singapore store list (nearest listed: The Heeren, 260 Orchard Rd #01-ORA)."
+cake_spade_088504,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.cakespade.com: rejected, its pages do not show this shop's address"
+dome_coffees_s_238868,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.domecoffees.com: rejected, its pages do not show this shop's address"
+158_brewcoffee_140158,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+bakerzin_307591,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.bakerzin.com: rejected, its pages do not show this shop's address"
+cafe_gavroche_s_079008,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+e_j_dessert_liability_partnership_588996,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+blue_magnolia_patisserie_588996,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+dough_culture_437157,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.doughculture.com: rejected, its pages do not show this shop's address; https://www.doughculture.com.sg: rejected, its pages do not show this shop's address"
+cakeinspiration_liability_partnership_427772,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+the_living_cafe_269758,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,245,
+cafe_folks_545894,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.cafefolks.com: rejected, its pages do not show this shop's address"
+therapy_coffee_428751,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+crown_coffee_338729,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+joe_dough_068912,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,75,
+kiroi_cheese_cake_150123,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,9,
+ck_cake_house_307506,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+avril_cafe_189204,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.avrilcafe.com: rejected, its pages do not show this shop's address"
+bloomsbury_bakers_330030,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,637,
+pita_bakery_189865,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+bakerz_lab_199001,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+cofu_cafe_150123,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+nick_vina_artisan_bakery_078877,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+orchid_cafe_078867,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+ciel_patisserie_160146,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.cielpatisserie.com: rejected, its pages do not show this shop's address"
+lifebread_central_208539,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+cafe_etc_574344,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+cafe_etc_329928,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+yi_jia_bread_cafe_574361,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+alya_cafe_338729,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.alyacafe.com: rejected, its pages do not show this shop's address"
+plain_vanilla_tiong_bahru,c,auto,no,,320,
+plain_vanilla_east_coast,c,auto,no,,320,
+plain_vanilla_telok_ayer,c,auto,no,,320,
+plain_vanilla_serangoon,c,auto,no,,320,
+plain_vanilla_cluny_court,c,auto,no,,320,
+happy_oven_tiong_bahru,c,auto,no,,53,
+awfully_chocolate_bakery_cafe,c,auto,no,,48,
+accompany_coffee,c,auto,no,,0,"One web search found no official website (only review/aggregator sites, which are not allowed sources); search results show a different cafe (Same Days Coffee) at 292 Joo Chiat Road, per third-party blogs only; closure of Accompany Coffee not confirmed from an own source."
+lucid,c,auto,no,,0,"www.lucid.sg now resolves to an unrelated business ('LUCID | Singapore's #1 TikTokShop Partner'). One web search found no own cafe website (only blogs, a gmail address and Facebook)."
+the_french_american_bakery,c,auto,no,,18,
+baker_and_cook_bukit_timah,c,auto,no,,55,
+baker_and_cook_holland_v,c,auto,no,,55,
+baker_and_cook_swan_lake,c,auto,no,,55,
+alice_boulangerie_tp,c,auto,no,,129,
+brotherbird_coffeehouse_bali,c,auto,no,,0,"Web search was unavailable (tool session limit), so the official site could not be searched for; brotherbird.com.sg does not resolve; brotherbird.com is a parked domain for sale; brotherbirdbakehouse.com does not resolve."
+merci_marcel_club_st,c,auto,no,,0,"Own site (home, all-locations, contact, /french-fold which redirects to a GIF) shows no menu page, image or PDF and no prices; Oddle stores do not exist. No menu obtainable from allowed sources."
+french_fold_telok_ayer,c,auto,no,,0,"Own site (home, all-locations, contact, /french-fold which redirects to a GIF) shows no menu page, image or PDF and no prices; Oddle stores do not exist. No menu obtainable from allowed sources."
+apollo_coffee_bar_serangoon,c,auto,no,,0,"Wix site has only Home/Enquiry/Feedback/Careers/Vouchers/Reservations/Find Us pages; no menu page, image or PDF and no prices for food or drinks."
+little_farms_cafe_valley_point,c,auto,no,,0,"littlefarms.com is an online grocer; its cafe link goes to littlefarmscafe.com, a Shopify delivery/takeaway shop (pastry boxes, coffee travelers) with no dine-in cafe menu, menu image or PDF found."
+cafe_melba_goodman,c,auto,no,,59,
+coffee_hive_068894,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+jay_govindas_vegetarian_bakery_188979,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+kopi_kia_140117,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+bw_cafe_048422,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+take_2_cafe_307612,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+pulse_patisserie_109684,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.pulsepatisserie.com: rejected, its pages do not show this shop's address"
+bt6_cafe_cuisine_599731,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+la_bonnie_pastries_427464,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+cafe_connexion_437080,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.cafeconnexion.com: rejected, its pages do not show this shop's address"
+kopitown_276474,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+dessert_bowl_555976,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.dessertbowl.com: rejected, its pages do not show this shop's address"
+gobi_s_desserts_427598,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+coffee_smith_238858,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+believe_nj_cafe_238366,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+capitol_coffee_089109,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.capitolcoffee.com: rejected, its pages do not show this shop's address"
+edith_patisserie_209848,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.edithpatisserie.com: rejected, its pages do not show this shop's address; https://edithpatisserie.oddle.me/en_SG: rejected, store page does not show this shop's postal code"
+artisan_boulangerie_compagnie_239555,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+yl_pastries_house_160036,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+okada_coffee_079027,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+dome_coffees_s_238839,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.domecoffees.com: rejected, its pages do not show this shop's address"
+thk_cafe_bugis_188067,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+the_richmond_coffee_189853,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.richmondcoffee.com: rejected, its pages do not show this shop's address"
+coffee_zone_069047,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+coffee_hive_307506,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+vons_dessert_238801,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+the_confection_connection_082001,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.theconfectionconnection.com: rejected, its pages do not show this shop's address"
+v8_cafe_188966,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.v8cafe.com: rejected, its pages do not show this shop's address"
+kampong_glam_cafe_199438,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+e_p_cafeteria_048441,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+blob_tiong_bahru,c,auto,no,,0,No own website found (one web search: only blogs/aggregators; search results give the address as 129 Kim Tian Road).
+tiong_hoe_specialty_coffee,c,auto,no,,0,"Own site is a Shopify beans/equipment shop (captured by code). Cafe drink menus link out to order.yqueue.co ordering pages (5 outlets: Fusionopolis Place, Guoco Tower, One Raffles Place, SBF Center, Square2), which rendered empty to the probe; no menu page/image/PDF on tionghoe.com. No Jalan Membina (Stirling/Tiong Bahru) link seen among the ordering links."
+bread_and_hearth_katong,c,auto,no,,0,"Listed Oddle store does not exist; one web search found no official website (only review/aggregator sites, which are not allowed sources); no own-site menu for Bread & Hearth Katong V."
+pull_by_tpg,c,auto,no,,0,"No own website found (one web search: only Chope, Burpple and blogs, which are not allowed sources)."
+two_bakers,c,auto,no,,0,"Web search was unavailable (tool session limit), so the official site could not be searched for; two-bakers.com redirects to a domain-parking lander (no longer the bakery's site); twobakers.com.sg does not resolve; Oddle store does not exist."
+bearded_bella_tp,c,auto,no,,77,
+columbus_coffee_co,c,auto,no,,59,
+the_glasshouse_neil,c,auto,no,,47,
+konditori_artisan_bakes,c,auto,no,,64,
+free_the_robot_telok_ayer,c,auto,no,,0,"robotscoffeebar.com does not resolve; the other official domain found by search, www.freetherobotcoffee.com, returns 404 Page Not Found. No own menu reachable."
+lola_cafe_kovan,c,auto,no,,60,
+hello_arigato_upper_thomson,c,auto,no,,72,
+five_oars_coffee_roasters_ec,c,auto,no,,80,
+eden_garden_cafe_068590,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+coffee_hive_069538,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+188_cafe_329763,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.188cafe.com: HTTP 403; https://www.188cafe.com: rejected, its pages do not show this shop's address"
+pontian_cafe_307591,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+the_coffee_connection_238876,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.thecoffeeconnection.com: rejected, its pages do not show this shop's address; https://www.coffeeconnection.com: rejected, its pages do not show this shop's address"
+compound_coffee_co_109684,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+dino_cake_house_cafe_588996,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+therapy_coffee_427543,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+temptations_bakery_427766,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+double_spout_cafe_singapore_530205,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+dj_bread_530204,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+indian_muslim_bakery_confectionery_424536,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+mellower_coffee_singapore_068896,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+cloud9_bake_shop_liability_partnership_209848,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+coffee_cup_150011,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.coffeecup.com: rejected, its pages do not show this shop's address"
+coffee_bandits_pte_ltd_169780,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+elyon_cakes_150126,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+one_shot_coffee_049712,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+imperial_treasure_bakery_079027,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+the_good_cafe_278992,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.thegoodcafe.com: rejected, its pages do not show this shop's address"
+kith_cafe_238215,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+galaxy_the_pastry_kitchen_160082,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+therapy_coffee_089513,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+cafe_project_088825,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+vintage_delicafe_199479,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+cafehouse_25_200028,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+2degrees_north_coffee_co_088875,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+dessert_first_189029,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.dessertfirst.com: rejected, its pages do not show this shop's address"
+merci_marcel_tiong_bahru,c,auto,no,,0,Homepage has no prices and no menu page; only linked PDF is a 2020 'Test-PDF-So-Chic.pdf' placeholder; /menu is 404; Oddle shop closed.
+chin_mee_chin_confectionery,c,auto,no,,55,
+common_man_coffee_roasters_joo_chiat,c,auto,no,,0,"Own site is a Shopify store for beans, gear and classes (already captured by code); its links show no cafe food/drinks menu page, image or PDF; both Oddle stores do not exist."
+common_man_coffee_roasters_rv,c,auto,no,,0,"Own site is a Shopify store for beans, gear and classes (already captured by code); its links show no cafe food/drinks menu page, image or PDF; both Oddle stores do not exist."
+anchorpoint_common_man,c,auto,no,,0,"Own site is a Shopify store for beans, gear and classes (already captured by code); its links show no cafe food/drinks menu page, image or PDF; both Oddle stores do not exist."
+kings_cart_coffee_factory,c,auto,no,,61,
+moonchild,c,auto,no,,0,"One web search found no official website (only review/aggregator sites, which are not allowed sources); no own-site menu for Moonchild, 351 Jalan Besar."
+equate_coffee_orchard,c,auto,no,,0,"Own site is a Shopify bean shop only (already captured by code); no cafe drinks menu. Site's 'Find us' lists only 1 Tanjong Pagar Plaza #02-25 S082001, not the Orchard Central address."
+two_men_bagel_house_novena,c,auto,no,,34,
+nesuto_tras,c,auto,no,,0,"Listed site nesuto.com is an unrelated apartment-hotel brand. Official site found by search is dear-nesuto.com (Shopify cake shop); its Tanjong Pagar page and home page show no cafe menu page, image or PDF. E-shop products not transcribed per brief."
+fika_swedish_cafe,c,auto,no,,0,"fika.org.sg does not resolve and the Oddle page does not load. One web search found no other own site; a blog (ladyironchef, Aug 2026, not an allowed price source) reports the cafe closing on 14 August 2026 after 17 years. Closure not verifiable on an own site."
+sarnies_telok_ayer,c,auto,no,,0,"sarnies.com is a brand/corporate site; the Sarnies Singapore page has only a reservation link and one image, no menu or prices; sgcoffee.sarnies.com is a Shopify bean shop (e-shop, not transcribed)."
+the_bread_rack_kovan,c,auto,no,,0,"One web search found no official website (only review/aggregator sites, which are not allowed sources); no own-site menu for The Bread Rack, Space@Kovan."
+one_man_coffee_thomson,c,auto,no,,0,"Single-page site with three slide images and contact details only; no menu, no prices. Address shown is 4 Fusionopolis Way, Kinesis #01-15, not Upper Thomson."
+patisserie_cle_siglap,c,auto,no,,28,
+artisan_boulangerie_compagnie_237994,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+reddot_brewhouse_247691,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,own site has no menu prices a script could read; menu pages or images found: https://www.reddotbrewhouse.com.sg/menu
+cafe_galilee_149297,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+cafe_pal_188952,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.cafepal.com: rejected, its pages do not show this shop's address"
+the_book_cafe_239070,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.bookcafe.com: rejected, its pages do not show this shop's address"
+vanilla_pastry_and_bakery_119963,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+the_coffee_connection_119968,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.thecoffeeconnection.com: rejected, its pages do not show this shop's address; https://www.coffeeconnection.com: rejected, its pages do not show this shop's address"
+artisan_boulangerie_compagnie_428802,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+bt_bakery_cafe_534748,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+the_bread_company_kovan_530205,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+the_royals_cafe_455209,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.royalscafe.com: rejected, its pages do not show this shop's address"
+a_han_bakes_555974,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.ahanbakes.com: rejected, its pages do not show this shop's address"
+coffee_bandits_pte_ltd_159553,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+ultra_bake_082001,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+moca_cafe_248839,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+delcie_s_desserts_and_cakes_330034,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+cad_cafe_189216,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+nylon_coffee_080004,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,24,
+the_coffee_stop_188770,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.coffeestop.com: rejected, its pages do not show this shop's address"
+pacific_coffee_company_s_339949,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+gelateria_italia_pk_188067,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+toby_s_estate_coffee_asia_238216,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+the_bread_company_307591,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.thebreadcompany.com: rejected, its pages do not show this shop's address"
+cuddles_cafe_237978,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+cafe_phoenix_247980,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+careshop_de_cafe_339940,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+artistry_cafe_199149,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+pastry_magic_269707,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+micro_bakery_kitchen_tiong_bahru,c,auto,no,,56,
+micro_bakery_red_house,c,auto,no,,56,
+micro_bakery_red_house_sixth_ave,c,auto,no,,56,
+bastille_bakery,c,auto,no,,53,
+olsen_bakehouse,c,auto,no,,90,
+keong_saik_bakery_bendemeer,c,auto,no,,188,
+habitat_coffee,c,auto,no,,0,Domain habitatcoffee.com.sg has expired (parked page: 'This domain name has expired'). No own menu available.
+nassim_hill_bakery,c,auto,no,,148,
+da_paolo_gastronomia_holland,c,auto,no,,0,"Own site has no dine-in/counter menu page, image or PDF; /order only links to gastronomia-foodtoorder.dapaolo.com.sg, an e-shop for catering/party food delivery (not transcribed per brief). Oddle store does not exist."
+da_paolo_gastronomia_novena,c,auto,no,,0,"Own site has no dine-in/counter menu page, image or PDF; /order only links to gastronomia-foodtoorder.dapaolo.com.sg, an e-shop for catering/party food delivery (not transcribed per brief). Oddle store does not exist."
+bakers_bench_bakery,c,auto,no,,98,
+all_things_delicious_arab_st,c,auto,no,,352,
+pantler_river_valley,c,auto,no,,0,"Own site is a one-line landing page linking only to shop.pantler.com.sg (Oddle ordering), which returned HTTP 403 'You are not allowed to visit this page'. No menu readable."
+bakery_brera_empress,c,auto,no,,85,
+whisk_and_paddle_novena,c,auto,no,,0,"Menu page (https://whiskandpaddle.com.sg/menu/) contains only a header banner image (menu_head.jpg, 2018) and no menu text, image or PDF."
+creme_maison_bakery_tai_seng,c,auto,no,,481,
+rich_good_cake_shop_198887,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+breadlink_160133,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+hanahana_cafe_228796,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.hanahanacafe.com: rejected, its pages do not show this shop's address"
+break_and_bake_049944,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+utb_coffee_singapore_588996,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+papa_beans_cafe_119968,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+cake_avenue_598132,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.cakeavenue.com: rejected, its pages do not show this shop's address; https://www.cakeavenue.com.sg: rejected, its pages do not show this shop's address; https://cakeavenue.oddle.me/en_SG: rejected, store page does not show this shop's postal code"
+tarts_n_pastries_437125,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+dino_cake_house_cafe_574384,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+bakerzin_556679,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.bakerzin.com: rejected, its pages do not show this shop's address"
+classic_cakes_456175,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.classiccakes.com: rejected, its pages do not show this shop's address"
+baker_s_brew_studio_574370,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+1_baker_street_575629,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+jewel_coffee_238879,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.jewelcoffee.com: rejected, its pages do not show this shop's address"
+gs_patisserie_080333,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+joe_dough_238858,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.joeanddough.com: rejected, its pages do not show this shop's address"
+la_teh_cafe_188979,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+lamaison_pastry_shop_198904,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+my_awesome_cafe_068639,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"Own site (single Squarespace page) describes food and coffee but shows no menu page, image, PDF or prices; reservations by WhatsApp only."
+coffee_cook_575630,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+swirls_cupcake_bakery_238216,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+classified_cafe_199002,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+aris_gourmet_bakery_238877,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+bake_confectionery_238801,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+9_plus_cafe_159469,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+columbus_bakeries_307506,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+whisk_cafe_160058,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+dessert_first_238873,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.dessertfirst.com: rejected, its pages do not show this shop's address"
+caffe_pralet,c,auto,no,,0,"caffepralet.com.sg does not resolve; the other own domain found by search, https://caffepralet.com/, fails to load (ERR_CERT_DATE_INVALID). No own menu reachable."
+petit_pain,c,auto,no,,0,"Web search was unavailable (tool session limit), so the official site could not be searched for; no site in job; petitpain.sg does not resolve."
+prairie_by_craftsmen_joo_chiat,c,auto,no,,0,"the only menu on the brand's site is for its Dunearn Village outlet, not Prairie at Joo Chiat; not used"
+chye_seng_huat_hardware,c,auto,no,,11,
+antea_social,c,auto,no,,0,"Site is a tea retail shop; the Teahouse page gives address/hours only and no dine-in menu or prices. NOTE: site address is 117 Owen Road, not 9 Tyrwhitt Road."
+drips_bakery_cafe_orchard,c,auto,no,,0,"Own site has no cafe menu page, image or PDF (home, visit-us, workshop pages only; one visit-us image checked was a location photo). Ordering link dripsbakery-order.oddle.me returned HTTP 403. Site lists Tiong Bahru studio and One Raffles Place, not Ngee Ann City."
+starter_lab_robertson,c,auto,no,,0,www.starterlab.com.sg does not resolve; one web search found no other own website (only blogs/aggregators).
+earlybird_cafe,c,auto,no,,0,"Web search was unavailable (tool session limit), so the official site could not be searched for; earlybirdcafesg.com (and www) does not resolve."
+burnt_ends_bakery_dempsey,c,auto,no,,0,Own site did not load (net::ERR_CONNECTION_RESET) on retry; no menu obtainable.
+kwaasong_bakehouse_telok_ayer,c,auto,no,,0,"No own website found (one web search: only Eatbook, Burpple and deal sites)."
+crown_bakery_bukit_timah,c,auto,no,,0,"Web search was unavailable (tool session limit), so the official site could not be searched for; crownbakery.com.sg returns 'Squarespace - Website Expired' (404)."
+hvala_somerset,c,auto,no,,92,
+fondue_cafe_81_278115,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+kopisi_168732,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+peyton_place_cafe_lounge_238875,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+m_w_cafe_248371,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+ah_chew_desserts_189022,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"Own 'our menu' page renders no item text or prices (67 characters, no menu image/PDF); the 'order' page lists outlets and delivery terms only and points to third-party delivery (GrabFood image). No readable prices on own site."
+cafehopping_in_a_box_588996,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+pnc_cafe_119963,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+wewe_bakery_427623,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+jc_coffee_houzz_427427,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+coterie_cafe_787136,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.coteriecafe.com: rejected, its pages do not show this shop's address"
+cafe_folks_545893,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.cafefolks.com: rejected, its pages do not show this shop's address"
+simplicite_cafe_429012,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+the_cake_shop_179030,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.thecakeshop.com.sg: rejected, its pages do not show this shop's address; https://www.cakeshop.com: rejected, its pages do not show this shop's address"
+kopi_solution_188966,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+cf_bakery_082001,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.cfbakery.com: rejected, its pages do not show this shop's address"
+open_book_cafe_089839,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+badoque_s_cafe_574370,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+cafe_haus_048423,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+the_coffee_academics_228209,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+ah_chew_desserts_jv_307627,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+brewhaus_179021,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.brewhaus.com: HTTP 403; https://www.brewhaus.com: rejected, its pages do not show this shop's address; https://www.brewhaus.sg: rejected, its pages do not show this shop's address"
+sultan_cafe_199001,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+yl_pastries_house_082001,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+the_plain_cafe_089688,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+dome_coffees_s_238859,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.domecoffees.com: rejected, its pages do not show this shop's address"
+simply_bread_259760,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.simplybread.com: rejected, its pages do not show this shop's address; https://www.simplybread.com.sg: rejected, its pages do not show this shop's address"
+the_gelato_connection_238839,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+e_p_cafeteria_080004,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,no site found from the licensee name
+pc_cafe_200031,d,auto,yes,https://data.gov.sg/datasets/d_227473e811b09731e64725f140b77697/view,0,"https://www.pccafe.com: rejected, its pages do not show this shop's address"
+flock_cafe,a+b,stage1,no,https://flockcafe.oddle.me/en_SG/stores,104,
+carrara_cafe,a,stage1,yes,https://www.chope.co/singapore-restaurants/restaurant/carrara-cafe,0,no own website or ordering page found; only a Facebook page and third-party listings
+cafe_ondo,a,stage1,yes,https://hungrygowhere.com/food-news/cafe-ondo/,0,no own website or ordering page found; only press coverage
+velvete_alexandra,a,stage1,yes,https://velvete.co/cafe-and-events/,16,
+caro_patisserie_joo_chiat,a,stage1,yes,https://caro-patisserie.com/pages/retail-shops,56,
+cake_inspiration_joo_chiat,a,stage1,yes,https://cake-inspiration.oddle.me/en_SG/stores,664,
+average_service,a,stage1,yes,https://eatbook.sg/average-service/,0,averageservice.com is a 'Launching Soon' placeholder; no menu or ordering page
+space_23,a,stage1,yes,https://eatbook.sg/space-23-cafe/,0,space23.sg timed out on every attempt (Cloudflare 522); no other allowed source
+refuel_ii_bukit_merah,a,stage1,yes,https://eatbook.sg/bukit-merah-cafe/,0,no Refuel found in Tiong Bahru; Refuel II in Bukit Merah is the nearest match and is not confirmed as the cafe visited; no own website or ordering page found
+lunar_rabbit_boulangerie_hamilton,a,stage1,yes,https://lunar-rabbit.com/,66,
+la_levain,a,stage1,no,https://www.lalevain.com/,102,
+drips_bakery_cafe,b,stage1,no,https://www.drips.com.sg/pages/visit-us,82,
+little_rogue_coffee,b,stage1,no,https://littleroguecoffee.com/,6,
+binge_tiong_bahru,b,stage1,no,,0,no own website or ordering page found (Instagram only)
+glass_roasters_tiong_bahru,b,stage1,no,,0,glassroasters.com fails to load (TLS error); no ordering page
+sunday_morning_coffee_shop,b,stage1,no,,0,no own website or ordering page found (Instagram only)
+pelle_and_pepe,b,stage1,no,https://pepelevain.co/,0,"own ordering page says 'closed for now but we'll be back soon'; no prices shown. Page gives 83 Joo Chiat Place, not the 201 Joo Chiat Road on file"
+janie_the_bakery,b,stage1,no,https://www.janiethebakery.com/,30,
+the_neptune,b,stage1,no,,0,no own website or ordering page found (Instagram only)
+le_petit_katong,b,stage1,no,,0,lepetitkatong.com sits behind a bot check and would not load; not confirmed to be the cafe's site
+boms_and_buns,b,stage1,no,https://bomsnbuns.com/pages/visit-us,31,
+asylum_coffeehouse,b,stage1,no,https://www.asylumcoffeehouse.com/,0,own site sells beans and brewing gear only; no cafe menu. The asylumcoffeesg.com on file no longer resolves
+lola_faye_cafe,b,stage1,no,,0,no own website or ordering page found (Instagram only)
+breaditation_bakery,b,stage1,no,,0,no own website or ordering page found (Instagram only)
+windowsill_pies_great_world,b,stage1,yes,https://windowsillpies.sg/pages/contact,28,
+cugini_trattoria_bakery,b,stage1,no,,0,no own website or ordering page found (Instagram only)
+koki_bakery_duxton,b,stage1,no,,0,no own website or ordering page found (Instagram only)
+butter_tgt_duxton,b,stage1,no,https://buttertgt.com/,0,"own site sells jarred butters and merchandise only; no cafe menu. Site gives 55 Neil Road, not the 76A Duxton Road on file"
+tarik_cafe_arab_st,b,stage1,no,,0,no own website or ordering page found (Instagram only)
+monochrome_boutique,b,stage1,no,,0,no own website or ordering page found (Instagram only)
+chye_seng_huat_hardware_robertson,b,stage1,no,,0,cshhcoffee.com lists only 150 Tyrwhitt Road; could not confirm a Robertson Quay outlet exists. Its ordering page belongs to the Tyrwhitt shop (group c)
+clump_coffee_serangoon,b,stage1,no,,0,no own website or ordering page found (Instagram only)
+pueblo_cafe_upper_thomson,b,stage1,no,,0,no own website or ordering page found (Instagram only)
+woodcraft_bakehouse_thomson,b,stage1,no,,0,no own website or ordering page found (Instagram only)
+slow_bakes_balestier,b,stage1,no,,0,"no own website or ordering page found (Instagram only); third-party pages place Slow Bakes in Yishun, not at the Ah Hood Road address on file"
+black_and_ink_swan_lake,b,stage1,no,,0,no own website or ordering page found (Facebook only)

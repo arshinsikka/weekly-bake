@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Weekly Bake</title>
-<meta name="description" content="Prices and menu moves for Singapore cafe and bakery operators.">
+<meta name="description" content="Prices and new menu items at Singapore cafes and bakeries.">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23FFFFFF'/%3E%3Cpath d='M5 7l5 18 6-12 6 12 5-18' fill='none' stroke='%231B5E4A' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,6 +20,7 @@
   --rule:#E2E4E0;
   --brand:#1B5E4A;
   --high:#A03D22;
+  --high-tint:#CB9485;   /* --high at 55% on --paper */
 
   --f-display:"Fraunces",Georgia,serif;
   --f-text:"Archivo",system-ui,-apple-system,sans-serif;
@@ -48,6 +49,9 @@ p{margin:0}
 a{color:var(--brand); text-decoration:underline; text-underline-offset:2px}
 :focus-visible{outline:2px solid var(--brand); outline-offset:3px; border-radius:2px}
 
+/* an author display rule must never show something marked hidden. until-found
+   is left alone: it hides with content-visibility and needs its box. */
+[hidden]:not([hidden=until-found]){display:none !important}
 button{font-family:inherit; font-size:inherit; color:inherit; background:none; border:none; padding:0; cursor:pointer}
 
 /* ---------- masthead ---------- */
@@ -73,11 +77,21 @@ button{font-family:inherit; font-size:inherit; color:inherit; background:none; b
 .finder{grid-area:find; min-width:0; border-top:2px solid var(--ink); padding-top:16px}
 .herosignup{grid-area:sign; min-width:0}
 
-/* the item tabs drive the map, so they sit on its top edge with the view toggle */
-.mapbar{display:flex; align-items:flex-end; justify-content:space-between; gap:10px 24px; margin:0 0 12px; padding-top:16px}
+/* the item picker drives the map, so it sits on its top edge with the view toggle */
+.mapbar{display:flex; align-items:center; justify-content:space-between; gap:10px 24px; margin:0 0 12px; padding-top:16px}
 .mapbar .choices{margin:0}
-.itemwrap{position:relative; min-width:0}
+.itempick{display:flex; align-items:center; gap:10px; min-width:0}
+.itempick label{font-size:var(--s15); color:var(--muted); white-space:nowrap}
+.itempick select{font-weight:500; min-width:0}
 .viewbar{flex:0 0 auto; flex-wrap:nowrap}
+/* phones swap the two view tabs for one small button in the map's corner */
+.viewwrap{position:relative}
+.viewswitch{
+  display:none; position:absolute; top:10px; right:0; z-index:6;
+  font-size:var(--s13); font-weight:500; color:var(--ink);
+  background:var(--paper); border:1px solid var(--rule); border-radius:3px; padding:7px 12px;
+}
+.viewwrap.listmode .viewswitch{position:static; margin:0 0 12px auto}
 .herosignup{margin-top:24px; padding-top:20px; border-top:1px solid var(--rule)}
 .herosignup .signup{margin-top:0}
 /* the panel is narrow, so the field gives way before the button wraps. Desktop
@@ -128,10 +142,25 @@ button{font-family:inherit; font-size:inherit; color:inherit; background:none; b
 }
 .map.labels .pin-dot{display:none}
 .map.labels .pin-label{display:block}
-.pin.hi .pin-dot{background:var(--high)}
-.pin.hi .pin-label{color:var(--high)}
-.pin.me .pin-dot{background:var(--brand); width:15px; height:15px}
-.pin.me .pin-label{background:var(--brand); border-color:var(--brand); color:var(--paper)}
+/* price against the item's usual price. Each step differs in lightness or
+   shape as well as hue, so it still reads without colour vision: a ring, a
+   dark dot, a light dot, a larger dark dot. */
+.pin.lo .pin-dot{background:var(--paper); border:2.5px solid var(--brand)}
+.pin.lo .pin-label{color:var(--brand); border-color:var(--brand)}
+.pin.up .pin-dot{background:var(--high-tint)}
+.pin.up .pin-label{color:var(--high)}
+.pin.hi .pin-dot{background:var(--high); width:14px; height:14px}
+.pin.hi .pin-label{background:var(--high); border-color:var(--high); color:var(--paper)}
+/* the reader's own shop: larger, solid, with a dark ring no other pin has */
+.pin.me .pin-dot{background:var(--brand); width:17px; height:17px; border:2px solid var(--paper); box-shadow:0 0 0 2px var(--ink)}
+.pin.me .pin-label{background:var(--brand); border-color:var(--brand); color:var(--paper); box-shadow:0 0 0 2px var(--ink)}
+
+.legend{display:flex; flex-wrap:wrap; gap:4px 14px; margin:10px 0 0; padding:0; list-style:none; font-size:var(--s13); color:var(--body)}
+.legend li{display:flex; align-items:center; gap:6px; white-space:nowrap}
+.key{flex:0 0 auto; width:11px; height:11px; border-radius:50%; background:var(--ink)}
+.key.lo{background:var(--paper); border:2.5px solid var(--brand)}
+.key.up{background:var(--high-tint)}
+.key.hi{background:var(--high); width:14px; height:14px}
 .pinwrap:focus-visible .pin-dot,.pinwrap:focus-visible .pin-label{outline:2px solid var(--brand); outline-offset:2px}
 
 .map .leaflet-popup-content-wrapper{border-radius:3px}
@@ -139,7 +168,26 @@ button{font-family:inherit; font-size:inherit; color:inherit; background:none; b
 .pop-name{display:block; font-size:var(--s15); font-weight:600; color:var(--ink)}
 .pop-price{display:block; margin-top:4px; font-size:var(--s15); font-weight:600; color:var(--ink); font-variant-numeric:tabular-nums}
 .pop-price.hi{color:var(--high)}
-.pop-date{display:block; color:var(--muted)}
+.pop-sub{display:block; color:var(--body); font-variant-numeric:tabular-nums}
+.pop-date{display:block; color:var(--muted); font-variant-numeric:tabular-nums}
+.pop-menu{display:inline-block; margin-top:6px; font-weight:500}
+.pop-more{display:block; margin-top:8px; padding-top:8px; border-top:1px solid var(--rule); font-variant-numeric:tabular-nums}
+.map .leaflet-popup-content a{color:var(--brand)}
+
+/* on a phone a pin opens here, from the bottom of the screen, not over the map */
+.sheet{
+  position:fixed; left:0; right:0; bottom:0; z-index:60;
+  background:var(--paper); border-top:2px solid var(--ink);
+  padding:14px var(--pad) calc(18px + env(safe-area-inset-bottom, 0px));
+  max-height:70vh; max-height:70svh; overflow-y:auto;
+  font-size:var(--s15); line-height:1.45; color:var(--body);
+  animation:sheetup .18s ease-out;
+}
+.sheet .pop-name{font-size:var(--s17); padding-right:64px}
+.sheet .pop-price{font-size:var(--s21)}
+.sheetclose{position:absolute; top:14px; right:var(--pad)}
+@keyframes sheetup{from{transform:translateY(100%)} to{transform:none}}
+@media (prefers-reduced-motion:reduce){ .sheet{animation:none} }
 
 /* ---------- find your shop ---------- */
 .combo{position:relative}
@@ -159,8 +207,10 @@ button{font-family:inherit; font-size:inherit; color:inherit; background:none; b
 .quickrow{display:flex; gap:10px; flex-wrap:wrap; align-items:stretch}
 .quickrow .moneywrap{flex:1 1 84px}
 .quickrow select{flex:2 1 150px}
-.gaps{margin-top:16px; padding-top:14px; border-top:1px solid var(--rule); font-size:var(--s15)}
-.gaps p + p{margin-top:6px}
+.swaplink{display:none; margin-top:10px}
+.offers{margin-top:10px; font-size:var(--s15); display:flex; flex-wrap:wrap; gap:6px 16px; align-items:baseline}
+.firstgap{margin-top:14px; padding-top:14px; border-top:1px solid var(--rule); font-size:var(--s15)}
+.morebtn{display:none; margin-top:10px}
 .result{margin-top:20px}
 .resultline{font-family:var(--f-display); font-weight:500; font-size:var(--s21); line-height:1.3; color:var(--ink)}
 .resultline .linkbtn{font-family:var(--f-text)}
@@ -279,7 +329,7 @@ td.hi{color:var(--high); font-weight:600}
   pointer-events:none; opacity:0; transition:opacity .15s linear;
 }
 .tabbar.more-right .wrap::after{opacity:1}
-@media (prefers-reduced-motion:reduce){ .tabbar .wrap::after, .itemwrap::after{transition:none} }
+@media (prefers-reduced-motion:reduce){ .tabbar .wrap::after{transition:none} }
 
 section.tabpanel{padding-top:44px}
 /* hidden="until-found" leaves the element in flow with a zero-height subtree,
@@ -314,30 +364,35 @@ footer .blk p{font-size:var(--s13); line-height:1.5}
   :root{--gap-section:48px; --pad:20px}
   .tabmodule{padding-top:40px}
   section.tabpanel{padding-top:32px}
-  /* phone order: headline, item tabs, map, find your shop, then the pitch and signup */
+  /* phone order: headline, item picker, map, find your shop, result, then the signup */
   .hero{padding:24px 0 var(--gap-section)}
   .hero-layout{display:flex; flex-direction:column}
   .hero h1{order:1}
   .mapcol{order:3}
   .finder{order:4; margin-top:28px}
-  /* item tabs become one scrolling strip with the tab bar's fade; the view
-     toggle drops to its own row */
-  .mapbar{display:block}
-  .itemtabs{flex-wrap:nowrap; overflow-x:auto; overflow-y:hidden; scrollbar-width:none; -ms-overflow-style:none; -webkit-overflow-scrolling:touch}
-  .itemtabs::-webkit-scrollbar{display:none}
-  .itemtabs .choice{flex:0 0 auto; white-space:nowrap}
-  .itemwrap::after{
-    content:""; position:absolute; top:0; right:0; bottom:0; width:48px;
-    background:linear-gradient(to right, rgba(255,255,255,0), var(--paper));
-    pointer-events:none; opacity:0; transition:opacity .15s linear;
-  }
-  .itemwrap.more-right::after{opacity:1}
-  .mapbar .viewbar{margin-top:12px}
+  /* the item picker is the only control above the map; the view switch moves
+     into the map's corner */
+  .mapbar{padding-top:14px}
+  .itempick{flex:1 1 auto}
+  .itempick select{flex:1 1 auto}
+  .mapbar .viewbar{display:none}
+  .viewswitch{display:block}
+  /* one way in at a time: the shop search, or the price and area */
+  .swaplink{display:inline-block}
+  .finder .quick{display:none; margin-top:0}
+  .finder.byprice .quick{display:block}
+  .finder.byprice .shopfind, .finder.byprice .notfound{display:none}
+  .deskonly{display:none}
+  /* the result stays short: the rest opens on request */
+  .strip, .tolink{display:none}
+  .morebtn{display:inline-block}
+  .rest{display:none}
+  .rest.open{display:block}
   .hero .lede{order:5; margin:32px 0 0; padding-top:20px; border-top:1px solid var(--rule)}
   .herosignup{order:6; margin-top:16px; padding-top:0; border-top:none}
   /* the map runs edge to edge */
   .mapframe{margin:0 calc(-1 * var(--pad))}
-  .map{height:55vh; height:55svh; min-height:300px; border-left:none; border-right:none}
+  .map{height:50vh; height:50svh; min-height:280px; border-left:none; border-right:none}
   .grid2{grid-template-columns:1fr; gap:28px}
   .footgrid{grid-template-columns:1fr; gap:18px}
   .masthead .wrap{display:block}
@@ -358,11 +413,11 @@ footer .blk p{font-size:var(--s13); line-height:1.5}
 <header class="masthead">
   <div class="wrap">
     <span class="wordmark">The Weekly Bake</span>
-    <span class="tag">Prices and menu moves for Singapore cafe and bakery operators</span>
+    <span class="tag">Prices and new menu items at Singapore cafes and bakeries</span>
   </div>
 </header>
 
-<div id="app" class="wrap loading">Loading the latest figures&hellip;</div>
+<div id="app" class="wrap loading">Loading the latest prices&hellip;</div>
 
 <template id="page-tpl">
 <main>
@@ -370,79 +425,93 @@ footer .blk p{font-size:var(--s13); line-height:1.5}
   <section class="hero">
     <div class="wrap hero-layout">
       <h1 id="hero-headline"></h1>
-      <p class="lede">Every Monday morning we send what Singapore's cafes and bakeries are charging, what they have just put on the menu, and who is discounting. It takes two minutes to read and it costs nothing.</p>
+      <p class="lede">Every Monday we email you three things: what cafes and bakeries in Singapore charge, what is new on their menus, and who has a discount. It takes two minutes to read. It is free.</p>
 
       <!-- MAP, with the named-prices list behind the toggle -->
       <div class="mapcol" id="map-col">
         <div class="mapbar">
-          <div class="itemwrap" id="item-wrap">
-            <div class="choices itemtabs" id="finder-items" role="group" aria-label="Choose an item"></div>
+          <div class="itempick">
+            <label for="item-select">Prices for</label>
+            <select id="item-select"></select>
           </div>
           <div class="choices viewbar" id="view-toggle" role="group" aria-label="Show prices as">
             <button type="button" class="choice" data-view="map" aria-pressed="true">Map</button>
-            <button type="button" class="choice" data-view="list" aria-pressed="false">List view</button>
+            <button type="button" class="choice" data-view="list" aria-pressed="false">List</button>
           </div>
         </div>
-        <div id="map-view">
-          <div class="mapframe">
-            <div class="map" id="map" role="region" aria-label="Map of cafe prices"></div>
-            <div class="maphint" id="map-hint" aria-hidden="true"></div>
+        <div class="viewwrap" id="view-wrap">
+          <button type="button" class="viewswitch" id="view-switch">List</button>
+          <div id="map-view">
+            <div class="mapframe">
+              <div class="map" id="map" role="region" aria-label="Map of cafe prices"></div>
+              <div class="maphint" id="map-hint" aria-hidden="true"></div>
+            </div>
+            <ul class="legend" aria-label="What the pin colours mean">
+              <li><span class="key lo"></span>Cheaper than most</li>
+              <li><span class="key"></span>About normal</li>
+              <li><span class="key up"></span>More expensive than most</li>
+              <li><span class="key hi"></span>Much more expensive</li>
+            </ul>
+            <p class="mapnote" id="map-note" hidden></p>
           </div>
-          <p class="mapnote" id="map-note" hidden></p>
-        </div>
-        <div id="list-view" hidden="until-found">
-          <div class="filterbar">
-            <label class="field-label" for="named-filter" style="margin:0">Filter by cafe or district</label>
-            <input type="text" id="named-filter" placeholder="Try a name or a district">
-          </div>
-          <div class="tablewrap">
-            <table id="named-table">
-              <thead><tr>
-                <th scope="col" data-key="shop_name"><button class="sortbtn" type="button">Cafe<span class="caret"></span></button></th>
-                <th scope="col" data-key="district"><button class="sortbtn" type="button">District<span class="caret"></span></button></th>
-                <th scope="col" class="n" data-key="price"><button class="sortbtn" type="button">Price<span class="caret"></span></button></th>
-              </tr></thead>
-              <tbody></tbody>
-            </table>
-          </div>
-          <div class="tablefoot">
-            <button class="linkbtn" id="named-more" type="button"></button>
-            <span class="count" id="named-count"></span>
+          <div id="list-view" hidden="until-found">
+            <div class="filterbar">
+              <label class="field-label" for="named-filter" style="margin:0">Search by cafe or area</label>
+              <input type="text" id="named-filter" placeholder="Type a name or an area">
+            </div>
+            <div class="tablewrap">
+              <table id="named-table">
+                <thead><tr>
+                  <th scope="col" data-key="shop_name"><button class="sortbtn" type="button">Cafe<span class="caret"></span></button></th>
+                  <th scope="col" data-key="district"><button class="sortbtn" type="button">Area<span class="caret"></span></button></th>
+                  <th scope="col" class="n" data-key="price"><button class="sortbtn" type="button">Price<span class="caret"></span></button></th>
+                </tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <div class="tablefoot">
+              <button class="linkbtn" id="named-more" type="button"></button>
+              <span class="count" id="named-count"></span>
+            </div>
           </div>
         </div>
         <p class="mapcaption" id="map-caption"></p>
       </div>
 
       <!-- FIND YOUR SHOP -->
-      <div class="finder">
-        <h2>Where do your prices sit?</h2>
+      <div class="finder" id="finder">
+        <h2>How do your prices compare?</h2>
         <div class="shopfind">
           <label class="field-label" for="shop-input">Find your shop</label>
           <div class="combo">
-            <input type="text" id="shop-input" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="shop-list" autocomplete="off" spellcheck="false" placeholder="Start typing its name">
+            <input type="text" id="shop-input" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="shop-list" autocomplete="off" spellcheck="false" placeholder="Type your shop's name">
             <ul class="combolist" id="shop-list" role="listbox" aria-label="Shops" hidden></ul>
           </div>
+          <button type="button" class="linkbtn swaplink" id="to-price">Not listed? Enter your price</button>
         </div>
         <div class="notfound" id="shop-notfound" hidden>
-          <p class="hint">We do not have a shop by that name yet. Enter your price below instead.</p>
+          <p class="hint">We do not have this shop yet. Enter your price instead.</p>
         </div>
         <form class="quick" id="finder-form" novalidate>
-          <label class="field-label" for="finder-price">Or just enter your price</label>
+          <label class="field-label" for="finder-price"><span class="deskonly">Not listed? </span><span id="price-label"></span></label>
           <div class="quickrow">
             <span class="moneywrap">
               <span class="dollar">$</span>
               <input type="number" id="finder-price" step="0.01" min="0" inputmode="decimal" placeholder="4.20" required>
             </span>
             <label for="finder-district" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Your area</label>
-            <select id="finder-district"><option value="">Your area (optional)</option></select>
-            <button class="btn" type="submit">Show me</button>
+            <select id="finder-district"><option value="">Area (optional)</option></select>
+            <button class="btn" type="submit">Compare</button>
           </div>
+          <button type="button" class="linkbtn swaplink" id="to-shop">Find your shop by name</button>
         </form>
         <div class="verdict">
           <div class="result" id="finder-result" aria-live="polite" hidden>
             <p class="resultline" id="result-line"></p>
-            <div class="consequence" id="finder-consequence" hidden></div>
-            <div class="gaps" id="finder-gaps" hidden></div>
+            <p class="offers" id="result-offers" hidden></p>
+            <p class="firstgap" id="result-first" hidden></p>
+            <button type="button" class="linkbtn morebtn" id="result-more" aria-controls="result-rest" aria-expanded="false" hidden></button>
+            <div class="consequence rest" id="result-rest" hidden></div>
           </div>
           <div class="strip">
             <svg id="strip-svg" viewBox="0 0 600 76" preserveAspectRatio="none" role="img" aria-labelledby="strip-desc"></svg>
@@ -458,9 +527,9 @@ footer .blk p{font-size:var(--s13); line-height:1.5}
         <form class="signup" id="news-form" novalidate>
           <label class="visually-hidden" for="news-email" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Email address</label>
           <input type="email" id="news-email" placeholder="you@yourcafe.sg" required>
-          <button class="btn" type="submit">Get Monday's email</button>
+          <button class="btn" type="submit">Get the Monday email</button>
         </form>
-        <p class="fineprint">No account needed. Unsubscribe in one click. We never pass your address on.</p>
+        <p class="fineprint">No account needed. You can stop the emails with one click. We never share your email address.</p>
         <p class="formnote" id="news-note" hidden></p>
       </div>
     </div>
@@ -471,9 +540,9 @@ footer .blk p{font-size:var(--s13); line-height:1.5}
     <div class="tabbar" id="tabbar">
       <div class="wrap">
         <div class="tabstrip" id="tabstrip" role="tablist" aria-label="Price and menu data">
-          <button type="button" role="tab" id="tab-what-things-cost" aria-controls="panel-what-things-cost" aria-selected="true" tabindex="0">What things cost</button>
-          <button type="button" role="tab" id="tab-whats-launching" aria-controls="panel-whats-launching" aria-selected="false" tabindex="-1">What&rsquo;s launching</button>
-          <button type="button" role="tab" id="tab-whos-discounting" aria-controls="panel-whos-discounting" aria-selected="false" tabindex="-1">Who&rsquo;s discounting</button>
+          <button type="button" role="tab" id="tab-what-things-cost" aria-controls="panel-what-things-cost" aria-selected="true" tabindex="0">Prices</button>
+          <button type="button" role="tab" id="tab-whats-launching" aria-controls="panel-whats-launching" aria-selected="false" tabindex="-1">New items</button>
+          <button type="button" role="tab" id="tab-whos-discounting" aria-controls="panel-whos-discounting" aria-selected="false" tabindex="-1">Discounts</button>
         </div>
       </div>
     </div>
@@ -482,7 +551,7 @@ footer .blk p{font-size:var(--s13); line-height:1.5}
   <section class="band tabpanel" id="panel-what-things-cost" role="tabpanel" aria-labelledby="tab-what-things-cost">
     <div class="wrap">
       <div class="sec-head">
-        <h2>What every item costs</h2>
+        <h2>What each item costs</h2>
         <p id="price-sub"></p>
       </div>
       <div class="tablewrap">
@@ -490,9 +559,9 @@ footer .blk p{font-size:var(--s13); line-height:1.5}
           <thead><tr>
             <th scope="col" data-key="display_name"><button class="sortbtn" type="button">Item<span class="caret"></span></button></th>
             <th scope="col" class="n" data-key="shop_count"><button class="sortbtn" type="button">Shops<span class="caret"></span></button></th>
-            <th scope="col" class="n" data-key="low"><button class="sortbtn" type="button">Cheapest<span class="caret"></span></button></th>
-            <th scope="col" class="n" data-key="median"><button class="sortbtn" type="button">Most charge<span class="caret"></span></button></th>
-            <th scope="col" class="n" data-key="high"><button class="sortbtn" type="button">Dearest<span class="caret"></span></button></th>
+            <th scope="col" class="n" data-key="low"><button class="sortbtn" type="button">Lowest<span class="caret"></span></button></th>
+            <th scope="col" class="n" data-key="median"><button class="sortbtn" type="button">Usual price<span class="caret"></span></button></th>
+            <th scope="col" class="n" data-key="high"><button class="sortbtn" type="button">Highest<span class="caret"></span></button></th>
           </tr></thead>
           <tbody></tbody>
         </table>
@@ -504,14 +573,14 @@ footer .blk p{font-size:var(--s13); line-height:1.5}
   <section class="band tabpanel" id="panel-whats-launching" role="tabpanel" aria-labelledby="tab-whats-launching" hidden="until-found">
     <div class="wrap">
       <div class="sec-head">
-        <h2>What other cafes have been putting on</h2>
+        <h2>New items at other cafes</h2>
         <p id="launch-sub"></p>
       </div>
       <div class="chart"><svg id="launch-svg" role="img" aria-labelledby="launch-desc"></svg>
       <p id="launch-desc" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></p></div>
       <div style="margin-top:34px">
-        <div class="filterrow" id="who-filter" role="group" aria-label="Filter by operator size"><span class="lbl">Who</span></div>
-        <div class="filterrow" id="month-filter" role="group" aria-label="Filter by month"><span class="lbl">Month</span></div>
+        <div class="filterrow" id="who-filter" role="group" aria-label="Filter by shop size"><span class="lbl">Who</span></div>
+        <div class="filterrow" id="month-filter" role="group" aria-label="Filter by month"><span class="lbl">When</span></div>
         <div class="filterrow" id="type-filter" role="group" aria-label="Filter by type"><span class="lbl">Type</span></div>
       </div>
       <div class="tablewrap">
@@ -521,7 +590,7 @@ footer .blk p{font-size:var(--s13); line-height:1.5}
             <th scope="col" data-key="shop"><button class="sortbtn" type="button">Cafe<span class="caret"></span></button></th>
             <th scope="col" data-key="flavour"><button class="sortbtn" type="button">Flavour<span class="caret"></span></button></th>
             <th scope="col" class="n" data-key="price"><button class="sortbtn" type="button">Price<span class="caret"></span></button></th>
-            <th scope="col" data-key="launch_month"><button class="sortbtn" type="button">Month<span class="caret"></span></button></th>
+            <th scope="col" data-key="when"><button class="sortbtn" type="button">When<span class="caret"></span></button></th>
           </tr></thead>
           <tbody></tbody>
         </table>
@@ -537,14 +606,14 @@ footer .blk p{font-size:var(--s13); line-height:1.5}
   <section class="band tabpanel" id="panel-whos-discounting" role="tabpanel" aria-labelledby="tab-whos-discounting" hidden="until-found">
     <div class="wrap">
       <div class="sec-head">
-        <h2>Who is discounting, and how</h2>
+        <h2>Who has a discount now</h2>
         <p id="promo-sub"></p>
       </div>
       <div class="choices" id="promo-tabs" role="group" aria-label="Filter offers"></div>
       <div class="tablewrap">
         <table id="promo-table">
           <thead><tr>
-            <th scope="col" data-key="brand_name"><button class="sortbtn" type="button">Brand<span class="caret"></span></button></th>
+            <th scope="col" data-key="brand_name"><button class="sortbtn" type="button">Shop<span class="caret"></span></button></th>
             <th scope="col" data-key="offer_text"><button class="sortbtn" type="button">Offer<span class="caret"></span></button></th>
             <th scope="col" data-key="promo_type"><button class="sortbtn" type="button">Type<span class="caret"></span></button></th>
             <th scope="col" data-key="end_date"><button class="sortbtn" type="button">Ends<span class="caret"></span></button></th>
@@ -556,7 +625,7 @@ footer .blk p{font-size:var(--s13); line-height:1.5}
         <button class="linkbtn" id="promo-more" type="button"></button>
         <span class="count" id="promo-count"></span>
       </div>
-      <p class="chartnote">Hotel restaurants and afternoon teas are excluded. They are not competing for the same customer.</p>
+      <p class="chartnote">We leave out hotel restaurants and afternoon teas. Their customers are different.</p>
     </div>
   </section>
 
@@ -564,23 +633,23 @@ footer .blk p{font-size:var(--s13); line-height:1.5}
   <!-- /DATA TABS -->
 
   <!-- WAITLIST -->
-  <section class="waitlist">
+  <section class="waitlist" id="waitlist">
     <div class="wrap">
-      <h2>See your own shop in this data, every week</h2>
-      <p class="intro">The weekly email tells you what the market is doing. The paid version tells you what it means for your shop specifically, updated every week without you doing anything.</p>
+      <h2>See your own shop in these prices, every week</h2>
+      <p class="intro">The free email shows what other cafes do. The paid one shows what it means for your shop. We update it every week. You do nothing.</p>
       <div class="grid2">
-        <div><h3>Where you rank, item by item</h3><p>Your position across every cafe we track, not just an average to compare against.</p></div>
-        <div><h3>Whether a flavour has reached your street</h3><p>Pandan might be at nine shops island-wide and only one in your district.</p></div>
-        <div><h3>What sells near you that you do not carry</h3><p>A ranked list of the gaps, ordered by how many neighbours have filled them.</p></div>
-        <div><h3>Tell me when something changes</h3><p>Pick your competitors and we email you when one of them moves a price.</p></div>
+        <div><h3>Your rank for each item</h3><p>See where your price is among every cafe we track, not only an average.</p></div>
+        <div><h3>Which flavours are near you</h3><p>Pandan may be at 9 shops in Singapore but only 1 in your area.</p></div>
+        <div><h3>What shops near you sell that you do not</h3><p>A list of items you do not sell, with the number of nearby shops that sell each one.</p></div>
+        <div><h3>An email when a price changes</h3><p>Choose the shops you compete with. We email you when one of them changes a price.</p></div>
       </div>
-      <p class="price-line">$20 a month when we launch</p>
+      <p class="price-line">$20 a month when we start</p>
       <form class="signup" id="wait-form" novalidate style="margin-top:0">
         <label for="wait-email" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Email address</label>
         <input type="email" id="wait-email" placeholder="you@yourcafe.sg" required>
         <button class="btn" type="submit">Join the waitlist</button>
       </form>
-      <p class="fineprint">Nothing to pay now. We will ask before we ever charge you.</p>
+      <p class="fineprint">You pay nothing now. We will ask you before we charge you.</p>
       <p class="formnote" id="wait-note" hidden></p>
     </div>
   </section>
@@ -588,13 +657,19 @@ footer .blk p{font-size:var(--s13); line-height:1.5}
   <footer>
     <div class="wrap">
       <div class="footgrid">
-      <div class="blk"><h3>Where the numbers come from</h3><p>We read menus published by the cafes themselves, their online ordering pages, and two government registers. We do not scrape delivery apps and we do not buy social listening, so everything here is either public or sent to us by the shop.</p></div>
-      <div class="blk"><h3>What is coming</h3><p>From November we will start reporting which items got discounted soon after launching and which quietly disappeared. That needs a few months of watching the same shops, which is exactly what we are doing now.</p></div>
+      <div class="blk"><h3>Where the numbers come from</h3><p>We only use each cafe's own menu, online or in the shop. If a menu looks old, we leave it out. We also read two government lists. We do not copy from delivery apps and we do not buy social media data. Everything here is public, or the shop sent it to us.</p></div>
+      <div class="blk"><h3>What is coming</h3><p>From November we will show which new items got a discount soon after they started, and which ones left the menu. For this we must watch the same shops for a few months. We are doing that now.</p></div>
       </div>
       <p class="footline">Your shop listed? Reply to any email to correct or remove it.</p>
       <div class="colophon"><span id="colophon-left" class="num"></span><span>Made in Singapore by four NUS students</span></div>
     </div>
   </footer>
+
+  <!-- a pin's details on a phone -->
+  <div class="sheet" id="pin-sheet" role="dialog" aria-label="Shop price" hidden>
+    <button type="button" class="linkbtn sheetclose" id="sheet-close">Close</button>
+    <div id="sheet-body"></div>
+  </div>
 </main>
 </template>
 
@@ -687,12 +762,15 @@ function shortDate(iso){
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || "");
   return m ? `${Number(m[3])} ${MONTH_NAMES[m[2]].slice(0, 3)} ${m[1]}` : "";
 }
-/* one date when every price was recorded the same day, otherwise the range */
-function recordedSpan(dates){
+/* "2026-10-04" -> "4 Oct" */
+const dayMonth = iso => shortDate(iso).replace(/ \d{4}$/, "");
+/* "on 4 Oct 2026" when every price was checked the same day, otherwise
+   "from 19 Sep 2026 to 4 Oct 2026" */
+function checkedWhen(dates){
   const seen = dates.filter(Boolean).sort();
   if(!seen.length) return "";
   const first = seen[0], last = seen[seen.length - 1];
-  return first === last ? shortDate(first) : `${shortDate(first)} to ${shortDate(last)}`;
+  return first === last ? `on ${shortDate(first)}` : `from ${shortDate(first)} to ${shortDate(last)}`;
 }
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const median = arr => {
@@ -730,9 +808,18 @@ let activeTab = DEFAULT_TAB;
    prices moved into the map's list view and the district chart is gone, so
    #who-charges-what opens the list and #by-district gets the default tab. */
 const LIST_HASH = "who-charges-what";
+/* #waitlist is a place on the page, not a tab. The page is drawn after the
+   data arrives, so the browser's own jump to it finds nothing and it is done
+   by hand. */
+const WAIT_HASH = "waitlist";
 function routeHash(){
   const slug = (location.hash || "").replace("#", "");
-  return {tab: TABS.indexOf(slug) === -1 ? DEFAULT_TAB : slug, list: slug === LIST_HASH};
+  return {tab: TABS.indexOf(slug) === -1 ? DEFAULT_TAB : slug, list: slug === LIST_HASH,
+          wait: slug === WAIT_HASH};
+}
+function scrollToWaitlist(){
+  const el = document.getElementById(WAIT_HASH);
+  if(el) el.scrollIntoView({behavior: "auto", block: "start"});
 }
 
 const UNTIL_FOUND = "onbeforematch" in document.documentElement;
@@ -828,6 +915,8 @@ function buildTabs(){
 
   window.addEventListener("popstate", () => {
     const to = routeHash();
+    // the waitlist link leaves whichever tab is open as it is
+    if(to.wait){ scrollToWaitlist(); return; }
     activateTab(to.tab, {push: false});
     if(to.list) setView("list", {track: false, scroll: true, smooth: false});
   });
@@ -841,6 +930,12 @@ function buildTabs(){
     panelShown(activeTab);
     updateStripFade();
     if(deep.list) setView("list", {track: false, scroll: true, smooth: false});
+    if(deep.wait){
+      // the web fonts move the page a little as they arrive, so land again after
+      scrollToWaitlist();
+      requestAnimationFrame(scrollToWaitlist);
+      if(document.fonts && document.fonts.ready) document.fonts.ready.then(scrollToWaitlist);
+    }
   }
 }
 
@@ -854,6 +949,7 @@ function render(d){
   buildFinder(d);
   buildNamed(d);
   buildViewToggle();
+  wirePins();
   buildMap(d);
   drawCaption(d);
   buildPriceTable(d);
@@ -882,82 +978,88 @@ function render(d){
 /* ---------- hero ---------- */
 function buildHero(d){
   document.getElementById("hero-headline").textContent =
-    "You can see your own prices. Now see what " + d.meta.shops_with_prices + " other cafes charge.";
+    `See what ${d.meta.shops_with_prices} cafes in Singapore charge.`;
 }
 
-/* ---------- item labels, derived from the data ---------- */
-function itemLabel(d, key){
-  const row = d.price_table.find(r => r.item_canonical === key);
-  return row ? row.display_name : key;
-}
-function itemNoun(d, key){
-  return itemLabel(d, key).split(",")[0].toLowerCase();
-}
-function itemPhrase(d, key){
-  const parts = itemLabel(d, key).split(",").map(x => x.trim());
-  return (parts.length > 1 ? parts[1] + " " + parts[0] : parts[0]).toLowerCase();
-}
-const WORDS = ["zero","one","two","three","four","five","six","seven","eight","nine","ten",
-  "eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen","twenty"];
-const inWords = n => WORDS[n] || String(n);
+/* ---------- the compared items, as the picker groups and names them ---------- */
+const ITEM_GROUPS = [
+  ["Coffee", [["flat_white","Flat white"], ["latte","Latte"], ["cappuccino","Cappuccino"],
+              ["americano","Americano"], ["espresso","Espresso"]]],
+  ["Matcha", [["matcha_latte","Matcha latte"]]],
+  ["Bakes",  [["croissant_plain","Croissant"], ["croissant_filled","Filled croissant"],
+              ["kouign_amann","Kouign-amann"]]]
+];
+const ITEM_NAMES = {};
+ITEM_GROUPS.forEach(g => g[1].forEach(([k, name]) => { ITEM_NAMES[k] = name; }));
+const itemName = k => ITEM_NAMES[k] || k;
+const itemWords = k => itemName(k).toLowerCase();
 
 /* ---------- the selected item and the reader ----------
    One item is selected at a time and the map, the list view, the strip, the
    caption and the result all follow it. */
-const FINDER_ITEMS = ["croissant_plain","flat_white","latte","matcha_latte"];
+let FINDER_ITEMS = Object.keys(ITEM_NAMES);   // narrowed to the items the data has
 let finderItem = "croissant_plain";
 /* who is asking: {shopId} once they pick their shop from the data, or
    {price, district} when they just type a price. district is "" when they
-   leave the area out, and then only the island-wide rank is given. */
+   leave the area out, and then only the Singapore-wide count is given. */
 let reader = null;
 let readerPrice = null;      // the price the strip marks
 let markerSettled = false;   // the slide plays once per result, not on resize
 const MIN_NEIGHBOURS = 3;    // fewer other shops than this and a district is not ranked
-const SHOPS = new Map();     // every shop with a price for at least one finder item
+const SHOPS = new Map();     // every shop with at least one counted price
 
 const byId = id => document.getElementById(id);
 const reduceMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const isPhone = () => window.matchMedia("(max-width: 860px)").matches;
 const priceRow = (d, key) => d.price_table.find(r => r.item_canonical === key) || {};
 
 function indexShops(d){
-  FINDER_ITEMS.forEach(k => (d.named_prices[k] || []).forEach(r => {
-    if(!SHOPS.has(r.shop_id)){
-      SHOPS.set(r.shop_id, {shop_id: r.shop_id, shop_name: r.shop_name, district: r.district,
-                            address: r.address || "", lat: r.lat, lng: r.lng, items: []});
-    }
-    SHOPS.get(r.shop_id).items.push(k);
-  }));
+  (d.shop_items || []).forEach(s => {
+    SHOPS.set(s.shop_id, {shop_id: s.shop_id, shop_name: s.shop_name, district: s.district,
+                          address: s.address || "", lat: s.lat, lng: s.lng,
+                          price_count: s.price_count || 0,
+                          // in the picker's order, so the first offers are the commonest
+                          items: FINDER_ITEMS.filter(k => s.items.indexOf(k) !== -1)});
+  });
 }
 
 let setItem = () => {};
+let enterPrice = () => {};
 function buildFinder(d){
+  FINDER_ITEMS = FINDER_ITEMS.filter(k => (d.named_prices[k] || []).length);
   indexShops(d);
-  const items = FINDER_ITEMS.filter(k => d.named_prices[k]);
-  if(items.indexOf(finderItem) === -1) finderItem = items[0];
+  if(FINDER_ITEMS.indexOf(finderItem) === -1) finderItem = FINDER_ITEMS[0];
 
-  const box = byId("finder-items");
-  items.forEach(k => {
-    const b = document.createElement("button");
-    b.type = "button"; b.className = "choice"; b.textContent = itemLabel(d, k);
-    b.dataset.val = k;
-    b.setAttribute("aria-pressed", String(k === finderItem));
-    b.addEventListener("click", () => setItem(k));
-    box.appendChild(b);
+  // the platform's own select, so a phone shows its own picker
+  const pick = byId("item-select");
+  ITEM_GROUPS.forEach(([heading, items]) => {
+    const live = items.filter(([k]) => FINDER_ITEMS.indexOf(k) !== -1);
+    if(!live.length) return;
+    const group = document.createElement("optgroup");
+    group.label = heading;
+    live.forEach(([k, name]) => {
+      const o = document.createElement("option");
+      o.value = k; o.textContent = name;
+      group.appendChild(o);
+    });
+    pick.appendChild(group);
   });
+  pick.value = finderItem;
+  pick.addEventListener("change", () => setItem(pick.value));
 
   setItem = k => {
-    if(k === finderItem || !d.named_prices[k]) return;
+    if(k === finderItem || FINDER_ITEMS.indexOf(k) === -1) return;
     finderItem = k; markerSettled = false;
-    box.querySelectorAll(".choice").forEach(x =>
-      x.setAttribute("aria-pressed", String(x.dataset.val === k)));
+    pick.value = k;
     // a typed price was for the previous item, so it does not carry across
     if(reader && !reader.shopId){ reader = null; byId("finder-price").value = ""; }
+    closePin();
     drawPins(d);
     drawCaption(d);
     setNamedItem();
-    updateToTable(d);
+    updateItemWords(d);
     showResult(d);
-    track("map_item_changed", {item: k});
+    track("item_selected", {item: k});
     track("tab_changed", {section:"rank_finder", item:k});
   };
 
@@ -967,6 +1069,17 @@ function buildFinder(d){
     o.value = name; o.textContent = name;
     sel.appendChild(o);
   });
+
+  /* On a phone only one way in shows at a time. The class does nothing on a
+     wide screen, where the shop search and the price row are both in view. */
+  const panel = byId("finder");
+  const byPrice = on => {
+    panel.classList.toggle("byprice", on);
+    byId(on ? "finder-price" : "shop-input").focus();
+  };
+  enterPrice = () => byPrice(true);
+  byId("to-price").addEventListener("click", () => byPrice(true));
+  byId("to-shop").addEventListener("click", () => byPrice(false));
 
   byId("finder-to-table").addEventListener("click", () => {
     track("rank_finder_to_table", {item: finderItem});
@@ -988,26 +1101,26 @@ function buildFinder(d){
   });
 
   // the result offers other items when a shop has no price for this one
-  byId("result-line").addEventListener("click", e => {
+  byId("result-offers").addEventListener("click", e => {
     const b = e.target.closest("[data-item]");
     if(b) setItem(b.dataset.item);
   });
-
-  // narrow screens scroll the item tabs sideways; the fade says there are more
-  const wrap = byId("item-wrap");
-  const fade = () => wrap.classList.toggle("more-right", box.scrollWidth - box.clientWidth - box.scrollLeft > 2);
-  box.addEventListener("scroll", fade, {passive: true});
-  onResize(fade);
-  fade();
+  byId("result-more").addEventListener("click", e => {
+    byId("result-rest").classList.add("open");
+    e.currentTarget.setAttribute("aria-expanded", "true");
+    e.currentTarget.hidden = true;
+  });
 
   buildShopSearch(d);
-  updateToTable(d);
+  updateItemWords(d);
   showResult(d);
 }
 
-function updateToTable(d){
+/* the labels that name the selected item */
+function updateItemWords(d){
   byId("finder-to-table").textContent =
-    `See all ${d.named_prices[finderItem].length} cafes and where they sit`;
+    `See all ${d.named_prices[finderItem].length} cafes in a list`;
+  byId("price-label").textContent = `Enter your ${itemWords(finderItem)} price`;
 }
 
 /* ---------- find your shop ----------
@@ -1017,6 +1130,8 @@ function buildShopSearch(d){
   const input = byId("shop-input"), list = byId("shop-list"), nf = byId("shop-notfound");
   const all = [...SHOPS.values()].sort((a,b) => a.shop_name.localeCompare(b.shop_name));
   let matches = [], active = -1, missTimer = null, missSent = false;
+  // "Velvete" finds "Velveté": accents are dropped from both sides
+  const fold = t => String(t).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 
   function close(){
     list.hidden = true; active = -1;
@@ -1032,9 +1147,9 @@ function buildShopSearch(d){
     li.scrollIntoView({block: "nearest"});
   }
   function paint(){
-    const q = input.value.trim().toLowerCase();
+    const q = fold(input.value.trim());
     clearTimeout(missTimer);
-    const name = s => s.shop_name.toLowerCase();
+    const name = s => fold(s.shop_name);
     matches = q ? all.filter(s => name(s).startsWith(q))
                     .concat(all.filter(s => !name(s).startsWith(q) && name(s).includes(q))) : [];
     if(!matches.length){
@@ -1063,9 +1178,10 @@ function buildShopSearch(d){
     reader = {shopId: s.shop_id};
     markerSettled = false;
     track("shop_search", {found: true});
+    closePin();
     drawPins(d);
+    findGaps(d, s);
     showResult(d);
-    showGaps(d, s);
     flyToShop(s);
   }
 
@@ -1088,7 +1204,7 @@ function buildShopSearch(d){
     } else if(e.key === "Enter"){
       if(!list.hidden && active >= 0){ e.preventDefault(); choose(matches[active]); }
       else if(!list.hidden && matches.length === 1){ e.preventDefault(); choose(matches[0]); }
-      else if(!nf.hidden){ e.preventDefault(); byId("finder-price").focus(); }
+      else if(!nf.hidden){ e.preventDefault(); enterPrice(); }
     } else if(e.key === "Escape"){
       close();
     }
@@ -1133,7 +1249,7 @@ function drawStrip(d){
 
   svg += `<rect x="${(x(med)-1).toFixed(2)}" y="${base-MED_H}" width="2" height="${MED_H}" fill="var(--ink)"></rect>`;
   const medLabelX = Math.min(Math.max(x(med), 52), axisRight - 40);
-  svg += `<text x="${medLabelX.toFixed(2)}" y="${base+15}" fill="var(--muted)" font-family="Archivo,sans-serif" font-size="11" text-anchor="middle" style="font-variant-numeric:tabular-nums">most charge ${money(med)}</text>`;
+  svg += `<text x="${medLabelX.toFixed(2)}" y="${base+15}" fill="var(--muted)" font-family="Archivo,sans-serif" font-size="11" text-anchor="middle" style="font-variant-numeric:tabular-nums">usual price ${money(med)}</text>`;
 
   if(outs.length){
     svg += `<line x1="${axisRight + 10}" y1="${base - 30}" x2="${axisRight + 10}" y2="${base + 4}" stroke="var(--rule)" stroke-width="1"></line>`;
@@ -1167,17 +1283,17 @@ function drawStrip(d){
 
   const noteEl = document.getElementById("strip-outlier");
   if(outs.length === 1){
-    noteEl.textContent = `One shop charges ${money(outs[0].price)}, well outside the rest. Shown on the right.`;
+    noteEl.textContent = `1 shop charges ${money(outs[0].price)}, far from the rest. It is shown on the right.`;
   } else if(outs.length > 1){
-    noteEl.textContent = `${outs.length} shops charge between ${money(outs[0].price)} and ${money(outs[outs.length-1].price)}, well outside the rest. Shown on the right.`;
+    noteEl.textContent = `${outs.length} shops charge ${money(outs[0].price)} to ${money(outs[outs.length-1].price)}, far from the rest. They are shown on the right.`;
   } else {
     noteEl.textContent = "";
   }
   noteEl.hidden = outs.length === 0;
 
   document.getElementById("strip-desc").textContent =
-    `Price distribution for ${itemNoun(d, finderItem)} across ${main.length} cafes, from ${money(lo)} to ${money(hi)}, most charge ${money(med)}.` +
-    (outs.length ? ` ${outs.length} further shop${outs.length>1?"s":""} shown separately as outliers.` : "");
+    `${itemName(finderItem)} prices at ${main.length} cafes, from ${money(lo)} to ${money(hi)}. The usual price is ${money(med)}.` +
+    (outs.length ? ` ${outs.length} more shop${outs.length>1?"s are":" is"} shown apart, with a very different price.` : "");
 
   if(targetX !== null){
     const marker = document.getElementById("reader-marker");
@@ -1193,20 +1309,31 @@ function drawStrip(d){
 }
 
 /* ---------- the result ----------
-   Rank counts the shops charging strictly more, plus one, so the dearest shop
-   is 1st and shops on the same price share a rank. */
-function rankPhrase(rank, tied){
-  if(rank === 1) return tied ? "joint most expensive" : "the most expensive";
-  return (tied ? "joint " : "") + ordinal(rank) + " most expensive";
+   Two short sentences: how many cafes in Singapore charge more, then where
+   the reader stands in their own area. Shops on the same price share a place.
+   Everything else waits behind "N more" on a phone. */
+let gapLines = [];           // what the neighbours sell, for a found shop
+
+function paintRest(lines){
+  const first = byId("result-first"), more = byId("result-more"), rest = byId("result-rest");
+  first.textContent = gapLines[0] || "";
+  first.hidden = !gapLines.length;
+  const all = lines.concat(gapLines.slice(1));
+  rest.innerHTML = all.map(t => `<p>${esc(t)}</p>`).join("");
+  rest.classList.remove("open");
+  rest.hidden = !all.length;
+  more.textContent = `${all.length} more`;
+  more.setAttribute("aria-expanded", "false");
+  more.hidden = !all.length;
 }
 
 function showResult(d){
   const rows = d.named_prices[finderItem];
-  const box = byId("finder-result"), line = byId("result-line");
-  const cons = byId("finder-consequence");
+  const box = byId("finder-result"), line = byId("result-line"), offers = byId("result-offers");
   readerPrice = null;
-  // the neighbour block belongs to a found shop and is drawn when one is picked
-  if(!reader || !reader.shopId) byId("finder-gaps").hidden = true;
+  offers.hidden = true;
+  // the neighbour lines belong to a found shop and are worked out when one is picked
+  if(!reader || !reader.shopId) gapLines = [];
 
   if(!reader){
     box.hidden = true;
@@ -1216,63 +1343,67 @@ function showResult(d){
   box.hidden = false;
 
   let v, district, selfId = null;
+  const rest = [];
   if(reader.shopId){
     const shop = SHOPS.get(reader.shopId);
     const own = rows.find(r => r.shop_id === reader.shopId);
     if(!own){
-      const offers = shop.items.map(k =>
-        `<button type="button" class="linkbtn" data-item="${esc(k)}">${esc(itemLabel(d, k))}</button>`);
-      const last = offers.pop();
-      line.innerHTML = `We do not have a ${esc(itemPhrase(d, finderItem))} price for ${esc(shop.shop_name)} yet. ` +
-        `Switch to ${offers.length ? offers.join(", ") + " or " : ""}${last} to see where you sit.`;
-      cons.hidden = true;
+      line.textContent = `We have no ${itemWords(finderItem)} price for this shop yet.`;
+      const have = shop.items.slice(0, 3);
+      offers.innerHTML = have.length
+        ? "<span>We have:</span>" + have.map(k =>
+            `<button type="button" class="linkbtn" data-item="${esc(k)}">${esc(itemName(k))}</button>`).join("")
+        : `<span>We have ${shop.price_count} other ${shop.price_count === 1 ? "price" : "prices"} from this shop, ` +
+          `but none for the ${FINDER_ITEMS.length} items we compare.</span>`;
+      offers.hidden = false;
+      paintRest(rest);
       drawStrip(d);
       return;
     }
     v = own.price; district = own.district; selfId = own.shop_id;
+    rest.push(`Our data has your price as ${money(v)}.`);
   } else {
     v = reader.price; district = reader.district;
   }
 
   const others = rows.filter(r => r.shop_id !== selfId);
-  const rankIn = list => list.filter(r => r.price > v).length + 1;
-  const tiedIn = list => list.some(r => r.price === v);
+  const above = others.filter(r => r.price > v).length;
   const near = others.filter(r => r.district === district);
-  const national = rankIn(others);
   let local = null;
 
-  let text = `You charge ${money(v)}. That is ${rankPhrase(national, tiedIn(others))} of ${others.length + 1} island-wide`;
+  let text = above === 0 ? "No cafe in Singapore charges more than you."
+           : above === 1 ? "1 cafe in Singapore charges more than you."
+           : `${above} cafes in Singapore charge more than you.`;
   if(!district){
-    text += ".";                      // price only: no area, so no district line
+    // price only: no area, so no second sentence
   } else if(near.length < MIN_NEIGHBOURS){
-    text += ". " + (near.length === 0 ? `No other shops in ${district} sell this so far.`
-                  : near.length === 1 ? `Only 1 other shop in ${district} sells this so far.`
-                  : `Only ${near.length} other shops in ${district} sell this so far.`);
+    text += " " + (near.length === 0 ? `No other shop we track in ${district} sells this.`
+                 : near.length === 1 ? `Only 1 other shop we track in ${district} sells this.`
+                 : `Only ${near.length} other shops we track in ${district} sell this.`);
   } else {
-    local = rankIn(near);
-    text += `, and ${rankPhrase(local, tiedIn(near))} of the ${near.length + 1} shops in ${district} that sell it.`;
+    local = near.filter(r => r.price > v).length + 1;
+    const same = near.filter(r => r.price === v).length;
+    const below = near.filter(r => r.price < v).length;
+    const place = local === 1 ? "the most expensive"
+                : below === 0 ? "the cheapest"
+                : `the ${ordinal(local)} most expensive of ${near.length + 1} shops`;
+    text += ` In ${district}, you are ${place}` +
+            (same ? ` (same as ${same} ${same === 1 ? "other" : "others"})` : "") + ".";
   }
   line.textContent = text;
 
-  const dearer = others.filter(r => r.price > v);
   const med = median(rows.map(r => r.price));
-  const parts = [];
-  if(dearer.length){
+  if(above){
     const top = rows.reduce((a, b) => (b.price > a.price ? b : a));
-    parts.push(`${dearer.length} ${dearer.length === 1 ? "cafe charges" : "cafes charge"} more than you. The dearest is ${money(top.price)} at ${esc(top.shop_name)}.`);
-  } else {
-    parts.push("No cafe in our data charges more than you.");
+    rest.push(`The highest price is ${money(top.price)} at ${top.shop_name}.`);
   }
-  if(v >= med){
-    parts.push("You are charging above the middle of the market.");
-  } else {
-    parts.push(`Moving to the middle of the market would add ${money(med - v)} per ${itemNoun(d, finderItem)}.`);
-  }
-  cons.innerHTML = parts.map(p => `<p>${p}</p>`).join("");
-  cons.hidden = false;
+  rest.push(v > med ? `You charge more than the usual price of ${money(med)}.`
+          : v === med ? `You charge the usual price, ${money(med)}.`
+          : `The usual price is ${money(med)}. That is ${money(med - v)} more than yours.`);
+  paintRest(rest);
 
   // ranks only: neither the price nor the shop goes anywhere
-  track("rank_result", {item: finderItem, national_rank: national, district_rank: local});
+  track("rank_result", {item: finderItem, national_rank: above + 1, district_rank: local});
   track("rank_finder_result", {item: finderItem, rank: rows.filter(r => r.price < v).length + 1, of: rows.length});
 
   readerPrice = v;
@@ -1284,12 +1415,11 @@ function showResult(d){
    An item is a gap when the shop has no recorded price for it, at least two
    other shops in its district do, and at least half of them do. */
 const MAX_GAPS = 3;
-function showGaps(d, shop){
-  const box = byId("finder-gaps");
+function findGaps(d, shop){
   const menus = d.shop_items || [];
   const mine = menus.find(m => m.shop_id === shop.shop_id);
   const others = menus.filter(m => m.district === shop.district && m.shop_id !== shop.shop_id);
-  if(!mine || others.length < MIN_NEIGHBOURS){ box.hidden = true; return; }
+  if(!mine || others.length < MIN_NEIGHBOURS){ gapLines = []; return; }
 
   const gaps = d.price_table
     .filter(row => mine.items.indexOf(row.item_canonical) === -1)
@@ -1299,10 +1429,9 @@ function showGaps(d, shop){
     .sort((a, b) => b.count - a.count)        // stable, so ties keep the table's order
     .slice(0, MAX_GAPS);
 
-  box.innerHTML = gaps.length
-    ? gaps.map(g => `<p>${g.count} of the ${others.length} other shops we track in ${esc(shop.district)} sell ${esc(itemPhrase(d, g.key))}. It isn't on your menu as we recorded it.</p>`).join("")
-    : `<p>Among the ${d.price_table.length} items we track, you already carry what most of ${esc(shop.district)} sells.</p>`;
-  box.hidden = false;
+  gapLines = gaps.length
+    ? gaps.map(g => `${g.count} of the ${others.length} other shops we track in ${shop.district} sell ${itemWords(g.key)}. We didn't see it on your menu.`)
+    : [`Of the ${d.price_table.length} items we compare, you already sell what most shops in ${shop.district} sell.`];
   track("neighbour_gaps_shown", {count: gaps.length});
 }
 
@@ -1318,15 +1447,12 @@ function drawCaption(d){
   const outs = rows.length - clean.length;
   const lo = Math.min(...clean), hi = Math.max(...clean);
   const gap = Math.round((hi / lo - 1) * 100);
-  const phrase = itemPhrase(d, finderItem);
-  const kind = priceRow(d, finderItem).format || "item";
-  const recorded = recordedSpan(rows.map(r => r.observed_date));
-  const outlier = outs === 0 ? "" :
-    `${inWords(outs)} excluded as ${outs === 1 ? "an outlier" : "outliers"}, `;
+  const checked = checkedWhen(rows.map(r => r.observed_date));
   byId("map-caption").textContent =
-    `${/^[aeiou]/.test(phrase) ? "An" : "A"} ${phrase} costs ${money(lo)} at one cafe and ${money(hi)} at another. ` +
-    `Same ${kind}, ${rows.length} shops, ${outlier}${gap}% apart.` +
-    (recorded ? ` Prices recorded ${recorded}.` : "");
+    `${itemName(finderItem)} costs ${money(lo)} to ${money(hi)} at ${rows.length} shops. ` +
+    `The highest price is ${gap}% more than the lowest.` +
+    (outs ? ` We left out ${outs} ${outs === 1 ? "shop" : "shops"} with a very different price.` : "") +
+    (checked ? ` We checked these prices on each cafe's own menu ${checked}.` : "");
 }
 
 /* ---------- map ---------- */
@@ -1357,11 +1483,6 @@ const BASEMAP = {
                '<a href="https://www.sla.gov.sg/" target="_blank" rel="noopener noreferrer">Singapore Land Authority</a>'
 };
 
-function recordedOn(iso){
-  const when = shortDate(iso);
-  return when ? "Recorded " + when : "Date not recorded";
-}
-
 let hintTimer = null;
 function showMapHint(text){
   const el = byId("map-hint");
@@ -1383,6 +1504,7 @@ function buildMap(d){
   if(!window.L || !placed.length){
     // no map library or nothing to place: the list still has every price
     byId("view-toggle").hidden = true;
+    byId("view-switch").hidden = true;
     setView("list", {track: false});
     return;
   }
@@ -1448,19 +1570,93 @@ function buildMap(d){
 
   pinLayer = L.layerGroup().addTo(map);
   drawPins(d);
+  // a tap on the map itself puts the phone's sheet away
+  map.on("click", closePin);
 
   if(unplaced.size){
     const note = byId("map-note");
-    note.textContent = `${unplaced.size} ${unplaced.size === 1 ? "cafe is" : "cafes are"} missing from the map because we could not place the postal code. Every cafe is in the list view.`;
+    note.textContent = `${unplaced.size} ${unplaced.size === 1 ? "cafe is" : "cafes are"} not on the map because we could not find the address. Every cafe is in the list.`;
     note.hidden = false;
   }
+}
+
+/* Where a price sits against the item's usual price (its median): the bottom
+   quarter, the middle half, the top quarter, and more than 40% above the
+   median, which is the same line the price table draws. Menu prices are round
+   numbers, so many shops share one. A price counts as cheaper only when it is
+   below the first quartile and as more expensive only when it is above the
+   third, so a price that a large share of shops charge is always "normal". */
+const BANDS = {lo: "Cheaper than most", mid: "About normal",
+               up: "More expensive than most", hi: "Much more expensive"};
+function bandOf(d){
+  const prices = d.named_prices[finderItem].map(r => r.price).sort((a, b) => a - b);
+  const at = q => {
+    const pos = (prices.length - 1) * q, i = Math.floor(pos);
+    return i + 1 < prices.length ? prices[i] + (pos - i) * (prices[i + 1] - prices[i]) : prices[i];
+  };
+  const med = priceRow(d, finderItem).median, q1 = at(0.25), q3 = at(0.75);
+  return p => p > med * 1.4 ? "hi" : p > q3 ? "up" : p < q1 ? "lo" : "mid";
+}
+
+/* "service charge 10%" -> "10% service charge". GST is named without its rate. */
+function chargeWords(c){
+  if(/^gst\b/i.test(c)) return "GST";
+  const m = /^(.*?)\s+(\d+(?:\.\d+)?%)$/.exec(c);
+  return m ? `${m[2]} ${m[1]}` : c;
+}
+
+/* A pin's details, at most five lines: name, price (and the menu's own price
+   where charges were added), date, the menu link, and how many more prices
+   the shop has. */
+function pinHtml(r, band){
+  const more = r.more_prices || 0;
+  const url = /^https?:\/\//.test(r.source_url || "") ? r.source_url : "";
+  const when = shortDate(r.observed_date);
+  const id = esc(r.shop_id);
+  return `<span class="pop-name">${esc(r.shop_name)}</span>` +
+    `<span class="pop-price${band === "hi" ? " hi" : ""}">${money(r.price)}</span>` +
+    (r.listed_price != null && (r.charges || []).length
+      ? `<span class="pop-sub">Menu price ${money(r.listed_price)} + ${esc(r.charges.map(chargeWords).join(" + "))}</span>` : "") +
+    (when ? `<span class="pop-date">Checked ${when}</span>` : "") +
+    (url ? `<a class="pop-menu" href="${esc(url)}" target="_blank" rel="noopener noreferrer" data-menu="${id}">See their menu</a>` : "") +
+    (more > 0 ? `<span class="pop-more">${more} more ${more === 1 ? "price" : "prices"} from this shop. ` +
+                `<a href="#${WAIT_HASH}" data-teaser="${id}">Join the waitlist</a> to see them.</span>` : "");
+}
+
+function openPin(r, band){
+  const html = pinHtml(r, band);
+  if(isPhone()){
+    map.closePopup();
+    byId("sheet-body").innerHTML = html;
+    const sheet = byId("pin-sheet");
+    // shown again from hidden, so the slide up replays
+    sheet.hidden = true; void sheet.offsetWidth; sheet.hidden = false;
+  } else {
+    L.popup({offset: [0, -8], maxWidth: 260}).setLatLng([r.lat, r.lng]).setContent(html).openOn(map);
+  }
+  track("pin_opened", {shop_id: r.shop_id, item: finderItem});
+}
+function closePin(){
+  const sheet = byId("pin-sheet");
+  if(sheet) sheet.hidden = true;
+  if(map) map.closePopup();
+}
+function wirePins(){
+  byId("sheet-close").addEventListener("click", closePin);
+  document.addEventListener("keydown", e => { if(e.key === "Escape") closePin(); });
+  // the popup and the sheet are redrawn for every pin, so their links are caught here
+  document.addEventListener("click", e => {
+    const menu = e.target.closest("[data-menu]"), teaser = e.target.closest("[data-teaser]");
+    if(menu) track("menu_link_clicked", {shop_id: menu.dataset.menu});
+    if(teaser){ track("teaser_clicked", {shop_id: teaser.dataset.teaser}); closePin(); }
+  });
 }
 
 function drawPins(d){
   if(!map) return;
   pinLayer.clearLayers();
   const rows = d.named_prices[finderItem].filter(r => r.lat != null && r.lng != null);
-  const med = priceRow(d, finderItem).median;
+  const band = bandOf(d);
   const mine = reader && reader.shopId;
 
   // shops sharing a building share a coordinate, so their pins are fanned out
@@ -1474,24 +1670,21 @@ function drawPins(d){
 
   spots.forEach(group => group.forEach((r, i) => {
     const me = r.shop_id === mine;
-    const hi = r.price > med * 1.4;            // same rule as the price table
+    const b = band(r.price);
     const off = i - (group.length - 1) / 2;
     const marker = L.marker([r.lat, r.lng], {
       icon: L.divIcon({
         className: "pinwrap", iconSize: [0, 0],
-        html: `<span class="pin${hi ? " hi" : ""}${me ? " me" : ""}" style="--off:${off}">` +
+        html: `<span class="pin ${b}${me ? " me" : ""}" style="--off:${off}">` +
               `<span class="pin-dot"></span><span class="pin-label">${money(r.price)}</span></span>`
       }),
-      title: `${r.shop_name}, ${money(r.price)}`,
-      zIndexOffset: me ? 1000 : hi ? 500 : 0,   // a high price is never hidden under a neighbour
+      // the words carry what the colour says, for anyone who cannot see it
+      title: `${r.shop_name}, ${money(r.price)}, ${BANDS[b].toLowerCase()}`,
+      // a high price is never hidden under a neighbour
+      zIndexOffset: me ? 1000 : b === "hi" ? 500 : b === "up" ? 250 : 0,
       riseOnHover: true
     });
-    marker.bindPopup(
-      `<span class="pop-name">${esc(r.shop_name)}</span>${esc(r.district)}` +
-      `<span class="pop-price${hi ? " hi" : ""}">${money(r.price)}</span>` +
-      `<span class="pop-date">${esc(recordedOn(r.observed_date))}</span>`,
-      {offset: [0, -8], maxWidth: 240});
-    marker.on("popupopen", () => track("pin_opened", {shop_id: r.shop_id, item: finderItem}));
+    marker.on("click", () => openPin(r, b));
     marker.addTo(pinLayer);
   }));
 }
@@ -1517,6 +1710,10 @@ function setView(mode, opts){
   else listEl.setAttribute("hidden", UNTIL_FOUND ? "until-found" : "");
   byId("view-toggle").querySelectorAll(".choice").forEach(b =>
     b.setAttribute("aria-pressed", String(b.dataset.view === mode)));
+  // the phone's one button names the view it leads to
+  byId("view-switch").textContent = mode === "map" ? "List" : "Map";
+  byId("view-wrap").classList.toggle("listmode", mode === "list");
+  closePin();
 
   if(mode === "map" && map){
     map.invalidateSize();
@@ -1537,6 +1734,7 @@ function setView(mode, opts){
 function buildViewToggle(){
   byId("view-toggle").querySelectorAll(".choice").forEach(b =>
     b.addEventListener("click", () => setView(b.dataset.view)));
+  byId("view-switch").addEventListener("click", () => setView(viewMode === "map" ? "list" : "map"));
   byId("list-view").addEventListener("beforematch", () => setView("list", {track: false}));
 }
 
@@ -1588,12 +1786,12 @@ function makeSortable(tableId, getRows, renderRow, initial){
 /* ---------- price table ---------- */
 function buildPriceTable(d){
   document.getElementById("price-sub").textContent =
-    `${d.price_table.length} items, priced across ${d.meta.shops_with_prices} cafes and bakeries. Click a column heading to sort.`;
+    `${d.price_table.length} items at ${d.meta.shops_with_prices} cafes and bakeries. Tap a column name to sort.`;
 
   makeSortable("price-table",
     () => d.price_table.slice(),
     r => {
-      const flagged = r.high > r.median * 1.4;   // dearest well clear of the middle
+      const flagged = r.high > r.median * 1.4;   // the highest price is far above the usual one
       return `<tr>
         <td class="item">${esc(r.display_name)}</td>
         <td class="n soft">${r.shop_count}</td>
@@ -1637,9 +1835,9 @@ function buildNamed(d){
   function repaint(){
     const total = matching().length;
     moreBtn.hidden = total <= LIMIT;
-    moreBtn.textContent = expanded ? "Show fewer" : `Show all ${total}`;
+    moreBtn.textContent = expanded ? "Show less" : `Show all ${total}`;
     countEl.textContent = total === 0
-      ? "No cafes match that filter."
+      ? "No cafes match."
       : `Showing ${expanded ? total : Math.min(LIMIT, total)} of ${total}`;
     paint();
   }
@@ -1654,17 +1852,19 @@ function buildNamed(d){
 /* ---------- launches ---------- */
 function buildLaunches(d){
   const list = d.launches_list;
-  const months = [...new Set(list.map(r => r.launch_month))].sort();
+  list.forEach(r => { r.when = launchWhen(r); });
+  const months = [...new Set(list.map(r => r.when))].sort();
+  const named = new Set(list.map(r => r.launch_month).filter(Boolean)).size;
   const formats = [...new Set(list.map(r => r.format))].sort();
   // the reader runs a handful of shops, so independents are the default view
   let who = "independent", month = "all", type = "all", expanded = false;
   const LIMIT = 20;
 
   document.getElementById("launch-sub").textContent =
-    `${list.length} new items over the last ${inWords(months.length)} months at named shops, with prices. ` +
-    `Large chains are filtered out by default because they price differently from a neighbourhood cafe. ` +
-    `Seasonal mooncakes and National Day specials are excluded, since the calendar drives those rather than demand, ` +
-    `and so is hotel F&B.`;
+    `${list.length} new items with prices, from the last ${named} months. ` +
+    `Big chains are hidden at first, because they price differently from a small cafe. ` +
+    `We leave out mooncakes and National Day items, because cafes sell those for the date and not because customers ask. ` +
+    `We also leave out hotel restaurants.`;
 
   // Hotel F&B is already dropped upstream, so All = Independents + Chains.
   // The chart reads from this too.
@@ -1689,15 +1889,15 @@ function buildLaunches(d){
     });
   }
 
-  chips("who-filter", [["all","All"], ["independent","Independents and small groups"], ["chain","Chains"]],
+  chips("who-filter", [["all","All"], ["independent","Small shops and small groups"], ["chain","Big chains"]],
         () => who, v => who = v, () => drawLaunchChart(d, byWho()));
-  chips("month-filter", [["all","All"], ...months.map(m => [m, monthLabel(m)])],
+  chips("month-filter", [["all","All"], ...months.map(m => [m, whenLabel(m)])],
         () => month, v => month = v);
   chips("type-filter", [["all","All"], ...formats.map(f => [f, f.charAt(0).toUpperCase() + f.slice(1)])],
         () => type, v => type = v);
 
   function matching(){
-    return byWho().filter(r => (month === "all" || r.launch_month === month)
+    return byWho().filter(r => (month === "all" || r.when === month)
                             && (type === "all" || r.format === type));
   }
 
@@ -1708,18 +1908,18 @@ function buildLaunches(d){
       <td>${esc(r.shop)}</td>
       <td class="soft">${esc(r.flavour)}</td>
       <td class="n mid">${r.price == null ? "&mdash;" : money(r.price)}</td>
-      <td class="soft">${monthLabel(r.launch_month)}</td>
+      <td class="soft num">${esc(whenLabel(r.when))}</td>
     </tr>`,
-    {key:"launch_month", dir:"desc"});
+    {key:"when", dir:"desc"});
 
   const moreBtn = document.getElementById("launch-more");
   const countEl = document.getElementById("launch-count");
   function repaint(){
     const total = matching().length;
     moreBtn.hidden = total <= LIMIT;
-    moreBtn.textContent = expanded ? "Show fewer" : "Show more";
+    moreBtn.textContent = expanded ? "Show less" : "Show more";
     countEl.textContent = total === 0
-      ? "No launches match those filters."
+      ? "No new items match."
       : `Showing ${expanded ? total : Math.min(LIMIT, total)} of ${total}`;
     paint();
   }
@@ -1732,13 +1932,24 @@ function buildLaunches(d){
 
 let redrawLaunchChart = () => {};
 
+/* When a new item appeared. Most carry the month the shop put it on sale.
+   Where the shop gave none, the day we first saw it stands in, so the item
+   still has a place in the chart, the filter and the sort: "2026-09-00" for
+   a month, "2026-10-04" for a first-seen day. Both are the same length so
+   they sort as text. */
+const launchWhen = r => r.launch_month ? r.launch_month + "-00" : (r.first_seen || "");
+function whenLabel(when){
+  if(/-00$/.test(when)) return monthLabel(when);
+  return when ? "First seen " + dayMonth(when) : "No date";
+}
+
 const MIN_SEGMENTS = 3;   // below this a month is stated as a number, not drawn
 function drawLaunchChart(d, rows){
   // counts come from the rows actually in scope, so the chart tracks the Who filter
   const order = d.format_split.map(f => f.format);
-  const months = [...new Set(d.launches_list.map(r => r.launch_month))].sort();
-  const countOf = (m, f) => rows.filter(r => r.launch_month === m && r.format === f).length;
-  const totals = months.map(m => rows.filter(r => r.launch_month === m).length);
+  const months = [...new Set(d.launches_list.map(launchWhen))].sort();
+  const countOf = (m, f) => rows.filter(r => launchWhen(r) === m && r.format === f).length;
+  const totals = months.map(m => rows.filter(r => launchWhen(r) === m).length);
   const maxTotal = Math.max(...totals, 1);
 
   const el = document.getElementById("launch-svg");
@@ -1782,8 +1993,8 @@ function drawLaunchChart(d, rows){
       });
     }
 
-    svg += `<text x="${cx.toFixed(2)}" y="${TOP + plotH + 22}" text-anchor="middle" fill="var(--ink)" font-family="Archivo,sans-serif" font-size="14">${monthLabel(m)}</text>`;
-    svg += `<text x="${cx.toFixed(2)}" y="${TOP + plotH + 39}" text-anchor="middle" fill="var(--muted)" font-family="Archivo,sans-serif" font-size="12" style="font-variant-numeric:tabular-nums">${total} ${total === 1 ? "launch" : "launches"}</text>`;
+    svg += `<text x="${cx.toFixed(2)}" y="${TOP + plotH + 22}" text-anchor="middle" fill="var(--ink)" font-family="Archivo,sans-serif" font-size="${narrow ? 12 : 14}">${esc(whenLabel(m))}</text>`;
+    svg += `<text x="${cx.toFixed(2)}" y="${TOP + plotH + 39}" text-anchor="middle" fill="var(--muted)" font-family="Archivo,sans-serif" font-size="12" style="font-variant-numeric:tabular-nums">${total} ${total === 1 ? "new item" : "new items"}</text>`;
     if(narrow && total >= MIN_SEGMENTS){
       order.forEach((f, fi) => {
         const c = countOf(m, f);
@@ -1798,7 +2009,7 @@ function drawLaunchChart(d, rows){
   el.style.height = H + "px";
   el.innerHTML = svg;
   document.getElementById("launch-desc").textContent =
-    "Launches per month by format: " + months.map((m,i) => `${monthLabel(m)} ${totals[i]}`).join(", ") + ".";
+    "New items each month, by type: " + months.map((m,i) => `${whenLabel(m)} ${totals[i]}`).join(", ") + ".";
 }
 
 /* ---------- promos ---------- */
@@ -1806,8 +2017,8 @@ function buildPromos(d){
   const s = d.promos_summary;
   const bundles = s.by_promo_type.bundle || 0;
   document.getElementById("promo-sub").textContent =
-    `${s.total} offers are running right now. ${bundles} of them are bundles rather than price cuts, ` +
-    `which protects the menu price while still moving volume.`;
+    `${s.total} offers are running now. ${bundles} of them are bundles, not price cuts. ` +
+    `A bundle sells more and keeps the menu price the same.`;
   // s.total already has hotel F&B removed upstream
 
   const types = Object.keys(s.by_promo_type);
@@ -1851,7 +2062,7 @@ function buildPromos(d){
   function repaint(){
     const total = matching().length;
     moreBtn.hidden = total <= LIMIT;
-    moreBtn.textContent = expanded ? "Show fewer" : "Show more";
+    moreBtn.textContent = expanded ? "Show less" : "Show more";
     countEl.textContent = `Showing ${expanded ? total : Math.min(LIMIT, total)} of ${total}`;
     paint();
   }
@@ -1870,13 +2081,13 @@ function allRecordedDates(d){
 }
 function buildFooter(d){
   document.getElementById("colophon-left").textContent =
-    `${d.meta.shops_with_prices} cafes and bakeries, ${d.meta.districts_count} districts, prices recorded ${recordedSpan(allRecordedDates(d))}`;
+    `${d.meta.shops_with_prices} cafes and bakeries, ${d.meta.districts_count} areas, prices checked ${checkedWhen(allRecordedDates(d))}`;
 }
 
 /* ---------- forms ---------- */
 const SIGNUP_DONE = {
-  newsletter_hero:    "You are on the list. The first issue lands Monday.",
-  waitlist:           "You are on the waitlist. We will email you before we launch."
+  newsletter_hero:    "You are on the list. The first email comes on Monday.",
+  waitlist:           "You are on the waitlist. We will email you before we start."
 };
 const isEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
@@ -1895,7 +2106,7 @@ function bindSignup(formId, inputId, noteId, source, evt){
     if(!isEmail(email)){
       // nothing is sent until the address is plausible
       note.className = "formnote bad";
-      note.textContent = "That does not look like an email address";
+      note.textContent = "Please check your email address";
       note.hidden = false;
       input.focus();
       return;
@@ -1924,7 +2135,7 @@ function bindSignup(formId, inputId, noteId, source, evt){
       btn.disabled = false;
       btn.textContent = btnLabel;
       note.className = "formnote bad";
-      note.textContent = "That did not save. Try again, or email us at hello@theweeklybake.sg";
+      note.textContent = "We could not save that. Please try again, or email us at hello@theweeklybake.sg";
       note.hidden = false;
     }
   });

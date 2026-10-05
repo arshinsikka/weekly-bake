@@ -70,7 +70,8 @@ ITEMS = [
     ("croissant_filled", "Croissant, filled"),
     ("kouign_amann", "Kouign-amann"),
 ]
-NAMED_ITEMS = ["croissant_plain", "flat_white", "latte", "matcha_latte"]
+# every compared item is on the map, so each one carries its named prices
+NAMED_ITEMS = [i for i, _ in ITEMS]
 DISTRICT_ITEMS = ["croissant_plain", "flat_white"]
 # one product per shop, whatever the menu calls it; every other item is told
 # apart by its wording. merge_wave3.py uses the same key.
@@ -173,7 +174,7 @@ CHAINS = CHAIN_BRANDS | big_brands
 
 # ------------------------------------------- one price per shop per item
 def pick_one_per_shop(item):
-    """Return {shop_id: (price, basis, note, observed_date)} using
+    """Return {shop_id: (price, basis, note, observed_date, source_url)} using
     takeaway > dine_in > online_order.
 
     Within the winning basis a shop can still list several products for the same
@@ -185,7 +186,8 @@ def pick_one_per_shop(item):
         if r["item_canonical"] != item or not r["price_sgd"].strip():
             continue
         by_shop[r["shop_id"]][r["price_basis"]].append(
-            (float(r["price_sgd"]), r.get("price_note", ""), r.get("observed_date", "")))
+            (float(r["price_sgd"]), r.get("price_note", ""), r.get("observed_date", ""),
+             r.get("source_url", "")))
 
     chosen, multi = {}, 0
     for shop_id, by_basis in by_shop.items():
@@ -194,13 +196,13 @@ def pick_one_per_shop(item):
             multi += 1
         for basis in BASIS_PREFERENCE:
             if by_basis.get(basis):
-                price, note, seen = min(by_basis[basis], key=lambda t: t[0])
-                chosen[shop_id] = (price, basis, note, seen)
+                price, note, seen, url = min(by_basis[basis], key=lambda t: t[0])
+                chosen[shop_id] = (price, basis, note, seen, url)
                 break
         else:                                   # basis outside the known three
             basis = sorted(by_basis)[0]
-            price, note, seen = min(by_basis[basis], key=lambda t: t[0])
-            chosen[shop_id] = (price, basis, note, seen)
+            price, note, seen, url = min(by_basis[basis], key=lambda t: t[0])
+            chosen[shop_id] = (price, basis, note, seen, url)
     return chosen, multi
 
 
@@ -226,17 +228,34 @@ for item, display in ITEMS:
     entry = {"item_canonical": item, "display_name": display,
              "format": formats.most_common(1)[0][0] if formats else "",
              "shop_count": len(chosen)}
-    entry.update(stats([p for p, _, _, _ in chosen.values()]) if chosen
+    entry.update(stats([c[0] for c in chosen.values()]) if chosen
                  else {"low": None, "median": None, "high": None})
     # when the prices behind this row were recorded, earliest to latest
-    seen_dates = sorted(s for _, _, _, s in chosen.values() if s)
+    seen_dates = sorted(c[3] for c in chosen.values() if c[3])
     entry["observed_from"] = seen_dates[0] if seen_dates else None
     entry["observed_to"] = seen_dates[-1] if seen_dates else None
     price_table.append(entry)
 
+# counted rows per shop: menu items on sale now with an exact price. The page
+# says how many more prices a shop has beyond the one a pin shows.
+price_rows = Counter(r["shop_id"] for r in menu if r["price_sgd"].strip())
+
+
+def listed_and_charges(note):
+    """The menu's own price and the charges merge_wave3.py added to it, read
+    back from price_note: (5.6, ["service charge 10%", "GST 9%"]), or
+    (None, []) where the menu price is already the price paid."""
+    listed = re.search(r"(?:^|; )listed: ([\d.]+)", note)
+    plus = re.search(r"(?:^|; )plus: ([^;]+)", note)
+    if not (listed and plus):
+        return None, []
+    return round(float(listed.group(1)), 2), [p.strip() for p in plus.group(1).split(",")]
+
+
 for item in NAMED_ITEMS:
     rows = []
-    for shop_id, (price, basis, note, seen) in picked[item].items():
+    for shop_id, (price, basis, note, seen, url) in picked[item].items():
+        listed, added = listed_and_charges(note)
         meta = shop_meta.get(shop_id, {})
         lat, lng = shop_geo.get(shop_id, (None, None))
         rows.append({
@@ -249,6 +268,10 @@ for item in NAMED_ITEMS:
             "price": round(price, 2),
             "price_basis": basis,
             "observed_date": seen,
+            "source_url": url,
+            "listed_price": listed,
+            "charges": added,
+            "more_prices": price_rows[shop_id] - 1,
             "note": note,
             "is_outlier": note.lower().startswith("outlier"),
         })
@@ -261,13 +284,17 @@ shop_items = [
     {"shop_id": shop_id,
      "shop_name": shop_meta.get(shop_id, {}).get("shop_name", shop_id),
      "district": shop_meta.get(shop_id, {}).get("district", ""),
+     "address": shop_meta.get(shop_id, {}).get("address", ""),
+     "lat": shop_geo.get(shop_id, (None, None))[0],
+     "lng": shop_geo.get(shop_id, (None, None))[1],
+     "price_count": price_rows[shop_id],
      "items": [item for item, _ in ITEMS if shop_id in picked[item]]}
-    for shop_id in sorted({r["shop_id"] for r in menu if r["price_sgd"].strip()})
+    for shop_id in sorted(price_rows)
 ]
 
 for item in DISTRICT_ITEMS:
     buckets = defaultdict(list)
-    for shop_id, (price, _, _, _) in picked[item].items():
+    for shop_id, (price, *_) in picked[item].items():
         buckets[shop_meta.get(shop_id, {}).get("district", "Unknown")].append(price)
     by_district[item] = [
         dict(district=d, shop_count=len(v), **stats(v))

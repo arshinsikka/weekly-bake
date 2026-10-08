@@ -9,7 +9,7 @@
 <script>
 /* an old link to a place on the preview opens the preview at once, so the
    landing screen never flashes in front of it */
-if(["what-things-cost","whats-launching","whos-discounting","waitlist","who-charges-what","by-district"].indexOf(location.hash.slice(1)) !== -1){
+if(["what-things-cost","whats-launching","whos-discounting","waitlist","who-charges-what","by-district","add-your-shop"].indexOf(location.hash.slice(1)) !== -1){
   document.documentElement.classList.remove("on-landing");
 }
 </script>
@@ -108,21 +108,24 @@ html.noslide .landing{transition:none}
 .phone .nearlist{margin-top:12px}
 .phone .nearrow:last-child{border-bottom:none}
 
-/* 2. the moving strip of cafe names. It is clipped inside its section, so it
-   can never make the page scroll sideways. */
-.strip{background:var(--espresso); color:var(--cream); padding-bottom:0; overflow:hidden}
-.striplabel{margin-bottom:20px}
-.marquee{width:100%; overflow:hidden}
-.marquee-track{display:flex; width:max-content; animation:marquee 60s linear infinite}
-.marquee-track span{
-  flex:0 0 auto; padding-right:clamp(48px,10vw,140px); white-space:nowrap;
-  font-family:var(--f-display); font-weight:800; font-size:clamp(48px,10vw,120px); line-height:1.15; color:var(--cream);
-}
-.marquee-track span:nth-child(even){color:var(--butter)}
-@keyframes marquee{from{transform:translateX(0)} to{transform:translateX(-50%)}}
-@media (prefers-reduced-motion:reduce){ .marquee-track{animation:none} }
+/* 2. the menu board: six cafes and their flat white prices. One row at a
+   time fades to another cafe. Nothing moves sideways. */
+.board{background:var(--espresso); color:var(--cream); padding-bottom:0}
+.board h2{color:var(--cream)}
+.menuboard{max-width:720px; margin-top:36px}
+.boardtitle,.boardrow{font-family:var(--f-display); font-weight:700; font-size:clamp(20px,3.6vw,34px)}
+.boardtitle{padding-bottom:10px; color:var(--butter)}
+/* a fixed height, so a change of cafe never moves anything */
+.boardrow{display:flex; align-items:center; gap:12px; height:clamp(40px,6.4vw,60px); line-height:1.2; overflow:hidden; transition:opacity .2s linear}
+.boardrow.out{opacity:0}
+/* a long name is cut short. It never wraps and never pushes the price. */
+.boardname{flex:0 1 auto; min-width:0; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; color:var(--cream)}
+.boardlead{flex:1 1 24px; min-width:24px; height:0; margin-top:.5em; border-bottom:3px dotted var(--muted)}
+.boardprice{flex:0 0 auto; color:var(--butter); font-variant-numeric:tabular-nums}
+.boardnote{margin-top:22px; font-size:16px; color:var(--cream)}
+@media (prefers-reduced-motion:reduce){ .boardrow{transition:none} }
 
-/* 3. one giant number, straight after the strip in the same colour */
+/* 3. one giant number, straight after the board in the same colour */
 .giant{background:var(--espresso); color:var(--cream)}
 .giantnum{font-family:var(--f-display); font-weight:800; font-size:clamp(120px,34vw,320px); line-height:.9; letter-spacing:-.04em; color:var(--tomato)}
 .gianthead{margin-top:20px; max-width:20ch; color:var(--cream)}
@@ -169,12 +172,15 @@ html.noslide .landing{transition:none}
 .full .tiles{margin-top:36px; font-size:16px; line-height:1.5}
 .full .signup{margin-top:36px; max-width:560px}
 
-/* 8. fair questions */
+/* 8. what owners asked us: six questions and their answers, all in view */
 .questions{background:var(--tint); color:var(--body)}
-.qa{margin-top:32px; max-width:760px}
-.qa details{border-bottom:1px solid var(--muted)}
-.qa summary{min-height:44px; padding:14px 0; font-weight:600; color:var(--espresso); cursor:pointer}
-.qa p{padding-bottom:20px; max-width:60ch}
+.qlead{margin-top:16px; max-width:44ch}
+.qa{margin-top:40px}
+.qpair{padding:28px 0}
+.qpair + .qpair{border-top:1px solid var(--muted)}
+.qpair h3{font-weight:700; font-size:clamp(22px,3vw,30px); line-height:1.2}
+.qpair p{margin-top:10px; max-width:60ch}
+.sendmenu{display:inline-flex; align-items:center; min-height:44px; font-weight:500}
 
 /* 9. closing */
 .closing{background:var(--espresso); color:var(--cream)}
@@ -195,6 +201,8 @@ html.noslide .landing{transition:none}
   .herogrid{grid-template-columns:minmax(0,1fr) 320px; gap:72px}
   .steps{grid-template-columns:repeat(3,minmax(0,1fr)); gap:48px}
   .quotegrid{grid-template-columns:repeat(2,minmax(0,1fr)); gap:72px}
+  .qpair{display:grid; grid-template-columns:minmax(0,5fr) minmax(0,7fr); gap:56px}
+  .qpair p{margin-top:0}
   .numgrid{grid-template-columns:repeat(3,auto); justify-content:space-between; align-items:end; gap:48px}
 }
 
@@ -688,18 +696,24 @@ footer .blk p{font-size:var(--s13); line-height:1.5}
     </div>
   </section>
 
-  <!-- 2. moving strip -->
-  <section class="lsec strip" id="l-strip">
-    <div class="wrap"><p class="striplabel" id="strip-label"></p></div>
-    <div class="marquee" aria-hidden="true"><div class="marquee-track" id="strip-names"></div></div>
+  <!-- 2. the menu board -->
+  <section class="lsec board" id="l-board">
+    <div class="wrap">
+      <h2 id="board-head"></h2>
+      <div class="menuboard" id="menu-board" role="img">
+        <p class="boardtitle" id="board-title" aria-hidden="true"></p>
+        <div id="board-rows" aria-hidden="true"></div>
+      </div>
+      <p class="boardnote" id="board-note"></p>
+    </div>
   </section>
 
   <!-- 3. one giant number -->
   <section class="lsec giant" id="l-number">
     <div class="wrap">
       <p class="giantnum" id="giant-num"></p>
-      <p class="gianthead">is how much more the most expensive flat white costs than the cheapest.</p>
-      <p class="giantsub">Most owners only find out by walking into the shop next door.</p>
+      <p class="gianthead" id="giant-head"></p>
+      <p class="giantsub" id="giant-sub"></p>
     </div>
   </section>
 
@@ -765,7 +779,7 @@ footer .blk p{font-size:var(--s13); line-height:1.5}
     <div class="wrap">
       <h2>The full version: $20 a month</h2>
       <ul class="fulllist">
-        <li>All <span class="n-items"></span> items</li>
+        <li id="full-all"></li>
         <li>Every cafe near you</li>
         <li>Full lists of new items and discounts</li>
         <li>Your own dashboard</li>
@@ -781,17 +795,36 @@ footer .blk p{font-size:var(--s13); line-height:1.5}
     </div>
   </section>
 
-  <!-- 8. fair questions -->
+  <!-- 8. what owners asked us -->
   <section class="lsec questions" id="l-questions">
     <div class="wrap">
-      <h2>Fair questions</h2>
+      <h2>What owners asked us</h2>
+      <p class="qlead">We showed this to cafe owners at their counters. These were their questions.</p>
       <div class="qa">
-        <details open><summary>Where do the prices come from?</summary><p>From each cafe's own menu, on their website or in the shop. Every price shows the date we checked it and a link to the menu.</p></details>
-        <details><summary>What if my price is wrong?</summary><p>Reply to any of our emails and we fix it. You can also send us your menu.</p></details>
-        <details><summary>My shop is not there. What now?</summary><p>Send us your menu and we add you within a week.</p></details>
-        <details><summary>What is free?</summary><p>Your result for flat white and croissant, the map, and a weekly email.</p></details>
-        <details><summary>What do I get for $20 a month?</summary><p>All <span class="n-items"></span> items, every cafe, the full lists of new items and discounts, and your own dashboard. No payment now. We email you when it starts.</p></details>
-        <details><summary>Who is behind this?</summary><p>Four students at NUS.</p></details>
+        <div class="qpair">
+          <h3>&ldquo;Where do your prices come from?&rdquo;</h3>
+          <div><p>From each cafe's own menu. We read it on their website, or we take a photo of it in the shop. Next to every price you can see the date we checked it and a link to that menu.</p></div>
+        </div>
+        <div class="qpair">
+          <h3>&ldquo;Why is it free? What is the catch?&rdquo;</h3>
+          <div><p>There is no catch. You can look up your shop, see how your flat white and croissant prices compare with other cafes, use the map, and get our email every week. All of that is free.</p></div>
+        </div>
+        <div class="qpair">
+          <h3>&ldquo;So what is the $20 a month for?&rdquo;</h3>
+          <div><p id="answer-paid"></p></div>
+        </div>
+        <div class="qpair">
+          <h3>&ldquo;What if you have my price wrong?&rdquo;</h3>
+          <div><p>Tell us and we change it. Reply to our email, or send us a photo of your menu.</p><a class="sendmenu" href="#add-your-shop">Send your menu</a></div>
+        </div>
+        <div class="qpair">
+          <h3>&ldquo;My shop is not on your list.&rdquo;</h3>
+          <div><p>Take a photo of your menu and send it to us. We add your shop within a week.</p><a class="sendmenu" href="#add-your-shop">Send your menu</a></div>
+        </div>
+        <div class="qpair">
+          <h3>&ldquo;I can't just change my prices. Why would I use this?&rdquo;</h3>
+          <div><p>Many owners told us the same. They use it for other decisions: what to charge for a new item, what cafes near them sell that they don't, and who is running a discount.</p></div>
+        </div>
       </div>
     </div>
   </section>
@@ -1326,12 +1359,27 @@ const LIST_HASH = "who-charges-what";
 const WAIT_HASH = "waitlist";
 /* Every address that opens the preview directly. Any other address is the
    landing screen. The same list is in the script in the head. */
-const DEEP_HASHES = TABS.concat([LIST_HASH, WAIT_HASH, "by-district"]);
+/* #add-your-shop opens the tool with the menu form open and in view */
+const ADD_HASH = "add-your-shop";
+const DEEP_HASHES = TABS.concat([LIST_HASH, WAIT_HASH, "by-district", ADD_HASH]);
 const hashSlug = () => (location.hash || "").replace("#", "");
 function routeHash(){
   const slug = hashSlug();
   return {tab: TABS.indexOf(slug) === -1 ? DEFAULT_TAB : slug, list: slug === LIST_HASH,
-          wait: slug === WAIT_HASH};
+          wait: slug === WAIT_HASH, add: slug === ADD_HASH};
+}
+/* the menu form, open and in view. On a phone it is a sheet over the page. On
+   a wide screen it sits in the page, so the page goes to it, and goes again
+   once the web fonts have settled the layout. */
+function showAddShop(){
+  openUpload("");
+  const land = () => {
+    const box = byId("upload-box");
+    if(box && !box.hidden && !isPhone()) box.scrollIntoView({block: "center"});
+  };
+  land();
+  requestAnimationFrame(land);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(land);
 }
 function scrollToWaitlist(){
   const el = document.getElementById(WAIT_HASH);
@@ -1433,6 +1481,7 @@ function buildTabs(){
     const to = routeHash();
     // the waitlist link leaves whichever tab is open as it is
     if(to.wait){ scrollToWaitlist(); return; }
+    if(to.add){ showAddShop(); return; }
     activateTab(to.tab, {push: false});
     if(to.list) setView("list", {track: false, scroll: true, smooth: false});
   });
@@ -1445,6 +1494,7 @@ function buildTabs(){
     history.replaceState(Object.assign({}, history.state, {tab: activeTab}), "", location.href);
     panelShown(activeTab);
     if(deep.list) setView("list", {track: false, scroll: true, smooth: false});
+    if(deep.add) showAddShop();
     if(deep.wait){
       // the web fonts move the page a little as they arrive, so land again after
       scrollToWaitlist();
@@ -1552,7 +1602,6 @@ function render(d){
    the product are drawn by the same code the tool uses, and are decoration:
    hidden from screen readers, out of reach of the keyboard and the finger. */
 let checkSections = () => {};
-const STRIP_NAMES = 12;      // names on the moving strip: few enough to pass slowly
 function landingExample(d){
   const item = OPEN_ITEMS[0], rows = d.named_prices[item] || [];
   const prices = [...new Set(rows.map(r => r.price))].sort((a, b) => a - b);
@@ -1586,19 +1635,76 @@ function buildLandingPage(d){
     seen.observe(priceEl);
   }
 
-  // 2. the strip: each name once, an outlet's bracket dropped, spread across the list
-  byId("strip-label").textContent = `${fmt(cafes)} cafes and bakeries tracked`;
-  const names = [...new Set([...SHOPS.values()].map(s => s.shop_name.replace(/\s*\([^)]*\)\s*$/, "")))]
-    .sort((a, b) => a.localeCompare(b));
-  const take = Math.min(STRIP_NAMES, names.length - names.length % 2);
-  const picked = Array.from({length: take}, (_, i) => names[Math.floor(i * names.length / take)]);
-  // drawn twice end to end, so the loop has no seam
-  byId("strip-names").innerHTML = picked.concat(picked).map(n => `<span>${esc(n)}</span>`).join("");
+  // 2. the menu board: six cafes and their flat white price, the cheapest at
+  // the top, the dearest at the bottom and four spread between, so the range
+  // shows at once. One name stands for all of a brand's outlets of that name.
+  byId("board-head").textContent = `${fmt(cafes)} cafes. One menu board.`;
+  byId("board-title").textContent = itemName(ex.item);
+  byId("menu-board").setAttribute("aria-label",
+    `${itemName(ex.item)} prices at ${fmt(rows.length)} cafes, from ${money(ex.prices[0])} to ${money(ex.prices[ex.prices.length - 1])}.`);
+  byId("board-note").textContent = checkedLine(rows);
+  const named = new Set();
+  const priced = rows.slice().sort((a, b) => a.price - b.price || a.shop_name.localeCompare(b.shop_name))
+    .filter(r => !named.has(r.shop_name) && named.add(r.shop_name));
+  const BOARD_ROWS = 6, EVERY = 2000, FADE = 200;
+  const spots = [...new Set(Array.from({length: BOARD_ROWS}, (_, i) => Math.round(i * (priced.length - 1) / (BOARD_ROWS - 1))))]
+    .filter(i => i >= 0 && i < priced.length);
+  const onBoard = spots.map(i => priced[i]);
+  // everyone else waits their turn, by name, so cheap and dear arrive mixed
+  const waiting = priced.filter((r, i) => spots.indexOf(i) === -1).sort((a, b) => a.shop_name.localeCompare(b.shop_name));
+  const rowsEl = byId("board-rows");
+  const rowHtml = r => `<span class="boardname">${esc(r.shop_name)}</span><span class="boardlead"></span>` +
+                       `<span class="boardprice">${money(r.price)}</span>`;
+  rowsEl.innerHTML = onBoard.map(r => `<div class="boardrow">${rowHtml(r)}</div>`).join("");
 
-  // 3. how far the dearest is above the cheapest, from the same two prices
-  // the boxes under the map show
-  const lo = ex.prices[0], hi = ex.prices[ex.prices.length - 1];
-  byId("giant-num").textContent = `${fmt(Math.round((hi / lo - 1) * 100))}%`;
+  /* Every two seconds the next row down fades to a cafe that is not on the
+     board. The cafe it replaces joins the back of the queue, so every cafe has
+     its turn before any comes round again. It rests while the section is off
+     screen, the tab is hidden or the tool is showing, and it never starts for
+     a reader who asked for less motion. */
+  let slot = 0, timer = null, inView = false;
+  const turn = () => {
+    timer = null;
+    const el = rowsEl.children[slot], i = slot;
+    slot = (slot + 1) % onBoard.length;
+    el.classList.add("out");
+    setTimeout(() => {
+      const next = waiting.shift();
+      waiting.push(onBoard[i]);
+      onBoard[i] = next;
+      el.innerHTML = rowHtml(next);
+      el.classList.remove("out");
+    }, FADE);
+    rest();
+  };
+  const rest = () => {
+    const run = inView && !document.hidden && onLanding() && !reduceMotion() && waiting.length > 0;
+    if(run && timer === null) timer = setTimeout(turn, EVERY);
+    else if(!run && timer !== null){ clearTimeout(timer); timer = null; }
+  };
+  if("IntersectionObserver" in window){
+    new IntersectionObserver(found => {
+      inView = found[found.length - 1].isIntersecting;
+      rest();
+    }, {threshold: 0.2}).observe(byId("l-board"));
+    document.addEventListener("visibilitychange", rest);
+  }
+
+  // 3. the compared item with the widest gap between its cheapest and its
+  // dearest price, from the same two prices the boxes under the map show.
+  // Filled croissants are left out: the fillings differ too much to compare.
+  const GAP_MIN_CAFES = 30;
+  const widest = FINDER_ITEMS.filter(k => k !== "croissant_filled" && d.named_prices[k].length >= GAP_MIN_CAFES).map(k => {
+    const all = d.named_prices[k].map(r => r.price), low = Math.min(...all), high = Math.max(...all);
+    return {item: k, cafes: all.length, low: low, high: high, gap: Math.round((high - low) / low * 100)};
+  }).sort((a, b) => b.gap - a.gap || b.cafes - a.cafes)[0];
+  if(widest){
+    byId("giant-num").textContent = `${fmt(widest.gap)}%`;
+    byId("giant-head").textContent = `is how much more the most expensive ${itemWords(widest.item)} costs than the cheapest.`;
+    byId("giant-sub").textContent = `From ${money(widest.low)} to ${money(widest.high)} across ${fmt(widest.cafes)} cafes, ` +
+      `including service charge and GST where a cafe adds them. ` +
+      `Most owners only find out by walking into the shop next door.`;
+  }
 
   // 4. how it works
   byId("step1-line").textContent = `We already have prices from ${fmt(cafes)} cafes and bakeries.`;
@@ -1636,20 +1742,31 @@ function buildLandingPage(d){
   byId("num-areas").textContent = fmt(d.meta.districts.length);
 
   // 7. the full version: the dashboard tiles as they are with nobody chosen
-  document.querySelectorAll(".n-items").forEach(el => { el.textContent = fmt(d.price_table.length); });
+  const andList = words => words.length < 2 ? words.join("") : `${words.slice(0, -1).join(", ")} and ${words[words.length - 1]}`;
+  const openNames = OPEN_ITEMS.filter(k => FINDER_ITEMS.indexOf(k) !== -1).map(itemWords);
+  const lockedNames = FINDER_ITEMS.filter(k => !isOpen(k)).map(itemWords);
+  byId("full-all").textContent = `All ${fmt(FINDER_ITEMS.length)} items, not only ${andList(openNames)}`;
   byId("land-tiles").innerHTML = dashTiles(d, null, "", true);
 
-  // 8. a question counts when it is opened, not when it is shut
-  document.querySelectorAll("#l-questions details").forEach((el, i) => {
-    el.querySelector("summary").addEventListener("click", () => {
-      if(!el.open) track("question_opened", {index: i + 1});
-    });
-  });
+  // 8. what the money is for, from the page's own lists of open and locked items
+  byId("answer-paid").textContent =
+    `Free shows you ${fmt(openNames.length)} ${plural(openNames.length, "item", "items")}: ${andList(openNames)}. ` +
+    `Paid shows you all ${fmt(FINDER_ITEMS.length)}, adding ${andList(lockedNames)}. ` +
+    `You also see every cafe, not only the ${fmt(NEAR)} nearest, every new item and discount, and a page made for your own shop. ` +
+    `You pay nothing today. We email you when it starts.`;
+  // "Send your menu" slides to the tool with the menu form open
+  document.querySelectorAll(".sendmenu").forEach(a => a.addEventListener("click", e => {
+    e.preventDefault();
+    track("landing_cta_clicked", {place: "send_menu"});
+    history.pushState({fromLanding: true, tab: activeTab}, "", "#" + ADD_HASH);
+    showPreview(true);
+    showAddShop();
+  }));
 
   /* Each section is reported once per visit, when half of it is in view. A
      section more than two screens tall can never be half in view, so it
      counts once it fills the screen. Nothing counts while the tool is showing. */
-  const SECTIONS = [["l-hero", "hero"], ["l-strip", "strip"], ["l-number", "number"], ["l-how", "how"],
+  const SECTIONS = [["l-hero", "hero"], ["l-board", "board"], ["l-number", "number"], ["l-how", "how"],
                     ["l-quotes", "quotes"], ["l-numbers", "numbers"], ["l-full", "full_version"],
                     ["l-questions", "questions"], ["l-closing", "closing"]];
   const seenSections = new Set();
@@ -2431,9 +2548,13 @@ function drawCaption(d){
   const usual = priceRow(d, finderItem).median;
   const boxes = [["Lowest", Math.min(...prices)], ["Usual", usual == null ? median(prices) : usual], ["Highest", Math.max(...prices)]];
   byId("map-spread").innerHTML = boxes.map(b => `<div><span>${b[0]}</span><strong>${money(b[1])}</strong></div>`).join("");
+  byId("map-caption").textContent = checkedLine(rows);
+}
+/* where the prices come from and when they were checked, for a set of rows */
+function checkedLine(rows){
   const seen = rows.map(r => r.observed_date).filter(Boolean).sort();
   const first = shortDate(seen[0]), last = shortDate(seen[seen.length - 1]);
-  byId("map-caption").textContent = "From each cafe's own menu." +
+  return "From each cafe's own menu." +
     (!seen.length ? "" : first === last ? ` Checked ${first}.` : ` Checked ${first} to ${last}.`);
 }
 

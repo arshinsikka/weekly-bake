@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Weekly Bake</title>
 <meta name="description" content="Prices and new menu items at Singapore cafes and bakeries.">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23FFFFFF'/%3E%3Cpath d='M5 7l5 18 6-12 6 12 5-18' fill='none' stroke='%230E7C66' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23FFC83D'/%3E%3Cpath d='M5 7l5 18 6-12 6 12 5-18' fill='none' stroke='%232A1810' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <script>
 /* an old link to a place on the preview opens the preview at once, so the
    landing screen never flashes in front of it */
@@ -20,18 +20,20 @@ if(["what-things-cost","whats-launching","whos-discounting","waitlist","who-char
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" integrity="sha512-h9FcoyWjHcOcmEVkxOfTLnmZFWIH0iZhZT1H2TbOq55xssQGEJHEaIm+PgoUaZbRvQTNTluNOEfb1ZRy6D3BOw==" crossorigin="anonymous" referrerpolicy="no-referrer">
 <style>
 :root{
-  --jade:#0E7C66;        /* brand, and the landing screen */
-  --jade-deep:#0A5C4C;   /* pressed states */
-  --marigold:#FFC233;    /* the main button only */
-  --coral:#F2553D;       /* highest prices: pins and large numbers only */
-  --coral-text:#C23A24;  /* the same meaning in small text */
-  --ink:#12332C;
-  --body:#3D4A46;
-  --muted:#6B7A75;
-  --rule:#DDE7E3;
-  --mist:#EAF5F1;        /* soft blocks */
-  --paper:#FFFFFF;
-  --pin-mid:#8FA39C;     /* a pin at about the normal price */
+  --butter:#FFC83D;      /* lead colour: the hero, the price in the result block, highlights */
+  --cream:#FFF6E5;       /* the page behind the tool and the calm sections */
+  --paper:#FFFFFF;       /* inputs and the phone screen */
+  --espresso:#2A1810;    /* main text and the dark sections */
+  --body:#4A3524;
+  --muted:#7A6A55;       /* small secondary text */
+  --rule:#E6D9C2;        /* hairlines */
+  --tint:#FBEBCB;        /* soft blocks: lock rows, the wall, the offer */
+  --tomato:#D63A14;      /* the main button, the giant number, the active tab or chip */
+  --tomato-deep:#A82C0E; /* pressed states, links, and small text that means "expensive" */
+  /* map pins, a warm ramp from cheap to expensive */
+  --pin-lo:#8C7A62;
+  --pin-lo-text:#140B07;
+  --pin-hi:#8E1B0E;
 
   --f-display:"Bricolage Grotesque",system-ui,-apple-system,sans-serif;
   --f-text:"Archivo",system-ui,-apple-system,sans-serif;
@@ -48,34 +50,33 @@ if(["what-things-cost","whats-launching","whos-discounting","waitlist","who-char
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{
-  margin:0; background:var(--paper); color:var(--body);
+  margin:0; background:var(--cream); color:var(--body);
   font-family:var(--f-text); font-size:16px; line-height:1.5;
   font-variant-numeric:tabular-nums;
   -webkit-font-smoothing:antialiased;
 }
-h1,h2,h3{font-family:var(--f-display); color:var(--ink); font-weight:700; margin:0; line-height:1.15}
+h1,h2,h3{font-family:var(--f-display); color:var(--espresso); font-weight:700; margin:0; line-height:1.15}
 h4{margin:0}
 p{margin:0}
 .wrap{max-width:var(--maxw); margin:0 auto; padding:0 var(--pad)}
 .num{font-variant-numeric:tabular-nums}
 .vh{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0)}
 
-a{color:var(--jade); text-decoration:underline; text-underline-offset:2px}
-:focus-visible{outline:2px solid var(--jade); outline-offset:3px; border-radius:4px}
+a{color:var(--tomato-deep); text-decoration:underline; text-underline-offset:2px}
+:focus-visible{outline:2px solid var(--espresso); outline-offset:3px; border-radius:4px}
 
 /* an author display rule must never show something marked hidden. until-found
    is left alone: it hides with content-visibility and needs its box. */
 [hidden]:not([hidden=until-found]){display:none !important}
 button{font-family:inherit; font-size:inherit; color:inherit; background:none; border:none; padding:0; cursor:pointer}
 
-/* ---------- screen 1: landing ----------
-   It lies over the preview and slides up and away when a choice is made. That
-   slide is the only decorative motion on the page. Coming back has none. */
+/* ---------- screen 1: the landing page ----------
+   It lies over the tool and scrolls on its own. When a choice is made it
+   slides up and away. Coming back has no motion. Each section runs edge to
+   edge in one flat colour and makes one point. */
 .landing{
-  position:fixed; inset:0; z-index:100; overflow-y:auto;
-  background:var(--jade); color:#fff;
-  display:flex; flex-direction:column;
-  padding:18px var(--pad) 0;
+  position:fixed; inset:0; z-index:100; overflow-x:hidden; overflow-y:auto;
+  background:var(--butter); color:var(--espresso); font-size:18px; line-height:1.45;
 }
 html:not(.on-landing) .landing{
   transform:translateY(-100%); visibility:hidden;
@@ -85,56 +86,101 @@ html.noslide .landing{transition:none}
 @media (prefers-reduced-motion:reduce){ html:not(.on-landing) .landing{transition:none} }
 .on-landing body{overflow:hidden}
 .on-landing #screen2{visibility:hidden}
-.landing-in{flex:1 0 auto; display:flex; flex-direction:column; width:100%; max-width:520px; margin:0 auto}
-/* the headline, the line, the field and the note sit together in the middle
-   of the space under the wordmark. The top padding is the height of the stat
-   row, so the middle is measured to the foot of the screen. While the field
-   is in use the group moves to the top, which leaves the suggestions clear of
-   a phone keyboard, and the stat row steps aside. */
-.landing-main{flex:1 0 auto; display:flex; flex-direction:column; justify-content:center; padding-top:84px}
-.landing.typing .landing-main{justify-content:flex-start; padding-top:18px}
-.stats{flex:0 0 auto; height:84px; display:flex; justify-content:space-between; align-items:flex-start; gap:16px}
-.landing.typing .stats{display:none}
-.statnum{display:block; font-family:var(--f-display); font-weight:800; font-size:26px; line-height:1.1; color:var(--marigold); white-space:nowrap}
-.statlbl{display:block; margin-top:2px; font-size:var(--s13); color:#fff}
-.landing .wordmark{color:#fff; font-size:var(--s17)}
-.landing h1{color:#fff; font-weight:800; font-size:clamp(36px,11.3vw,60px); line-height:1.05; letter-spacing:-.02em}
-.landing .sub{margin-top:10px; font-size:var(--s17)}
-.landing .combo{margin-top:18px}
-.landing input[type=text]{width:100%; font-size:var(--s17); min-height:54px; border-color:var(--paper)}
-.landing .free{margin-top:10px; font-size:var(--s15)}
-.landing :focus-visible{outline-color:var(--marigold)}
+
+.landbar{position:sticky; top:0; z-index:40; background:var(--butter)}
+.landbar .wrap{display:flex; align-items:center; justify-content:space-between; gap:16px; min-height:60px}
+.lsec{padding:80px 0}
+.lsec h2,.gianthead{font-family:var(--f-display); font-weight:800; font-size:clamp(32px,6vw,64px); line-height:1.05; letter-spacing:-.02em}
+
+/* 1. hero */
+.hero{background:var(--butter); min-height:100vh; min-height:100dvh}
+.herogrid{display:grid; grid-template-columns:minmax(0,1fr); gap:56px; align-items:center}
+.hero h1{font-weight:800; font-size:clamp(40px,9vw,88px); line-height:1; letter-spacing:-.03em}
+.hero .sub{margin-top:16px}
+.hero .combo{margin-top:22px; max-width:520px}
+.hero input[type=text]{width:100%; font-size:18px; min-height:56px; background:var(--paper); border-color:var(--espresso)}
+.hero .free{margin-top:12px; font-size:16px}
+/* a phone drawn in CSS, holding a real result block. Decoration only. */
+.phone{width:300px; max-width:100%; margin:0 auto; border:10px solid var(--espresso); border-radius:36px; background:var(--cream); overflow:hidden; font-size:16px; line-height:1.5}
+.phonescreen{padding:20px 14px 12px; min-height:420px}
+.phonehead{font-family:var(--f-display); font-weight:800; font-size:20px; color:var(--espresso); margin-bottom:10px}
+.phone .rb-price{font-size:54px}
+.phone .nearlist{margin-top:12px}
+.phone .nearrow:last-child{border-bottom:none}
+
+/* 2. the moving strip of cafe names. It is clipped inside its section, so it
+   can never make the page scroll sideways. */
+.strip{background:var(--espresso); color:var(--cream); padding-bottom:0; overflow:hidden}
+.striplabel{margin-bottom:20px}
+.marquee{width:100%; overflow:hidden}
+.marquee-track{display:flex; width:max-content; animation:marquee 60s linear infinite}
+.marquee-track span{
+  flex:0 0 auto; padding-right:clamp(48px,10vw,140px); white-space:nowrap;
+  font-family:var(--f-display); font-weight:800; font-size:clamp(48px,10vw,120px); line-height:1.15; color:var(--cream);
+}
+.marquee-track span:nth-child(even){color:var(--butter)}
+@keyframes marquee{from{transform:translateX(0)} to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){ .marquee-track{animation:none} }
+
+/* 3. one giant number, straight after the strip in the same colour */
+.giant{background:var(--espresso); color:var(--cream)}
+.giantnum{font-family:var(--f-display); font-weight:800; font-size:clamp(120px,34vw,320px); line-height:.9; letter-spacing:-.04em; color:var(--tomato)}
+.gianthead{margin-top:20px; max-width:20ch; color:var(--cream)}
+.giantsub{margin-top:24px; max-width:36ch; color:var(--cream)}
+
+/* 4. how it works */
+.how{background:var(--cream); color:var(--body)}
+.steps{display:grid; grid-template-columns:minmax(0,1fr); gap:56px; margin-top:44px}
+.stepnum{font-family:var(--f-display); font-weight:800; font-size:72px; line-height:1; color:var(--tomato)}
+.step h3{margin-top:10px; font-weight:800; font-size:28px}
+.step > p{margin-top:8px}
+/* a small real piece of the product under each step. Decoration only. */
+.stepvis{margin-top:22px; max-width:380px; font-size:16px; line-height:1.5}
+.fakeinput{display:flex; align-items:center; min-height:48px; padding:10px 14px; background:var(--paper); border:1px solid var(--espresso); border-radius:var(--r); color:var(--espresso)}
+.fakelist{margin-top:6px; padding:6px 0; background:var(--paper); border-radius:var(--r)}
+.fakelist div{padding:7px 14px}
+.stepvis .rb-head{margin-top:0}
+.stepvis .itemrow:first-child{border-top:1px solid var(--rule)}
+.how .btn-main{margin-top:56px}
+.landing footer{background:var(--cream); color:var(--body); font-size:16px}
+
+@media (min-width:861px){
+  .landing{font-size:20px}
+  .lsec{padding:120px 0}
+  .herogrid{grid-template-columns:minmax(0,1fr) 320px; gap:72px}
+  .steps{grid-template-columns:repeat(3,minmax(0,1fr)); gap:48px}
+}
 
 /* ---------- screen 2: top bar ---------- */
 .topbar{border-bottom:1px solid var(--rule)}
 .topbar .wrap{display:flex; align-items:center; justify-content:space-between; gap:16px; min-height:52px}
-.wordmark{font-family:var(--f-display); font-weight:800; font-size:18px; color:var(--ink); letter-spacing:-.01em}
+.wordmark{font-family:var(--f-display); font-weight:800; font-size:18px; color:var(--espresso); letter-spacing:-.01em}
 
 .sec{padding-top:28px}
 .sec > .wrap > h2{font-size:22px}
 
 /* ---------- your result ---------- */
 .who{font-size:var(--s15); color:var(--muted); margin-bottom:14px}
-.who strong{display:block; font-family:var(--f-display); font-weight:800; font-size:var(--s26); line-height:1.15; color:var(--ink)}
+.who strong{display:block; font-family:var(--f-display); font-weight:800; font-size:var(--s26); line-height:1.15; color:var(--espresso)}
 .typebox{
   display:block; width:100%; text-align:left; min-height:48px; padding:14px 16px;
-  background:var(--jade); border-radius:var(--r); color:#fff; font-weight:500;
+  background:var(--espresso); border-radius:var(--r); color:var(--cream); font-weight:500;
 }
-.typebox:active{background:var(--jade-deep)}
-.typebox:focus-visible,.rankblock :focus-visible{outline-color:var(--ink)}
-/* the result: one jade block */
-.rankblock{background:var(--jade); border-radius:var(--r); color:#fff; padding:18px}
+.typebox:active{background:var(--body)}
+.typebox:focus-visible{outline-offset:4px}
+/* the result: one dark block */
+.rankblock{background:var(--espresso); border-radius:var(--r); color:var(--cream); padding:18px}
 .rb-label{font-size:var(--s15)}
-.rb-price{font-family:var(--f-display); font-weight:800; font-size:64px; line-height:1; color:var(--marigold); margin:6px 0 10px}
+.rb-price{font-family:var(--f-display); font-weight:800; font-size:64px; line-height:1; color:var(--butter); margin:6px 0 10px}
 .rb-verdict{font-family:var(--f-display); font-weight:700; font-size:22px; line-height:1.2}
 .rb-head{margin-top:16px; font-weight:600}
 .rb-head span{font-size:var(--s13); font-weight:400}
-/* how the other cafes split: less in white, the same in marigold, more in coral */
+/* how the other cafes split: less in cream, the same in butter, more in tomato */
 .rb-bar{display:flex; gap:2px; height:12px; margin-top:6px; border-radius:6px; overflow:hidden}
 .rb-bar i{display:block; min-width:4px}
-.rb-bar .less{background:#fff}
-.rb-bar .same{background:var(--marigold)}
-.rb-bar .more{background:var(--coral)}
+.rb-bar .less{background:var(--cream)}
+.rb-bar .same{background:var(--butter)}
+.rb-bar .more{background:var(--tomato)}
 .rb-line{margin-top:6px; font-size:var(--s15)}
 .rb-small{font-size:var(--s13); margin-top:14px}
 .rankblock + .resultline,.rankblock + p{margin-top:12px}
@@ -142,11 +188,11 @@ html.noslide .landing{transition:none}
 #result-sec .lockedbox{margin-bottom:0}
 /* the spread under the map */
 .spread{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-top:12px; max-width:600px}
-.spread div{background:var(--mist); border-radius:var(--r); padding:10px 12px}
-.spread span{display:block; font-size:var(--s13); color:var(--muted)}
-.spread strong{display:block; font-family:var(--f-display); font-weight:700; font-size:20px; line-height:1.2; color:var(--ink)}
+.spread div{background:var(--tint); border-radius:var(--r); padding:10px 12px}
+.spread span{display:block; font-size:var(--s13); color:var(--body)}
+.spread strong{display:block; font-family:var(--f-display); font-weight:700; font-size:20px; line-height:1.2; color:var(--espresso)}
 .result{max-width:600px}
-.resultline{font-family:var(--f-display); font-weight:700; font-size:22px; line-height:1.25; color:var(--ink)}
+.resultline{font-family:var(--f-display); font-weight:700; font-size:22px; line-height:1.25; color:var(--espresso)}
 .offers{margin-top:6px; font-size:var(--s15); display:flex; flex-wrap:wrap; gap:0 16px; align-items:center}
 .uploadlink{margin-top:6px}
 
@@ -161,32 +207,32 @@ html.noslide .landing{transition:none}
 .near{margin-top:22px; max-width:600px}
 .near h3{font-size:var(--s17)}
 .nearlist{list-style:none; margin:8px 0 0; padding:0; border-top:1px solid var(--rule)}
-.nearlist button{
+.nearlist button,.nearrow{
   display:flex; width:100%; align-items:center; justify-content:space-between; gap:14px;
   min-height:48px; padding:8px 0; border-bottom:1px solid var(--rule); text-align:left;
 }
-.nearname{color:var(--ink); font-weight:500}
+.nearname{color:var(--espresso); font-weight:500}
 .nearlock{color:var(--muted)}
 .nearlock svg{display:block; width:16px; height:16px}
 .lockednote{margin-top:6px; font-size:var(--s15)}
 .lockedbox .near{margin-top:20px}
 .lockedbox .wall{margin-top:24px}
 .neararea{display:block; font-size:var(--s13); font-weight:400; color:var(--muted)}
-.nearprice{color:var(--ink); font-weight:600}
+.nearprice{color:var(--espresso); font-weight:600}
 
 /* ---------- lock rows: every cut-off ends in one, and it leads to the waitlist ---------- */
 .lockrow{
   display:flex; align-items:center; gap:10px; width:100%; max-width:600px; min-height:48px;
   margin-top:10px; padding:10px 14px; text-align:left;
-  background:var(--mist); border-radius:var(--r); color:var(--ink); font-size:var(--s15); font-weight:500;
+  background:var(--tint); border-radius:var(--r); color:var(--espresso); font-size:var(--s15); font-weight:500;
 }
 .lockrow:active{background:var(--rule)}
 .lockrow svg,.tilelock svg{flex:0 0 auto; width:16px; height:16px}
-.lockedline{font-family:var(--f-display); font-weight:700; font-size:22px; line-height:1.25; color:var(--ink)}
+.lockedline{font-family:var(--f-display); font-weight:700; font-size:22px; line-height:1.25; color:var(--espresso)}
 .lockedbox{margin-bottom:8px}
 
 /* ---------- the wall ---------- */
-.wall{background:var(--mist); border-radius:var(--r); padding:22px 18px}
+.wall{background:var(--tint); border-radius:var(--r); padding:22px 18px}
 .wall h2{font-size:var(--s26); font-weight:800}
 .wall p{margin-top:8px}
 .wall .btn{margin-top:16px}
@@ -206,7 +252,7 @@ html.noslide .landing{transition:none}
 .viewwrap{position:relative}
 .viewswitch{
   display:block; position:absolute; top:10px; right:0; z-index:6;
-  font-size:var(--s15); font-weight:500; color:var(--ink); min-height:44px;
+  font-size:var(--s15); font-weight:500; color:var(--espresso); min-height:44px;
   background:var(--paper); border:1px solid var(--rule); border-radius:var(--r); padding:8px 16px;
 }
 .viewwrap.listmode .viewswitch{position:static; margin:0 0 12px auto}
@@ -214,7 +260,7 @@ html.noslide .landing{transition:none}
 .mapframe{position:relative; margin:0 calc(-1 * var(--pad))}
 .map{
   height:50vh; height:50svh; min-height:280px;
-  background:#F4F5F3; border:1px solid var(--rule); border-left:none; border-right:none;
+  background:#F3EFE8; border:1px solid var(--rule); border-left:none; border-right:none;
   position:relative; z-index:0; isolation:isolate;
 }
 /* one finger belongs to the page. Leaflet would otherwise claim every touch. */
@@ -227,7 +273,7 @@ html.noslide .landing{transition:none}
 .maphint{
   position:absolute; inset:0; z-index:5; display:flex; align-items:center; justify-content:center;
   padding:20px; text-align:center; pointer-events:none;
-  background:rgba(18,51,44,.6); color:#fff; font-size:var(--s17); font-weight:500;
+  background:rgba(42,24,16,.7); color:#fff; font-size:var(--s17); font-weight:500;
   opacity:0;
 }
 .maphint.on{opacity:1}
@@ -240,7 +286,7 @@ html.noslide .landing{transition:none}
 .pin{position:absolute; left:0; top:0; --off:0}
 .pin-dot{
   position:absolute; width:11px; height:11px; border-radius:50%;
-  background:var(--pin-mid); border:1.5px solid var(--paper);
+  background:var(--butter); border:1.5px solid var(--paper);
   transform:translate(calc(-50% + var(--off) * 11px), -50%);
 }
 /* a dot is too small to tap, so it carries a larger invisible target */
@@ -249,49 +295,49 @@ html.noslide .landing{transition:none}
   display:none; position:absolute; white-space:nowrap;
   font:500 13px/1 var(--f-text); font-variant-numeric:tabular-nums;
   padding:5px 7px; border-radius:8px;
-  color:var(--ink); background:var(--paper); border:1.5px solid var(--pin-mid);
+  color:var(--espresso); background:var(--butter); border:1.5px solid var(--butter);
   transform:translate(-50%, calc(-50% + var(--off) * 26px));
 }
 .map.labels .pin-dot{display:none}
 .map.labels .pin-label{display:block}
-/* price against the item's usual price: jade is cheaper than most, grey is
-   about normal, marigold is more expensive than most, coral is much more
-   expensive. Every label also prints the price, and the top step is larger,
-   so it still reads without colour vision. */
-.pin.lo .pin-dot{background:var(--jade)}
-.pin.lo .pin-label{color:var(--jade-deep); border-color:var(--jade)}
-.pin.up .pin-dot{background:var(--marigold)}
-.pin.up .pin-label{background:var(--marigold); border-color:var(--marigold)}
-.pin.hi .pin-dot{background:var(--coral); width:14px; height:14px}
-.pin.hi .pin-label{background:var(--coral); border-color:var(--coral); color:#fff; font-weight:600}
-/* the reader's own shop: larger, solid, with a dark ring no other pin has */
-.pin.me .pin-dot{background:var(--jade-deep); width:17px; height:17px; border:2px solid var(--paper); outline:2px solid var(--ink)}
-.pin.me .pin-label{background:var(--jade-deep); border-color:var(--jade-deep); color:#fff; outline:2px solid var(--ink)}
+/* price against the item's usual price, a warm ramp: taupe is cheaper than
+   most, butter is about normal, tomato is more expensive than most, dark red
+   is much more expensive. Every label also prints the price, and the top
+   step is larger, so it still reads without colour vision. */
+.pin.lo .pin-dot{background:var(--pin-lo)}
+.pin.lo .pin-label{background:var(--pin-lo); border-color:var(--pin-lo); color:var(--pin-lo-text)}
+.pin.up .pin-dot{background:var(--tomato)}
+.pin.up .pin-label{background:var(--tomato); border-color:var(--tomato); color:#fff; font-weight:600}
+.pin.hi .pin-dot{background:var(--pin-hi); width:14px; height:14px}
+.pin.hi .pin-label{background:var(--pin-hi); border-color:var(--pin-hi); color:#fff; font-weight:600}
+/* the reader's own shop: larger, dark, with a butter ring no other pin has */
+.pin.me .pin-dot{background:var(--espresso); width:17px; height:17px; border:2px solid var(--paper); outline:2px solid var(--butter)}
+.pin.me .pin-label{background:var(--espresso); border-color:var(--espresso); color:var(--cream); outline:2px solid var(--butter)}
 
 .legend{display:flex; flex-wrap:wrap; gap:4px 14px; margin:10px 0 0; padding:0; list-style:none; font-size:var(--s13); color:var(--body)}
 .legend li{display:flex; align-items:center; gap:6px; white-space:nowrap}
-.key{flex:0 0 auto; width:11px; height:11px; border-radius:50%; background:var(--pin-mid)}
-.key.lo{background:var(--jade)}
-.key.up{background:var(--marigold)}
-.key.hi{background:var(--coral); width:14px; height:14px}
-.pinwrap:focus-visible .pin-dot,.pinwrap:focus-visible .pin-label{outline:2px solid var(--jade); outline-offset:2px}
+.key{flex:0 0 auto; width:11px; height:11px; border-radius:50%; background:var(--butter)}
+.key.lo{background:var(--pin-lo)}
+.key.up{background:var(--tomato)}
+.key.hi{background:var(--pin-hi); width:14px; height:14px}
+.pinwrap:focus-visible .pin-dot,.pinwrap:focus-visible .pin-label{outline:2px solid var(--espresso); outline-offset:2px}
 
 .map .leaflet-popup-content-wrapper{border-radius:var(--r); box-shadow:none; border:1px solid var(--rule)}
 .map .leaflet-popup-tip{box-shadow:none; border:1px solid var(--rule)}
 .map .leaflet-popup-content{margin:12px 14px; font-size:var(--s13); line-height:1.45; color:var(--body)}
-.pop-name{display:block; font-size:var(--s15); font-weight:600; color:var(--ink)}
-.pop-price{display:block; margin-top:4px; font-size:var(--s15); font-weight:600; color:var(--ink); font-variant-numeric:tabular-nums}
-.pop-price.hi{color:var(--coral-text)}
+.pop-name{display:block; font-size:var(--s15); font-weight:600; color:var(--espresso)}
+.pop-price{display:block; margin-top:4px; font-size:var(--s15); font-weight:600; color:var(--espresso); font-variant-numeric:tabular-nums}
+.pop-price.hi{color:var(--tomato-deep)}
 .pop-sub{display:block; color:var(--body); font-variant-numeric:tabular-nums}
 .pop-date{display:block; color:var(--muted); font-variant-numeric:tabular-nums}
 .pop-menu{display:inline-block; margin-top:6px; font-weight:500}
 .pop-more{display:block; margin-top:8px; padding-top:8px; border-top:1px solid var(--rule); font-variant-numeric:tabular-nums}
-.map .leaflet-popup-content a{color:var(--jade)}
+.map .leaflet-popup-content a{color:var(--tomato-deep)}
 
 /* on a phone a pin opens here, from the bottom of the screen, not over the map */
 .sheet{
   position:fixed; left:0; right:0; bottom:0; z-index:60;
-  background:var(--paper); border-top:2px solid var(--ink); border-radius:var(--r) var(--r) 0 0;
+  background:var(--paper); border-top:2px solid var(--espresso); border-radius:var(--r) var(--r) 0 0;
   padding:14px var(--pad) calc(18px + env(safe-area-inset-bottom, 0px));
   max-height:70vh; max-height:70svh; overflow-y:auto;
   font-size:var(--s15); line-height:1.45; color:var(--body);
@@ -307,21 +353,21 @@ html.noslide .landing{transition:none}
   position:absolute; left:0; right:0; top:calc(100% + 6px); z-index:30;
   margin:0; padding:6px 0; list-style:none; max-height:440px; overflow-y:auto;
   background:var(--paper); border:1px solid var(--rule); border-radius:var(--r);
-  box-shadow:0 8px 24px rgba(18,51,44,.22);
+  box-shadow:0 8px 24px rgba(42,24,16,.22);
 }
 .combolist li[role=option]{display:flex; flex-direction:column; justify-content:center; min-height:44px; padding:7px 14px; cursor:pointer}
-.combolist li[aria-selected=true],.combolist li[role=option]:hover{background:var(--mist)}
+.combolist li[aria-selected=true],.combolist li[role=option]:hover{background:var(--tint)}
 .combohead{padding:8px 14px 2px; font-size:var(--s13); font-weight:600; color:var(--muted)}
-.optname{display:block; font-size:16px; line-height:1.3; color:var(--ink); font-weight:500}
+.optname{display:block; font-size:16px; line-height:1.3; color:var(--espresso); font-weight:500}
 .optsub{display:block; font-size:var(--s13); color:var(--muted)}
 .optlast{border-top:1px solid var(--rule); margin-top:4px}
-.optlast .optname{color:var(--jade)}
+.optlast .optname{color:var(--tomato-deep)}
 
 /* ---------- add your shop: send a menu ---------- */
 .uploadlink{display:inline-flex}
 .uploadbox{
   position:fixed; left:0; right:0; bottom:0; z-index:60; margin:0;
-  background:var(--paper); border-top:2px solid var(--ink); border-radius:var(--r) var(--r) 0 0;
+  background:var(--paper); border-top:2px solid var(--espresso); border-radius:var(--r) var(--r) 0 0;
   padding:14px var(--pad) calc(18px + env(safe-area-inset-bottom, 0px));
   max-height:88vh; max-height:88svh; overflow-y:auto;
 }
@@ -334,7 +380,7 @@ html.noslide .landing{transition:none}
 
 .signup{margin-top:18px; display:flex; flex-direction:column; align-items:stretch; gap:10px}
 input[type=email],input[type=number],input[type=text],select{
-  font-family:inherit; font-size:16px; color:var(--ink);
+  font-family:inherit; font-size:16px; color:var(--espresso);
   background:var(--paper); border:1px solid var(--muted); border-radius:var(--r);
   padding:10px 14px; min-height:48px; min-width:0;
 }
@@ -342,18 +388,21 @@ input::placeholder{color:var(--muted)}
 .signup input[type=email]{width:100%}
 .btn{
   display:inline-flex; align-items:center; justify-content:center; min-height:48px;
-  background:var(--jade); color:#fff; font-weight:600; font-size:16px;
-  padding:12px 20px; border-radius:var(--r); border:1px solid var(--jade);
+  background:var(--espresso); color:var(--cream); font-weight:600; font-size:16px;
+  padding:12px 20px; border-radius:var(--r); border:1px solid var(--espresso);
 }
-.btn:hover,.btn:active{background:var(--jade-deep); border-color:var(--jade-deep)}
+.btn:hover,.btn:active{background:var(--body); border-color:var(--body)}
 .btn:disabled{opacity:.6; cursor:default}
 /* the main button: joining the waitlist */
-.btn-main,.btn-main:hover{background:var(--marigold); border-color:var(--marigold); color:var(--ink)}
-.btn-main:active{background:var(--marigold); border-color:var(--ink)}
+.btn-main,.btn-main:hover{background:var(--tomato); border-color:var(--tomato); color:#fff}
+.btn-main:active{background:var(--tomato-deep); border-color:var(--tomato-deep)}
+.btn-small{min-height:44px; padding:8px 16px; font-size:var(--s15)}
+/* small grey text is too faint on the soft blocks, so it goes darker there */
+.wall .fineprint,.waitlist .fineprint{color:var(--body)}
 .fineprint{margin-top:10px; font-size:var(--s13); color:var(--muted)}
-.formnote{margin-top:12px; font-size:var(--s15); color:var(--jade); font-weight:500}
-.formnote.bad{color:var(--coral-text)}
-.formdone{font-size:var(--s17); color:var(--jade); font-weight:500; max-width:46ch}
+.formnote{margin-top:12px; font-size:var(--s15); color:var(--espresso); font-weight:500}
+.formnote.bad{color:var(--tomato-deep)}
+.formdone{font-size:var(--s17); color:var(--espresso); font-weight:500; max-width:46ch}
 
 .field-label{display:block; font-size:var(--s15); color:var(--muted); margin-bottom:8px}
 .choices{display:flex; flex-wrap:wrap; gap:0 18px; margin:8px 0 14px}
@@ -362,8 +411,8 @@ input::placeholder{color:var(--muted)}
   font-size:var(--s15); color:var(--muted);
   border-bottom:2px solid transparent;
 }
-.choice:hover{color:var(--ink)}
-.choice[aria-pressed=true]{color:var(--ink); font-weight:500; border-bottom-color:var(--jade)}
+.choice:hover{color:var(--espresso)}
+.choice[aria-pressed=true]{color:var(--espresso); font-weight:500; border-bottom-color:var(--tomato)}
 
 .moneywrap{position:relative; flex:1 1 150px}
 .moneywrap .dollar{position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--muted); pointer-events:none}
@@ -381,26 +430,26 @@ section.band{padding:var(--gap-section) 0}
 table{border-collapse:collapse; width:100%; min-width:520px; font-size:var(--s15)}
 caption{text-align:left; font-size:var(--s13); color:var(--muted); padding-bottom:10px}
 th,td{text-align:left; padding:13px 16px 13px 0; border-bottom:1px solid var(--rule); vertical-align:top}
-th{color:var(--muted); font-weight:500; font-size:var(--s13); white-space:nowrap; border-bottom-color:var(--ink); padding-top:0; padding-bottom:0}
+th{color:var(--muted); font-weight:500; font-size:var(--s13); white-space:nowrap; border-bottom-color:var(--espresso); padding-top:0; padding-bottom:0}
 td.n,th.n{text-align:right; font-variant-numeric:tabular-nums}
 tr > *:last-child{padding-right:0}
 th.n .sortbtn{justify-content:flex-end; width:100%}
 thead th{position:relative}
 .sortbtn{display:inline-flex; align-items:center; gap:5px; min-height:44px; color:var(--muted); font-size:var(--s13); font-weight:500}
-.sortbtn:hover{color:var(--ink)}
-th[aria-sort] .sortbtn{color:var(--ink)}
+.sortbtn:hover{color:var(--espresso)}
+th[aria-sort] .sortbtn{color:var(--espresso)}
 .caret{font-size:10px; line-height:1}
 tbody tr:last-child td{border-bottom:1px solid var(--rule)}
-td.item{color:var(--ink); font-weight:500}
-td.mid{color:var(--ink); font-weight:600}
+td.item{color:var(--espresso); font-weight:500}
+td.mid{color:var(--espresso); font-weight:600}
 td.soft{color:var(--muted)}
-td.hi{color:var(--coral-text); font-weight:600}
+td.hi{color:var(--tomato-deep); font-weight:600}
 .tablefoot{margin-top:10px; display:flex; gap:16px; align-items:center; flex-wrap:wrap}
 .linkbtn{
   display:inline-flex; align-items:center; min-height:44px;
-  font-size:var(--s15); color:var(--jade); font-weight:500; text-decoration:underline; text-underline-offset:3px;
+  font-size:var(--s15); color:var(--tomato-deep); font-weight:500; text-decoration:underline; text-underline-offset:3px;
 }
-.linkbtn:active{color:var(--jade-deep)}
+.linkbtn:active{color:var(--espresso)}
 .count{font-size:var(--s13); color:var(--muted)}
 .filterbar{display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:16px}
 .filterbar input[type=text]{flex:1 1 260px; max-width:360px}
@@ -416,7 +465,7 @@ td.hi{color:var(--coral-text); font-weight:600}
 
 /* ---------- tab module ---------- */
 .tabmodule{padding-top:36px}
-.tabbar{position:sticky; top:0; z-index:20; background:var(--paper)}
+.tabbar{position:sticky; top:0; z-index:20; background:var(--cream)}
 .tabstrip{
   display:flex; gap:28px; align-items:flex-end;
   padding:4px 0 5px; border-bottom:1px solid var(--rule);
@@ -430,8 +479,8 @@ td.hi{color:var(--coral-text); font-weight:600}
   font-family:var(--f-text); font-weight:500; font-size:16px; line-height:1.3;
   color:var(--muted); padding:10px 0 9px; border-bottom:2px solid transparent;
 }
-.tabstrip [role=tab]:hover{color:var(--ink)}
-.tabstrip [role=tab][aria-selected=true]{color:var(--ink); border-bottom-color:var(--jade)}
+.tabstrip [role=tab]:hover{color:var(--espresso)}
+.tabstrip [role=tab][aria-selected=true]{color:var(--espresso); border-bottom-color:var(--tomato)}
 
 section.tabpanel{padding-top:28px; padding-bottom:8px}
 /* hidden="until-found" leaves the element in flow with a zero-height subtree,
@@ -441,50 +490,51 @@ section.tabpanel[hidden]{padding-top:0; padding-bottom:0}
 
 /* ---------- new items: a finding, bars by type, and a list grouped by cafe ---------- */
 .launch{max-width:720px}
-.finding{margin-top:10px; font-size:var(--s17); font-weight:500; color:var(--ink)}
+.finding{margin-top:10px; font-size:var(--s17); font-weight:500; color:var(--espresso)}
 .typebars{margin-top:12px}
 .typebar{display:grid; grid-template-columns:104px minmax(0,1fr) 32px; align-items:center; gap:10px; width:100%; min-height:44px; text-align:left; font-size:var(--s15)}
-.typebar .fill{display:block; height:14px; min-width:4px; background:var(--jade); border-radius:7px}
-.typebar .cnt{text-align:right; font-weight:600; color:var(--ink)}
-.typebar[aria-pressed=true] .nm{font-weight:600; color:var(--ink)}
+.typebar .fill{display:block; height:14px; min-width:4px; background:var(--butter); border-radius:7px}
+.typebar .nm{color:var(--espresso)}
+.typebar .cnt{text-align:right; font-weight:600; color:var(--espresso)}
+.typebar[aria-pressed=true] .nm{font-weight:600; color:var(--espresso)}
 .launchctl{display:flex; align-items:center; gap:10px 16px; margin-top:16px}
 .launchctl .lbl{font-size:var(--s13); color:var(--muted)}
 .launchctl select{flex:1 1 120px; min-width:0}
 .switch{flex:0 0 auto; display:inline-flex; align-items:center; gap:8px; min-height:44px; font-size:var(--s15); white-space:nowrap; cursor:pointer}
-.switch input{width:20px; height:20px; margin:0; accent-color:var(--jade)}
+.switch input{width:20px; height:20px; margin:0; accent-color:var(--tomato)}
 .chiprow{display:flex; gap:0 18px; margin-top:4px; overflow-x:auto; white-space:nowrap; scrollbar-width:none}
 .chiprow::-webkit-scrollbar{display:none}
 .chiprow .choice{flex:0 0 auto}
 .cafegroup{margin-top:18px}
 .cafehead{display:flex; flex-wrap:wrap; align-items:baseline; gap:2px 10px; padding-bottom:6px}
-.cafehead strong{font-weight:600; color:var(--ink)}
+.cafehead strong{font-weight:600; color:var(--espresso)}
 .cafehead span{font-size:var(--s13); color:var(--muted)}
 .cafegroup .nearlist{margin-top:0}
 .itemrow{display:flex; align-items:flex-start; justify-content:space-between; gap:14px; min-height:48px; padding:8px 0; border-bottom:1px solid var(--rule)}
 .howcount{margin-top:24px; font-size:var(--s15)}
-.howcount summary{padding:11px 0; color:var(--jade); font-weight:500; cursor:pointer}
+.howcount summary{padding:11px 0; color:var(--tomato-deep); font-weight:500; cursor:pointer}
 .howcount p{max-width:60ch}
 
 /* ---------- neighbour gaps ---------- */
 #gaps h2{font-size:22px}
 
 /* ---------- waitlist ---------- */
-.waitlist{background:var(--mist); padding:var(--gap-section) 0; margin-top:var(--gap-section)}
+.waitlist{background:var(--tint); padding:var(--gap-section) 0; margin-top:var(--gap-section)}
 .waitlist h2{font-size:var(--s26); font-weight:800}
 .waitlist h3{font-size:var(--s17); margin-top:24px}
 .waitlist h3 + p{margin-top:6px}
 .tiles{display:grid; grid-template-columns:1fr; gap:12px; margin:12px 0 4px}
 .tile{background:var(--paper); border-radius:var(--r); padding:16px}
-.tile h4{font-size:var(--s15); font-weight:600; color:var(--ink); margin-bottom:8px; display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px}
+.tile h4{font-size:var(--s15); font-weight:600; color:var(--espresso); margin-bottom:8px; display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px}
 .tile p{font-size:var(--s15)}
-.tile .big{font-family:var(--f-display); font-weight:800; font-size:40px; line-height:1.05; color:var(--ink)}
+.tile .big{font-family:var(--f-display); font-weight:800; font-size:40px; line-height:1.05; color:var(--espresso)}
 .tilerow{display:flex; justify-content:space-between; gap:12px; padding:7px 0; border-bottom:1px solid var(--rule)}
-.tilerow span:last-child{color:var(--ink); font-weight:600; text-align:right}
+.tilerow span:last-child{color:var(--espresso); font-weight:600; text-align:right}
 .tilelock{display:flex; align-items:center; gap:8px; width:100%; min-height:44px; margin-top:2px; text-align:left; font-size:var(--s15); color:var(--muted)}
 .lockcell svg{width:14px; height:14px; vertical-align:-2px}
 .areapick{margin-bottom:10px}
 .areapick select{flex:1 1 180px; max-width:360px}
-.soon{font-size:var(--s13); font-weight:500; color:var(--jade-deep); background:var(--mist); border-radius:var(--r); padding:2px 10px}
+.soon{font-size:var(--s13); font-weight:500; color:var(--espresso); background:var(--tint); border-radius:var(--r); padding:2px 10px}
 .waitlist .signup{margin-top:20px}
 
 .freemail{padding-bottom:var(--gap-section)}
@@ -496,13 +546,13 @@ section.tabpanel[hidden]{padding-top:0; padding-bottom:0}
 footer{border-top:1px solid var(--rule); padding:36px 0 44px}
 .footgrid{display:grid; grid-template-columns:1fr; gap:18px}
 .footline{margin-top:22px; font-size:var(--s13)}
-footer h3{font-family:var(--f-text); font-size:var(--s13); font-weight:600; color:var(--ink); margin-bottom:4px}
+footer h3{font-family:var(--f-text); font-size:var(--s13); font-weight:600; color:var(--espresso); margin-bottom:4px}
 footer .blk p{font-size:var(--s13); line-height:1.5}
 .colophon{margin-top:28px; padding-top:16px; border-top:1px solid var(--rule); display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; font-size:var(--s13); color:var(--muted)}
 
 .loading{padding:80px 0; color:var(--muted)}
-.dataerr{padding:26px; border:1px solid var(--coral-text); border-radius:var(--r); color:var(--ink); margin:40px 0}
-.dataerr code{font-family:ui-monospace,Menlo,monospace; font-size:14px; background:var(--mist); padding:2px 5px; border-radius:4px}
+.dataerr{padding:26px; border:1px solid var(--tomato-deep); border-radius:var(--r); color:var(--espresso); margin:40px 0}
+.dataerr code{font-family:ui-monospace,Menlo,monospace; font-size:14px; background:var(--tint); padding:2px 5px; border-radius:4px}
 
 /* ---------- the phone map ----------
    Up to 700px the map in the page is a still preview with one button over it.
@@ -519,7 +569,7 @@ footer .blk p{font-size:var(--s13); line-height:1.5}
   html.mapfull body{overflow:hidden}
   html.mapfull #map-view{
     position:fixed; inset:0; z-index:90; height:100vh; height:100dvh;
-    display:flex; flex-direction:column; background:var(--paper);
+    display:flex; flex-direction:column; background:var(--cream);
     animation:mapfade .15s ease-out;
   }
   html.mapfull .fullbar{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:6px var(--pad)}
@@ -563,26 +613,87 @@ footer .blk p{font-size:var(--s13); line-height:1.5}
 </head>
 <body>
 
-<!-- SCREEN 1: landing -->
+<!-- SCREEN 1: the landing page. Part 2 will add sections before the footer. -->
 <div class="landing" id="landing">
-  <div class="landing-in">
-    <span class="wordmark">The Weekly Bake</span>
-    <div class="landing-main">
-    <h1>Never guess a price again.</h1>
-    <p class="sub">Type your shop. See the whole market.</p>
-    <div class="combo">
-      <label class="vh" for="shop-input">Your shop or area</label>
-      <input type="text" id="shop-input" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="shop-list" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" placeholder="Your shop or area">
-      <ul class="combolist" id="shop-list" role="listbox" aria-label="Shops and areas" hidden></ul>
+  <header class="landbar" id="landbar">
+    <div class="wrap">
+      <span class="wordmark">The Weekly Bake</span>
+      <button type="button" class="btn btn-small" id="find-top">Find my shop</button>
     </div>
-    <p class="free">Free. No sign-up.</p>
+  </header>
+
+  <!-- 1. hero -->
+  <section class="lsec hero" id="l-hero">
+    <div class="wrap herogrid">
+      <div class="herotext">
+        <h1>Never guess a price again.</h1>
+        <p class="sub">Type your shop. See the whole market.</p>
+        <div class="combo">
+          <label class="vh" for="shop-input">Your shop or area</label>
+          <input type="text" id="shop-input" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="shop-list" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" placeholder="Your shop or area">
+          <ul class="combolist" id="shop-list" role="listbox" aria-label="Shops and areas" hidden></ul>
+        </div>
+        <p class="free">Free. No sign-up.</p>
+      </div>
+      <div class="phone" aria-hidden="true" inert>
+        <div class="phonescreen" id="hero-phone"></div>
+      </div>
     </div>
-    <div class="stats" id="stats" hidden>
-      <div><span class="statnum" id="stat-prices"></span><span class="statlbl">prices</span></div>
-      <div><span class="statnum" id="stat-cafes"></span><span class="statlbl">cafes and bakeries</span></div>
-      <div><span class="statnum" id="stat-areas"></span><span class="statlbl">areas</span></div>
+  </section>
+
+  <!-- 2. moving strip -->
+  <section class="lsec strip" id="l-strip">
+    <div class="wrap"><p class="striplabel" id="strip-label"></p></div>
+    <div class="marquee" aria-hidden="true"><div class="marquee-track" id="strip-names"></div></div>
+  </section>
+
+  <!-- 3. one giant number -->
+  <section class="lsec giant" id="l-number">
+    <div class="wrap">
+      <p class="giantnum" id="giant-num"></p>
+      <p class="gianthead">is how much more the most expensive flat white costs than the cheapest.</p>
+      <p class="giantsub">Most owners only find out by walking into the shop next door.</p>
     </div>
-  </div>
+  </section>
+
+  <!-- 4. how it works -->
+  <section class="lsec how" id="l-how">
+    <div class="wrap">
+      <h2>How it works</h2>
+      <div class="steps">
+        <div class="step">
+          <p class="stepnum">1</p>
+          <h3>Type your shop</h3>
+          <p id="step1-line"></p>
+          <div class="stepvis" id="step1-vis" aria-hidden="true" inert></div>
+        </div>
+        <div class="step">
+          <p class="stepnum">2</p>
+          <h3>See where you stand</h3>
+          <p>How many cafes charge less, the same or more than you.</p>
+          <div class="stepvis" id="step2-vis" aria-hidden="true" inert></div>
+        </div>
+        <div class="step">
+          <p class="stepnum">3</p>
+          <h3>See what your neighbours launched</h3>
+          <p>New items and discounts at cafes near you, every week.</p>
+          <div class="stepvis" id="step3-vis" aria-hidden="true" inert></div>
+        </div>
+      </div>
+      <button type="button" class="btn btn-main" id="find-bottom">Find my shop</button>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <div class="footgrid">
+      <div class="blk"><h3>Where the numbers come from</h3><p>We only use each cafe's own menu, online or in the shop. If a menu looks old, we leave it out. We also read two government lists. We do not copy from delivery apps and we do not buy social media data. Everything here is public, or the shop sent it to us.</p></div>
+      <div class="blk"><h3>What is coming</h3><p>From November we will show which new items got a discount soon after they started, and which ones left the menu. For this we must watch the same shops for a few months. We are doing that now.</p></div>
+      </div>
+      <p class="footline">Your shop listed? Reply to any email to correct or remove it.</p>
+      <div class="colophon"><span id="colophon-land" class="num"></span><span>Made in Singapore by four NUS students</span></div>
+    </div>
+  </footer>
 </div>
 
 <!-- SCREEN 2: a preview of the paid product -->
@@ -1235,10 +1346,11 @@ function showLanding(){
   byId("landing").scrollTop = 0;
 }
 /* the price counts up once, as the landing screen leaves */
-function countUp(){
-  const el = byId("rb-price");
+function countUp(){ countPrice(byId("rb-price"), byId("finder-result")); }
+/* a price that carries its value in data-n counts up to it once */
+function countPrice(el, box){
   if(!el || reduceMotion()) return;
-  const n = Number(el.dataset.n), box = byId("finder-result");
+  const n = Number(el.dataset.n);
   const DELAY = 350, LENGTH = 700;
   // a screen reader hears the finished sentence, not every step
   box.setAttribute("aria-busy", "true");
@@ -1275,6 +1387,7 @@ function render(d){
   buildFooter(d);
   wireForms();
   buildLanding(d);
+  buildLandingPage(d);
   refresh();
   watchScrollDepth();
 
@@ -1299,6 +1412,82 @@ function render(d){
 
   track("page_view", {generated_at: d.meta.generated_at, src: VISIT.src, ref: VISIT.ref,
                       device: VISIT.device, host: VISIT.host});
+}
+
+/* ---------- the landing page under the hero ----------
+   Every figure and every name here is read from the data. The small pieces of
+   the product are drawn by the same code the tool uses, and are decoration:
+   hidden from screen readers, out of reach of the keyboard and the finger. */
+const STRIP_NAMES = 12;      // names on the moving strip: few enough to pass slowly
+function landingExample(d){
+  const item = OPEN_ITEMS[0], rows = d.named_prices[item] || [];
+  const prices = [...new Set(rows.map(r => r.price))].sort((a, b) => a - b);
+  // the lowest price that more than half of the other cafes undercut
+  const price = prices.find(p => rows.filter(r => r.price < p).length * 2 > rows.length);
+  return {item: item, rows: rows, price: price == null ? prices[prices.length - 1] : price, prices: prices};
+}
+function buildLandingPage(d){
+  const ex = landingExample(d), rows = ex.rows;
+  const cafes = (d.shop_items || []).filter(s => s.price_count > 0).length;
+  const byName = rows.slice().sort((a, b) => a.shop_name.localeCompare(b.shop_name));
+
+  // 1. the phone: the example's result block, then one cafe that charges
+  // less, one the same and one more
+  const three = [byName.find(r => r.price < ex.price), byName.find(r => r.price === ex.price),
+                 byName.find(r => r.price > ex.price)].filter(Boolean);
+  const phone = byId("hero-phone");
+  phone.innerHTML = `<p class="phonehead">Your cafe</p>` +
+    `<div class="rankblock">${rankHead(d, ex.item, ex.price, rows, "")}</div>` +
+    `<div class="nearlist">` + three.map(r =>
+      `<div class="nearrow"><span class="nearname">${esc(r.shop_name)}</span><span class="nearprice">${money(r.price)}</span></div>`).join("") +
+    `</div>`;
+  // the price counts up once, the first time the phone is in view
+  const priceEl = phone.querySelector(".rb-price");
+  if(priceEl && "IntersectionObserver" in window && !reduceMotion()){
+    const seen = new IntersectionObserver(found => {
+      if(!found.some(e => e.isIntersecting)) return;
+      seen.disconnect();
+      countPrice(priceEl, phone);
+    }, {threshold: 0.6});
+    seen.observe(priceEl);
+  }
+
+  // 2. the strip: each name once, an outlet's bracket dropped, spread across the list
+  byId("strip-label").textContent = `${fmt(cafes)} cafes and bakeries tracked`;
+  const names = [...new Set([...SHOPS.values()].map(s => s.shop_name.replace(/\s*\([^)]*\)\s*$/, "")))]
+    .sort((a, b) => a.localeCompare(b));
+  const take = Math.min(STRIP_NAMES, names.length - names.length % 2);
+  const picked = Array.from({length: take}, (_, i) => names[Math.floor(i * names.length / take)]);
+  // drawn twice end to end, so the loop has no seam
+  byId("strip-names").innerHTML = picked.concat(picked).map(n => `<span>${esc(n)}</span>`).join("");
+
+  // 3. how far the dearest is above the cheapest, from the same two prices
+  // the boxes under the map show
+  const lo = ex.prices[0], hi = ex.prices[ex.prices.length - 1];
+  byId("giant-num").textContent = `${fmt(Math.round((hi / lo - 1) * 100))}%`;
+
+  // 4. how it works
+  byId("step1-line").textContent = `We already have prices from ${fmt(cafes)} cafes and bakeries.`;
+  // three letters that bring up the most shops, as the field would show them
+  const all = [...SHOPS.values()].sort((a, b) => a.shop_name.localeCompare(b.shop_name));
+  const starts = new Map();
+  all.forEach(s => { const k = fold(s.shop_name).slice(0, 3); starts.set(k, (starts.get(k) || 0) + 1); });
+  const typed = [...starts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0][0];
+  byId("step1-vis").innerHTML = `<div class="fakeinput">${esc(typed)}</div><div class="fakelist">` +
+    all.filter(s => fold(s.shop_name).startsWith(typed)).slice(0, 3).map(s =>
+      `<div><span class="optname">${esc(s.shop_name)}</span><span class="optsub">${esc(s.district)}</span></div>`).join("") + `</div>`;
+  byId("step2-vis").innerHTML = `<div class="rankblock">${splitGroup("", "All cafes", rows, ex.price)}</div>`;
+  const newest = d.launches_list.filter(r => !r.is_chain)
+    .sort((a, b) => launchWhen(b).localeCompare(launchWhen(a))).slice(0, 2);
+  byId("step3-vis").innerHTML = newest.map(r => `<div class="itemrow">${newItemRow(r)}</div>`).join("");
+
+  // both "Find my shop" buttons go to the field at the top and put the cursor in it
+  const find = () => {
+    byId("landing").scrollTop = 0;
+    byId("shop-input").focus({preventScroll: true});
+  };
+  byId("find-top").addEventListener("click", find);
+  byId("find-bottom").addEventListener("click", find);
 }
 
 /* ---------- the wall, and the ways back to the landing screen ---------- */
@@ -1580,7 +1769,12 @@ function buildLanding(d){
     input.setAttribute("aria-expanded", "true");
     input.removeAttribute("aria-activedescendant");
     // on a phone the field moves to the top, so the keyboard leaves the list in view
-    if(isPhone()) land.scrollTop = input.parentElement.offsetTop - 12;
+    liftField();
+    // on a wide screen the field stays where it is unless the list would run
+    // off the foot of the window. Then the page moves up just far enough.
+    const spill = list.getBoundingClientRect().bottom - window.innerHeight + 12;
+    const room = input.getBoundingClientRect().top - byId("landbar").offsetHeight - 12;
+    if(!isPhone() && spill > 0 && room > 0) land.scrollTop += Math.min(spill, room);
   }
   function pick(o){
     if(o.none){
@@ -1602,15 +1796,23 @@ function buildLanding(d){
     track("preview_opened", {mode: o.shop ? "shop" : "area", via: "pick"});
     showPreview(true);
   }
-  // while the field is in use the group sits at the top and the stat row is hidden
-  const typing = on => land.classList.toggle("typing", on);
+  // While the field is in use on a phone it sits just under the top bar, so
+  // the keyboard leaves the suggestions in view. It goes back to where the
+  // page was when the field is left empty.
+  let restTop = null;
+  const liftField = () => {
+    if(isPhone()) land.scrollTop = input.parentElement.offsetTop - byId("landbar").offsetHeight - 12;
+  };
+  const typing = on => {
+    if(on){
+      if(restTop === null) restTop = land.scrollTop;
+      liftField();
+    } else if(restTop !== null){
+      land.scrollTop = restTop;
+      restTop = null;
+    }
+  };
   resetLanding = () => { input.value = ""; asking = false; close(); typing(false); };
-
-  // the three figures at the foot of the screen
-  byId("stat-prices").textContent = PRICES;
-  byId("stat-cafes").textContent = fmt((d.shop_items || []).filter(s => s.price_count > 0).length);
-  byId("stat-areas").textContent = fmt(d.meta.districts.length);
-  byId("stats").hidden = false;
 
   // a close left over from a blur must not shut a list opened since
   input.addEventListener("input", () => { clearTimeout(blurTimer); asking = false; paint(); });
@@ -1783,7 +1985,7 @@ function paintDash(d){
 }
 
 /* ---------- the result ----------
-   One jade block: the reader's price, the kind of price it is, and how the
+   One dark block: the reader's price, the kind of price it is, and how the
    other cafes split around it, across every cafe we track and in the reader's
    own area. The reader's own shop is never one of the others. A locked item
    gives no result at all. */
@@ -1794,6 +1996,17 @@ function verdictOf(v, usual, less, more, n){
   if(more * 2 > n) return "Cheaper than most cafes";
   return "About the usual price";
 }
+/* The top of the block: the label, the price, the verdict and the "All cafes"
+   group. The landing page draws its example with this too, without ids. */
+function rankHead(d, item, v, others, pre){
+  const less = others.filter(r => r.price < v).length, more = others.filter(r => r.price > v).length;
+  const id = name => pre ? ` id="${pre}-${name}"` : "";
+  return `<p class="rb-label"${id("label")}>Your ${esc(itemWords(item))}</p>` +
+    // the price counts up once, so it carries its own value
+    `<p class="rb-price"${id("price")} data-n="${v}">${money(v)}</p>` +
+    `<p class="rb-verdict"${id("verdict")}>${verdictOf(v, priceRow(d, item).median, less, more, others.length)}</p>` +
+    (others.length ? splitGroup(pre ? pre + "-all" : "", "All cafes", others, v) : "");
+}
 /* a heading, a bar split by count, and the same counts in words */
 function splitGroup(id, title, group, v){
   const less = group.filter(r => r.price < v).length;
@@ -1802,7 +2015,7 @@ function splitGroup(id, title, group, v){
   const say = (n, word) => n ? `${fmt(n)} ${n === 1 ? "charges" : "charge"} ${word}.` : "";
   const words = [say(less, "less"), say(same, "the same"), say(more, "more")].filter(Boolean).join(" ");
   const seg = (n, cls) => n ? `<i class="${cls}" style="flex:${n} 1 0"></i>` : "";
-  return `<div class="rb-group" id="${id}">` +
+  return `<div class="rb-group"${id ? ` id="${id}"` : ""}>` +
     `<p class="rb-head">${esc(title)} <span>(the other ${fmt(group.length)})</span></p>` +
     `<div class="rb-bar" role="img" aria-label="${esc(words)}">${seg(less, "less")}${seg(same, "same")}${seg(more, "more")}</div>` +
     `<p class="rb-line">${esc(words)}</p></div>`;
@@ -1861,13 +2074,7 @@ function showResult(d){
 
   // never more than the data: each count is out of the shops we have a price from
   const usual = priceRow(d, finderItem).median;
-  const less = others.filter(r => r.price < v).length;
-  let html =
-    `<p class="rb-label" id="rb-label">Your ${esc(itemWords(finderItem))}</p>` +
-    // the price counts up once, so it carries its own value
-    `<p class="rb-price" id="rb-price" data-n="${v}">${money(v)}</p>` +
-    `<p class="rb-verdict" id="rb-verdict">${verdictOf(v, usual, less, above, others.length)}</p>`;
-  if(others.length) html += splitGroup("rb-all", "All cafes", others, v);
+  let html = rankHead(d, finderItem, v, others, "rb");
   // an area with too few other shops is not ranked
   if(district && near.length >= MIN_NEIGHBOURS){
     local = near.filter(r => r.price > v).length + 1;
@@ -2533,6 +2740,14 @@ const launchWhen = r => r.launch_month ? r.launch_month + "-00" : (r.first_seen 
 const TYPE_WORDS = {pastry: "pastries", cake: "cakes", drink: "drinks", savoury: "savoury items", other: "other items"};
 const typeWords = f => TYPE_WORDS[f] || `${f} items`;
 const capital = s => s.charAt(0).toUpperCase() + s.slice(1);
+const whenWords = w => /-00$/.test(w) ? `new in ${monthLabel(w)}` : w ? `first seen ${dayMonth(w)}` : "";
+// "pandan kaya, new in July", or "New in July" when the item has no flavour
+const secondLine = r => {
+  const w = whenWords(launchWhen(r));
+  return r.flavour && w ? `${r.flavour}, ${w}` : r.flavour || capital(w);
+};
+const newItemRow = r => `<span class="nearname">${esc(r.item_name)}<span class="neararea">${esc(secondLine(r))}</span></span>` +
+  `<span class="nearprice">${r.price == null ? "" : money(r.price)}</span>`;
 function buildLaunches(d){
   const list = d.launches_list;
   list.forEach(r => { r.when = launchWhen(r); });
@@ -2567,10 +2782,6 @@ function buildLaunches(d){
     });
   };
   const matching = () => scope().filter(r => type === "all" || r.format === type);
-  const whenWords = w => /-00$/.test(w) ? `new in ${monthLabel(w)}` : w ? `first seen ${dayMonth(w)}` : "";
-  // "pandan kaya, new in July", or "New in July" when the item has no flavour
-  const secondLine = r => r.flavour && whenWords(r.when) ? `${r.flavour}, ${whenWords(r.when)}`
-                        : r.flavour || capital(whenWords(r.when));
 
   function repaint(){
     const inScope = scope(), n = inScope.length;
@@ -2767,7 +2978,7 @@ function allRecordedDates(d){
   return dates;
 }
 function buildFooter(d){
-  document.getElementById("colophon-left").textContent =
+  byId("colophon-land").textContent = document.getElementById("colophon-left").textContent =
     `${d.meta.shops_with_prices} cafes and bakeries, ${d.meta.districts_count} areas, prices checked ${checkedWhen(allRecordedDates(d))}`;
 }
 

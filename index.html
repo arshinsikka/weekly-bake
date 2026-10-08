@@ -166,6 +166,11 @@ html.noslide .landing{transition:none}
   min-height:48px; padding:8px 0; border-bottom:1px solid var(--rule); text-align:left;
 }
 .nearname{color:var(--ink); font-weight:500}
+.nearlock{color:var(--muted)}
+.nearlock svg{display:block; width:16px; height:16px}
+.lockednote{margin-top:6px; font-size:var(--s15)}
+.lockedbox .near{margin-top:20px}
+.lockedbox .wall{margin-top:24px}
 .neararea{display:block; font-size:var(--s13); font-weight:400; color:var(--muted)}
 .nearprice{color:var(--ink); font-weight:600}
 
@@ -576,9 +581,21 @@ footer .blk p{font-size:var(--s13); line-height:1.5}
         <label for="item-select">Prices for</label>
         <select id="item-select"></select>
       </div>
+      <!-- a locked item: its count, the nearest cafes without their prices, and the offer -->
       <div class="lockedbox" id="locked-box" hidden>
         <p class="lockedline" id="locked-line"></p>
-        <div id="locked-lock"></div>
+        <p class="lockednote" id="locked-note" hidden>We didn't see it on your menu.</p>
+        <div class="near" id="locked-near" hidden>
+          <h3 id="locked-near-title"></h3>
+          <ul class="nearlist" id="locked-near-list"></ul>
+        </div>
+        <div class="wall" id="locked-wall">
+          <h2 id="locked-wall-title"></h2>
+          <p>Join the waitlist to unlock every item, every cafe and your own dashboard. $20 a month.</p>
+          <button type="button" class="btn btn-main" id="locked-join">Join the waitlist</button>
+          <p class="fineprint">No payment now. We will email you when it starts.</p>
+          <button type="button" class="linkbtn" id="locked-free">Not ready? Get the free weekly email.</button>
+        </div>
       </div>
       <button type="button" class="typebox" id="type-box">Type your shop to see how you compare.</button>
       <div class="notlisted" id="notlisted" hidden>
@@ -612,7 +629,7 @@ footer .blk p{font-size:var(--s13); line-height:1.5}
   </section>
 
   <!-- 2. ITEM PICKER and 3. MAP, with the named-prices list behind the toggle -->
-  <section class="sec">
+  <section class="sec" id="map-sec">
     <div class="wrap">
       <div class="mapcol" id="map-col">
         <div class="mapbar">
@@ -670,7 +687,7 @@ footer .blk p{font-size:var(--s13); line-height:1.5}
   </section>
 
   <!-- 4. THE WALL, once -->
-  <section class="sec">
+  <section class="sec" id="wall-sec">
     <div class="wrap">
       <div class="wall" id="wall">
         <h2>See everything for $20 a month</h2>
@@ -1280,14 +1297,15 @@ function buildWall(d){
   const cafes = (d.shop_items || []).filter(s => s.price_count > 0).length;
   byId("wall-line").textContent = `${PRICES} menu prices from ${fmt(cafes)} cafes, and your own dashboard.`;
   byId("wait-all").textContent = `All ${n} items. Every cafe. Full lists of new items and discounts.`;
-  byId("wall-join").addEventListener("click", () => {
+  // the general wall and a locked item's offer lead to the same two places
+  ["wall-join", "locked-join"].forEach(id => byId(id).addEventListener("click", () => {
     track("wall_clicked", {target: "waitlist"});
     scrollToEl(byId(WAIT_HASH));
-  });
-  byId("wall-free").addEventListener("click", () => {
+  }));
+  ["wall-free", "locked-free"].forEach(id => byId(id).addEventListener("click", () => {
     track("wall_clicked", {target: "free_email"});
     scrollToEl(byId("free-email"));
-  });
+  }));
 
   // once per visit, the first time the wall is in view on the preview. The
   // landing screen can lie over it, so being in the viewport is not enough.
@@ -1403,7 +1421,10 @@ function buildFinder(d){
     const open = isOpen(finderItem);
     pick.value = finderItem;
     closePin();
-    byId("map-block").hidden = !open;
+    // a locked item takes the map, its switch and the general wall away with
+    // it, and brings its own offer
+    byId("map-sec").hidden = !open;
+    byId("wall-sec").hidden = !open;
     byId("locked-box").hidden = open;
     if(open){
       if(map && viewMode === "map"){ map.invalidateSize(); fenceMap(); }
@@ -1411,11 +1432,9 @@ function buildFinder(d){
       drawCaption(d);
       setNamedItem();
     } else {
-      // a locked item gives its count and nothing else: no pins, no prices
+      // a locked item gives counts and names, never a price, and no pins
       if(pinLayer) pinLayer.clearLayers();
-      const n = d.named_prices[finderItem].length;
-      byId("locked-line").textContent = `${fmt(n)} ${plural(n, "cafe sells", "cafes sell")} ${itemWords(finderItem)}.`;
-      byId("locked-lock").innerHTML = lockRow(n, `${plural(n, "price", "prices")} for ${itemWords(finderItem)}`, "item");
+      paintLocked(d);
     }
     byId("price-label").textContent = `Enter your ${itemWords(finderItem)} price`;
     document.querySelectorAll("#full-items .choice").forEach(b =>
@@ -1654,28 +1673,53 @@ function distKm(a, b){
   const x = (b[1] - a[1]) * Math.cos((a[0] + b[0]) * Math.PI / 360), y = b[0] - a[0];
   return Math.hypot(x, y) * 111.2;
 }
-function paintNear(d, shop){
-  const box = byId("near");
+/* the nearest cafes with a counted price for the selected item, the reader's own shop left out */
+function nearestCafes(d, shop){
   const home = shop ? shop.district : area;
   const from = shop && shop.lat != null && shop.lng != null ? [shop.lat, shop.lng]
              : home ? areaCentre(home) : null;
-  if(!from || !isOpen(finderItem)){ box.hidden = true; return; }
-
-  const rows = d.named_prices[finderItem];
-  const top = rows
+  if(!from) return [];
+  return d.named_prices[finderItem]
     .filter(r => r.lat != null && r.lng != null && !(shop && r.shop_id === shop.shop_id))
     .map(r => ({r: r, far: (!shop && r.district !== home ? 1000 : 0) + distKm(from, [r.lat, r.lng])}))
     .sort((a, b) => a.far - b.far)
     .slice(0, NEAR).map(x => x.r);
+}
+const nearName = (r, home) => `<span class="nearname">${esc(r.shop_name)}` +
+  (r.district && r.district !== home ? `<span class="neararea">${esc(r.district)}</span>` : "") + `</span>`;
+
+/* A locked item: how many cafes sell it, whether the reader's shop does, the
+   nearest cafes that do, and the offer. A row here is built from the cafe's
+   name and area only. Its price is never put in the page. */
+function paintLocked(d){
+  const rows = d.named_prices[finderItem], n = rows.length;
+  const shop = reader && reader.shopId ? SHOPS.get(reader.shopId) : null;
+  const home = shop ? shop.district : area;
+  byId("locked-line").textContent = `${fmt(n)} ${plural(n, "cafe sells", "cafes sell")} ${itemWords(finderItem)}.`;
+  byId("locked-note").hidden = !(shop && !rows.some(r => r.shop_id === shop.shop_id));
+  const top = nearestCafes(d, shop);
+  byId("locked-near").hidden = !top.length;
+  byId("locked-near-title").textContent =
+    `${itemName(finderItem)} at ${fmt(top.length)} ${plural(top.length, "cafe", "cafes")} near you`;
+  byId("locked-near-list").innerHTML = top.map(r =>
+    `<li><button type="button" data-lock="item">${nearName(r, home)}` +
+    `<span class="nearlock">${LOCK_ICON}<span class="vh">Locked</span></span></button></li>`).join("");
+  byId("locked-wall-title").textContent = `See all ${fmt(n)} ${itemWords(finderItem)} ${plural(n, "price", "prices")}`;
+}
+
+function paintNear(d, shop){
+  const box = byId("near");
+  const home = shop ? shop.district : area;
+  if(!isOpen(finderItem)){ box.hidden = true; return; }
+  const rows = d.named_prices[finderItem];
+  const top = nearestCafes(d, shop);
   if(!top.length){ box.hidden = true; return; }
 
   const own = shop && rows.some(r => r.shop_id === shop.shop_id) ? 1 : 0;
   byId("near-title").textContent = `${itemName(finderItem)} at ${fmt(top.length)} ${plural(top.length, "cafe", "cafes")} near you`;
   byId("near-list").innerHTML = top.map(r =>
     `<li><button type="button" data-near="${esc(r.shop_id)}">` +
-    `<span class="nearname">${esc(r.shop_name)}` +
-      (r.district && r.district !== home ? `<span class="neararea">${esc(r.district)}</span>` : "") +
-    `</span><span class="nearprice">${money(r.price)}</span></button></li>`).join("");
+    `${nearName(r, home)}<span class="nearprice">${money(r.price)}</span></button></li>`).join("");
   byId("near-lock").innerHTML =
     lockRow(rows.length - top.length - own, `more cafes with a ${itemWords(finderItem)} price`, "nearby");
   box.hidden = false;
@@ -1771,7 +1815,7 @@ function showResult(d){
                 : area ? `<strong>${esc(area)}</strong>` : "";
   who.hidden = !(shop || area);
   // nobody chosen: the way back to the landing screen stands in for the result
-  byId("type-box").hidden = !!reader || notListed;
+  byId("type-box").hidden = !!reader || notListed || !open;
   byId("notlisted").hidden = !(notListed && open);
   paintNear(d, shop);
 

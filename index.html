@@ -143,12 +143,59 @@ html.noslide .landing{transition:none}
 .stepvis .itemrow:first-child{border-top:1px solid var(--rule)}
 .how .btn-main{margin-top:56px}
 .landing footer{background:var(--cream); color:var(--body); font-size:16px}
+.bigline{font-family:var(--f-display); font-weight:800; font-size:clamp(32px,6vw,64px); line-height:1.05; letter-spacing:-.02em}
+
+/* 5. what owners said */
+.quotes{background:var(--tomato); color:#fff}
+.quotelabel{margin-bottom:28px}
+.quotegrid{display:grid; grid-template-columns:minmax(0,1fr); gap:56px}
+.quotes figure{margin:0}
+.quotes blockquote{margin:0; font-family:var(--f-display); font-weight:700; font-size:clamp(24px,4.2vw,40px); line-height:1.15; letter-spacing:-.01em}
+.quotes figcaption{margin-top:16px; font-size:16px}
+
+/* 6. the numbers */
+.numbers{background:var(--butter); color:var(--espresso)}
+.numgrid{display:grid; grid-template-columns:minmax(0,1fr); gap:36px}
+.bignum{font-family:var(--f-display); font-weight:800; font-size:clamp(56px,13vw,140px); line-height:.95; letter-spacing:-.03em}
+/* "Nearly" sits small over its number, so the number keeps its full size */
+.numpre{display:block; font-size:.3em; line-height:1.3; letter-spacing:0}
+.numlbl{margin-top:8px}
+.numbers .bigline{margin-top:64px; max-width:16ch}
+
+/* 7. the full version */
+.full{background:var(--cream); color:var(--body)}
+.fulllist{list-style:none; margin:28px 0 0; padding:0; max-width:560px}
+.fulllist li{padding:12px 0; border-bottom:1px solid var(--rule); color:var(--espresso); font-weight:500}
+.full .tiles{margin-top:36px; font-size:16px; line-height:1.5}
+.full .signup{margin-top:36px; max-width:560px}
+
+/* 8. fair questions */
+.questions{background:var(--tint); color:var(--body)}
+.qa{margin-top:32px; max-width:760px}
+.qa details{border-bottom:1px solid var(--muted)}
+.qa summary{min-height:44px; padding:14px 0; font-weight:600; color:var(--espresso); cursor:pointer}
+.qa p{padding-bottom:20px; max-width:60ch}
+
+/* 9. closing */
+.closing{background:var(--espresso); color:var(--cream)}
+.closing h2{color:var(--cream); font-size:clamp(40px,9vw,88px); line-height:1; letter-spacing:-.03em}
+.closing .combo{margin-top:26px; max-width:520px}
+.closing input[type=text]{width:100%; font-size:18px; min-height:56px}
+.closing .free{margin-top:12px; font-size:16px}
+.closing h3{margin-top:72px; color:var(--cream); font-weight:800; font-size:28px}
+.closing .signup{max-width:560px}
+.closing .formnote,.closing .formnote.bad,.closing .formdone{color:var(--cream)}
+.closing :focus-visible{outline-color:var(--butter)}
+.btn.btn-butter,.btn.btn-butter:hover{background:var(--butter); border-color:var(--butter); color:var(--espresso)}
+.btn.btn-butter:active{background:var(--butter); border-color:var(--cream)}
 
 @media (min-width:861px){
   .landing{font-size:20px}
   .lsec{padding:120px 0}
   .herogrid{grid-template-columns:minmax(0,1fr) 320px; gap:72px}
   .steps{grid-template-columns:repeat(3,minmax(0,1fr)); gap:48px}
+  .quotegrid{grid-template-columns:repeat(2,minmax(0,1fr)); gap:72px}
+  .numgrid{grid-template-columns:repeat(3,auto); justify-content:space-between; align-items:end; gap:48px}
 }
 
 /* ---------- screen 2: top bar ---------- */
@@ -681,6 +728,91 @@ footer .blk p{font-size:var(--s13); line-height:1.5}
         </div>
       </div>
       <button type="button" class="btn btn-main" id="find-bottom">Find my shop</button>
+    </div>
+  </section>
+
+  <!-- 5. what owners said -->
+  <section class="lsec quotes" id="l-quotes">
+    <div class="wrap">
+      <p class="quotelabel">What owners told us</p>
+      <div class="quotegrid">
+        <figure>
+          <blockquote>&ldquo;We set prices based on what cafes around us charge, and we had to visit them in person to check. Now we have one single source for all of that.&rdquo;</blockquote>
+          <figcaption>A cafe owner</figcaption>
+        </figure>
+        <figure>
+          <blockquote>&ldquo;It makes it easy to track competitors' prices without checking their websites one by one, and to see when other cafes launch new items or offer discounts.&rdquo;</blockquote>
+          <figcaption>A bakery team</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. the numbers -->
+  <section class="lsec numbers" id="l-numbers">
+    <div class="wrap">
+      <div class="numgrid">
+        <div><p class="bignum" id="num-prices"></p><p class="numlbl">menu prices</p></div>
+        <div><p class="bignum" id="num-cafes"></p><p class="numlbl">cafes and bakeries</p></div>
+        <div><p class="bignum" id="num-areas"></p><p class="numlbl">areas</p></div>
+      </div>
+      <p class="bigline">Every price comes from the cafe's own menu.</p>
+    </div>
+  </section>
+
+  <!-- 7. the full version -->
+  <section class="lsec full" id="l-full">
+    <div class="wrap">
+      <h2>The full version: $20 a month</h2>
+      <ul class="fulllist">
+        <li>All <span class="n-items"></span> items</li>
+        <li>Every cafe near you</li>
+        <li>Full lists of new items and discounts</li>
+        <li>Your own dashboard</li>
+      </ul>
+      <div class="tiles" id="land-tiles"></div>
+      <form class="signup" id="land-wait-form" novalidate>
+        <label class="vh" for="land-wait-email">Email address</label>
+        <input type="email" id="land-wait-email" placeholder="you@yourcafe.sg" required>
+        <button class="btn btn-main" type="submit">Join the waitlist</button>
+      </form>
+      <p class="fineprint">No payment now. We will email you when it starts.</p>
+      <p class="formnote" id="land-wait-note" hidden></p>
+    </div>
+  </section>
+
+  <!-- 8. fair questions -->
+  <section class="lsec questions" id="l-questions">
+    <div class="wrap">
+      <h2>Fair questions</h2>
+      <div class="qa">
+        <details open><summary>Where do the prices come from?</summary><p>From each cafe's own menu, on their website or in the shop. Every price shows the date we checked it and a link to the menu.</p></details>
+        <details><summary>What if my price is wrong?</summary><p>Reply to any of our emails and we fix it. You can also send us your menu.</p></details>
+        <details><summary>My shop is not there. What now?</summary><p>Send us your menu and we add you within a week.</p></details>
+        <details><summary>What is free?</summary><p>Your result for flat white and croissant, the map, and a weekly email.</p></details>
+        <details><summary>What do I get for $20 a month?</summary><p>All <span class="n-items"></span> items, every cafe, the full lists of new items and discounts, and your own dashboard. No payment now. We email you when it starts.</p></details>
+        <details><summary>Who is behind this?</summary><p>Four students at NUS.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. closing: the same field as the hero, then the free email -->
+  <section class="lsec closing" id="l-closing">
+    <div class="wrap">
+      <h2>Never guess a price again.</h2>
+      <div class="combo">
+        <label class="vh" for="shop-input-2">Your shop or area</label>
+        <input type="text" id="shop-input-2" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="shop-list-2" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" placeholder="Your shop or area">
+        <ul class="combolist" id="shop-list-2" role="listbox" aria-label="Shops and areas" hidden></ul>
+      </div>
+      <p class="free">Free. No sign-up.</p>
+      <h3>Or get the free weekly email</h3>
+      <form class="signup" id="land-news-form" novalidate>
+        <label class="vh" for="land-news-email">Email address</label>
+        <input type="email" id="land-news-email" placeholder="you@yourcafe.sg" required>
+        <button class="btn btn-butter" type="submit">Send it to me</button>
+      </form>
+      <p class="formnote" id="land-news-note" hidden></p>
     </div>
   </section>
 
@@ -1344,6 +1476,7 @@ function showLanding(){
   document.documentElement.classList.add("on-landing");
   resetLanding();
   byId("landing").scrollTop = 0;
+  checkSections();
 }
 /* the price counts up once, as the landing screen leaves */
 function countUp(){ countPrice(byId("rb-price"), byId("finder-result")); }
@@ -1418,6 +1551,7 @@ function render(d){
    Every figure and every name here is read from the data. The small pieces of
    the product are drawn by the same code the tool uses, and are decoration:
    hidden from screen readers, out of reach of the keyboard and the finger. */
+let checkSections = () => {};
 const STRIP_NAMES = 12;      // names on the moving strip: few enough to pass slowly
 function landingExample(d){
   const item = OPEN_ITEMS[0], rows = d.named_prices[item] || [];
@@ -1470,11 +1604,17 @@ function buildLandingPage(d){
   byId("step1-line").textContent = `We already have prices from ${fmt(cafes)} cafes and bakeries.`;
   // three letters that bring up the most shops, as the field would show them
   const all = [...SHOPS.values()].sort((a, b) => a.shop_name.localeCompare(b.shop_name));
+  // one row per brand, so three outlets of one name never fill the list
+  const brand = s => s.shop_name.replace(/\s*\([^)]*\)\s*$/, "");
   const starts = new Map();
-  all.forEach(s => { const k = fold(s.shop_name).slice(0, 3); starts.set(k, (starts.get(k) || 0) + 1); });
-  const typed = [...starts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0][0];
-  byId("step1-vis").innerHTML = `<div class="fakeinput">${esc(typed)}</div><div class="fakelist">` +
-    all.filter(s => fold(s.shop_name).startsWith(typed)).slice(0, 3).map(s =>
+  all.forEach(s => {
+    const k = fold(s.shop_name).slice(0, 3);
+    if(!starts.has(k)) starts.set(k, new Map());
+    if(!starts.get(k).has(brand(s))) starts.get(k).set(brand(s), s);
+  });
+  const best = [...starts.entries()].sort((a, b) => b[1].size - a[1].size || a[0].localeCompare(b[0]))[0];
+  byId("step1-vis").innerHTML = `<div class="fakeinput">${esc(best[0])}</div><div class="fakelist">` +
+    [...best[1].values()].slice(0, 3).map(s =>
       `<div><span class="optname">${esc(s.shop_name)}</span><span class="optsub">${esc(s.district)}</span></div>`).join("") + `</div>`;
   byId("step2-vis").innerHTML = `<div class="rankblock">${splitGroup("", "All cafes", rows, ex.price)}</div>`;
   const newest = d.launches_list.filter(r => !r.is_chain)
@@ -1486,8 +1626,53 @@ function buildLandingPage(d){
     byId("landing").scrollTop = 0;
     byId("shop-input").focus({preventScroll: true});
   };
-  byId("find-top").addEventListener("click", find);
-  byId("find-bottom").addEventListener("click", find);
+  byId("find-top").addEventListener("click", () => { track("landing_cta_clicked", {place: "topbar"}); find(); });
+  byId("find-bottom").addEventListener("click", () => { track("landing_cta_clicked", {place: "how"}); find(); });
+
+  // 6. the numbers. "Nearly" is set small over its number.
+  const parts = /^(\D+?)\s*(\d[\d,]*\+?)$/.exec(PRICES);
+  byId("num-prices").innerHTML = parts ? `<span class="numpre">${esc(parts[1])}</span> ${esc(parts[2])}` : esc(PRICES);
+  byId("num-cafes").textContent = fmt(cafes);
+  byId("num-areas").textContent = fmt(d.meta.districts.length);
+
+  // 7. the full version: the dashboard tiles as they are with nobody chosen
+  document.querySelectorAll(".n-items").forEach(el => { el.textContent = fmt(d.price_table.length); });
+  byId("land-tiles").innerHTML = dashTiles(d, null, "", true);
+
+  // 8. a question counts when it is opened, not when it is shut
+  document.querySelectorAll("#l-questions details").forEach((el, i) => {
+    el.querySelector("summary").addEventListener("click", () => {
+      if(!el.open) track("question_opened", {index: i + 1});
+    });
+  });
+
+  /* Each section is reported once per visit, when half of it is in view. A
+     section more than two screens tall can never be half in view, so it
+     counts once it fills the screen. Nothing counts while the tool is showing. */
+  const SECTIONS = [["l-hero", "hero"], ["l-strip", "strip"], ["l-number", "number"], ["l-how", "how"],
+                    ["l-quotes", "quotes"], ["l-numbers", "numbers"], ["l-full", "full_version"],
+                    ["l-questions", "questions"], ["l-closing", "closing"]];
+  const seenSections = new Set();
+  let queued = false;
+  checkSections = () => {
+    queued = false;
+    if(!onLanding()) return;
+    const high = window.innerHeight;
+    SECTIONS.forEach(([id, name]) => {
+      if(seenSections.has(name)) return;
+      const r = byId(id).getBoundingClientRect();
+      const inView = Math.min(r.bottom, high) - Math.max(r.top, 0);
+      if(r.height > 0 && inView >= Math.min(r.height / 2, high * 0.9)){
+        seenSections.add(name);
+        track("landing_section_seen", {section: name});
+      }
+    });
+  };
+  byId("landing").addEventListener("scroll", () => {
+    if(!queued){ queued = true; requestAnimationFrame(checkSections); }
+  }, {passive: true});
+  onResize(checkSections);
+  checkSections();
 }
 
 /* ---------- the wall, and the ways back to the landing screen ---------- */
@@ -1708,9 +1893,16 @@ const MAX_SUGGEST = 6;
 // "Velvete" finds "Velveté" and "tiongbahru" finds "Tiong Bahru": accents,
 // spaces and punctuation are dropped from both sides
 const fold = t => String(t).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]/g, "");
-let resetLanding = () => {};
+const FIELD_RESETS = [];
+const resetLanding = () => FIELD_RESETS.forEach(reset => reset());
 function buildLanding(d){
-  const input = byId("shop-input"), list = byId("shop-list"), land = byId("landing");
+  makeShopField(d, byId("shop-input"), byId("shop-list"), "hero");
+  makeShopField(d, byId("shop-input-2"), byId("shop-list-2"), "closing");
+}
+/* One field, made once for each place it stands. Both run this same code, so
+   they cannot drift apart. `from` says which one a pick came from. */
+function makeShopField(d, input, list, from){
+  const land = byId("landing");
   const all = [...SHOPS.values()].sort((a,b) => a.shop_name.localeCompare(b.shop_name));
   const areas = d.meta.districts.slice();
   // two outlets with one name in one area are told apart by their street
@@ -1734,7 +1926,7 @@ function buildLanding(d){
     active = i;
     list.querySelectorAll("li[role=option]").forEach((li, n) => li.setAttribute("aria-selected", String(n === i)));
     if(i < 0){ input.removeAttribute("aria-activedescendant"); return; }
-    const li = byId("shop-opt-" + i);
+    const li = byId(list.id + "-opt-" + i);
     input.setAttribute("aria-activedescendant", li.id);
     li.scrollIntoView({block: "nearest"});
   }
@@ -1744,7 +1936,7 @@ function buildLanding(d){
     opts = [];
     const row = (o, name, sub, cls) => {
       const i = opts.push(o) - 1;
-      html += `<li role="option" id="shop-opt-${i}" aria-selected="false" data-i="${i}"${cls ? ` class="${cls}"` : ""}>` +
+      html += `<li role="option" id="${list.id}-opt-${i}" aria-selected="false" data-i="${i}"${cls ? ` class="${cls}"` : ""}>` +
               `<span class="optname">${esc(name)}</span>` +
               (sub ? `<span class="optsub">${esc(sub)}</span>` : "") + `</li>`;
     };
@@ -1781,15 +1973,15 @@ function buildLanding(d){
       typedName = input.value.trim();
       asking = true;
       track("shop_search", {found: false});
-      track("not_listed_picked", {});
+      track("not_listed_picked", {from: from});
       paint();
       return;
     }
     const missing = asking;
     asking = false;
     close();
-    if(o.shop) chooseShop(d, o.shop);
-    else chooseArea(d, o.area, missing);
+    if(o.shop) chooseShop(d, o.shop, from);
+    else chooseArea(d, o.area, missing, from);
     input.blur();
     // one step in the history, so Back returns here
     history.pushState({fromLanding: true, tab: activeTab}, "", "#" + activeTab);
@@ -1812,7 +2004,7 @@ function buildLanding(d){
       restTop = null;
     }
   };
-  resetLanding = () => { input.value = ""; asking = false; close(); typing(false); };
+  FIELD_RESETS.push(() => { input.value = ""; asking = false; close(); typing(false); });
 
   // a close left over from a blur must not shut a list opened since
   input.addEventListener("input", () => { clearTimeout(blurTimer); asking = false; paint(); });
@@ -1843,27 +2035,27 @@ function buildLanding(d){
 }
 
 /* a shop opens on flat white when it sells one, otherwise on plain croissant */
-function chooseShop(d, s){
+function chooseShop(d, s, from){
   reader = {shopId: s.shop_id};
   area = s.district; notListed = false; typedName = "";
   byId("finder-price").value = "";
   byId("finder-district").value = "";
   finderItem = s.items.indexOf(OPEN_ITEMS[0]) !== -1 ? OPEN_ITEMS[0] : OPEN_ITEMS[1];
   track("shop_search", {found: true});
-  track("shop_picked", {shop_id: s.shop_id});
+  track("shop_picked", {shop_id: s.shop_id, from: from});
   findGaps(d, s);
   refresh();
   focusMap();
 }
 /* an area on its own, or the area of a shop we do not have yet */
-function chooseArea(d, name, missing){
+function chooseArea(d, name, missing, from){
   reader = null;
   area = name; notListed = missing; gapCount = 0;
   if(!missing) typedName = "";
   byId("finder-price").value = "";
   byId("finder-district").value = name;
   finderItem = OPEN_ITEMS[0];
-  track("area_picked", {area: name});
+  track("area_picked", {area: name, from: from});
   refresh();
   focusMap();
 }
@@ -1942,10 +2134,14 @@ let LIVE_PROMOS = [];        // the offers still running, set when the discounts
 const inArea = (place, name) => place === name || name.split(" / ").indexOf(place) !== -1;
 function paintDash(d){
   const shop = reader && reader.shopId ? SHOPS.get(reader.shopId) : null;
+  byId("dash-note").hidden = !!(shop && shop.items.length);
+  byId("tiles").innerHTML = dashTiles(d, shop, shop ? shop.district : area, false);
+}
+/* The four tiles. `plain` draws the lock lines as text, for the landing page,
+   where there is no waitlist section under them to scroll to. */
+function dashTiles(d, shop, home, plain){
   const own = !!(shop && shop.items.length);
-  const home = shop ? shop.district : area;
   const locals = [...SHOPS.values()].filter(s => !home || s.district === home);
-  byId("dash-note").hidden = own;
 
   const ranks = OPEN_ITEMS.filter(k => FINDER_ITEMS.indexOf(k) !== -1).map(k => {
     const rows = d.named_prices[k];
@@ -1970,8 +2166,9 @@ function paintDash(d){
   const launches = d.launches_list.filter(l => !home || inArea(l.district, home)).length;
   const promos = LIVE_PROMOS.length;
 
-  const lockLine = text => `<button type="button" class="tilelock" data-lock="dashboard">${LOCK_ICON}<span>${esc(text)}</span></button>`;
-  byId("tiles").innerHTML =
+  const lockLine = text => plain ? `<p class="tilelock">${LOCK_ICON}<span>${esc(text)}</span></p>`
+    : `<button type="button" class="tilelock" data-lock="dashboard">${LOCK_ICON}<span>${esc(text)}</span></button>`;
+  return "" +
     `<div class="tile"><h4>Where you rank</h4>${ranks}` +
       (locked > 0 ? lockLine(`+ ${locked} more ${plural(locked, "item", "items")}`) : "") + `</div>` +
     `<div class="tile"><h4>What you are missing</h4><p class="big">${own ? gapCount : sold}</p>` +
@@ -2989,7 +3186,7 @@ const SIGNUP_DONE = {
 };
 const isEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
-function bindSignup(formId, inputId, noteId, source, evt){
+function bindSignup(formId, inputId, noteId, source, evt, position){
   const form = document.getElementById(formId);
   const input = document.getElementById(inputId);
   const note = document.getElementById(noteId);
@@ -3027,7 +3224,7 @@ function bindSignup(formId, inputId, noteId, source, evt){
       done.textContent = SIGNUP_DONE[source];
       form.replaceWith(done);
       note.hidden = true;
-      track(evt, {position: source});
+      track(evt, {position: position || source});
     }catch(err){
       // whatever they typed stays in the field
       btn.disabled = false;
@@ -3042,6 +3239,9 @@ function bindSignup(formId, inputId, noteId, source, evt){
 function wireForms(){
   bindSignup("news-form", "news-email", "news-note", "newsletter_hero", "newsletter_submitted");
   bindSignup("wait-form", "wait-email", "wait-note", "waitlist", "waitlist_submitted");
+  // the landing page's two forms: the same rows, told apart only in analytics
+  bindSignup("land-wait-form", "land-wait-email", "land-wait-note", "waitlist", "waitlist_submitted", "landing");
+  bindSignup("land-news-form", "land-news-email", "land-news-note", "newsletter_hero", "newsletter_submitted", "landing");
 }
 </script>
 </body>

@@ -439,6 +439,32 @@ section.tabpanel{padding-top:28px; padding-bottom:8px}
    unaffected by this. Never set display here or until-found stops working. */
 section.tabpanel[hidden]{padding-top:0; padding-bottom:0}
 
+/* ---------- new items: a finding, bars by type, and a list grouped by cafe ---------- */
+.launch{max-width:720px}
+.finding{margin-top:10px; font-size:var(--s17); font-weight:500; color:var(--ink)}
+.typebars{margin-top:12px}
+.typebar{display:grid; grid-template-columns:104px minmax(0,1fr) 32px; align-items:center; gap:10px; width:100%; min-height:44px; text-align:left; font-size:var(--s15)}
+.typebar .fill{display:block; height:14px; min-width:4px; background:var(--jade); border-radius:7px}
+.typebar .cnt{text-align:right; font-weight:600; color:var(--ink)}
+.typebar[aria-pressed=true] .nm{font-weight:600; color:var(--ink)}
+.launchctl{display:flex; align-items:center; gap:10px 16px; margin-top:16px}
+.launchctl .lbl{font-size:var(--s13); color:var(--muted)}
+.launchctl select{flex:1 1 120px; min-width:0}
+.switch{flex:0 0 auto; display:inline-flex; align-items:center; gap:8px; min-height:44px; font-size:var(--s15); white-space:nowrap; cursor:pointer}
+.switch input{width:20px; height:20px; margin:0; accent-color:var(--jade)}
+.chiprow{display:flex; gap:0 18px; margin-top:4px; overflow-x:auto; white-space:nowrap; scrollbar-width:none}
+.chiprow::-webkit-scrollbar{display:none}
+.chiprow .choice{flex:0 0 auto}
+.cafegroup{margin-top:18px}
+.cafehead{display:flex; flex-wrap:wrap; align-items:baseline; gap:2px 10px; padding-bottom:6px}
+.cafehead strong{font-weight:600; color:var(--ink)}
+.cafehead span{font-size:var(--s13); color:var(--muted)}
+.cafegroup .nearlist{margin-top:0}
+.itemrow{display:flex; align-items:flex-start; justify-content:space-between; gap:14px; min-height:48px; padding:8px 0; border-bottom:1px solid var(--rule)}
+.howcount{margin-top:24px; font-size:var(--s15)}
+.howcount summary{padding:11px 0; color:var(--jade); font-weight:500; cursor:pointer}
+.howcount p{max-width:60ch}
+
 /* ---------- neighbour gaps ---------- */
 #gaps h2{font-size:22px}
 
@@ -737,58 +763,44 @@ footer .blk p{font-size:var(--s13); line-height:1.5}
   <!-- LAUNCHES -->
   <section class="band tabpanel" id="panel-whats-launching" role="tabpanel" aria-labelledby="tab-whats-launching" hidden="until-found">
     <div class="wrap">
-      <div class="sec-head">
-        <h2>New items at other cafes</h2>
-        <p id="launch-sub"></p>
+      <div class="launch">
+        <h2 id="launch-title"></h2>
+        <p class="finding" id="launch-finding"></p>
+        <div class="typebars" id="launch-bars" role="group" aria-label="New items by type"></div>
+        <div class="launchctl">
+          <label class="lbl" for="launch-area">Area</label>
+          <select id="launch-area"><option value="">All areas</option></select>
+          <label class="switch"><input type="checkbox" id="launch-chains">Include big chains</label>
+        </div>
+        <div class="chiprow" id="launch-types" role="group" aria-label="Filter by type"></div>
+        <div id="launch-list"></div>
+        <div id="launch-lock"></div>
+        <details class="howcount">
+          <summary>How we count</summary>
+          <p id="launch-how"></p>
+        </details>
       </div>
-      <div class="chart"><svg id="launch-svg" role="img" aria-labelledby="launch-desc"></svg>
-      <p id="launch-desc" class="vh"></p></div>
-      <div style="margin-top:24px">
-        <div class="filterrow areapick"><label class="lbl" for="launch-area">Area</label><select id="launch-area"><option value="">All areas</option></select></div>
-        <div class="filterrow" id="who-filter" role="group" aria-label="Filter by shop size"><span class="lbl">Who</span></div>
-        <div class="filterrow" id="month-filter" role="group" aria-label="Filter by month"><span class="lbl">When</span></div>
-        <div class="filterrow" id="type-filter" role="group" aria-label="Filter by type"><span class="lbl">Type</span></div>
-      </div>
-      <div class="tablewrap">
-        <table id="launch-table">
-          <thead><tr>
-            <th scope="col" data-key="item_name"><button class="sortbtn" type="button">Item<span class="caret"></span></button></th>
-            <th scope="col" data-key="shop"><button class="sortbtn" type="button">Cafe<span class="caret"></span></button></th>
-            <th scope="col" data-key="flavour"><button class="sortbtn" type="button">Flavour<span class="caret"></span></button></th>
-            <th scope="col" class="n" data-key="price"><button class="sortbtn" type="button">Price<span class="caret"></span></button></th>
-            <th scope="col" data-key="when"><button class="sortbtn" type="button">When<span class="caret"></span></button></th>
-          </tr></thead>
-          <tbody></tbody>
-        </table>
-      </div>
-      <div id="launch-lock"></div>
-      <p class="count" id="launch-count" hidden></p>
     </div>
   </section>
 
   <!-- PROMOS -->
   <section class="band tabpanel" id="panel-whos-discounting" role="tabpanel" aria-labelledby="tab-whos-discounting" hidden="until-found">
     <div class="wrap">
-      <div class="sec-head">
-        <h2>Who has a discount now</h2>
-        <p id="promo-sub"></p>
+      <div class="launch">
+        <h2 id="promo-title"></h2>
+        <p class="finding" id="promo-finding"></p>
+        <div class="launchctl">
+          <label class="lbl" for="promo-area">Area</label>
+          <select id="promo-area"><option value="">All areas</option></select>
+        </div>
+        <div class="chiprow" id="promo-tabs" role="group" aria-label="Filter offers"></div>
+        <div id="promo-list"></div>
+        <div id="promo-lock"></div>
+        <details class="howcount">
+          <summary>How we count</summary>
+          <p>A bundle sells more and keeps the menu price the same. We leave out hotel restaurants and afternoon teas. Offers disappear after their end date.</p>
+        </details>
       </div>
-      <div class="filterrow areapick"><label class="lbl" for="promo-area">Area</label><select id="promo-area"><option value="">All areas</option></select></div>
-      <div class="choices" id="promo-tabs" role="group" aria-label="Filter offers"></div>
-      <div class="tablewrap">
-        <table id="promo-table">
-          <thead><tr>
-            <th scope="col" data-key="brand_name"><button class="sortbtn" type="button">Shop<span class="caret"></span></button></th>
-            <th scope="col" data-key="offer_text"><button class="sortbtn" type="button">Offer<span class="caret"></span></button></th>
-            <th scope="col" data-key="promo_type"><button class="sortbtn" type="button">Type<span class="caret"></span></button></th>
-            <th scope="col" data-key="end_date"><button class="sortbtn" type="button">Ends<span class="caret"></span></button></th>
-          </tr></thead>
-          <tbody></tbody>
-        </table>
-      </div>
-      <div id="promo-lock"></div>
-      <p class="count" id="promo-count" hidden></p>
-      <p class="chartnote">We leave out hotel restaurants and afternoon teas. Their customers are different.</p>
     </div>
   </section>
 
@@ -1266,7 +1278,6 @@ function render(d){
   refresh();
   watchScrollDepth();
 
-  registerPanelChart("whats-launching", () => redrawLaunchChart());
   // a reload must not start out believing the full-screen map is open
   if(history.state && history.state.mapFull){
     const kept = Object.assign({}, history.state);
@@ -1640,8 +1651,6 @@ function chooseShop(d, s){
   track("shop_picked", {shop_id: s.shop_id});
   findGaps(d, s);
   refresh();
-  setLaunchArea(area);
-  setPromoArea(area);
   focusMap();
 }
 /* an area on its own, or the area of a shop we do not have yet */
@@ -1654,8 +1663,6 @@ function chooseArea(d, name, missing){
   finderItem = OPEN_ITEMS[0];
   track("area_picked", {area: name});
   refresh();
-  setLaunchArea(area);
-  setPromoArea(area);
   focusMap();
 }
 
@@ -2511,188 +2518,150 @@ function fillAreas(select, d){
     select.appendChild(o);
   });
 }
-let setLaunchArea = () => {};
-let setPromoArea = () => {};
+/* the free preview of a grouped list: a few rows from each cafe, a few in all */
+const PER_CAFE = 2;
 
-/* ---------- launches ---------- */
+/* ---------- new items ----------
+   One finding, a bar per type, and the items grouped by cafe. The area and
+   the chains switch set what is counted. The type chips, and the bars, which
+   do the same job, narrow the list only. */
+/* When a new item appeared. Most carry the month the shop put it on sale.
+   Where the shop gave none, the day we first saw it stands in: "2026-09-00"
+   for a month, "2026-10-04" for a first-seen day. Both are the same length so
+   they sort as text. */
+const launchWhen = r => r.launch_month ? r.launch_month + "-00" : (r.first_seen || "");
+const TYPE_WORDS = {pastry: "pastries", cake: "cakes", drink: "drinks", savoury: "savoury items", other: "other items"};
+const typeWords = f => TYPE_WORDS[f] || `${f} items`;
+const capital = s => s.charAt(0).toUpperCase() + s.slice(1);
 function buildLaunches(d){
   const list = d.launches_list;
   list.forEach(r => { r.when = launchWhen(r); });
-  const months = [...new Set(list.map(r => r.when))].sort();
   // calendar months from the earliest launch to the latest, both counted
+  const dated = list.map(r => r.when).filter(Boolean).sort();
   const ym = w => Number(w.slice(0, 4)) * 12 + Number(w.slice(5, 7));
-  const dated = months.filter(Boolean);
   const span = dated.length ? ym(dated[dated.length - 1]) - ym(dated[0]) + 1 : 0;
-  const formats = [...new Set(list.map(r => r.format))].sort();
-  // the reader runs a handful of shops, so independents are the default view
-  let who = "independent", month = "all", type = "all", where = "";
-  const areaSel = document.getElementById("launch-area");
+  const since = dated.length ? monthLabel(dated[0]) : "";
+  // the reader runs a handful of shops, so big chains stay out until asked for
+  let chains = false, type = "all", where = "";
+  const areaSel = byId("launch-area"), chainBox = byId("launch-chains");
+  const barsEl = byId("launch-bars"), chipsEl = byId("launch-types"), listEl = byId("launch-list");
   fillAreas(areaSel, d);
+  byId("launch-how").textContent =
+    `We show new items from the last ${fmt(span)} ${plural(span, "month", "months")} that have a price. ` +
+    `Big chains are hidden unless you switch them on. ` +
+    `We leave out mooncakes, National Day items and hotel restaurants.`;
 
-  document.getElementById("launch-sub").textContent =
-    `${list.length} new items with prices, from the last ${span} ${span === 1 ? "month" : "months"}. ` +
-    `Big chains are hidden at first, because they price differently from a small cafe. ` +
-    `We leave out mooncakes and National Day items, because cafes sell those for the date and not because customers ask. ` +
-    `We also leave out hotel restaurants.`;
-
-  // Hotel F&B is already dropped upstream, so All = Independents + Chains.
-  // The chart reads from this too.
-  const byWho = () => list.filter(r =>
-    who === "all" || (who === "chain" ? r.is_chain : !r.is_chain));
-
-  function chips(container, opts, get, set, onPick){
-    const box = document.getElementById(container);
-    opts.forEach(([val, label]) => {
-      const b = document.createElement("button");
-      b.type = "button"; b.className = "choice"; b.textContent = label; b.dataset.val = val;
-      b.setAttribute("aria-pressed", String(get() === val));
-      b.addEventListener("click", () => {
-        set(val);
-        box.querySelectorAll(".choice").forEach(x =>
-          x.setAttribute("aria-pressed", String(x.dataset.val === val)));
-        if(onPick) onPick();
-        repaint();
-        track("tab_changed", {section:"launches", filter:container, value:val});
-      });
-      box.appendChild(b);
+  // Hotel F&B is already dropped upstream. A row with no area, or an area
+  // that is not one of ours, shows under "All areas" only.
+  // A brand with several outlets can list one item under each of them. It is
+  // counted once, and the newest copy is the one kept.
+  const newestFirst = list.slice().sort((a, b) => b.when.localeCompare(a.when));
+  const scope = () => {
+    const seen = new Set();
+    return newestFirst.filter(r => {
+      if(!(chains || !r.is_chain) || (where && !inArea(r.district, where))) return false;
+      const key = r.shop + "|" + r.item_name;
+      if(seen.has(key)) return false;
+      seen.add(key);
+      return true;
     });
-  }
+  };
+  const matching = () => scope().filter(r => type === "all" || r.format === type);
+  const whenWords = w => /-00$/.test(w) ? `new in ${monthLabel(w)}` : w ? `first seen ${dayMonth(w)}` : "";
+  // "pandan kaya, new in July", or "New in July" when the item has no flavour
+  const secondLine = r => r.flavour && whenWords(r.when) ? `${r.flavour}, ${whenWords(r.when)}`
+                        : r.flavour || capital(whenWords(r.when));
 
-  chips("who-filter", [["all","All"], ["independent","Small shops and small groups"], ["chain","Big chains"]],
-        () => who, v => who = v, () => drawLaunchChart(d, byWho()));
-  chips("month-filter", [["all","All"], ...months.map(m => [m, whenLabel(m)])],
-        () => month, v => month = v);
-  chips("type-filter", [["all","All"], ...formats.map(f => [f, f.charAt(0).toUpperCase() + f.slice(1)])],
-        () => type, v => type = v);
-
-  // a row with no area, or an area that is not one of ours, shows under "All areas" only
-  function matching(){
-    return byWho().filter(r => (month === "all" || r.when === month)
-                            && (type === "all" || r.format === type)
-                            && (!where || inArea(r.district, where)));
-  }
-
-  const paint = makeSortable("launch-table",
-    () => sortRows(matching(), "when", "desc").slice(0, CUT),
-    r => `<tr>
-      <td class="item">${esc(r.item_name)}</td>
-      <td>${esc(r.shop)}</td>
-      <td class="soft">${esc(r.flavour)}</td>
-      <td class="n mid">${r.price == null ? "&mdash;" : money(r.price)}</td>
-      <td class="soft num">${esc(whenLabel(r.when))}</td>
-    </tr>`,
-    {key:"when", dir:"desc"});
-
-  const lockEl = document.getElementById("launch-lock");
-  const countEl = document.getElementById("launch-count");
   function repaint(){
-    const total = matching().length;
-    countEl.textContent = total !== 0 ? "" : where ? "Nothing new in this area yet." : "No new items match.";
-    countEl.hidden = total !== 0;
-    lockEl.innerHTML = lockRow(total - CUT, "more new items", "new_items");
-    paint();
+    const inScope = scope(), n = inScope.length;
+    // types under the area and the switch, the commonest first
+    const tally = new Map();
+    inScope.forEach(r => tally.set(r.format, (tally.get(r.format) || 0) + 1));
+    const counts = [...tally.entries()].sort((a, b) => b[1] - a[1]);
+    if(type !== "all" && !tally.has(type)) type = "all";
+    const rows = matching();
+
+    byId("launch-title").textContent = where ? `What cafes in ${where} added to their menus`
+                                             : "What cafes added to their menus";
+    const clearTop = counts.length === 1 || (counts.length > 1 && counts[0][1] > counts[1][1]);
+    byId("launch-finding").textContent = n === 0 ? "Nothing new in this area yet."
+      : `${fmt(n)} ${plural(n, "new item", "new items")} since ${since}.` +
+        // more than half is "most". A smaller lead is given as a count.
+        (!(n >= 3 && clearTop) ? ""
+          : counts[0][1] * 2 > n ? ` Most are ${typeWords(counts[0][0])}.`
+          : ` ${capital(typeWords(counts[0][0]))} lead with ${fmt(counts[0][1])}.`);
+
+    const top = counts.length ? counts[0][1] : 1;
+    // one type alone needs no bars and no chips
+    barsEl.hidden = counts.length < 2;
+    barsEl.innerHTML = counts.map(([f, c]) =>
+      `<button type="button" class="typebar" data-type="${esc(f)}" aria-pressed="${f === type}">` +
+      `<span class="nm">${esc(capital(typeWords(f)))}</span>` +
+      `<span><span class="fill" style="width:${(c / top * 100).toFixed(1)}%"></span></span>` +
+      `<span class="cnt">${fmt(c)}</span></button>`).join("");
+    chipsEl.hidden = counts.length < 2;
+    chipsEl.innerHTML = [["all", "All"]].concat(counts.map(([f]) => [f, capital(typeWords(f))])).map(([val, label]) =>
+      `<button type="button" class="choice" data-type="${esc(val)}" aria-pressed="${val === type}">${esc(label)}</button>`).join("");
+
+    // one group per cafe name, so a brand's outlets are one group: the cafe
+    // with the newest item first, then the cafe with more items
+    const groups = new Map();
+    rows.forEach(r => {
+      if(!groups.has(r.shop)) groups.set(r.shop, {shop: r.shop, areas: [], items: []});
+      const g = groups.get(r.shop);
+      g.items.push(r);
+      if(r.district && g.areas.indexOf(r.district) === -1) g.areas.push(r.district);
+    });
+    const ordered = [...groups.values()];
+    ordered.forEach(g => g.items.sort((a, b) => b.when.localeCompare(a.when)));
+    ordered.sort((a, b) => b.items[0].when.localeCompare(a.items[0].when) || b.items.length - a.items.length);
+
+    // the free preview: a few items from each cafe, a few in all, in group
+    // order. A header still gives its cafe's full count.
+    let left = CUT, html = "";
+    ordered.forEach(g => {
+      if(left <= 0) return;
+      const show = g.items.slice(0, Math.min(PER_CAFE, left));
+      left -= show.length;
+      html += `<div class="cafegroup"><p class="cafehead"><strong>${esc(g.shop)}</strong>` +
+        `<span>${fmt(g.items.length)} ${plural(g.items.length, "new item", "new items")}</span>` +
+        (!where && g.areas.length ? `<span>${esc(g.areas.join(", "))}</span>` : "") + `</p><ul class="nearlist">` +
+        show.map(r => `<li class="itemrow"><span class="nearname">${esc(r.item_name)}` +
+          `<span class="neararea">${esc(secondLine(r))}</span></span>` +
+          `<span class="nearprice">${r.price == null ? "" : money(r.price)}</span></li>`).join("") +
+        `</ul></div>`;
+    });
+    listEl.hidden = n === 0;
+    listEl.innerHTML = html;
+    byId("launch-lock").innerHTML = lockRow(rows.length - (CUT - left), "more new items", "new_items");
   }
+
+  // a bar and its chip do the same thing
+  const pickType = e => {
+    const b = e.target.closest("[data-type]");
+    if(!b) return;
+    type = b.dataset.type;
+    repaint();
+    track("tab_changed", {section:"launches", filter:"type-filter", value:type});
+  };
+  barsEl.addEventListener("click", pickType);
+  chipsEl.addEventListener("click", pickType);
+  chainBox.addEventListener("change", () => {
+    chains = chainBox.checked;
+    repaint();
+    track("tab_changed", {section:"launches", filter:"who-filter", value: chains ? "all" : "independent"});
+  });
   areaSel.addEventListener("change", () => {
     where = areaSel.value;
     repaint();
     track("area_filter_used", {tab: "new_items"});
   });
-  // opens on the reader's area when it has a row, otherwise on every area
-  setLaunchArea = home => {
-    where = home || "";
-    if(where && !matching().length) where = "";
-    areaSel.value = where;
-    repaint();
-  };
-
-  redrawLaunchChart = () => drawLaunchChart(d, byWho());
-  drawLaunchChart(d, byWho());
   repaint();
 }
 
-let redrawLaunchChart = () => {};
-
-/* When a new item appeared. Most carry the month the shop put it on sale.
-   Where the shop gave none, the day we first saw it stands in, so the item
-   still has a place in the chart, the filter and the sort: "2026-09-00" for
-   a month, "2026-10-04" for a first-seen day. Both are the same length so
-   they sort as text. */
-const launchWhen = r => r.launch_month ? r.launch_month + "-00" : (r.first_seen || "");
-function whenLabel(when){
-  if(/-00$/.test(when)) return monthLabel(when);
-  return when ? "First seen " + dayMonth(when) : "No date";
-}
-
-const MIN_SEGMENTS = 3;   // below this a month is stated as a number, not drawn
-function drawLaunchChart(d, rows){
-  // counts come from the rows actually in scope, so the chart tracks the Who filter
-  const order = d.format_split.map(f => f.format);
-  const months = [...new Set(d.launches_list.map(launchWhen))].sort();
-  const countOf = (m, f) => rows.filter(r => launchWhen(r) === m && r.format === f).length;
-  const totals = months.map(m => rows.filter(r => launchWhen(r) === m).length);
-  const maxTotal = Math.max(...totals, 1);
-
-  const el = document.getElementById("launch-svg");
-  const W = boxWidth(el.parentElement, 900);
-  const narrow = W < 620;
-  const TOP = 12, BOT = narrow ? 46 + order.length * 14 : 46;
-  const H = (narrow ? 210 : 280) + (narrow ? order.length * 14 : 0);
-  const plotH = H - TOP - BOT;
-  const sideLabel = !narrow;
-  const slot = W / months.length;
-  const colW = Math.min(narrow ? 66 : 120, slot * (sideLabel ? 0.34 : 0.46));
-  const ops = [0.85, 0.62, 0.42, 0.24, 0.14];
-
-  let svg = "";
-  months.forEach((m, mi) => {
-    const cx = slot * mi + slot/2;
-    const x = sideLabel ? cx - colW * 0.85 : cx - colW/2;
-    const total = totals[mi];
-
-    if(total < MIN_SEGMENTS){
-      // too few to draw legibly, so say the number instead of drawing slivers
-      svg += `<text x="${cx.toFixed(2)}" y="${(TOP + plotH - 6).toFixed(2)}" text-anchor="middle" fill="var(--ink)" font-family="Archivo,sans-serif" font-size="21" style="font-variant-numeric:tabular-nums">${total}</text>`;
-    } else {
-      let y = TOP + plotH;
-      let lastLabelY = Infinity;
-      order.forEach((f, fi) => {
-        const c = countOf(m, f);
-        if(!c) return;
-        const h = (c / maxTotal) * plotH;
-        y -= h;
-        svg += `<rect x="${x.toFixed(2)}" y="${y.toFixed(2)}" width="${colW.toFixed(2)}" height="${h.toFixed(2)}" fill="var(--jade)" opacity="${ops[fi % ops.length]}"></rect>`;
-        if(h >= 16){
-          svg += `<text x="${(x + colW/2).toFixed(2)}" y="${(y + h/2 + 5).toFixed(2)}" text-anchor="middle" fill="#fff" font-family="Archivo,sans-serif" font-size="13" font-weight="600" style="font-variant-numeric:tabular-nums">${c}</text>`;
-        }
-        if(sideLabel){
-          let ly = y + h/2 + 4;
-          if(lastLabelY - ly < 14) ly = lastLabelY - 14;
-          lastLabelY = ly;
-          svg += `<text x="${(x + colW + 9).toFixed(2)}" y="${ly.toFixed(2)}" fill="var(--muted)" font-family="Archivo,sans-serif" font-size="12">${esc(f)} ${c}</text>`;
-        }
-      });
-    }
-
-    svg += `<text x="${cx.toFixed(2)}" y="${TOP + plotH + 22}" text-anchor="middle" fill="var(--ink)" font-family="Archivo,sans-serif" font-size="${narrow ? 12 : 14}">${esc(whenLabel(m))}</text>`;
-    svg += `<text x="${cx.toFixed(2)}" y="${TOP + plotH + 39}" text-anchor="middle" fill="var(--muted)" font-family="Archivo,sans-serif" font-size="12" style="font-variant-numeric:tabular-nums">${total} ${total === 1 ? "new item" : "new items"}</text>`;
-    if(narrow && total >= MIN_SEGMENTS){
-      order.forEach((f, fi) => {
-        const c = countOf(m, f);
-        if(!c) return;
-        svg += `<text x="${cx.toFixed(2)}" y="${TOP + plotH + 57 + fi * 14}" text-anchor="middle" fill="var(--muted)" font-family="Archivo,sans-serif" font-size="11" style="font-variant-numeric:tabular-nums">${esc(f)} ${c}</text>`;
-      });
-    }
-  });
-
-  el.setAttribute("viewBox", `0 0 ${W} ${H}`);
-  el.setAttribute("preserveAspectRatio", "xMinYMin meet");
-  el.style.height = H + "px";
-  el.innerHTML = svg;
-  document.getElementById("launch-desc").textContent =
-    "New items each month, by type: " + months.map((m,i) => `${whenLabel(m)} ${totals[i]}`).join(", ") + ".";
-}
-
-/* ---------- promos ---------- */
+/* ---------- promos ----------
+   One finding and the offers grouped by cafe, in the same style as the new
+   items. The area sets what is counted. The chips narrow the list only. */
 function buildPromos(d){
   /* Only offers still running show. An offer ends at the close of its end
      date, so it stays through that day and goes the day after. Today is the
@@ -2711,22 +2680,16 @@ function buildPromos(d){
   const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
   const live = d.promos_list
     .filter(r => !r.end_date || r.end_date >= today)
-    .map(r => Object.assign({}, r, {end_date: r.end_date || null,   // no date sorts last
-                                    areas: brandAreas(r.brand_name)}));
+    .map(r => Object.assign({}, r, {end_date: r.end_date || null, areas: brandAreas(r.brand_name)}));
   LIVE_PROMOS = live;
-  const bundles = live.filter(r => r.promo_type === "bundle").length;
-  document.getElementById("promo-sub").textContent =
-    `${live.length} ${live.length === 1 ? "offer is" : "offers are"} running now. ` +
-    `${bundles} of them ${bundles === 1 ? "is a bundle, not a price cut" : "are bundles, not price cuts"}. ` +
-    `A bundle sells more and keeps the menu price the same.`;
 
   const types = [...new Set(live.map(r => r.promo_type))].sort();
   const LABELS = {bundle:"Bundles", price_cut:"Price cuts"};
+  const ONE = {bundle:"Bundle", price_cut:"Price cut"};
   let current = "all", where = "";
-  const areaSel = document.getElementById("promo-area");
+  const areaSel = byId("promo-area"), tabs = byId("promo-tabs"), listEl = byId("promo-list");
   fillAreas(areaSel, d);
 
-  const tabs = document.getElementById("promo-tabs");
   const add = (val, label) => {
     const b = document.createElement("button");
     b.type = "button"; b.className = "choice"; b.textContent = label; b.dataset.val = val;
@@ -2743,41 +2706,54 @@ function buildPromos(d){
   add("all", "All");
   types.forEach(t => add(t, LABELS[t] || t));
 
-  function matching(){
-    return live.filter(r => (current === "all" || r.promo_type === current)
-                         && (!where || r.areas.indexOf(where) !== -1));
-  }
+  const scope = () => live.filter(r => !where || r.areas.indexOf(where) !== -1);
+  // soonest end first, and an offer with no end date last
+  const byEnd = (a, b) => (a == null) - (b == null) || String(a).localeCompare(String(b));
 
-  const paint = makeSortable("promo-table",
-    () => sortRows(matching(), "end_date", "asc").slice(0, CUT),
-    r => `<tr>
-      <td class="item">${esc(r.brand_name)}</td>
-      <td>${esc(r.offer_text)}</td>
-      <td class="soft">${esc((LABELS[r.promo_type] || r.promo_type).replace(/s$/,""))}</td>
-      <td class="soft num">${r.end_date ? esc(r.end_date) : "No end date given"}</td>
-    </tr>`,
-    {key:"end_date", dir:"asc"});
-
-  const lockEl = document.getElementById("promo-lock");
-  const countEl = document.getElementById("promo-count");
   function repaint(){
-    const total = matching().length;
-    countEl.textContent = total === 0 && where ? "Nothing new in this area yet." : "";
-    countEl.hidden = !(total === 0 && where);
-    lockEl.innerHTML = lockRow(total - CUT, "more discounts", "discounts");
-    paint();
+    const inScope = scope(), n = inScope.length;
+    const bundles = inScope.filter(r => r.promo_type === "bundle").length;
+    const rows = inScope.filter(r => current === "all" || r.promo_type === current);
+
+    byId("promo-title").textContent = where ? `What cafes in ${where} are offering now` : "What cafes are offering now";
+    byId("promo-finding").textContent = n === 0 ? "No offers in this area right now."
+      : `${fmt(n)} ${plural(n, "offer", "offers")} running now.` +
+        (bundles === 0 || bundles === n ? ""
+          : ` ${fmt(bundles)} ${plural(bundles, "is a bundle, not a price cut", "are bundles, not price cuts")}.`);
+
+    const groups = new Map();
+    rows.forEach(r => {
+      if(!groups.has(r.brand_name)) groups.set(r.brand_name, {name: r.brand_name, items: []});
+      groups.get(r.brand_name).items.push(r);
+    });
+    const ordered = [...groups.values()];
+    ordered.forEach(g => g.items.sort((a, b) => byEnd(a.end_date, b.end_date)));
+    ordered.sort((a, b) => byEnd(a.items[0].end_date, b.items[0].end_date));
+
+    // the free preview: a few offers from each cafe, a few in all
+    let left = CUT, html = "";
+    ordered.forEach(g => {
+      if(left <= 0) return;
+      const show = g.items.slice(0, Math.min(PER_CAFE, left));
+      left -= show.length;
+      html += `<div class="cafegroup"><p class="cafehead"><strong>${esc(g.name)}</strong>` +
+        `<span>${fmt(g.items.length)} ${plural(g.items.length, "offer", "offers")}</span></p><ul class="nearlist">` +
+        show.map(r => `<li class="itemrow"><span class="nearname">${esc(r.offer_text)}` +
+          `<span class="neararea">${esc(ONE[r.promo_type] || r.promo_type)}, ` +
+          `${r.end_date ? "ends " + esc(dayMonth(r.end_date)) : "no end date"}</span></span></li>`).join("") +
+        `</ul></div>`;
+    });
+    tabs.hidden = n === 0;
+    listEl.hidden = n === 0;
+    listEl.innerHTML = html;
+    byId("promo-lock").innerHTML = lockRow(rows.length - (CUT - left), "more discounts", "discounts");
   }
+
   areaSel.addEventListener("change", () => {
     where = areaSel.value;
     repaint();
     track("area_filter_used", {tab: "discounts"});
   });
-  setPromoArea = home => {
-    where = home || "";
-    if(where && !matching().length) where = "";
-    areaSel.value = where;
-    repaint();
-  };
   repaint();
 }
 

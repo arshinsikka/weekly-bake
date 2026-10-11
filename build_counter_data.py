@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
-"""Build counter/counter_data.json: the new items Counter shows, with the
-fields the live site's file leaves out (the source link, limited time, and
-which of our shops a cafe name stands for).
+"""Build counter/counter_data.json: the new items and the offers Counter shows,
+with the fields the live site's file leaves out (the source link, limited
+time, what an offer covers, and which of our shops a cafe name stands for).
 
 The rules are the live site's own, copied from build_site_data.py rather than
 imported, because importing that script runs it and it writes files. Before
 anything is written the result is checked against site/site_data.json: the
-same launches, the same chain flags. If they differ nothing is written.
+same launches with the same chain flags, and the same offers. If either
+differs nothing is written.
 
-Inputs, all read only: launches_clean.csv, shops_all.csv, site/site_data.json.
+Inputs, all read only: launches_clean.csv, promos_clean.csv, shops_all.csv,
+site/site_data.json.
 Outputs: counter/counter_data.json, and counter/site_data.json as a byte copy
 of site/site_data.json when the two differ. No network calls.
 """
@@ -65,6 +67,7 @@ def read(name):
 
 
 launches = read("launches_clean.csv")
+promos = read("promos_clean.csv")
 shop_history = read("shops_all.csv")
 with open(SITE_DATA, encoding="utf-8") as fh:
     site_data = json.load(fh)
@@ -132,10 +135,54 @@ if ours != theirs or len(records) != len(site_launches):
     sys.exit(1)
 
 
+# ------------------------------------------------------------------ offers
+# copied from build_site_data.py, lines 42-43 and 362-365: hotel rows are left out
+def is_hotel_promo(row):
+    return is_hotel(row["brand_name"], row["source_url"], row["source_type"])
+
+promos_kept = [p for p in promos if not is_hotel_promo(p)]
+
+offers = []
+for p in promos_kept:
+    matches = linked(p["brand_name"])
+    offers.append({
+        "brand_name": p["brand_name"],
+        "offer_text": p["offer_text"],
+        "promo_type": p["promo_type"],
+        "items_covered": p["items_covered"],
+        "start_date": p["start_date"].strip() or None,
+        "end_date": p["end_date"].strip() or None,
+        "end_date_stated": p["end_date_stated"] == "yes",
+        # the same chain rule as a launch, not the CSV's own is_chain column
+        "is_chain": brand_key(p["brand_name"]) in CHAINS,
+        "source_url": p["source_url"],
+        "source_type": p["source_type"],
+        "observed_date": p["observed_date"].strip() or None,
+        "shop_ids": [s["shop_id"] for s in matches],
+        # one shop: its own district. An offer names a brand and no place, so otherwise none.
+        "district": matches[0]["district"] if len(matches) == 1 else "",
+    })
+
+def offer_key(r):
+    return (r["brand_name"], r["offer_text"], r["promo_type"], r["end_date"] or "")
+
+site_promos = site_data["promos_list"]
+ours_o, theirs_o = {offer_key(r) for r in offers}, {offer_key(r) for r in site_promos}
+if ours_o != theirs_o or len(offers) != len(site_promos):
+    print("NOT WRITTEN: the offers differ from site/site_data.json")
+    print(f"  records here {len(offers)}, in site_data.json {len(site_promos)}")
+    for k in sorted(ours_o - theirs_o):
+        print("  only here            :", k)
+    for k in sorted(theirs_o - ours_o):
+        print("  only in site_data.json:", k)
+    sys.exit(1)
+
+
 # ------------------------------------------------------------------ output
 counter_data = {
-    "meta": {"generated_at": TODAY, "launches": len(records)},
+    "meta": {"generated_at": TODAY, "launches": len(records), "offers": len(offers)},
     "launches": records,
+    "offers": offers,
 }
 with open(COUNTER_DATA, "w", encoding="utf-8") as fh:
     json.dump(counter_data, fh, indent=2, ensure_ascii=False)
@@ -154,4 +201,8 @@ print(f"  chains                       : {sum(1 for r in records if r['is_chain'
 print(f"  with at least one shop_id    : {len(with_shop)}")
 print(f"  distinct shops linked        : {len({i for r in records for i in r['shop_ids']})}")
 print(f"  counter/site_data.json       : {'refreshed' if refreshed else 'already identical, left alone'}")
+print(f"  offers                       : {len(promos)} rows read, {len(offers)} kept, {len(promos) - len(offers)} hotels dropped, "
+      f"{sum(1 for r in offers if r['is_chain'])} chains, {sum(1 for r in offers if r['shop_ids'])} with at least one shop_id, "
+      f"{len({i for r in offers for i in r['shop_ids']})} distinct shops linked "
+      f"(check against site_data.json: equal, {len(ours_o)} here, {len(theirs_o)} there)")
 print(f"  wrote {COUNTER_DATA.relative_to(FOLDER)}")

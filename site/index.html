@@ -1467,7 +1467,8 @@ function track(eventName, props){
     // fetch, never sendBeacon: a beacon always sends cookies, and Supabase
     // answers every site ("*"), a pair the browser refuses, so each beacon
     // was dropped before it left. keepalive lets the request outlive the page.
-    fetch(SUPABASE_URL + "/rest/v1/events", {
+    // handed back so a click that leaves the page can wait for it; it never rejects
+    return fetch(SUPABASE_URL + "/rest/v1/events", {
       method: "POST", keepalive: true, credentials: "omit", headers: SB_HEADERS, body: payload
     }).catch(() => {});
   }catch(_){ /* swallowed on purpose */ }
@@ -1701,10 +1702,7 @@ function tellUs(){
   fit();
   addEventListener("resize", fit);
   const cf = byId("close-find");
-  if(cf) cf.addEventListener("click", () => {
-    track("landing_cta_clicked", {place: "closing"});
-    openCounter("", "closing");
-  });
+  if(cf) cf.addEventListener("click", () => tryCounter("closing"));
   const open = byId("tell-open"), form = byId("tell-form");
   if(!open || !form) return;
   open.addEventListener("click", () => {
@@ -1763,6 +1761,17 @@ const COUNTER_APP = "https://app.countr.site";
 const FROM_LANDING = "src=landing&from=landing", FROM_DEMO = "src=landing&from=demo";
 const COUNTER_PREVIEW = "?shop=caffe_pralet&rivals=merci_marcel_tiong_bahru,tiong_bahru_bakery,drips_bakery_cafe,tianns&";
 let openCounter = () => {};
+/* "Try Counter": the event goes first, then the app opens in this tab. The page waits for the event to be
+   answered, but never longer than TRY_WAIT; track sends with keepalive, so a slow one still outlives the page. */
+const TRY_WAIT = 400;
+let trying = false;
+function tryCounter(place){
+  if(trying) return;
+  trying = true;
+  const go = () => { if(trying){ trying = false; location.href = COUNTER_APP + "/?" + FROM_LANDING; } };
+  Promise.resolve(track("landing_cta_clicked", {place: place})).then(go);
+  setTimeout(go, TRY_WAIT);
+}
 
 function buildTryDemo(){
   const screen = byId("try-screen"), frame = byId("try-frame");
@@ -1981,9 +1990,9 @@ function buildLandingPage(d){
     .sort((a, b) => launchWhen(b).localeCompare(launchWhen(a))).slice(0, 2);
   byId("step3-vis").innerHTML = newest.map(r => `<div class="itemrow">${newItemRow(r)}</div>`).join("");
 
-  // the "Try Counter" buttons open the app at its first screen
+  // the "Try Counter" buttons leave this page for the app at its first screen, in the same tab
   [["find-top", "topbar"], ["find-bottom", "how"], ["find-plan", "pricing"]].forEach(([id, place]) =>
-    byId(id).addEventListener("click", () => { track("landing_cta_clicked", {place: place}); openCounter("", place); }));
+    byId(id).addEventListener("click", () => tryCounter(place)));
 
   // 7. the full version: the dashboard tiles as they are with nobody chosen
   const today = new Date().toLocaleDateString("en-CA");

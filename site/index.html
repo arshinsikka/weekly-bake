@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Counter</title>
 <meta name="description" content="Prices and new menu items at Singapore cafes and bakeries.">
-<link rel="icon" href="img/logo-mark.svg" type="image/svg+xml">
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="fonts/gambetta-500.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/switzer-400.woff2" as="font" type="font/woff2" crossorigin>
 <style>
@@ -84,9 +84,6 @@ html:not(.on-landing) .landing{
 .herogrid{display:grid; grid-template-columns:minmax(0,1fr); gap:32px; align-items:center}
 .hero h1{font-weight:800; font-size:clamp(40px,9vw,88px); line-height:1; letter-spacing:-.03em}
 .hero .sub{margin-top:16px}
-.hero .combo{margin-top:22px; max-width:520px}
-.hero input[type=text]{width:100%; font-size:18px; min-height:56px; background:var(--paper); border-color:var(--espresso)}
-.hero .free{margin-top:12px; font-size:16px}
 /* The menu board: six cafes and their price for one item. One row at a time
    flips to another cafe. Every row is a button that opens that cafe. */
 .menuboard{background:var(--espresso); color:var(--cream); border-radius:20px; padding:22px 22px 24px; line-height:1.5}
@@ -317,17 +314,9 @@ footer h3{font-family:var(--f-text); font-size:var(--s13); font-weight:600; colo
 .eyebrow{display:inline-flex; align-items:center; gap:8px; margin-bottom:22px; padding:6px 14px 6px 10px; border-radius:999px; background:var(--paper); box-shadow:var(--card-shadow); font-size:14px; font-weight:600; color:var(--espresso)}
 .eyebrow i{width:8px; height:8px; border-radius:50%; background:#3E9B5B; box-shadow:0 0 0 4px rgba(62,155,91,.18)}
 .menuboard{box-shadow:0 30px 60px -20px rgba(42,24,16,.45); border-radius:20px}
-.section-kicker{display:block; margin-bottom:14px; font-size:14px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--tomato)}
+.section-kicker{display:block; margin-bottom:14px; font-size:14px; font-weight:600; letter-spacing:.08em; color:var(--tomato)}
 .sublead{margin-top:16px; max-width:52ch; color:var(--body)}
 /* photo band */
-.photos{background:var(--cream)}
-.bento{display:grid; gap:16px; margin-top:44px; grid-template-columns:repeat(2,minmax(0,1fr))}
-.shot{position:relative; margin:0; border-radius:20px; overflow:hidden; aspect-ratio:4/5; background:var(--tint); box-shadow:var(--card-shadow)}
-.shot img{display:block; width:100%; height:100%; object-fit:cover}
-.shot.wide{grid-column:span 2; aspect-ratio:16/10}
-.chip{position:absolute; left:14px; bottom:14px; right:14px; display:flex; align-items:center; gap:10px; padding:10px 14px; border-radius:14px; background:rgba(255,255,255,.94); box-shadow:var(--card-shadow); font-size:14px; line-height:1.3; color:var(--espresso)}
-.chip b{display:block; font-family:var(--f-display); font-size:16px}
-.chip .dot{flex:none; width:32px; height:32px; border-radius:10px; display:grid; place-items:center; font-size:17px; background:var(--butter)}
 /* steps as cards */
 .step{background:var(--paper); border-radius:20px; padding:28px; box-shadow:var(--card-shadow)}
 .stepnum{font-size:15px; display:inline-grid; place-items:center; width:40px; height:40px; border-radius:12px; background:var(--butter); color:var(--tomato-deep)}
@@ -373,10 +362,6 @@ footer h3{font-family:var(--f-text); font-size:var(--s13); font-weight:600; colo
 .closing{position:relative; background:linear-gradient(rgba(42,24,16,.82),rgba(42,24,16,.92)),url(img/busy.jpg) center/cover; text-align:left}
 @media (min-width:861px){
   .navlinks{display:flex}
-  .bento{grid-template-columns:repeat(4,minmax(0,1fr)); grid-auto-rows:220px}
-  .shot,.shot.wide{aspect-ratio:auto}
-  .shot.wide{grid-column:span 2; grid-row:span 2}
-  .shot.tall{grid-row:span 2}
   .quotegrid{grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px}
   .plans{grid-template-columns:repeat(2,minmax(0,1fr)); max-width:880px; margin-left:auto; margin-right:auto}
   .qa{grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px}
@@ -402,14 +387,9 @@ footer h3{font-family:var(--f-text); font-size:var(--s13); font-weight:600; colo
   transition:transform .6s cubic-bezier(.2,.8,.2,1), opacity .6s; animation:toastin .6s cubic-bezier(.2,.8,.2,1)}
 .toast .ti{flex:none; width:36px; height:36px; border-radius:11px; display:grid; place-items:center; font-size:18px; background:var(--butter)}
 .toast b{display:block; color:var(--espresso); font-size:14px}
-.toast small{display:block; color:var(--muted); font-size:12px; margin-bottom:1px; text-transform:uppercase; letter-spacing:.06em; font-weight:600}
+.toast small{display:block; color:var(--muted); font-size:12px; margin-bottom:1px; letter-spacing:.06em; font-weight:600}
 .toast.back{transform:translateY(-62px) scale(.94); opacity:.55}
 @keyframes toastin{from{opacity:0; transform:translateY(40px) scale(.96)}}
-.shot img{transition:transform 6s ease-out}
-.shot:hover img,.shot.in img{transform:scale(1.07)}
-.chip{animation:bob 5s ease-in-out infinite}
-.shot:nth-child(2) .chip{animation-delay:-1.6s}
-.shot:nth-child(4) .chip{animation-delay:-3.1s}
 @keyframes bob{50%{transform:translateY(-6px)}}
 .step,.plan,.qpair,.quotes figure{transition:transform .3s ease, box-shadow .3s ease}
 .step:hover,.plan:hover,.qpair:hover,.quotes figure:hover{transform:translateY(-4px); box-shadow:0 2px 4px rgba(42,24,16,.06),0 24px 48px -16px rgba(42,24,16,.28)}
@@ -417,8 +397,8 @@ footer h3{font-family:var(--f-text); font-size:var(--s13); font-weight:600; colo
 .motion .rv.in{opacity:1; transform:none}
 @media (max-width:860px){ .toasts{left:8px; bottom:-60px} .heroside{margin-bottom:70px} }
 @media (prefers-reduced-motion:reduce){
-  .hero::before,.hero::after,.eyebrow i,.chip,.rot span,.toast{animation:none}
-  .shot img,.toast{transition:none}
+  .hero::before,.hero::after,.eyebrow i,.rot span,.toast{animation:none}
+  .toast{transition:none}
 }
 /* ---------- hero: words left, the live board right ---------- */
 .hero{min-height:0; padding:56px 0 88px}
@@ -426,9 +406,6 @@ footer h3{font-family:var(--f-text); font-size:var(--s13); font-weight:600; colo
 .hero h1{font-size:clamp(44px,6vw,80px); line-height:.98}
 .hero h1 .mark{background:linear-gradient(transparent 62%, #F3D27A 62%, #F3D27A 92%, transparent 92%); padding:0 .06em}
 .hero .sub{margin-top:20px; font-size:clamp(18px,1.8vw,21px); max-width:30ch}
-.hero .combo{width:100%; max-width:480px; margin-top:28px}
-.hero input[type=text]{border-radius:999px; padding-left:24px; min-height:60px; box-shadow:var(--card-shadow); border-color:rgba(42,24,16,.25)}
-.hero .free{color:var(--muted); font-size:15px; padding-left:24px}
 .hero .herostats{margin-top:36px; padding-top:22px; border-top:1px solid rgba(42,24,16,.12); max-width:480px; gap:6px 26px; font-size:15px; color:var(--body)}
 .heroside{position:relative; padding:44px 0}
 .hero .boardnote{display:none}
@@ -503,7 +480,7 @@ footer h3{font-family:var(--f-text); font-size:var(--s13); font-weight:600; colo
 .nf:hover{transform:translateX(-4px) scale(1.02); box-shadow:0 1px 1px rgba(42,24,16,.04),0 22px 44px -14px rgba(42,24,16,.42)}
 .nf:focus-visible{outline:2px solid var(--tomato); outline-offset:2px}
 .nf .ic{flex:none; width:38px; height:38px; border-radius:10px; display:grid; place-items:center; font-size:20px; background:var(--espresso); box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
-.nf .hd{display:flex; justify-content:space-between; gap:8px; font-size:11.5px; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); margin-bottom:2px}
+.nf .hd{display:flex; justify-content:space-between; gap:8px; font-size:11.5px; letter-spacing:.04em; color:var(--muted); margin-bottom:2px}
 .nf .hd span:last-child{text-transform:none; letter-spacing:0}
 .nf b{display:block; font-size:14px; color:var(--espresso); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
 .nf .tx{display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
@@ -586,7 +563,7 @@ button.rot span::after{content:" \2197"; font-size:.7em; vertical-align:.25em; o
 .bub.them{align-self:flex-start; background:#F1ECE1; border-bottom-left-radius:6px}
 .bub.us{align-self:flex-end; background:var(--espresso); color:var(--cream); border-bottom-right-radius:6px}
 .bub.ship{align-self:flex-end; background:var(--butter); color:var(--espresso); border:1px solid #EAD9A6; border-bottom-right-radius:6px}
-.bub.ship small{display:block; font-size:11.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--tomato-deep); margin-bottom:3px}
+.bub.ship small{display:block; font-size:11.5px; font-weight:700; letter-spacing:.06em; color:var(--tomato-deep); margin-bottom:3px}
 .bub.typing{display:flex; gap:4px; padding:13px 14px}
 .bub.typing i{width:7px; height:7px; border-radius:50%; background:var(--muted); opacity:.5; animation:dot 1s infinite}
 .bub.typing i:nth-child(2){animation-delay:.15s}
@@ -680,7 +657,7 @@ button.rot span::after{content:" \2197"; font-size:.7em; vertical-align:.25em; o
 .hero .heroside{display:flex; justify-content:flex-end; align-items:center; padding:24px 0}
 .hero .heroside::before{inset:4% 6%; opacity:.55}
 .boardframe{position:relative; z-index:1; width:100%; max-width:560px}
-.boardlbl{display:flex; justify-content:space-between; gap:12px; margin:0 4px 12px; font-family:var(--f-mono); font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
+.boardlbl{display:flex; justify-content:space-between; gap:12px; margin:0 4px 12px; font-family:var(--f-mono); font-size:12px; letter-spacing:.14em; color:var(--muted)}
 .boardlbl span:first-child{color:var(--espresso); font-weight:500}
 .boardlbl span:first-child::before{content:""; display:inline-block; width:7px; height:7px; margin-right:8px; border-radius:50%; background:var(--tomato); vertical-align:1px}
 .hero .menuboard{padding:20px 26px 0; border-radius:16px; border:10px solid #5C3D28;
@@ -691,7 +668,7 @@ button.rot span::after{content:" \2197"; font-size:.7em; vertical-align:.25em; o
 .boardnews{display:flex; align-items:center; gap:12px; margin:14px -26px 0; padding:14px 26px 16px; border-top:2px dashed rgba(251,242,217,.16);
   color:var(--cream); font-size:15px; text-decoration:none; transition:opacity .25s}
 .boardnews.swap{opacity:0}
-.bnk{flex:none; font-family:var(--f-mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; background:var(--butter); color:var(--espresso); padding:4px 8px; border-radius:4px}
+.bnk{flex:none; font-family:var(--f-mono); font-size:11px; letter-spacing:.12em; background:var(--butter); color:var(--espresso); padding:4px 8px; border-radius:4px}
 .bnt{flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:rgba(255,252,242,.75)}
 .bnt b{color:var(--cream); font-weight:600}
 .bna{flex:none; color:var(--butter); transition:transform .2s}
@@ -717,14 +694,14 @@ button.rot span::after{content:" \2197"; font-size:.7em; vertical-align:.25em; o
 .ticket::before{content:""; position:absolute; top:-12px; left:50%; width:34px; height:16px; margin-left:-17px; border-radius:3px; background:linear-gradient(#CFC9BF,#8F887D); box-shadow:0 2px 3px rgba(0,0,0,.3)}
 .ticket::after{content:""; position:absolute; left:0; right:0; bottom:-8px; height:8px;
   background:linear-gradient(135deg,var(--paper) 50%,transparent 50%) 0 0/12px 8px repeat-x, linear-gradient(225deg,var(--paper) 50%,transparent 50%) 0 0/12px 8px repeat-x}
-.tk-top{display:flex; justify-content:space-between; gap:8px; padding-bottom:10px; border-bottom:1.5px dashed rgba(42,24,16,.25); text-transform:uppercase; letter-spacing:.08em; font-size:10.5px; color:var(--muted)}
+.tk-top{display:flex; justify-content:space-between; gap:8px; padding-bottom:10px; border-bottom:1.5px dashed rgba(42,24,16,.25); letter-spacing:.08em; font-size:10.5px; color:var(--muted)}
 .tk-top span:last-child{text-align:right}
 .tk-ask{margin:14px 0 16px; font-family:"Caveat",cursive; font-weight:700; font-size:clamp(21px,1.9vw,25px); line-height:1.08; color:var(--espresso)}
 .tk-done{padding-top:12px; border-top:1.5px dashed rgba(42,24,16,.25); color:var(--body)}
-.tk-done b{display:table; margin:2px 0 10px; padding:2px 8px; border:2px solid var(--tomato); border-radius:4px; color:var(--tomato); font-weight:500; text-transform:uppercase; letter-spacing:.12em; font-size:11px; transform:rotate(-4deg)}
+.tk-done b{display:table; margin:2px 0 10px; padding:2px 8px; border:2px solid var(--tomato); border-radius:4px; color:var(--tomato); font-weight:500; letter-spacing:.12em; font-size:11px; transform:rotate(-4deg)}
 .bigquote{margin:84px auto 0; text-align:center}
 .bigquote p{max-width:24ch; margin:0 auto; font-family:var(--f-display); font-weight:700; font-size:clamp(28px,3.6vw,46px); line-height:1.12; letter-spacing:-.02em; color:var(--cream)}
-.bigquote cite{display:block; margin-top:18px; font-style:normal; font-family:var(--f-mono); font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--butter)}
+.bigquote cite{display:block; margin-top:18px; font-style:normal; font-family:var(--f-mono); font-size:12px; letter-spacing:.14em; color:var(--butter)}
 .quotes .chatnote{text-align:center; margin-top:28px}
 @media (max-width:860px){
   .rail{margin:0 -16px; padding:22px 16px 0; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch}
@@ -746,7 +723,7 @@ button.rot span::after{content:" \2197"; font-size:.7em; vertical-align:.25em; o
 .receipt::before{top:-8px; background:linear-gradient(45deg,var(--paper) 50%,transparent 50%) 0 0/12px 8px repeat-x, linear-gradient(-45deg,var(--paper) 50%,transparent 50%) 0 0/12px 8px repeat-x}
 .receipt::after{bottom:-8px; background:linear-gradient(135deg,var(--paper) 50%,transparent 50%) 0 0/12px 8px repeat-x, linear-gradient(225deg,var(--paper) 50%,transparent 50%) 0 0/12px 8px repeat-x}
 .rc-head{font-family:var(--f-display); font-weight:800; font-size:24px; letter-spacing:-.01em; text-align:center}
-.rc-sub{margin-top:2px; text-align:center; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted)}
+.rc-sub{margin-top:2px; text-align:center; font-size:11px; letter-spacing:.16em; color:var(--muted)}
 .rc-rule{margin:16px 0; border-top:2px dashed rgba(42,24,16,.28)}
 .rc-line{display:flex; justify-content:space-between; gap:12px; margin:5px 0}
 .rc-dim{color:var(--muted); font-size:13px}
@@ -757,7 +734,7 @@ button.rot span::after{content:" \2197"; font-size:.7em; vertical-align:.25em; o
 .closing .receipt .rc-form .btn:hover{background:var(--tomato-deep); border-color:var(--tomato-deep); color:#fff}
 .closing .receipt .formnote,.closing .receipt .formnote.bad,.closing .receipt .formdone{color:var(--espresso); text-align:center}
 .closing .receipt :focus-visible{outline-color:var(--tomato)}
-.rc-foot{margin-top:18px; text-align:center; font-size:10.5px; line-height:1.9; letter-spacing:.16em; text-transform:uppercase; color:var(--muted)}
+.rc-foot{margin-top:18px; text-align:center; font-size:10.5px; line-height:1.9; letter-spacing:.16em; color:var(--muted)}
 @media (prefers-reduced-motion:reduce){ .ticket,.receipt{transition:none} }
 /* =====================================================================
    v2 design system: a warm trade paper for cafes.
@@ -837,7 +814,7 @@ h1,h2,h3,.lsec h2{font-family:var(--f-display); font-weight:500; letter-spacing:
 .notif:hover{box-shadow:0 22px 46px -14px rgba(36,21,14,.5), 0 2px 6px rgba(36,21,14,.12)}
 .ni{flex:none; width:38px; height:38px; border-radius:10px; display:grid; place-items:center; background:var(--espresso); color:var(--gold);
   font-family:var(--f-display); font-size:17px; font-weight:500}
-.nh{display:flex; width:100%; justify-content:space-between; gap:8px; font-size:11.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted)}
+.nh{display:flex; width:100%; justify-content:space-between; gap:8px; font-size:11.5px; letter-spacing:.06em; color:var(--muted)}
 .nh time{text-transform:none; letter-spacing:0}
 .nt{display:block; margin-top:2px; font-size:14.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
 .nt b{font-weight:600}
@@ -920,7 +897,7 @@ h1,h2,h3,.lsec h2{font-family:var(--f-display); font-weight:500; letter-spacing:
 .priceline .dotcol.top i{background:var(--crust-lite)}
 .plan .signup .btn{width:100%}
 .hero .herostats{max-width:44ch}
-.herostats .method,.hero .herostats span{white-space:normal}
+.hero .herostats span{white-space:normal}
 @media (max-width:640px){ .receipt{transform:none; max-width:100%} .hero h1{font-size:44px} }
 /* no italics on the landing: emphasis is colour alone */
 .landing em,.landing i:not([class]),.hero h1 em,.plword,.tk-ask,.bigquote p,.bigclose span{font-style:normal !important}
@@ -1129,17 +1106,52 @@ h1,h2,h3,.lsec h2{font-family:var(--f-display); font-weight:500; letter-spacing:
 .hero .heroside{display:block; padding:0; margin:0; min-width:0}
 .hero .heroside .laptop{width:100%; margin:0}
 .hero .laptop .base{margin:0 -2.5%}
-@media (min-width:861px){ .hero .herogrid{grid-template-columns:minmax(0,9fr) minmax(0,11fr); gap:40px; align-items:center} }
-@media (max-width:860px){ .hero .heroside{margin-bottom:0} .hero .herogrid{gap:32px} .hero .herostats{display:none} }
+@media (min-width:861px){ .hero .herogrid{grid-template-columns:minmax(0,9fr) minmax(0,10fr); gap:clamp(64px,8vw,120px); align-items:center} }
+@media (max-width:860px){ .hero .heroside{margin-bottom:0} .hero .herogrid{gap:48px} }
 @media (max-width:640px){ .laptop{margin-top:32px} .laptop .lid{border-radius:14px 14px 4px 4px} .laptop .base{height:10px; margin:0 -3%} }
-/* logo mark before the wordmark */
-.wordmark{display:inline-flex; align-items:center; gap:9px}
-.wordmark img{display:block; flex:none; width:28px; height:28px}
-@media (max-width:640px){ .wordmark img{width:24px; height:24px} .wordmark{gap:8px} }
+/* the wordmark is the logo picture; its name stays in the page for screen readers */
+.wordmark{display:inline-flex; align-items:center}
+.wordmark img{display:block; flex:none; width:auto; height:28px}
+@media (max-width:640px){ .wordmark img{height:24px} }
 /* the secondary hero action: the product on video */
-.demobtn{margin-left:6px; color:var(--espresso); font-weight:500; text-underline-offset:3px}
+.demobtn{color:var(--espresso); font-weight:500; text-underline-offset:3px}
 .demobtn:hover{color:var(--tomato)}
 .hero .rot::after{display:none}
+/* hero: the waitlist signup, then one small link to the sample cafe */
+.hero{padding-top:clamp(48px,8vh,112px) !important; padding-bottom:clamp(64px,10vh,128px) !important}
+.hero .signup{max-width:480px; margin-top:34px}
+.hero .signup input[type=email]{min-height:56px; font-size:17px; border:1.5px solid var(--espresso)}
+.hero .signup .btn{min-height:56px; background:var(--gold); border-color:var(--gold); color:var(--espresso)}
+.hero .formdone{margin-top:34px; max-width:480px}
+.herolink{margin-top:14px; font-size:14px}
+/* the price line on cream, its two prices at heading size */
+.priceline{background:var(--cream); color:var(--body)}
+.priceline h2{color:var(--espresso)}
+.plword{color:var(--tomato)}
+.bigprice{font-size:clamp(36px,4.4vw,62px); line-height:1.04}
+.bigprice.lo{color:var(--espresso)}
+.bigprice.hi{color:var(--tomato)}
+.pricelbl,.dotlabel{color:var(--body)}
+.dotcol i{background:var(--espresso)}
+.priceline .dotcol.top i{background:var(--tomato)}
+.dotcol.on{outline-color:var(--espresso)}
+.plpill{color:var(--espresso); background:var(--paper); border-color:var(--rule)}
+.plpill:hover{background:var(--tint)}
+.plpill[aria-pressed=true]{background:var(--espresso); color:var(--cream); border-color:var(--espresso)}
+/* the owners' questions, under the tickets in "Designed at the counter" */
+.askblock{margin-top:clamp(56px,7vw,96px); scroll-margin-top:84px}
+.asktitle{color:var(--cream); font-size:clamp(26px,2.6vw,34px)}
+.quotes .qlead{margin-top:10px; color:rgba(255,252,242,.72)}
+.quotes .qa{margin-top:28px !important}
+.quotes .qpair,.quotes .qpair + .qpair{border-top-color:rgba(255,252,242,.16)}
+.quotes .qpair:last-child{border-bottom-color:rgba(255,252,242,.16)}
+.quotes .qpair summary h3{color:var(--cream)}
+.quotes .qpair summary::after{color:var(--gold)}
+.quotes .qpair p{color:rgba(255,252,242,.72)}
+.quotes .sendmenu{color:var(--gold)}
+/* small labels in sentence case sit closer together than capitals did */
+.tk-top,.tk-done b,.bigquote cite{letter-spacing:.02em}
+.rc-sub,.rc-foot{letter-spacing:.02em; font-size:12px}
 </style>
 </head>
 <body>
@@ -1148,7 +1160,7 @@ h1,h2,h3,.lsec h2{font-family:var(--f-display); font-weight:500; letter-spacing:
 <div class="landing" id="landing">
   <header class="landbar" id="landbar">
     <div class="wrap">
-      <span class="wordmark"><img class="mk-dark" src="img/logo-mark.svg" alt="" width="28" height="28"><img class="mk-light" src="img/logo-mark-light.svg" alt="" width="28" height="28">Counter</span>
+      <span class="wordmark"><img class="mk-dark" src="img/logo-dark.png" alt="" width="135" height="28"><img class="mk-light" src="img/logo-light.png" alt="" width="135" height="28"><span class="vh">Counter</span></span>
       <nav class="navlinks" aria-label="Sections"><a href="#l-full">Pricing</a></nav>
       <button type="button" class="btn btn-small" id="find-top">Try Counter</button>
     </div>
@@ -1160,13 +1172,14 @@ h1,h2,h3,.lsec h2{font-family:var(--f-display); font-weight:500; letter-spacing:
       <div class="herotext">
         <h1>Never guess a <em>price</em> again.</h1>
         <p class="sub">See what the cafes around you charge for <span id="rot-art">a</span> <span class="rot" id="rot-word" data-item="flat_white"><span>flat white</span></span>, next to your own price.</p>
-        <div class="combo">
-          <label class="vh" for="shop-input">Your shop or area</label>
-          <input type="text" id="shop-input" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="shop-list" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" placeholder="Your shop or area">
-          <button type="button" class="lookbtn" id="hero-look">Look up</button>
-          <ul class="combolist" id="shop-list" role="listbox" aria-label="Shops and areas" hidden></ul>
-        </div>
-        <p class="free">Free. No sign-up. <a class="demobtn" id="demo-open" href="#l-try">Or try a sample cafe</a></p>
+        <form class="signup" id="hero-wait-form" novalidate>
+          <label class="vh" for="hero-wait-email">Email address</label>
+          <input type="email" id="hero-wait-email" placeholder="you@yourcafe.sg" required>
+          <button class="btn btn-butter" type="submit">Join the waitlist</button>
+        </form>
+        <p class="fineprint">No payment now. We will email you when it starts.</p>
+        <p class="formnote" id="hero-wait-note" hidden></p>
+        <p class="herolink"><a class="demobtn" id="demo-open" href="#l-try">Or try a sample cafe</a></p>
         <p class="herostats" id="hero-stats"></p>
       </div>
       <div class="heroside">
@@ -1182,40 +1195,7 @@ h1,h2,h3,.lsec h2{font-family:var(--f-display); font-weight:500; letter-spacing:
     </div>
   </section>
 
-  <!-- 2. the price line -->
-  <section class="lsec priceline" id="l-price">
-    <div class="plbgs" id="pl-bgs" aria-hidden="true"></div>
-    <div class="wrap">
-      <div class="plpills" id="pl-pills" role="group" aria-label="Item"></div>
-      <h2 id="pl-head"></h2>
-      <div class="pricerow">
-        <div><p class="bigprice lo" id="pl-lo"></p><p class="pricelbl">cheapest</p></div>
-        <div class="right"><p class="bigprice hi" id="pl-hi"></p><p class="pricelbl">most expensive</p></div>
-      </div>
-      <div class="dotplot" id="pl-plot" role="img"></div>
-      <p class="pricenote" id="pl-note"></p>
-    </div>
-  </section>
-
-  <!-- 3. photo band -->
-  <section class="lsec photos" id="l-photos">
-    <div class="wrap">
-      <span class="section-kicker">Built for the counter</span>
-      <h2>Every price on the street. One screen.</h2>
-      <p class="sublead">Flat whites, croissants, sourdough. We read the menus of cafes and bakeries near you so you don't have to walk over and check.</p>
-      <div class="bento">
-        <figure class="shot wide"><img src="img/counter.jpg" alt="A cafe counter with an espresso machine" loading="lazy">
-          <figcaption class="chip"><span class="dot">&#9749;</span><span><b>Flat white</b>See how many cafes charge less, the same or more</span></figcaption></figure>
-        <figure class="shot tall"><img src="img/croissant.jpg" alt="Croissants dusted with sugar" loading="lazy">
-          <figcaption class="chip"><span class="dot">&#129360;</span><span><b>New item spotted</b>Launched near you this week</span></figcaption></figure>
-        <figure class="shot"><img src="img/shelf.jpg" alt="Bread on a bakery shelf with price tags" loading="lazy"></figure>
-        <figure class="shot"><img src="img/lattes.jpg" alt="Three lattes on a wooden table" loading="lazy">
-          <figcaption class="chip"><span class="dot">%</span><span><b>Discount</b>Who is running one</span></figcaption></figure>
-      </div>
-    </div>
-  </section>
-
-  <!-- 4. how it works -->
+  <!-- 2. how it works -->
   <section class="lsec how" id="l-how">
     <div class="wrap">
       <span class="section-kicker">How it works</span>
@@ -1252,7 +1232,21 @@ h1,h2,h3,.lsec h2{font-family:var(--f-display); font-weight:500; letter-spacing:
     </div>
   </section>
 
-  <!-- 4b. try it: the live product, used right inside the laptop -->
+  <!-- 3. the price line -->
+  <section class="lsec priceline" id="l-price">
+    <div class="wrap">
+      <div class="plpills" id="pl-pills" role="group" aria-label="Item"></div>
+      <h2 id="pl-head"></h2>
+      <div class="pricerow">
+        <div><p class="bigprice lo" id="pl-lo"></p><p class="pricelbl">cheapest</p></div>
+        <div class="right"><p class="bigprice hi" id="pl-hi"></p><p class="pricelbl">most expensive</p></div>
+      </div>
+      <div class="dotplot" id="pl-plot" role="img"></div>
+      <p class="pricenote" id="pl-note"></p>
+    </div>
+  </section>
+
+  <!-- 4. try it: the live product, used right inside the laptop -->
   <section class="lsec trydemo" id="l-try">
     <div class="wrap">
       <span class="section-kicker">Try it</span>
@@ -1271,7 +1265,7 @@ h1,h2,h3,.lsec h2{font-family:var(--f-display); font-weight:500; letter-spacing:
     </div>
   </section>
 
-  <!-- 5. what owners said: real counter conversations, and what we changed after -->
+  <!-- 5. what owners said and asked: real counter conversations, and what we changed after -->
   <section class="lsec quotes" id="l-quotes">
     <div class="wrap chatgrid">
       <div class="chatcopy">
@@ -1282,7 +1276,7 @@ h1,h2,h3,.lsec h2{font-family:var(--f-display); font-weight:500; letter-spacing:
           <li><b>Researched in person.</b> We visited 50+ cafes and bakeries to learn how prices are really set.</li>
           <li><b>Refined with owners.</b> Price sources, colour-coded maps and a simpler menu all came from their feedback.</li>
           <li><b>Always improving.</b> Every suggestion is read by our team. The best ones go live.
-            <button type="button" class="ideabtn" id="tell-open">Share an idea &rarr;</button>
+            <button type="button" class="ideabtn" id="tell-open">Share an idea</button>
             <form class="tellform" id="tell-form" hidden novalidate>
               <label class="vh" for="tell-text">What would make Counter more useful for your shop?</label>
               <textarea id="tell-text" rows="3" maxlength="500" placeholder="What would make Counter more useful for your shop?"></textarea>
@@ -1318,11 +1312,41 @@ h1,h2,h3,.lsec h2{font-family:var(--f-display); font-weight:500; letter-spacing:
         </ol>
       </div>
     </div>
+    <div class="wrap askblock" id="l-questions">
+      <h3 class="asktitle">Asked at the counter.</h3>
+      <p class="qlead">We showed this to owners before we built it. These were their questions.</p>
+    <div class="qa">
+      <details class="qpair">
+        <summary><h3>&ldquo;Where do your prices come from?&rdquo;</h3></summary>
+        <div><p>From each cafe's own menu. We read it on their website, or we take a photo of it in the shop. Next to every price you can see the date we checked it and a link to that menu.</p></div>
+      </details>
+      <details class="qpair">
+        <summary><h3>&ldquo;Why is it free? What is the catch?&rdquo;</h3></summary>
+        <div><p>There is no catch. Counter is free while we start out: find your shop, pick your competitors and use every page, from your prices to their new items and offers. The Weekly Bake is free too.</p></div>
+      </details>
+      <details class="qpair">
+        <summary><h3>&ldquo;So what is the S$20 a month for?&rdquo;</h3></summary>
+        <div><p>For what we build next: more items to compare, a message the morning a competitor changes a price, and your prices and theirs over time. You pay nothing today. Join the waitlist and we email you when it starts.</p></div>
+      </details>
+      <details class="qpair">
+        <summary><h3>&ldquo;What if you have my price wrong?&rdquo;</h3></summary>
+        <div><p>Tell us and we fix it. Reply to The Weekly Bake, or send us a photo of your menu.</p><a class="sendmenu" href="https://counter-psi-khaki.vercel.app/?setup=place&src=landing">Send your menu</a></div>
+      </details>
+      <details class="qpair">
+        <summary><h3>&ldquo;My shop is not on your list.&rdquo;</h3></summary>
+        <div><p>Add it yourself in about a minute: type your shop&rsquo;s name and postal code, then upload a photo or PDF of your menu.</p><a class="sendmenu" href="https://counter-psi-khaki.vercel.app/?setup=place&src=landing">Add your shop</a></div>
+      </details>
+      <details class="qpair">
+        <summary><h3>&ldquo;I can't just change my prices. Why would I use this?&rdquo;</h3></summary>
+        <div><p>Many owners told us the same. They use it for other decisions: what to charge for a new item, what cafes near them sell that they don't, and who is running a discount.</p></div>
+      </details>
+    </div>
+    </div>
     <blockquote class="wrap bigquote"><p>&ldquo;We sell on quality, not price. But we still check what everyone around us charges.&rdquo;</p><cite>Bakery owner, 16 years in Tiong Bahru</cite></blockquote>
     <p class="wrap chatnote">From our counter notes, Sep&ndash;Oct 2026. Shops are unnamed to respect their privacy.</p>
   </section>
 
-  <!-- 7. the full version -->
+  <!-- 6. the full version -->
   <section class="lsec full" id="l-full">
     <div class="wrap">
       <span class="section-kicker">Pricing</span>
@@ -1363,44 +1387,7 @@ h1,h2,h3,.lsec h2{font-family:var(--f-display); font-weight:500; letter-spacing:
     </div>
   </section>
 
-  <!-- 8. what owners asked us -->
-  <section class="lsec questions" id="l-questions">
-    <div class="wrap qgrid">
-      <div class="qhead">
-      <span class="section-kicker">Questions</span>
-      <h2>Asked at the counter.</h2>
-      <p class="qlead">We showed this to owners before we built it. These were their questions.</p>
-      </div>
-      <div class="qa">
-        <details class="qpair">
-          <summary><h3>&ldquo;Where do your prices come from?&rdquo;</h3></summary>
-          <div><p>From each cafe's own menu. We read it on their website, or we take a photo of it in the shop. Next to every price you can see the date we checked it and a link to that menu.</p></div>
-        </details>
-        <details class="qpair">
-          <summary><h3>&ldquo;Why is it free? What is the catch?&rdquo;</h3></summary>
-          <div><p>There is no catch. Counter is free while we start out: find your shop, pick your competitors and use every page, from your prices to their new items and offers. The Weekly Bake is free too.</p></div>
-        </details>
-        <details class="qpair">
-          <summary><h3>&ldquo;So what is the S$20 a month for?&rdquo;</h3></summary>
-          <div><p>For what we build next: more items to compare, a message the morning a competitor changes a price, and your prices and theirs over time. You pay nothing today. Join the waitlist and we email you when it starts.</p></div>
-        </details>
-        <details class="qpair">
-          <summary><h3>&ldquo;What if you have my price wrong?&rdquo;</h3></summary>
-          <div><p>Tell us and we fix it. Reply to The Weekly Bake, or send us a photo of your menu.</p><a class="sendmenu" href="https://counter-psi-khaki.vercel.app/?setup=place&src=landing">Send your menu</a></div>
-        </details>
-        <details class="qpair">
-          <summary><h3>&ldquo;My shop is not on your list.&rdquo;</h3></summary>
-          <div><p>Add it yourself in about a minute: type your shop&rsquo;s name and postal code, then upload a photo or PDF of your menu.</p><a class="sendmenu" href="https://counter-psi-khaki.vercel.app/?setup=place&src=landing">Add your shop</a></div>
-        </details>
-        <details class="qpair">
-          <summary><h3>&ldquo;I can't just change my prices. Why would I use this?&rdquo;</h3></summary>
-          <div><p>Many owners told us the same. They use it for other decisions: what to charge for a new item, what cafes near them sell that they don't, and who is running a discount.</p></div>
-        </details>
-      </div>
-    </div>
-  </section>
-
-  <!-- 9. closing: one line, one field, then a one-line footer -->
+  <!-- 7. closing: one line, one field, then a one-line footer -->
   <section class="lsec closing" id="l-closing">
       <div class="menuwall" aria-hidden="true">
         <div class="mw-col"><p class="mw-head">Coffee</p><p class="mw-row"><span>Flat white</span><i></i><b><s>5.50</s> 5.80</b></p><p class="mw-row"><span>Latte</span><i></i><b>5.90</b></p><p class="mw-row"><span>Cappuccino</span><i></i><b>5.60</b></p><p class="mw-row"><span>Long black</span><i></i><b>4.80</b></p><p class="mw-row"><span>Espresso</span><i></i><b>4.00</b></p><p class="mw-row"><span>Mocha</span><i></i><b>6.50</b></p><p class="mw-row"><span>Iced latte</span><i></i><b>6.40</b></p></div>
@@ -1413,11 +1400,11 @@ h1,h2,h3,.lsec h2{font-family:var(--f-display); font-weight:500; letter-spacing:
         <span class="section-kicker" style="color:var(--butter)">Not ready to try Counter?</span>
         <h2 class="bigclose">Start with<br><span>The Weekly Bake.</span></h2>
         <p class="closesub">Counter&rsquo;s free Monday email: prices, new items and deals near you.</p>
-        <button type="button" class="closefind" id="close-find">Or try Counter now &rarr;</button>
+        <button type="button" class="closefind" id="close-find">Or try Counter now</button>
       </div>
       <div class="receipt">
         <p class="rc-head">The Weekly Bake</p>
-        <p class="rc-sub">Monday edition &middot; by Counter</p>
+        <p class="rc-sub">Monday edition, by Counter</p>
         <p class="rc-rule" aria-hidden="true"></p>
         <p class="rc-line"><span>1 &times; Prices near you</span><span>0.00</span></p>
         <p class="rc-line"><span>1 &times; New items launched</span><span>0.00</span></p>
@@ -1431,7 +1418,7 @@ h1,h2,h3,.lsec h2{font-family:var(--f-display); font-weight:500; letter-spacing:
           <button class="btn" type="submit">Send me Mondays</button>
         </form>
         <p class="formnote" id="land-news-note" hidden></p>
-        <p class="rc-foot">No spam &middot; Unsubscribe anytime<br>Thank you, come again</p>
+        <p class="rc-foot">No spam. Unsubscribe anytime.<br>Thank you, come again</p>
       </div>
       <div class="combo" hidden>
         <label class="vh" for="shop-input-2">Your shop or area</label>
@@ -1443,10 +1430,10 @@ h1,h2,h3,.lsec h2{font-family:var(--f-display); font-weight:500; letter-spacing:
 
   <footer class="endfoot slim">
     <div class="wrap slimrow">
-      <span class="wordmark"><img src="img/logo-mark-light.svg" alt="" width="28" height="28"><span>Counter<span class="wdot">.</span></span></span>
-      <nav class="slimnav" aria-label="Footer"><a href="#l-how">How it works</a><a href="#l-full">Pricing</a><a href="team.html">Team</a><a href="#l-questions">FAQ</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></nav>
+      <span class="wordmark"><img src="img/logo-light.png" alt="" width="135" height="28"><span class="vh">Counter</span></span>
+      <nav class="slimnav" aria-label="Footer"><a href="#l-how">How it works</a><a href="#l-full">Pricing</a><a href="team.html">Team</a><a href="#l-questions">Questions</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></nav>
     </div>
-    <p class="wrap slimsmall">&copy; 2026 Counter. Made in Singapore.<span aria-hidden="true"> &middot; </span><span id="colophon-land" class="num"></span></p>
+    <p class="wrap slimsmall">&copy; 2026 Counter. Made in Singapore. <span id="colophon-land" class="num"></span></p>
   </footer>
 </div>
 
@@ -1531,10 +1518,13 @@ window.addEventListener("pagehide", endVisit);
 const PAGE_OPENED = Date.now();
 const DEPTHS_SEEN = new Set();
 function watchScrollDepth(){
+  // the page scrolls inside #landing. A mark counts once the visitor has scrolled
+  // that far down it, so nothing is sent as the page loads.
+  const land = document.getElementById("landing");
   const check = () => {
-    const doc = document.documentElement;
-    const full = doc.scrollHeight - window.innerHeight;
-    const pct = full <= 0 ? 100 : ((window.scrollY / full) * 100);
+    const full = land.scrollHeight - land.clientHeight;
+    if(full <= 0 || land.scrollTop <= 0) return;
+    const pct = (land.scrollTop / full) * 100;
     [25, 50, 75, 100].forEach(mark => {
       if(pct >= mark - 0.5 && !DEPTHS_SEEN.has(mark)){
         DEPTHS_SEEN.add(mark);
@@ -1542,8 +1532,7 @@ function watchScrollDepth(){
       }
     });
   };
-  window.addEventListener("scroll", check, {passive: true});
-  check();
+  land.addEventListener("scroll", check, {passive: true});
 }
 window.addEventListener("pagehide", () => {
   track("time_on_page", {seconds: Math.round((Date.now() - PAGE_OPENED) / 1000)});
@@ -1694,7 +1683,7 @@ function tellUs(){
   rotateTickets();
   const bar = byId("landbar"), land = byId("landing");
   // over a dark section the bar turns dark with it
-  const darks = [...document.querySelectorAll(".landing .priceline, .landing .quotes, .landing .closing, .landing .endfoot")];
+  const darks = [...document.querySelectorAll(".landing .quotes, .landing .closing, .landing .endfoot")];
   const onScroll = () => {
     bar.classList.toggle("scrolled", land.scrollTop > 8);
     const y = bar.getBoundingClientRect().bottom - 1;
@@ -1811,14 +1800,7 @@ function buildLandingPage(d){
     [1, 2, 3, 4, 5].map(n => `<i class="cf" style="background-image:url(img/cafes/cafe-${n}.jpg)"></i>`).join("") +
     `<i class="cf cfmore">+${fmt(Math.max(cafes - 5, 0))}</i></span>`;
   byId("hero-stats").innerHTML = faces +
-    `<b>${esc(PRICES)} prices</b> from <b>${fmt(cafes)} cafes and bakeries</b> in ${fmt(d.meta.districts.length)} areas.` +
-    `<span class="method">Read from each cafe's own menu, online or in the shop. Checked ${esc(checkedWhen(allRecordedDates(d)))}.</span>`;
-  byId("hero-look").addEventListener("click", () => {
-    const f = byId("shop-input");
-    f.focus();
-    f.dispatchEvent(new Event("input"));
-    track("landing_cta_clicked", {place: "hero_lookup"});
-  });
+    `<b>${esc(PRICES)} prices</b> from <b>${fmt(cafes)} cafes and bakeries</b> in ${fmt(d.meta.districts.length)} areas.`;
   byId("rc-count").textContent = `${PRICES} prices checked`;
   landingMotion(d);
   byId("proof-row").innerHTML =
@@ -1864,12 +1846,6 @@ function buildLandingPage(d){
       span = (widest.high - widest.low) || 1;
       picked = null;
       byId("pl-pills").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.item === widest.item)));
-      // a faded photo of the item stands behind the section and crossfades to the next
-      byId("pl-bgs").querySelectorAll(".plbg").forEach(el => {
-        const on = el.dataset.item === widest.item;
-        if(on && !el.style.backgroundImage) el.style.backgroundImage = `url(img/items/${el.dataset.item}.jpg)`;
-        el.classList.toggle("on", on);
-      });
       // the hero names the same item at the same moment
       const rw = byId("rot-word"), ra = byId("rot-art");
       if(rw){
@@ -1878,9 +1854,6 @@ function buildLandingPage(d){
         rw.innerHTML = `<span>${esc(words)}</span>`;
         if(ra) ra.textContent = /^[aeiou]/.test(words) ? "an" : "a";
       }
-      // the next photo loads ahead of its turn
-      const next = ranked[(ranked.indexOf(widest) + 1) % ranked.length];
-      if(next) new Image().src = `img/items/${next.item}.jpg`;
     };
     const DOT_WIDE = 12, DOT_NARROW = 8, DOT_GAP = 1, COLUMN_MAX = 180, REVEAL = 1, LABEL_ROOM = 34;
 
@@ -1930,7 +1903,6 @@ function buildLandingPage(d){
       plot.style.height = `${stackHigh + LABEL_ROOM}px`;
       mark(picked);
     };
-    byId("pl-bgs").innerHTML = ranked.map(r => `<div class="plbg" data-item="${esc(r.item)}"></div>`).join("");
     byId("pl-pills").innerHTML = ranked.map(r =>
       `<button type="button" class="plpill" data-item="${esc(r.item)}" aria-pressed="false"><span>${esc(itemName(r.item))}</span></button>`).join("");
     load(ranked[0]);
@@ -2026,8 +1998,8 @@ function buildLandingPage(d){
   /* Each section is reported once per visit, when half of it is in view. A
      section more than two screens tall can never be half in view, so it
      counts once it fills the screen. Nothing counts while the tool is showing. */
-  const SECTIONS = [["l-hero", "hero"], ["l-price", "price_line"], ["l-how", "how"], ["l-try", "try_it"], ["l-quotes", "quotes"],
-                    ["l-full", "full_version"], ["l-questions", "questions"], ["l-closing", "closing"]];
+  const SECTIONS = [["l-hero", "hero"], ["l-how", "how"], ["l-price", "price_line"], ["l-try", "try_it"], ["l-quotes", "quotes"],
+                    ["l-full", "full_version"], ["l-closing", "closing"]];
   const seenSections = new Set();
   let queued = false;
   checkSections = () => {
@@ -2104,7 +2076,6 @@ const MAX_SUGGEST = 6;
 // spaces and punctuation are dropped from both sides
 const fold = t => String(t).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]/g, "");
 function buildLanding(d){
-  makeShopField(d, byId("shop-input"), byId("shop-list"), "hero");
   makeShopField(d, byId("shop-input-2"), byId("shop-list-2"), "closing");
 }
 /* One field, made once for each place it stands. Both run this same code, so
@@ -2363,8 +2334,10 @@ function bindSignup(formId, inputId, noteId, source, evt, position){
 }
 
 function wireForms(){
-  // the landing page's two forms: the same rows, told apart only in analytics
+  // the landing page's forms: the same rows, told apart only in analytics
   bindSignup("land-wait-form", "land-wait-email", "land-wait-note", "waitlist", "waitlist_submitted", "landing");
+  // the hero's waitlist form sends just what the pricing card's does
+  bindSignup("hero-wait-form", "hero-wait-email", "hero-wait-note", "waitlist", "waitlist_submitted", "landing");
   bindSignup("land-news-form", "land-news-email", "land-news-note", "newsletter_hero", "newsletter_submitted", "landing");
 }
 </script>

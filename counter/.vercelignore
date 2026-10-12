@@ -12,9 +12,11 @@
 # each shop's own menu: the folder, then only the .json files inside it
 !menus
 !menus/*.json
-# fonts and the logo mark
+# fonts, the logo and the favicon
 !fonts
 !fonts/*.woff2
 !img
-!img/logo-mark.svg
+!img/logo-dark.png
+!img/logo-light.png
+!img/favicon.svg
 .vercel

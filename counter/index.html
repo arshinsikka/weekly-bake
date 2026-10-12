@@ -853,22 +853,31 @@ function track(name, props){
 }
 const isEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 /* where the visit came from, read once: src is a short plain tag on our own links (?src=newsletter), anything else is dropped;
-   ref is the referring site's host only. src is then taken out of the address, the rest of it (shop, rivals, page) kept. */
+   ref is the referring site's host only. from says which of our own doors was used: "landing", "outreach" or "demo" (the app
+   shown inside the landing page), and "direct" for anything else or nothing. It is kept for the visit, so a reload still knows it. src and from are then taken out of the
+   address, the rest of it (shop, rivals, page) kept. */
+const FROM_KEY = "counter.from", FROM_KNOWN = ["landing", "outreach", "demo"];
 (() => {
-  let src = null, ref = null, has = false;
+  let src = null, ref = null, has = false, from = "direct";
   try {
-    const url = new URL(location.href), tag = url.searchParams.get("src");
+    const url = new URL(location.href), tag = url.searchParams.get("src"), door = url.searchParams.get("from");
     has = !!url.searchParams.get("shop");
-    if(tag !== null){
-      if(/^[A-Za-z0-9_-]{1,40}$/.test(tag)) src = tag.toLowerCase();
+    if(tag !== null && /^[A-Za-z0-9_-]{1,40}$/.test(tag)) src = tag.toLowerCase();
+    let kept = null;
+    try { kept = sessionStorage.getItem(FROM_KEY); } catch(e){ kept = null; }
+    // a link that says where it is from decides; without one, what this visit already knew stands
+    from = door !== null ? (FROM_KNOWN.indexOf(door) !== -1 ? door : "direct") : (FROM_KNOWN.indexOf(kept) !== -1 ? kept : "direct");
+    try { sessionStorage.setItem(FROM_KEY, from); } catch(e){ /* known for this page only */ }
+    if(tag !== null || door !== null){
       url.searchParams.delete("src");
+      url.searchParams.delete("from");
       history.replaceState(history.state, "", url.pathname + url.search + url.hash);
     }
   } catch(e){ /* the app works the same without it */ }
   try { if(document.referrer) ref = new URL(document.referrer).hostname || null; } catch(e){ ref = null; }
   let phone = false;
   try { phone = matchMedia("(max-width:640px)").matches; } catch(e){ /* not a phone */ }
-  track("app_opened", {src: src, ref: ref, has_shop: has, is_phone: phone});
+  track("app_opened", {src: src, ref: ref, has_shop: has, is_phone: phone, from: from});
 })();
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 /* "2026-10-04" -> "4 Oct" */
@@ -1685,7 +1694,7 @@ function paintAlerts(){
    once the reader has compared an item. Once a shop has signed up both show
    the address instead. The address and the choice are kept in this browser,
    for each shop, with what was seen. */
-const PRIVACY_URL = "https://theweeklybake.online/privacy.html";
+const PRIVACY_URL = "https://www.countr.site/privacy.html";
 let mailDraft = "";               // what is typed in the field, kept across repaints
 const alertMine = () => alertsAll[shop.shop_id] && typeof alertsAll[shop.shop_id] === "object" ? alertsAll[shop.shop_id] : {};
 function mailWords(){

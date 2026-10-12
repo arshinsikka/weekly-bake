@@ -1330,11 +1330,11 @@ h1,h2,h3,.lsec h2{font-family:var(--f-display); font-weight:500; letter-spacing:
       </details>
       <details class="qpair">
         <summary><h3>&ldquo;What if you have my price wrong?&rdquo;</h3></summary>
-        <div><p>Tell us and we fix it. Reply to The Weekly Bake, or send us a photo of your menu.</p><a class="sendmenu" href="https://counter-psi-khaki.vercel.app/?setup=place&src=landing">Send your menu</a></div>
+        <div><p>Tell us and we fix it. Reply to The Weekly Bake, or send us a photo of your menu.</p><a class="sendmenu" href="https://app.countr.site/?setup=place&src=landing&from=landing">Send your menu</a></div>
       </details>
       <details class="qpair">
         <summary><h3>&ldquo;My shop is not on your list.&rdquo;</h3></summary>
-        <div><p>Add it yourself in about a minute: type your shop&rsquo;s name and postal code, then upload a photo or PDF of your menu.</p><a class="sendmenu" href="https://counter-psi-khaki.vercel.app/?setup=place&src=landing">Add your shop</a></div>
+        <div><p>Add it yourself in about a minute: type your shop&rsquo;s name and postal code, then upload a photo or PDF of your menu.</p><a class="sendmenu" href="https://app.countr.site/?setup=place&src=landing&from=landing">Add your shop</a></div>
       </details>
       <details class="qpair">
         <summary><h3>&ldquo;I can't just change my prices. Why would I use this?&rdquo;</h3></summary>
@@ -1758,14 +1758,16 @@ function landingMotion(d){
    used right inside the laptop; the shield keeps a scroll from turning into a click in
    the app. Everything that opens Counter goes through openCounter: on a wide screen it
    loads into that laptop, on a phone (too small for the laptop) it opens the app itself. */
-const COUNTER_APP = "https://counter-psi-khaki.vercel.app";
-const COUNTER_PREVIEW = "?shop=caffe_pralet&rivals=merci_marcel_tiong_bahru,tiong_bahru_bakery,drips_bakery_cafe,tianns&src=landing";
+const COUNTER_APP = "https://app.countr.site";
+// every link a visitor clicks into the app says from=landing; the app the page itself loads into the laptop says from=demo
+const FROM_LANDING = "src=landing&from=landing", FROM_DEMO = "src=landing&from=demo";
+const COUNTER_PREVIEW = "?shop=caffe_pralet&rivals=merci_marcel_tiong_bahru,tiong_bahru_bakery,drips_bakery_cafe,tianns&";
 let openCounter = () => {};
 
 function buildTryDemo(){
   const screen = byId("try-screen"), frame = byId("try-frame");
-  frame.src = COUNTER_APP + COUNTER_PREVIEW;
-  byId("try-tab").href = COUNTER_APP + "?src=landing";
+  frame.src = COUNTER_APP + COUNTER_PREVIEW + FROM_DEMO;
+  byId("try-tab").href = COUNTER_APP + "?" + FROM_LANDING;
 
   const fit = () => { frame.style.transform = "scale(" + screen.clientWidth / 1280 + ")"; };
   new ResizeObserver(fit).observe(screen);
@@ -1778,7 +1780,7 @@ function buildTryDemo(){
   const wide = () => matchMedia("(min-width:861px)").matches;
   // query: "" for the sample cafe, "setup=place", "shop=<id>" or "at=a:<area>" to land on that
   openCounter = (query, place) => {
-    const url = COUNTER_APP + "?" + (query ? query + "&" : "") + "src=landing";
+    const url = COUNTER_APP + "?" + (query ? query + "&" : "") + FROM_LANDING;
     if(!wide()){ track("demo_opened", {place: place, phone: true}); location.href = url; return; }
     if(query) frame.src = url;
     start(place);
@@ -1786,7 +1788,7 @@ function buildTryDemo(){
   };
 
   // the sample on a phone is the app itself, at the same cafe
-  const sample = place => { if(wide()) return false; track("demo_opened", {place: place, phone: true}); location.href = COUNTER_APP + COUNTER_PREVIEW; return true; };
+  const sample = place => { if(wide()) return false; track("demo_opened", {place: place, phone: true}); location.href = COUNTER_APP + COUNTER_PREVIEW + FROM_LANDING; return true; };
   byId("try-start").addEventListener("click", () => { if(sample("try_section")) return; start("try_section"); frame.focus(); });
   byId("demo-open").addEventListener("click", e => { e.preventDefault(); if(!sample("hero_sample")) openCounter("", "hero_sample"); });
 }
@@ -2283,7 +2285,7 @@ const SIGNUP_DONE = {
 };
 const isEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
-function bindSignup(formId, inputId, noteId, source, evt, position){
+function bindSignup(formId, inputId, noteId, source, evt, position, spot){
   const form = document.getElementById(formId);
   const input = document.getElementById(inputId);
   const note = document.getElementById(noteId);
@@ -2321,7 +2323,8 @@ function bindSignup(formId, inputId, noteId, source, evt, position){
       done.textContent = SIGNUP_DONE[source];
       form.replaceWith(done);
       note.hidden = true;
-      track(evt, {position: position || source});
+      // spot says which form on the page it was; only the waitlist forms give one
+      track(evt, spot ? {position: position || source, spot: spot} : {position: position || source});
     }catch(err){
       // whatever they typed stays in the field
       btn.disabled = false;
@@ -2335,9 +2338,9 @@ function bindSignup(formId, inputId, noteId, source, evt, position){
 
 function wireForms(){
   // the landing page's forms: the same rows, told apart only in analytics
-  bindSignup("land-wait-form", "land-wait-email", "land-wait-note", "waitlist", "waitlist_submitted", "landing");
-  // the hero's waitlist form sends just what the pricing card's does
-  bindSignup("hero-wait-form", "hero-wait-email", "hero-wait-note", "waitlist", "waitlist_submitted", "landing");
+  bindSignup("land-wait-form", "land-wait-email", "land-wait-note", "waitlist", "waitlist_submitted", "landing", "pricing");
+  // the hero's waitlist form sends what the pricing card's does; spot tells the two apart
+  bindSignup("hero-wait-form", "hero-wait-email", "hero-wait-note", "waitlist", "waitlist_submitted", "landing", "hero");
   bindSignup("land-news-form", "land-news-email", "land-news-note", "newsletter_hero", "newsletter_submitted", "landing");
 }
 </script>

@@ -2,5 +2,18 @@
 # Keeps credentials (.env.local) and local CLI state out of the deployment.
 *
 !index.html
+!privacy.html
+!terms.html
+!team.html
+!legal.css
 !site_data.json
 !vercel.json
+# fonts, pictures and videos: each folder, then everything inside it
+!fonts
+!fonts/**
+!img
+!img/**
+!media
+!media/**
+.vercel
+.env*

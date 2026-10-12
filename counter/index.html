@@ -5,49 +5,59 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Counter</title>
 <meta name="robots" content="noindex">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="img/logo-mark.svg">
+<link rel="preload" href="fonts/gambetta-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/switzer-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preconnect" href="https://www.onemap.gov.sg" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" integrity="sha512-h9FcoyWjHcOcmEVkxOfTLnmZFWIH0iZhZT1H2TbOq55xssQGEJHEaIm+PgoUaZbRvQTNTluNOEfb1ZRy6D3BOw==" crossorigin="anonymous" referrerpolicy="no-referrer">
 <style>
+@font-face{font-family:'Gambetta';src:url(fonts/gambetta-400.woff2) format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Gambetta';src:url(fonts/gambetta-400i.woff2) format('woff2');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'Gambetta';src:url(fonts/gambetta-500.woff2) format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Gambetta';src:url(fonts/gambetta-500i.woff2) format('woff2');font-weight:500;font-style:italic;font-display:swap}
+@font-face{font-family:'Gambetta';src:url(fonts/gambetta-600.woff2) format('woff2');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Switzer';src:url(fonts/switzer-400.woff2) format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Switzer';src:url(fonts/switzer-500.woff2) format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Switzer';src:url(fonts/switzer-600.woff2) format('woff2');font-weight:600;font-style:normal;font-display:swap}
 /* Every colour and typeface on the page is named here, so each changes in one place. */
 :root{
-  --bg:#F5F4F1;
-  --panel:#FFFFFF;
-  --line:#DEDBD5;
-  --rule:#E4E1DB;
-  --ink:#2A1810;
-  --body:#4A3F38;
-  --muted:#6F665E;
-  --butter:#FFC83D;      /* the one main button, and the line under the selected tab */
-  --picked:#F0EEEA;
+  --bg:#FFFCF5;
+  --panel:#FFFEFA;
+  --line:#E3D8C1;
+  --rule:#E3D8C1;
+  --ink:#24150E;
+  --body:#45321F;
+  --muted:#76664F;
+  --butter:#24150E;      /* the one main button (espresso, as on the landing page), and the line under the selected tab */
+  --on-butter:#FFFCF5;
+  --picked:#F4ECDA;
   /* another cafe compared with this shop, and nothing else */
-  --more:#D63A14;        /* charges more than this shop */
-  --less:#3E6FA3;        /* charges less than this shop */
-  --same:#C9C5BE;        /* charges the same */
-  --same-line:#8F8A83;   /* the thin border round a "same" mark */
-  --faint:#8F8A83;       /* lines of the menu that do not work yet */
+  --more:#B5401A;        /* charges more than this shop */
+  --less:#3B6A8F;        /* charges less than this shop */
+  --same:#D3C8AE;        /* charges the same */
+  --same-line:#8A7C62;   /* the thin border round a "same" mark */
+  --faint:#9A8C74;       /* lines of the menu that do not work yet */
   /* rust, from the Counter logo: the "Limited time" tag, a switch that is on, and the filled heart of a saved item. Nothing else. */
-  --rust:#C0531F;
-  --rust-soft:#FBEDE5;   /* the tag's background */
-  --rust-line:#EBC3AE;   /* the tag's border */
-  --rust-ink:#A8481B;    /* the tag's text: rust darkened until it reads on the soft tint */
-  --f-display:"Bricolage Grotesque", system-ui, sans-serif;
-  --f-text:"Archivo", system-ui, sans-serif;
-  --r-panel:12px;
-  --r:10px;
+  --rust:#A4441C;
+  --rust-soft:#F8E9DC;   /* the tag's background */
+  --rust-line:#E4BFA3;   /* the tag's border */
+  --tomato-deep:#7E3313;
+  --rust-ink:#8E3A16;    /* the tag's text: rust darkened until it reads on the soft tint */
+  --f-display:"Gambetta", Georgia, "Times New Roman", serif;
+  --f-text:"Switzer", system-ui, -apple-system, sans-serif;
+  --r-panel:8px;
+  --r:6px;
   --side:240px;
 }
 *,*::before,*::after{box-sizing:border-box}
 [hidden]{display:none !important}
 html{-webkit-text-size-adjust:100%}
-body{margin:0; background:var(--bg); color:var(--body); font:400 15px/1.45 var(--f-text)}
+body{font-feature-settings:"kern","liga"; margin:0; background:var(--bg); color:var(--body); font:400 15px/1.45 var(--f-text)}
 h1,h2,h3,p,ul{margin:0}
 ul{padding:0; list-style:none}
-h1,h2{font-family:var(--f-display); color:var(--ink); line-height:1.15}
-h1{font-weight:800; font-size:30px}
-h2{font-weight:700; font-size:22px}
+h1,h2{font-family:var(--f-display); color:var(--ink); line-height:1.15; font-weight:500; letter-spacing:-.015em}
+h1{font-size:34px}
+h2{font-size:25px}
 h3{font:600 13px/1.3 var(--f-text); color:var(--muted)}
 a{color:var(--ink)}
 button{font:inherit; color:inherit}
@@ -62,8 +72,8 @@ svg.ic{width:18px; height:18px; flex:none; fill:none; stroke:currentColor; strok
   display:inline-flex; align-items:center; justify-content:center; gap:8px; white-space:nowrap;
 }
 .btn:hover{border-color:var(--ink)}
-.btn.primary{background:var(--butter); border-color:var(--butter)}
-.btn.primary:hover{border-color:var(--ink)}
+.btn.primary{background:var(--butter); border-color:var(--butter); color:var(--on-butter)}
+.btn.primary:hover{background:var(--tomato-deep); border-color:var(--tomato-deep)}
 .btn.sq{width:44px; padding:0}
 .panel{background:var(--panel); border:1px solid var(--line); border-radius:var(--r-panel); padding:20px}
 .muted{color:var(--muted)}
@@ -103,7 +113,7 @@ svg.ic{width:18px; height:18px; flex:none; fill:none; stroke:currentColor; strok
 }
 .trail button:hover{border-color:var(--ink)}
 .trail button.last{background:var(--picked); border-color:var(--ink)}
-.ask{font:700 20px/1.2 var(--f-display); color:var(--ink); margin-bottom:14px}
+.ask{font:500 22px/1.2 var(--f-display); color:var(--ink); margin-bottom:14px}
 .tiles{display:grid; grid-template-columns:repeat(auto-fill, minmax(min(200px, 100%), 1fr)); gap:12px}
 .tile{
   min-height:96px; padding:14px 16px; display:flex; flex-direction:column; justify-content:center; gap:3px;
@@ -121,12 +131,42 @@ svg.ic{width:18px; height:18px; flex:none; fill:none; stroke:currentColor; strok
 .tile .box svg{width:14px; height:14px; stroke-width:3; visibility:hidden}
 .tile[aria-pressed="true"] .box{background:var(--ink)}
 .tile[aria-pressed="true"] .box svg{visibility:visible}
+/* ---------- first screen: the value up front, the search, the areas ---------- */
+.hero{max-width:640px; margin:0 auto; padding-top:24px; text-align:center}
+.hero h1{font-size:34px}
+.hero .lede{margin:12px auto 0; max-width:46ch; font-size:16px}
+.hero .field{margin-top:28px; text-align:left}
+.hero .field label{font-size:14px; color:var(--muted); margin-bottom:8px}
+.searchrow{display:flex; gap:8px}
+.searchrow input{flex:1; min-width:0; min-height:56px; padding:0 16px; font-size:18px}
+.searchrow .btn{min-height:56px; padding:0 22px; font-size:16px; font-weight:700}
+.hero .none a{font-weight:600}
+.howto{list-style:none; margin:18px 0 0; padding:0; display:flex; flex-wrap:wrap; justify-content:center; gap:6px 18px; font-size:13px; color:var(--muted)}
+.howto li{display:flex; align-items:center; gap:6px}
+.howto .num{width:20px; height:20px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:12px; font-weight:600; border:1px solid currentColor}
+.hero .ask{margin:36px 0 12px; font-size:16px; color:var(--muted); font-weight:600}
+.hero .tiles{grid-template-columns:repeat(4, minmax(0, 1fr)); gap:10px}
+.hero .tile{min-height:60px; padding:10px 12px; border:1px solid var(--line); border-radius:10px; text-align:center; align-items:center}
+.hero .tile:hover{border-color:var(--ink)}
+.hero .tile .t1{font-size:15px}
+.hero .tile .t2{font-size:12px}
+.samplebtn{margin-top:20px; min-height:44px; padding:0; border:0; background:none; color:var(--muted); font-weight:600; text-decoration:underline; cursor:pointer}
+.samplebtn:hover{color:var(--ink)}
+@media (min-width:1024px){
+  .hero h1{font-size:44px}
+}
+@media (max-width:640px){
+  .hero{padding-top:8px}
+  .hero .tiles{grid-template-columns:repeat(2, minmax(0, 1fr))}
+  .searchrow input{min-height:52px; font-size:16px}
+  .searchrow .btn{min-height:52px; padding:0 16px}
+  .hero .field{margin-top:20px}
+  .hero .ask{margin-top:28px}
+}
 /* ---------- menu upload: Your menu, Check your menu ---------- */
 .up{margin-top:24px}
 .up > * + *{margin-top:18px}
 .up > .field, .up .choose{max-width:420px}
-.codeline{display:flex; gap:8px}
-.codeline input{flex:1; min-width:0}
 .hint{margin-top:6px; font-size:13px; color:var(--muted)}
 .say{color:var(--ink); font-weight:600}
 .say:empty, .hint:empty{display:none}
@@ -223,7 +263,7 @@ html.keys .offscreen:focus-visible + .btn{outline:2px solid var(--ink); outline-
 .field input:disabled{background:var(--bg)}
 .field input[aria-invalid="true"]{border:2px solid var(--ink)}
 .card{max-width:480px}
-.card .big{font:800 28px/1.15 var(--f-display); color:var(--ink); margin:4px 0 8px}
+.card .big{font:500 30px/1.15 var(--f-display); color:var(--ink); margin:4px 0 8px}
 .card .btn{margin-top:18px}
 .choose-cols{display:grid; grid-template-columns:minmax(0, 2fr) minmax(0, 1fr); gap:24px; align-items:start; margin-top:24px}
 #picker .trail{margin:0 0 16px}
@@ -243,7 +283,8 @@ html.keys .offscreen:focus-visible + .btn{outline:2px solid var(--ink); outline-
 .btn:disabled:hover{border-color:var(--butter)}
 .pop-btn{margin-top:8px; min-height:40px; font-size:13px}
 
-.wordmark{font:800 22px/1 var(--f-display); color:var(--ink)}
+.wordmark img{width:26px; height:26px; flex:none}
+.wordmark{display:inline-flex; align-items:center; gap:8px; font:600 22px/1 var(--f-display); letter-spacing:-.01em; color:var(--ink)}
 .field label{display:block; font-weight:600; color:var(--ink); margin-bottom:6px}
 .field input{
   width:100%; min-height:44px; padding:0 12px; border:1px solid var(--line); border-radius:var(--r);
@@ -332,6 +373,10 @@ html.keys .offscreen:focus-visible + .btn{outline:2px solid var(--ink); outline-
 .switch[aria-checked="true"] .track{background:var(--rust)}
 .switch[aria-checked="true"] .track::after{left:18px}
 .tablebox{overflow-x:auto}
+.moneybox{margin:14px 0; padding:12px 14px; background:var(--picked); border-radius:var(--r)}
+.moneybox .sold{display:block; font-weight:600; color:var(--ink); margin-bottom:6px}
+.moneybox input{width:120px; min-height:40px; padding:0 10px; border:1px solid var(--line); border-radius:8px; font:inherit; background:var(--panel)}
+.moneybox .moneyline{margin:8px 0 0; color:var(--body)}
 /* fixed widths, so a long name or a tag wraps inside its column and never widens the table */
 .newtable{width:100%; min-width:744px; border-collapse:collapse; table-layout:fixed; font-size:14px}
 /* The last three columns are as wide as their longest text needs, in pixels,
@@ -350,7 +395,7 @@ html.keys .offscreen:focus-visible + .btn{outline:2px solid var(--ink); outline-
 /* a cafe's own row: its name, where it is, how many items, on the picked grey */
 .newtable .ghead th{padding:10px; text-align:left; font-weight:400; background:var(--picked); border-bottom:1px solid var(--line)}
 .newtable tbody + tbody .ghead th{border-top:10px solid var(--panel)}
-.newtable .ghead .cafe{font:700 17px/1.25 var(--f-display); color:var(--ink); margin-right:10px}
+.newtable .ghead .cafe{font:500 18px/1.25 var(--f-display); color:var(--ink); margin-right:10px}
 .newtable .ghead .where{color:var(--muted); margin-right:10px}
 .newtable .ghead .howmany{color:var(--body); font-weight:600}
 .newtable .gfold td{padding:8px 10px 12px; border-bottom:0}
@@ -372,6 +417,23 @@ html.keys .offscreen:focus-visible + .btn{outline:2px solid var(--ink); outline-
 .newtable .tag.isnew{margin-left:0; margin-right:6px}
 #alertspage h2{font-size:20px; margin-bottom:8px}
 #alertspage .tablebox + h2, #alertspage p + h2{margin-top:24px}
+/* on a phone a table is too wide to read: each row becomes a small card, the column names said in words where needed */
+@media (max-width:640px){
+  .tablebox{overflow:visible}
+  .newtable, .newtable.offers{min-width:0; table-layout:auto}
+  .newtable, .newtable tbody, .newtable tr, .newtable th, .newtable td{display:block}
+  .newtable thead{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+  .newtable .ghead th{padding:10px 12px; border-radius:8px}
+  .newtable tbody + tbody .ghead th{border-top:0; margin-top:14px}
+  .newtable .irow{display:flex; flex-wrap:wrap; align-items:center; gap:6px 14px; padding:12px 2px; border-bottom:1px solid var(--rule)}
+  .newtable .irow td{padding:0; border:0}
+  .newtable .irow td:first-child, .newtable .irow td.offer, .newtable.alerts:not(.offers) .irow td:nth-child(2){flex-basis:100%}
+  .newtable.offers td.offer{padding-right:0}
+  .newtable .irow td.num{font-weight:600; color:var(--ink)}
+  .newtable .irow td.save{margin-left:auto; padding-left:0}
+  .newtable:not(.offers):not(.alerts) .irow td:nth-child(2)::before, .newtable.alerts:not(.offers) .irow td:nth-child(3)::before{content:"New: "; color:var(--muted)}
+  .newtable .gfold td{padding:10px 2px 4px}
+}
 /* a competitor for one item: its Remove button, and the list of cafes to choose from */
 .cafes .btn, #ir-box .cafes .btn{min-height:32px; padding:0 10px; font-size:13px}
 .d-list .listacts{display:flex; flex-wrap:wrap; gap:8px}
@@ -463,18 +525,31 @@ html.keys .offscreen:focus-visible + .btn{outline:2px solid var(--ink); outline-
 .hidden-list li span{flex:1; min-width:0; color:var(--ink); font-weight:600}
 .hidden-list .btn{margin-left:0}
 .note{margin:16px 4px 0}
+.mailbox{margin:20px 0 0; padding:16px; background:var(--picked); border-radius:var(--r)}
+.mailbox.alerts{margin:28px 0 0}
+.mailh{margin:0 0 6px; font:500 22px/1.2 var(--f-display); color:var(--ink)}
+.mailbox.prices .mailh{font-size:17px}
+.mailwords{margin:0; color:var(--body)}
+.mailform{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px}
+.mailin{flex:1 1 220px; min-width:0; min-height:44px; padding:0 12px; border:1px solid var(--line); border-radius:8px; background:var(--panel); color:var(--ink); font:inherit}
+.mailin:focus{border-color:var(--ink)}
+.mailbox .mailmsg{margin:8px 0 0}
+.mailbox .small{margin:8px 0 0}
+.mailbox .btn.quiet{border-color:transparent; background:transparent}
+.mailbox .btn.quiet:hover{border-color:var(--ink)}
+.mailsaid{display:flex; align-items:center; gap:8px; margin:0; color:var(--ink); overflow-wrap:anywhere}
 
 /* ---------- right panel: one item ---------- */
 .detail > * + *{margin-top:16px}
 .d-head{display:flex; align-items:center; gap:12px}
 .d-head .title{flex:1; min-width:0; display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px}
 .d-head .label{font-weight:600; color:var(--muted)}
-.d-verdict{font:700 24px/1.2 var(--f-display); color:var(--ink)}
+.d-verdict{font:500 26px/1.2 var(--f-display); color:var(--ink)}
 .detail > .d-verdict{margin-top:8px}
-.askprice h3{font:700 17px/1.2 var(--f-display); color:var(--ink)}
+.askprice h3{font:500 18px/1.2 var(--f-display); color:var(--ink)}
 .askprice > * + *{margin-top:10px}
 .d-price{display:flex; flex-wrap:wrap; align-items:center; gap:12px 20px}
-.bigprice{font:800 44px/1 var(--f-display); color:var(--ink); font-variant-numeric:tabular-nums}
+.bigprice{font:500 48px/1 var(--f-display); color:var(--ink); font-variant-numeric:tabular-nums}
 .stepper{display:flex; align-items:center; gap:12px}
 .d-priceinfo > * + *{margin-top:8px}
 .inner{background:var(--bg); border-radius:var(--r); padding:16px}
@@ -505,7 +580,7 @@ html.keys .offscreen:focus-visible + .btn{outline:2px solid var(--ink); outline-
 .seg .btn:first-child{border-radius:var(--r) 0 0 var(--r)}
 .seg .btn:last-child{border-radius:0 var(--r) var(--r) 0; margin-left:-1px}
 .seg .btn[aria-pressed="true"]{background:var(--ink); border-color:var(--ink); color:#fff}
-.d-list h3{font:700 17px/1.2 var(--f-display); color:var(--ink); margin-bottom:10px}
+.d-list h3{font:500 18px/1.2 var(--f-display); color:var(--ink); margin-bottom:10px}
 .cafes li{display:flex; align-items:flex-start; gap:12px; padding:12px 0; border-top:1px solid var(--rule)}
 .cafes .what{flex:1; min-width:0}
 .cafes .name{font-weight:600; color:var(--ink)}
@@ -623,7 +698,7 @@ html.keys .offscreen:focus-visible + .btn{outline:2px solid var(--ink); outline-
 <!-- set-up: step 1 finds the shop, step 2 chooses its competitors -->
 <div class="setup" id="setup" hidden>
   <header class="topbar">
-    <p class="wordmark">Counter</p>
+    <p class="wordmark"><img src="img/logo-mark.svg" alt="" width="26" height="26">Counter</p>
     <ol class="steps" id="steps" aria-label="Set-up steps">
       <li id="step-1"><span class="num">1</span>Your shop</li>
       <li id="step-m" hidden><span class="num">2</span>Your menu</li>
@@ -668,12 +743,12 @@ html.keys .offscreen:focus-visible + .btn{outline:2px solid var(--ink); outline-
 <div class="app" id="app" hidden>
   <!-- phone widths only: a bar that stays at the top, with the page's name and the menu button -->
   <header class="mbar" id="mbar">
-    <div class="words"><p class="wordmark">Counter</p><p class="where" id="mbar-page"></p></div>
+    <div class="words"><p class="wordmark"><img src="img/logo-mark.svg" alt="" width="26" height="26">Counter</p><p class="where" id="mbar-page"></p></div>
     <button type="button" class="btn" id="menu-btn" aria-expanded="false" aria-controls="side"></button>
   </header>
   <!-- one set of links: the sidebar on a laptop, the menu panel on a phone -->
   <aside class="side" id="side">
-    <p class="wordmark side-mark">Counter</p>
+    <p class="wordmark side-mark"><img src="img/logo-mark.svg" alt="" width="26" height="26">Counter</p>
     <div class="who">
       <p class="name" id="who-name"></p>
       <p class="area" id="who-area"></p>
@@ -760,6 +835,41 @@ const byId = id => document.getElementById(id);
 const money = n => "$" + Number(n).toFixed(2);
 const cents = n => Math.round(Number(n) * 100);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* ---------- usage numbers ----------
+   Small events and one email signup go to the same Supabase project as the
+   landing page. The key is the public anon key; row-level security limits it
+   to adding rows. Nothing here may ever break or slow the app: a failed or
+   blocked call is dropped without a word. The id lives in memory only. */
+const SUPABASE_URL = "https://ybcnzkzgyoghkqsxnqkl.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InliY256a3pneW9naGtxc3hucWtsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4ODc0MzAsImV4cCI6MjEwNTQ2MzQzMH0.koP33NN4VcbzyBtfBoAT9Gbwd0ayU03-5tW6YZOZr4A";
+const SB_HEADERS = {"apikey": SUPABASE_KEY, "Authorization": "Bearer " + SUPABASE_KEY, "Content-Type": "application/json", "Prefer": "return=minimal"};
+const SESSION_ID = Math.random().toString(36).slice(2) + "-" + Date.now().toString(36);
+function track(name, props){
+  try {
+    fetch(SUPABASE_URL + "/rest/v1/events", {method: "POST", keepalive: true, credentials: "omit", headers: SB_HEADERS,
+      body: JSON.stringify({name: String(name), props: props || {}, session_id: SESSION_ID})}).catch(() => {});
+  } catch(e){ /* dropped on purpose */ }
+}
+const isEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+/* where the visit came from, read once: src is a short plain tag on our own links (?src=newsletter), anything else is dropped;
+   ref is the referring site's host only. src is then taken out of the address, the rest of it (shop, rivals, page) kept. */
+(() => {
+  let src = null, ref = null, has = false;
+  try {
+    const url = new URL(location.href), tag = url.searchParams.get("src");
+    has = !!url.searchParams.get("shop");
+    if(tag !== null){
+      if(/^[A-Za-z0-9_-]{1,40}$/.test(tag)) src = tag.toLowerCase();
+      url.searchParams.delete("src");
+      history.replaceState(history.state, "", url.pathname + url.search + url.hash);
+    }
+  } catch(e){ /* the app works the same without it */ }
+  try { if(document.referrer) ref = new URL(document.referrer).hostname || null; } catch(e){ ref = null; }
+  let phone = false;
+  try { phone = matchMedia("(max-width:640px)").matches; } catch(e){ /* not a phone */ }
+  track("app_opened", {src: src, ref: ref, has_shop: has, is_phone: phone});
+})();
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 /* "2026-10-04" -> "4 Oct" */
 const dayMonth = iso => {
@@ -959,6 +1069,18 @@ const shortVerdict = t => t.replace(/ cafes$/, "");
 
 /* How the other cafes split around a price. The reader's own shop is never
    one of the others. */
+/* the whole menu in one line, at the real prices: how many items cost more than most cafes, less, or about the usual */
+function pricesSummary(){
+  const said = myItems.map(k => compare(k, realPrice(k))).filter(c => c.enough);
+  if(!said.length) return "";
+  const more = said.filter(c => /^(Much )?[Mm]ore expensive/.test(c.verdict)).length, less = said.filter(c => /^Cheaper/.test(c.verdict)).length;
+  const usual = said.length - more - less, one = n => n === 1;
+  if(one(said.length)) return more ? "Your item costs more than most cafes charge." : less ? "Your item costs less than most cafes charge." : "Your item is about the usual price.";
+  const parts = [more ? `${more} ${one(more) ? "costs" : "cost"} more than most cafes charge` : "", less ? `${less} ${one(less) ? "costs" : "cost"} less` : "",
+                 usual ? `${usual} ${one(usual) ? "is" : "are"} about the usual price` : ""].filter(Boolean);
+  if(parts.length === 1) return more ? `All ${said.length} of your items cost more than most cafes charge.` : less ? `All ${said.length} of your items cost less than most cafes charge.` : `All ${said.length} of your items are about the usual price.`;
+  return `Of your ${said.length} items, ` + parts.slice(0, -1).join(", ") + " and " + parts[parts.length - 1] + ".";
+}
 function compare(key, v){
   const others = D.named_prices[key].filter(r => r.shop_id !== shop.shop_id);
   // with no price to compare with, no cafe charges less or more
@@ -1094,9 +1216,10 @@ function openShop(s, ids, q){
   // a new shop, a new page, or a return from set-up starts the page afresh.
   // A change to the hidden items alone leaves the open tab and item be.
   const entering = screen !== "prices" || lastShop !== s.shop_id || page !== nextPage;
-  if(lastShop !== s.shop_id){ trial.clear(); test.clear(); }
+  if(lastShop !== s.shop_id){ trial.clear(); test.clear(); compared = false; }
   lastShop = s.shop_id;
   page = nextPage;
+  if(entering) track("page_viewed", {page: page});
   setShop(s, ids, q);
 
   if(entering){
@@ -1177,8 +1300,9 @@ function paintFrame(){
   // no item at all on Items I do not sell: one line, and no panels
   const none = miss && !missing.length;
   const sub = byId("page-sub");
-  sub.hidden = !miss || none;
-  sub.textContent = miss ? `Your competitors sell ${n === 1 ? "1 item" : n + " items"} we did not find on your menu.` : "";
+  const summary = page === "prices" ? pricesSummary() : "";
+  sub.hidden = !(miss || summary) || none;
+  sub.textContent = miss ? `Your competitors sell ${n === 1 ? "1 item" : n + " items"} we did not find on your menu.` : summary;
   const empty = byId("page-empty");
   empty.hidden = !none;
   empty.textContent = none ? "Your competitors do not sell any compared item that is missing from your menu." : "";
@@ -1225,6 +1349,7 @@ function paintList(){
   });
   html += miss ? hiddenHtml() + `<p class="note muted small">Not for me hides an item from this list.</p>`
                : `<p class="note muted small">We compare the items most cafes sell. More are coming.</p>`;
+  if(page === "prices" && compared) html += mailHtml("prices");
   box.innerHTML = html;
 }
 /* A row for an item the shop does not sell: who sells it and what cafes
@@ -1469,7 +1594,7 @@ const ALERTS_KEY = "counter.alerts.v1";
 const ALERT_DAYS = 30;            // a new item is an alert for this many days
 const ALERT_WAIT = 2000;          // milliseconds on the page before its alerts are seen
 const SEEN_MAX = 500;             // keys kept for one shop, newest kept
-let alertsAll = {};               // shop_id -> {seen: [keys]}
+let alertsAll = {};               // shop_id -> {seen: [keys], email: the address signed up, off: true once the strip was turned down}
 let alertFresh = null;            // the keys that were unseen when the page was opened: they keep their "New" tag until it is left
 let alertTimer = 0;
 function loadAlerts(){
@@ -1541,7 +1666,7 @@ function paintAlerts(){
       all.offers.map(r => `<tr class="irow" data-key="${esc(r.key)}"><td>${fresh(r)}<span class="lead">${esc(r.brand_name)}</span></td>` +
         `<td class="offer"><span class="lead">${esc(r.offer_text)}</span>` +
           (statedEnd(r) ? `<span class="under" data-ends>Ends ${dayMonth(statedEnd(r))}</span>` : "") + `</td>` +
-        `<td class="nowrap">${offerLink(r)}</td></tr>`).join("") + `</tbody></table></div>`);
+        `<td class="nowrap">${offerLink(r)}</td></tr>`).join("") + `</tbody></table></div>`) + mailHtml("alerts");
   // after 2 seconds on the page every alert shown is seen: the count goes, the "New" tags stay until the page is left
   clearTimeout(alertTimer);
   if(!shown.some(r => !seen.has(r.key))) return;
@@ -1549,11 +1674,79 @@ function paintAlerts(){
   alertTimer = setTimeout(() => {
     if(!shop || shop.shop_id !== id || page !== "alerts" || screen !== "prices") return;
     const keys = shown.map(r => r.key), old = seenAlerts().filter(k => keys.indexOf(k) === -1);
-    alertsAll[id] = {seen: old.concat(keys).slice(-SEEN_MAX)};
+    alertsAll[id] = Object.assign({}, alertsAll[id], {seen: old.concat(keys).slice(-SEEN_MAX)});
     storeAlerts();
     byId("nav-alerts-words").textContent = `Alerts (${unseenAlerts()})`;
   }, ALERT_WAIT);
 }
+
+/* ---------- email me when they change something ----------
+   One form in two places: the top of Alerts, and a strip under the item list
+   once the reader has compared an item. Once a shop has signed up both show
+   the address instead. The address and the choice are kept in this browser,
+   for each shop, with what was seen. */
+const PRIVACY_URL = "https://demoweeklybake.vercel.app/privacy.html";
+let mailDraft = "";               // what is typed in the field, kept across repaints
+const alertMine = () => alertsAll[shop.shop_id] && typeof alertsAll[shop.shop_id] === "object" ? alertsAll[shop.shop_id] : {};
+function mailWords(){
+  const names = rivals.slice(0, 2).map(o => `<b>${esc(o.shop_name)}</b>`), n = rivals.length;
+  const what = "changed: prices, new items and offers";
+  if(n === 0) return `Every Monday, what your competitors ${what}.`;
+  if(n === 1) return `Every Monday, what ${names[0]} ${what}.`;
+  if(n === 2) return `Every Monday, what ${names[0]} and ${names[1]} ${what}.`;
+  return `Every Monday, what ${names[0]}, ${names[1]} and your other competitors ${what}.`;
+}
+function mailHtml(place){
+  const mine = alertMine(), email = typeof mine.email === "string" ? mine.email : "";
+  const head = place === "alerts" ? "h2" : "p";
+  if(email && place === "prices") return "";
+  if(email) return `<div class="mailbox done ${place}"><p class="mailsaid">${ICON.tick}<span>The Weekly Bake goes to <b>${esc(email)}</b> every Monday.</span></p></div>`;
+  if(place === "prices" && mine.off) return "";
+  return `<div class="mailbox ${place}"><${head} class="mailh">${place === "alerts" ? "Get these in The Weekly Bake" : "Hear when they change a price"}</${head}><p class="mailwords">${mailWords()}</p>` +
+    `<form class="mailform" data-place="${place}" novalidate>` +
+    `<input type="email" class="mailin" autocomplete="email" inputmode="email" placeholder="you@yourcafe.com" aria-label="Your email" value="${esc(mailDraft)}">` +
+    `<button type="submit" class="btn primary">Sign me up</button>` +
+    (place === "prices" ? `<button type="button" class="btn quiet" data-mail="no">No thanks</button>` : "") + `</form>` +
+    `<p class="say mailmsg" role="alert"></p>` +
+    (place === "alerts" ? `<p class="muted small">The Weekly Bake is our free Monday email. Unsubscribe any time. <a href="${PRIVACY_URL}" target="_blank" rel="noopener">Privacy</a></p>` : "") + `</div>`;
+}
+document.addEventListener("input", e => { if(e.target && e.target.classList && e.target.classList.contains("mailin")) mailDraft = e.target.value; });
+document.addEventListener("click", e => {
+  const el = e.target.closest("[data-mail]");
+  if(!el || !shop) return;
+  alertsAll[shop.shop_id] = Object.assign({}, alertMine(), {off: true});
+  storeAlerts();
+  paintList();
+});
+document.addEventListener("submit", async e => {
+  const f = e.target.closest ? e.target.closest(".mailform") : null;
+  if(!f || !shop) return;
+  e.preventDefault();
+  const input = f.querySelector("input"), btn = f.querySelector("button[type=submit]"), msg = f.parentNode.querySelector(".mailmsg");
+  if(btn.disabled) return;
+  const email = input.value.trim(), id = shop.shop_id, place = f.dataset.place;
+  if(!isEmail(email)){ msg.textContent = "Please check your email address."; input.focus(); return; }
+  msg.textContent = "";
+  btn.disabled = true;
+  btn.textContent = "Sending";
+  let ok = false;
+  try {
+    const res = await fetch(SUPABASE_URL + "/rest/v1/signups", {method: "POST", headers: SB_HEADERS, body: JSON.stringify({email: email, source: "counter_app shop=" + id + " rivals=" + rivals.map(o => o.shop_id).join(",")})});
+    // 409: this address is already on the list, which is what they asked for
+    ok = res.ok || res.status === 409;
+  } catch(err){ ok = false; }
+  if(!ok){
+    btn.disabled = false;
+    btn.textContent = "Sign me up";
+    msg.textContent = "We could not save that. Please try again in a moment.";
+    return;
+  }
+  alertsAll[id] = Object.assign({}, alertsAll[id], {email: email});
+  storeAlerts();
+  mailDraft = "";
+  track("alerts_signup", {shop_id: id, n_rivals: rivals.length, place: place});
+  if(shop && shop.shop_id === id) paint();
+});
 
 /* ---------- a competitor for one item ----------
    On My prices a cafe can be added as a competitor for the open item alone.
@@ -1708,7 +1901,7 @@ function paintPricesTop(){
         `<button type="button" class="btn sq" data-act="minus" aria-label="Lower the price by ${STEP} cents"${cents(v) <= FLOOR ? " disabled" : ""}>${ICON.minus}</button>` +
         `<span class="bigprice" id="d-big" aria-live="polite">${money(v)}</span>` +
         `<button type="button" class="btn sq" data-act="plus" aria-label="Raise the price by ${STEP} cents">${ICON.plus}</button></div>` +
-      `<p>Your real price is ${money(real)}.</p>` + own +
+      `<p>Your real price is ${money(real)}.</p>` + own + soldHtml(k) +
       `<button type="button" class="btn" data-act="reset">Go back to my real price</button>` +
       // a price that differs from the real one can be saved. The button reads
       // "Saved" only while the saved price is the one on screen.
@@ -1733,6 +1926,42 @@ function paintPricesTop(){
     `</ul>` +
     `<p class="count muted small" id="d-count">${c.n} cafes</p>`;
 }
+/* ----- what a price is worth in a month -----
+   The owner says how many they sell a day; the line is the sum only: the
+   difference in price, times that many, times 30 days. It is kept in this
+   browser, for each shop and item. */
+const SOLD_KEY = "counter.sold.v1";
+let soldAll = null;
+let soldSeen = false;            // the daily count has been counted this visit
+function soldOf(k){
+  if(!soldAll){ try { soldAll = JSON.parse(localStorage.getItem(SOLD_KEY) || "{}") || {}; } catch(e){ soldAll = {}; } }
+  const n = (soldAll[shop.shop_id] || {})[k];
+  return Number.isInteger(n) && n > 0 ? n : 0;
+}
+function setSold(k, n){
+  soldOf(k);
+  (soldAll[shop.shop_id] = soldAll[shop.shop_id] || {})[k] = n;
+  try { localStorage.setItem(SOLD_KEY, JSON.stringify(soldAll)); } catch(e){ /* kept for this visit */ }
+}
+function moneyWords(k){
+  const n = soldOf(k), real = realPrice(k), diff = cents(cur(k)) - cents(real);
+  if(!n) return "Add how many you sell to see what this price is worth in a month.";
+  if(!diff) return `At your real price, ${n} a day takes in ${money(n * real * 30).replace(/\.00$/, "")} a month.`;
+  const month = Math.round(Math.abs(diff) * n * 30 / 100);
+  return `${diff > 0 ? "About $" + month.toLocaleString("en-SG") + " more" : "About $" + month.toLocaleString("en-SG") + " less"} a month than your real price, if you still sell ${n} a day.`;
+}
+const soldHtml = k =>
+  `<div class="moneybox"><label class="sold" for="d-sold">How many do you sell a day?</label>` +
+  `<input type="number" id="d-sold" inputmode="numeric" min="1" max="5000" placeholder="e.g. 60" value="${soldOf(k) || ""}">` +
+  `<p class="moneyline" id="d-money" aria-live="polite">${esc(moneyWords(k))}</p></div>`;
+document.addEventListener("input", e => {
+  if(!e.target || e.target.id !== "d-sold" || !openItem) return;
+  const n = Math.round(Number(e.target.value));
+  setSold(openItem, n > 0 && n <= 5000 ? n : 0);
+  if(n > 0 && n <= 5000 && !soldSeen){ soldSeen = true; track("sold_entered", {}); }
+  byId("d-money").textContent = moneyWords(openItem);
+});
+
 /* the same place for an item the shop does not sell: who sells it, a price to
    test, and what the cafes that sell it charge */
 function paintMissingTop(){
@@ -2082,6 +2311,8 @@ function drawMap(fit){
 }
 
 /* ---------- what a press does ---------- */
+const triedSeen = new Set();     // items whose trial price was counted this visit
+let compared = false;            // whether the reader has opened an item's compare view this visit
 const focusOn = sel => { const el = document.querySelector(sel); if(el) el.focus(); };
 document.addEventListener("click", e => {
   const el = e.target.closest("[data-act]");
@@ -2100,6 +2331,7 @@ document.addEventListener("click", e => {
       if(!ids.length) return;
       // the owner's own shop keeps its competitors in the browser too
       if(chooser.shop.shop_id === MY_ID && myShop){ myShop.rivals = ids; storeShop(); }
+      track("competitors_done", {shop_id: chooser.shop.shop_id, n: ids.length});
       go({shop: chooser.shop.shop_id, rivals: ids.join(","), hide: chooser.keep.hide, page: chooser.keep.page});
     }
     return;
@@ -2112,6 +2344,8 @@ document.addEventListener("click", e => {
   }
   if(!shop) return;
   const k = openItem, miss = page === "missing", bag = miss ? test : trial;
+  if((act === "try" || act === "plus" || act === "minus") && !miss && k && !triedSeen.has(k)){ triedSeen.add(k); track("price_tried", {item: k}); }
+  if(act === "open") compared = true;
   // the question about a real price is answered at once or it is gone
   const asked = ask;
   ask = null;
@@ -2377,19 +2611,31 @@ function showFind(q, lost){
   if(place.part) steps.push({text: place.part.name, nav: address({at: "p:" + place.part.name})});
   if(place.area) steps.push({text: place.area.district, nav: address({at: "a:" + place.area.district})});
 
-  let html = `<h1>Find your shop</h1><p class="sub">Three taps. No typing needed.</p>` +
+  const hero = !picked && place.level === "parts";
+    let html = hero ? "" : `<h1>Find your shop</h1><p class="sub">Pick your area, then your shop.</p>` +
              `<div class="trail" id="find-trail">${trailHtml(steps)}</div>`;
+  if(hero) document.title = "Are your prices right? | Counter";
   if(picked){
     html += `<div class="panel card" id="shop-card" tabindex="-1"><p class="muted">Your shop</p>` +
       `<p class="big">${esc(picked.shop_name)}</p><p>${esc(picked.district)}</p><p>${esc(picked.address || "")}</p>` +
       `<button type="button" class="btn primary" data-nav="${esc(address({shop: picked.shop_id}))}">Yes, this is my shop</button></div>`;
   } else if(place.level === "parts"){
-    html += (lost ? `<p class="say" id="find-lost" role="status">This shop was set up in another browser. Add it again here.</p>` : "") +
-      `<p class="ask" tabindex="-1">Which part of ${WHOLE} is your shop in?</p><div class="tiles" id="find-tiles">` +
+    const sample = sampleShop();
+    html += `<div class="hero"><h1>Never guess a price again.</h1>` +
+      `<p class="lede">Find your cafe and see what cafes near you charge. Free, about a minute.</p>` +
+      `<div class="field combo"><label for="shop-input">Find your cafe by name</label>` +
+      `<div class="searchrow"><input id="shop-input" type="text" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="false" aria-controls="shop-list" aria-autocomplete="list"${sample ? ` placeholder="${esc("e.g. " + sample.s.shop_name)}"` : ""}>` +
+      `<button type="button" class="btn primary" id="shop-go">Look up</button></div>` +
+      `<ul id="shop-list" role="listbox" aria-label="Cafes" hidden></ul></div>` +
+      `<ol class="howto"><li><span class="num">1</span>Find your cafe</li><li><span class="num">2</span>Pick who you compete with</li><li><span class="num">3</span>See your prices next to theirs</li></ol>` +
+      (lost ? `<p class="say" id="find-lost" role="status">This shop was set up in another browser. Add it again here.</p>` : "") +
+      `<p class="ask" tabindex="-1">Or pick your area</p><div class="tiles" id="find-tiles">` +
       // a shop the owner added here comes first
       (myShop ? `<button type="button" class="tile" id="find-mine" data-nav="${esc(mineHome())}"><span class="t1">Your shop: ${esc(myShop.shop_name)}</span>` +
                 `<span class="t2">${esc(myShop.street || myShop.address)}</span></button>` : "") +
-      parts.map(p => tile(address({at: "p:" + p.name}), p.name, partWords(p))).join("") + `</div>`;
+      parts.map(p => tile(address({at: "p:" + p.name}), p.name, partWords(p))).join("") + `</div>` +
+      (sample ? `<button type="button" class="samplebtn" id="sample-link" data-nav="${esc(address({shop: sample.s.shop_id, rivals: sample.ids.join(",")}))}">Just looking? See a sample cafe</button>` : "") +
+      `</div>`;
   } else if(place.level === "areas"){
     html += `<p class="ask" tabindex="-1">Which area?</p><div class="tiles" id="find-tiles">` +
       place.part.areas.map(a => tile(address({at: "a:" + a.district}), a.district, cafeWords(a))).join("") +
@@ -2404,7 +2650,76 @@ function showFind(q, lost){
   body.innerHTML = html;
   show("find");
   slideIn(body);
-  focusOn("#find-body .ask, #shop-card");
+  if(hero){
+    wireShopSearch();
+    const link = byId("sample-link");
+    if(link) link.addEventListener("click", () => { if(typeof track === "function") track("sample_opened", {shop_id: link.dataset.nav.match(/shop=([^&]+)/)[1]}); });
+  }
+  if(place.level !== "parts" || picked) focusOn("#find-body .ask, #shop-card");
+}
+/* a shop with a full set of compared items whose nearest few cafes have some too: the sample cafe */
+function sampleShop(){
+  const priced = [...SHOPS.values()].filter(o => o.items && o.items.length && o.lat != null && o.shop_id !== MY_ID);
+  const best = priced.slice().sort((a, b) => b.items.length - a.items.length || b.price_count - a.price_count);
+  for(const s of best){
+    const near = nearestFirst(s, priced.filter(o => o.shop_id !== s.shop_id)).slice(0, NEAR_START);
+    if(near.length === NEAR_START) return {s: s, ids: near.map(o => o.shop_id)};
+  }
+  return null;
+}
+/* "Find your cafe by name": picking one is the same as picking its tile */
+function wireShopSearch(){
+  const input = byId("shop-input"), list = byId("shop-list");
+  const all = [...SHOPS.values()].sort((a, b) => a.shop_name.localeCompare(b.shop_name));
+  let opts = [], active = -1;
+  function close(){
+    list.hidden = true; active = -1; opts = [];
+    input.setAttribute("aria-expanded", "false");
+    input.removeAttribute("aria-activedescendant");
+  }
+  function setActive(i){
+    active = i;
+    list.querySelectorAll("li[role=option]").forEach((li, n) => li.setAttribute("aria-selected", String(n === i)));
+    if(i < 0){ input.removeAttribute("aria-activedescendant"); return; }
+    const li = byId("shop-opt-" + i);
+    input.setAttribute("aria-activedescendant", li.id);
+    li.scrollIntoView({block: "nearest"});
+  }
+  function suggest(){
+    const raw = input.value.trim(), q = fold(raw);
+    if(raw.length < 2 || !q){ close(); return; }
+    opts = ranked(all, s => s.shop_name, q).slice(0, 8);
+    list.innerHTML = opts.length
+      ? opts.map((s, i) => `<li role="option" id="shop-opt-${i}" aria-selected="false" data-i="${i}">` +
+          `<span class="optname">${esc(s.shop_name)}</span><span class="optsub">${esc(s.district)}</span></li>`).join("")
+      : `<li class="none" role="presentation">Not listed? <a href="${esc(address({setup: "place"}))}" data-nav="${esc(address({setup: "place"}))}">Add your shop</a></li>`;
+    list.hidden = false; list.scrollTop = 0; active = -1;
+    input.setAttribute("aria-expanded", "true");
+    input.removeAttribute("aria-activedescendant");
+  }
+  const pick = s => go({at: "a:" + s.district, pick: s.shop_id});
+  byId("shop-go").addEventListener("mousedown", e => e.preventDefault());
+  byId("shop-go").addEventListener("click", () => {
+    suggest();
+    if(opts.length) pick(opts[0]); else if(list.hidden) input.focus();
+  });
+  input.addEventListener("input", suggest);
+  input.addEventListener("focus", suggest);
+  input.addEventListener("blur", () => setTimeout(close, 150));
+  input.addEventListener("keydown", e => {
+    if(e.key === "Escape"){ close(); return; }
+    if(list.hidden || !opts.length) return;
+    if(e.key === "ArrowDown"){ e.preventDefault(); setActive((active + 1) % opts.length); }
+    else if(e.key === "ArrowUp"){ e.preventDefault(); setActive((active - 1 + opts.length) % opts.length); }
+    else if(e.key === "Enter"){ e.preventDefault(); pick(opts[active < 0 ? 0 : active]); }
+  });
+  // mousedown, so the pick lands before the field's blur closes the list
+  list.addEventListener("mousedown", e => {
+    const li = e.target.closest("li[role=option]");
+    if(!li) return;
+    e.preventDefault();
+    pick(opts[Number(li.dataset.i)]);
+  });
 }
 
 /* ---------- step 2: choose your competitors ----------
@@ -2416,10 +2731,12 @@ function awayWords(km){
   const m = Math.round(km * 1000 / 50) * 50;
   return m < 1000 ? `${m} m` : `${km.toFixed(1)} km`;
 }
+const pickedSeen = new Set();    // shops already counted as picked this visit
 function showChooser(s, ids, q){
   shop = null;
   const key = s.shop_id + (ids ? "|edit|" + ids.join(",") : "|first");
   const entering = !chooser || chooser.key !== key;
+  if(entering && !ids && !pickedSeen.has(s.shop_id)){ pickedSeen.add(s.shop_id); track("shop_picked", {shop_id: s.shop_id, added: s.shop_id === MY_ID}); }
   if(entering){
     const others = nearestFirst(s, [...SHOPS.values()].filter(o => o.shop_id !== s.shop_id));
     chooser = {key: key, shop: s, edit: !!ids, old: ids || [], others: others, view: "list", fitted: false, at: null,
@@ -2715,7 +3032,6 @@ function pickRow(key, rows){
    For a shop that is not in the list. The photos or the PDF go to this site's
    own /api/read-menu once and are then let go. What comes back is checked by
    the owner and kept in this browser only. */
-const CODE_KEY = "counter.code.v1";
 const MENU_KEY = "counter.mymenu.v1";
 const UP_FILES = 6;               // photos at most
 const UP_PDF = 3000000;           // bytes: a PDF of 3 MB is the most the request can carry
@@ -2727,10 +3043,9 @@ const SHRINK = [[1800, 0.82], [1800, 0.7], [1800, 0.6], [1600, 0.7], [1600, 0.6]
 /* an error code as it is shown: the server's own code, with the AI company's name left out */
 const refWords = ref => String(ref).replace(/^google_/, "ai_");
 const UP_SAY = {
-  bad_code: "That access code is not right.",
   too_large: "These files are too large together. Use fewer photos.",
   bad_files: "We could not use these files. Use up to 6 photos, or one PDF.",
-  limit: "The daily limit for reading menus is used up. Try again tomorrow.",
+  limit: "Too many menus are being read right now. Try again in a minute.",
   not_set_up: "Menu reading is not switched on yet.",
   busy: "The AI is busy right now. Wait a minute and try again.",
   read_failed: "Something went wrong while reading. Nothing was saved. Try again.",
@@ -2748,12 +3063,11 @@ const UP_SAY = {
   postal_failed: "We could not look up the postal code. Try again.",
   name_needed: "Type your shop's name."
 };
-const up = {code: null, files: [], busy: false, adding: false};
+const up = {files: [], busy: false, adding: false};
 let ed = null;                // the menu being checked: its rows, and which row is each compared item
 let myMenu = null;            // the saved menu, as it is written to the browser
 let menuLost = false;         // true when the browser would not keep it
 
-function loadCode(){ try { return localStorage.getItem(CODE_KEY) || ""; } catch(e){ return ""; } }
 function loadMenu(){
   let kept = null;
   try { kept = JSON.parse(localStorage.getItem(MENU_KEY) || "null"); } catch(e){ kept = null; }
@@ -2817,7 +3131,7 @@ function upSay(id, words){
 }
 function paintUpState(){
   const btn = byId("up-read");
-  if(btn) btn.disabled = up.busy || up.adding || !String(up.code || "").trim() || !up.files.length;
+  if(btn) btn.disabled = up.busy || up.adding || !up.files.length;
   upSay("up-status", up.busy ? "Reading your menu. This usually takes under a minute. A long menu can take up to three minutes." : "");
 }
 function paintFiles(){
@@ -2830,15 +3144,10 @@ function paintFiles(){
   paintUpState();
 }
 function paintMenuScreen(){
-  if(up.code === null) up.code = loadCode();
   byId("upload-body").innerHTML =
     `<h1 tabindex="-1">Your menu</h1>` +
     `<p class="sub">Add photos of your menu, or one PDF. We read the items and prices for you.</p>` +
     `<div class="up">` +
-    `<div class="field"><label for="up-code">Access code</label><div class="codeline">` +
-      `<input id="up-code" type="password" autocomplete="off" spellcheck="false" value="${esc(up.code)}">` +
-      `<button type="button" class="btn" data-up="showcode" aria-controls="up-code" aria-pressed="false">Show</button></div>` +
-      `<p class="hint">Your team has this code.</p></div>` +
     `<div class="choose"><input class="offscreen" type="file" id="up-file" accept="image/jpeg,image/png,image/webp,application/pdf" multiple>` +
       `<label class="btn" for="up-file">Choose photos or a PDF</label>` +
       `<p class="hint">JPG, PNG or WebP photos, up to 6. Or one PDF up to 3 MB.</p></div>` +
@@ -2895,7 +3204,7 @@ async function addFiles(chosen){
     if(!pdf && !isPhoto(file)){ said = UP_SAY.file_type; continue; }
     if(hasPdf || (pdf && up.files.length) || up.files.length >= UP_FILES){ said = UP_SAY.too_many; continue; }
     if(pdf){
-      if(file.size > UP_PDF){ said = UP_SAY.pdf_large; continue; }
+      // a PDF too large to send is read here if it has text, or turned into photos of its pages
       up.files.push({name: file.name, size: file.size, pdf: true, file: file});
       continue;
     }
@@ -2922,23 +3231,168 @@ async function fitPhotos(){
   return false;
 }
 /* the one request that carries the menu. Gives the rows, or the name of what went wrong. */
+/* ----- reading a menu without AI -----
+   A PDF made on a computer carries its text. pdf.js (loaded only when a PDF is
+   chosen) gives each piece of text and where it sits; pieces on one line are
+   joined, and a line is split where a wide gap leaves a column. A piece that
+   ends in a price is an item; a short piece without one is a heading for the
+   column it sits in. A scan or a photo has no text, so it goes to the AI. */
+const PDF_JS = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/";
+const PDF_MIN_ROWS = 5;           // fewer priced items than this: the AI reads it instead
+/* Only a read that looks clean skips the AI: most price-like numbers became an item, names do not repeat
+   (a "member" price column) and are not spaced out letter by letter. Tried on 15 real cafe PDFs, this kept
+   the 3 that were read 98-100% right and sent every poor read to the AI. A doubt costs one AI read, not a wrong menu. */
+const pdfSure = rows => !!rows && rows.length >= PDF_MIN_ROWS && !!rows.stats &&
+  rows.stats.coverage >= 0.7 && rows.stats.repeats <= 0.05 && rows.stats.spaced <= 0.05;
+const PDF_MAX_PAGES = 10;
+// a price as menus here print it: 6.5, $6.50, S$6.50, SGD 6.50, 6.50++ (before service charge and GST), 6,50
+const PRICE = String.raw`(?:S\$|SGD\s*|\$)?\s*(\d{1,3}(?:[.,]\d{1,2})?)\s*\+{0,2}`;
+const PRICE_AT_END = new RegExp(String.raw`^(.*?[A-Za-zÀ-ɏ一-鿿].*?)[\s.·…:_+-]*${PRICE}(?:\s*(?:\/|\|)?\s*${PRICE})?\s*$`);
+const PRICE_ONLY = new RegExp(String.raw`^${PRICE}(?:\s*(?:\/|\|)?\s*${PRICE})?$`);
+const NOT_ITEM = /\b(tel|phone|whatsapp|open|opening|closed|daily|am|pm|gst|service charge|singapore|road|rd|street|st|avenue|ave|level|min|minimum|spend|delivery|fee|deposit|corkage|voucher|since|est|#\d|www\.|\.com|@)\b/i;
+const KIND_WORDS = [
+  ["cake", /cake|brownie|tiramisu|mousse|pudding|swiss roll|banana bread|cupcake|cheesecake|loaf slice|basque|chiffon/i],
+  ["savoury", /sandwich|burger|pizza|pasta|salad|\beggs?\b|toast|rice|noodle|soup|bagel|wrap|quiche|sausage|bacon|chicken|beef|salmon|\bham\b|tuna|brunch|breakfast|benedict|avocado|mushroom|fries|truffle/i],
+  ["pastry", /croissant|danish|\bbuns?\b|tart|cookie|scone|bread|brioche|muffin|pastry|pastries|kouign|pain|cruffin|bakes?\b|loaf|baguette|sourdough|focaccia|madeleine|canel|financier|cinnamon roll|donut|doughnut|bun\b/i]
+];
+const DRINK_HEAD = /drink|coffee|espresso|tea|beverage|juice|soda|matcha|chocolate|milk|smoothie|frappe|kombucha|beer|wine|refresher/i;
+function readKind(name, head){
+  if((DRINK_WORDS.test(name) && !NOT_DRINK.test(name)) || (DRINK_HEAD.test(head) && !KIND_WORDS.some(k => k[1].test(name)))) return "drink";
+  // the menu's own heading says what its items are; the name decides only under a heading that does not
+  const k = KIND_WORDS.find(k => k[1].test(head)) || KIND_WORDS.find(k => k[1].test(name));
+  return k ? k[0] : "other";
+}
+let pdfReady = null;
+function loadPdfJs(){
+  if(!pdfReady) pdfReady = new Promise((ok, no) => {
+    const tag = document.createElement("script");
+    tag.src = PDF_JS + "pdf.min.js";
+    tag.onload = () => { window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDF_JS + "pdf.worker.min.js"; ok(window.pdfjsLib); };
+    tag.onerror = () => { pdfReady = null; no(new Error("pdf.js")); };
+    document.head.appendChild(tag);
+  });
+  return pdfReady;
+}
+/* a PDF -> rows in the shape the AI gives, or null when it has no text to read */
+async function pdfMenu(file){
+  const lib = await loadPdfJs();
+  const doc = await lib.getDocument({data: await file.arrayBuffer()}).promise;
+  const rows = [];
+  let numbers = 0;                  // every piece of text that looks like a price, used or not
+  for(let n = 1; n <= Math.min(doc.numPages, PDF_MAX_PAGES); n += 1){
+    const page = await doc.getPage(n), width = page.getViewport({scale: 1}).width;
+    const bits = (await page.getTextContent()).items.filter(t => t.str && t.str.trim())
+      .map(t => ({x: t.transform[4], y: t.transform[5], w: t.width, h: Math.abs(t.transform[3]) || 10, s: t.str}));
+    // pieces whose baselines are within a third of a line are one line, top to bottom
+    bits.sort((a, b) => b.y - a.y || a.x - b.x);
+    const lines = [];
+    bits.forEach(b => { const last = lines[lines.length - 1]; if(last && Math.abs(last.y - b.y) < b.h / 3) last.bits.push(b); else lines.push({y: b.y, bits: [b]}); });
+    const heads = {};               // the column's last heading, by which third of the page it starts in
+    lines.forEach(line => {
+      line.bits.sort((a, b) => a.x - b.x);
+      // a gap wider than three letters splits the line into cells
+      const cells = [];
+      line.bits.forEach(b => {
+        const c = cells[cells.length - 1];
+        if(c && b.x - c.end < b.h * 1.6) { c.s += (b.x - c.end > b.h * 0.15 ? " " : "") + b.s; c.end = b.x + b.w; }
+        else cells.push({x: b.x, end: b.x + b.w, s: b.s});
+      });
+      // a cell that is only a price belongs to the name just before it
+      const joined = [];
+      cells.forEach(c => { const t = c.s.trim(), last = joined[joined.length - 1];
+        if(PRICE_ONLY.test(t) && last && !PRICE_AT_END.test(last.s.trim())) { last.s += " " + t; } else joined.push({x: c.x, s: t}); });
+      joined.forEach(c => {
+        numbers += (c.s.match(/(?:^|[^\d.])\d{1,3}(?:[.,]\d{1,2})?(?![\d.])/g) || []).length;
+        const col = Math.min(2, Math.floor(3 * c.x / width));
+        const m = c.s.match(PRICE_AT_END);
+        if(m && !NOT_ITEM.test(m[1])){
+          const name = m[1].replace(/[\s.·…:_+-]+$/, "").trim(), price = Number(m[2].replace(",", "."));
+          if(price >= 0.5 && price <= 999 && name.length <= 120){
+            const head = heads[col] || "";
+            rows.push({name: name, section: head, variant: "", price: price, unsure: m[3] !== undefined, kind: readKind(name, head)});
+          }
+        } else if(!m && c.s.length <= 40 && /[A-Za-z]/.test(c.s) && !/[.!?]$/.test(c.s) && !NOT_ITEM.test(c.s)){
+          heads[col] = c.s.replace(/\s+/g, " ");
+        }
+      });
+    });
+  }
+  if(!rows.length) return null;
+  // how sure the read is, from the read alone: the share of price-like numbers that became an item, and the share of names that repeat
+  const names = rows.map(r => r.name.toLowerCase());
+  rows.stats = {numbers: numbers, coverage: rows.length / Math.max(numbers, 1),
+                repeats: 1 - new Set(names).size / names.length,
+                spaced: rows.filter(r => /(?:\b\w ){3,}/.test(r.name)).length / rows.length};
+  return rows;
+}
+/* the first pages of a PDF as photos, the same as photos the owner took: for a PDF too large to send */
+async function pdfPhotos(file){
+  const lib = await loadPdfJs();
+  const doc = await lib.getDocument({data: await file.arrayBuffer()}).promise, out = [];
+  for(let n = 1; n <= Math.min(doc.numPages, UP_FILES); n += 1){
+    const page = await doc.getPage(n), one = page.getViewport({scale: 1});
+    const view = page.getViewport({scale: SHRINK[0][0] / Math.max(one.width, one.height)});
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.round(view.width); canvas.height = Math.round(view.height);
+    const pen = canvas.getContext("2d");
+    pen.fillStyle = "#fff"; pen.fillRect(0, 0, canvas.width, canvas.height);
+    await page.render({canvasContext: pen, viewport: view}).promise;
+    const blob = await new Promise(ok => canvas.toBlob(ok, "image/jpeg", SHRINK[0][1]));
+    if(blob) out.push({name: `${file.name} page ${n}`, size: blob.size, pdf: false, file: blob, blob: blob, step: 0});
+  }
+  return out;
+}
+/* the last few reads, kept in this browser by a hash of their files */
+const READS_KEY = "counter.reads.v1", READS_MAX = 5;
+function readsKept(){ try { const k = JSON.parse(localStorage.getItem(READS_KEY) || "{}"); return k && typeof k === "object" ? k : {}; } catch(e){ return {}; } }
+function keepRead(hash, items){
+  if(!hash) return;
+  const k = readsKept();
+  k[hash] = {at: Date.now(), items: items};
+  const newest = Object.keys(k).sort((a, b) => k[b].at - k[a].at).slice(0, READS_MAX);
+  try { localStorage.setItem(READS_KEY, JSON.stringify(Object.fromEntries(newest.map(h => [h, k[h]])))); } catch(e){ /* read again next time */ }
+}
+async function filesHash(files){
+  try {
+    const bytes = new TextEncoder().encode(files.map(f => f.mime + ":" + f.data).join("|"));
+    return Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", bytes))).map(b => b.toString(16).padStart(2, "0")).join("");
+  } catch(e){ return ""; }
+}
 async function sendMenu(){
+  // a PDF with real text is read here, free and exact; the AI only reads photos and scans
+  if(up.files.length === 1 && up.files[0].pdf){
+    const items = await pdfMenu(up.files[0].file).catch(() => null);
+    if(pdfSure(items)){ track("menu_read", {how: "pdf_free", ok: true}); return {items: items}; }
+    if(up.files[0].file.size > UP_PDF){
+      const pages = await pdfPhotos(up.files[0].file).catch(() => null);
+      if(!pages || !pages.length) return {error: "pdf_large"};
+      up.files = pages;
+    }
+  }
   if(!(await fitPhotos())) return {error: up.files.some(f => f.pdf) ? "pdf_large" : "photos_large"};
   const files = [];
   for(const f of up.files) files.push({mime: f.pdf ? "application/pdf" : "image/jpeg", data: await asBase64(f.pdf ? f.file : f.blob)});
+  // the same files read before in this browser are not paid for twice
+  const hash = await filesHash(files);
+  const before = readsKept()[hash];
+  if(before && Array.isArray(before.items)){ track("menu_read", {how: "cache", ok: true}); return {items: before.items}; }
   const stop = new AbortController(), timer = setTimeout(() => stop.abort(), UP_WAIT);
   let res = null, data = null;
   try {
     res = await fetch("api/read-menu", {method: "POST", headers: {"Content-Type": "application/json"},
-                                        body: JSON.stringify({code: String(up.code).trim(), files: files}), signal: stop.signal});
+                                        body: JSON.stringify({files: files}), signal: stop.signal});
     data = await res.json();
   } catch(e){ data = null; }
   clearTimeout(timer);
-  if(!res) return {error: "read_failed"};
+  if(!res){ track("menu_read", {how: "ai", ok: false}); return {error: "read_failed"}; }
   if(res.ok && data && Array.isArray(data.items)){
     const items = data.items.filter(r => r && typeof r.name === "string" && r.name.trim() !== "");
-    return data.not_a_menu || !items.length ? {error: "not_a_menu"} : {items: items};
+    if(data.not_a_menu || !items.length){ track("menu_read", {how: "ai", ok: false}); return {error: "not_a_menu"}; }
+    keepRead(hash, items);
+    track("menu_read", {how: "ai", ok: true});
+    return {items: items};
   }
+  track("menu_read", {how: "ai", ok: false});
   const error = data && Object.prototype.hasOwnProperty.call(UP_SAY, data.error) ? data.error : res.status === 413 ? "too_large" : "read_failed";
   // the daily limit is said in the server's own words. A failed read may carry a short code that says where it stopped.
   return {error: error, words: error === "limit" && data && typeof data.message === "string" ? data.message : "",
@@ -2956,7 +3410,6 @@ async function readMenu(){
   try { got = await sendMenu(); } catch(e){ got = {error: "read_failed"}; }
   up.busy = false;
   if(got.items){
-    try { localStorage.setItem(CODE_KEY, String(up.code).trim()); } catch(e){ /* the code is asked for again next time */ }
     up.files = [];                             // the files are not kept after the read
     ed = fromRead(got.items);
     ed.owner = id;
@@ -3519,6 +3972,7 @@ function showUpload(q, s){
   if(name === "check" && !ed) name = target ? "update" : "menu";
   if(name !== asked) history.replaceState(null, "", upAddr(name));
   document.title = `${UP_TITLE[name]} | Counter`;
+  if(name === "update" && screen !== "update") track("page_viewed", {page: "update"});
   if(name === "place") paintPlace(); else if(name === "menu") paintMenuScreen(); else if(name === "update") paintUpdate(); else paintCheck();
   show(name);
   if(target){
@@ -3548,13 +4002,7 @@ document.addEventListener("click", e => {
   const el = e.target.closest("[data-up]");
   if(!el || el.disabled) return;
   const act = el.dataset.up;
-  if(act === "showcode"){
-    const field = byId("up-code"), hide = field.type === "text";
-    field.type = hide ? "password" : "text";
-    el.textContent = hide ? "Show" : "Hide";
-    el.setAttribute("aria-pressed", String(!hide));
-  }
-  else if(act === "dropfile"){
+  if(act === "dropfile"){
     up.files.splice(Number(el.dataset.i), 1);
     upSay("up-filemsg", "");
     paintFiles();
@@ -3655,7 +4103,6 @@ document.addEventListener("click", e => {
 });
 document.addEventListener("input", e => {
   const el = e.target;
-  if(el.id === "up-code"){ up.code = el.value; paintUpState(); return; }
   if(el.id === "pl-name"){ pl.name = el.value; return; }
   // a changed postal code makes the place found for the old one stale
   if(el.id === "pl-postal"){ pl.postal = el.value; if(pl.results){ pl.results = null; pl.pick = null; paintPlaceResult(); } return; }
@@ -3714,13 +4161,11 @@ document.addEventListener("change", e => {
    The last set, how many were asked for today and the ideas not wanted are
    kept in this browser only, for each shop. */
 const IDEAS_KEY = "counter.ideas.v1";
-const IDEAS_A_DAY = 3;            // sets of ideas for one shop in one day
-const AVOID_MAX = 30;             // ideas not wanted that are sent along, newest kept
-const IDEAS_WAIT = 75000;         // milliseconds before the page stops waiting: longer than the server's own 60 seconds
+const AVOID_MAX = 30;             // ideas not wanted, newest kept
 const IDEA_TYPES = {bundle: "Bundle", price_cut: "Price cut"};
 const IDEA_DAYS = {"weekdays": "Weekdays", "weekends": "Weekends", "every day": "Every day"};
 let ideasAll = {};                // shop_id -> {date, used, ideas, avoid, looked}
-const iu = {busy: false, loading: false, msg: "", ref: "", code: ""};
+const iu = {busy: false, loading: false, msg: "", ref: ""};
 function loadIdeas(){
   let kept = null;
   try { kept = JSON.parse(localStorage.getItem(IDEAS_KEY) || "{}"); } catch(e){ kept = null; }
@@ -3817,6 +4262,7 @@ function ideaLines(v){
 }
 const savedAi = key => shopSaves().ideas.find(e => e.kind === "ai_idea" && e.idea.key === key);
 
+let ideasShown = "";             // the ideas on screen last counted
 function paintIdeas(){
   const box = byId("ideaspage"), mine = shopIdeas(), rows = ideaRows(shop.shop_id);
   // ideas kept from before need the menu to be drawn: it is asked for once, and the section is drawn again
@@ -3826,13 +4272,14 @@ function paintIdeas(){
     loadFile(id).then(() => { iu.loading = false; if(shop && shop.shop_id === id && page === "offers") paintIdeas(); });
   }
   const views = mine.ideas.map(i => ideaView(i, rows)).filter(Boolean);
-  const left = Math.max(0, IDEAS_A_DAY - mine.used), first = mine.used === 0 && !mine.ideas.length;
-  const needCode = loadCode() === "";
+  const first = !mine.ideas.length;
+  const shownKey = shop.shop_id + "|" + views.map(v => v.key).join(",");
+  if(views.length && shownKey !== ideasShown){ ideasShown = shownKey; track("ideas_shown", {n: views.length}); }
   const looked = mine.looked && views.length ? mine.looked : null;
   const count = (n, one, many) => `${n} ${n === 1 ? one : many}`;
   box.innerHTML =
     `<h2 id="ideas-h" tabindex="-1">${ICON.ai}Ideas for your shop</h2>` +
-    `<p class="muted" id="ideas-says">Written by AI from your menu and what cafes near you offer. Check them before you use them.</p>` +
+    `<p class="muted" id="ideas-says">Made from your menu, the usual prices near you and the offers cafes near you run now. Check them before you use them.</p>` +
     (looked ? `<p class="muted small" id="ideas-looked">Looked at: your menu (${count(looked.n, "item", "items")}), ` +
       `${count(looked.c, "offer", "offers")} from your competitors, ${count(looked.o, "offer", "offers")} from other cafes.</p>` : "") +
     (views.length ? `<ul class="idealist" id="ideas-list">` + views.map(v =>
@@ -3841,14 +4288,8 @@ function paintIdeas(){
       `<button type="button" class="btn quiet" data-ai="drop" data-key="${esc(v.key)}" aria-label="Not for me: ${esc(v.title)}">Not for me</button></div></li>`).join("") + `</ul>` : "") +
     `<p class="say" id="ideas-msg" role="alert" tabindex="-1">${esc(iu.msg)}</p>` +
     `<p class="hint" id="ideas-ref">${iu.ref ? `Error code: ${esc(refWords(iu.ref))}` : ""}</p>` +
-    `<p class="say" id="ideas-status" role="status">${iu.busy ? "Writing ideas for your shop. This can take up to a minute." : ""}</p>` +
-    (left > 0 ? `<div class="ideasacts">` +
-      (needCode ? `<div class="field"><label for="ideas-code">Access code</label><div class="codeline">` +
-        `<input id="ideas-code" type="password" autocomplete="off" spellcheck="false" value="${esc(iu.code)}">` +
-        `<button type="button" class="btn" data-ai="showcode" aria-controls="ideas-code" aria-pressed="false">Show</button></div>` +
-        `<p class="hint">Your team has this code.</p></div>` : "") +
-      `<button type="button" class="btn" id="ideas-get" data-ai="get"${iu.busy ? " disabled" : ""}>${ICON.ai}${first ? "Get ideas for my shop" : "Give me different ideas"}</button></div>` : "") +
-    (first ? "" : `<p class="muted small" id="ideas-left">${left > 0 ? `${left} of ${IDEAS_A_DAY} left today` : "No more ideas today. Come back tomorrow."}</p>`);
+    `<div class="ideasacts">` +
+      `<button type="button" class="btn" id="ideas-get" data-ai="get"${iu.busy ? " disabled" : ""}>${ICON.ai}${first ? "Get ideas for my shop" : "Give me different ideas"}</button></div>`;
 }
 /* what goes with the menu: the offers running now, the competitors' new items, the usual prices */
 function ideasRequest(rows, mine){
@@ -3865,55 +4306,121 @@ function ideasRequest(rows, mine){
 async function getIdeas(){
   if(iu.busy) return;
   const id = shop.shop_id, mine = shopIdeas();
-  if(IDEAS_A_DAY - mine.used <= 0) return;
-  const field = byId("ideas-code");
-  const code = (loadCode() || (field ? field.value : iu.code) || "").trim();
   iu.msg = ""; iu.ref = "";
-  if(code === ""){ focusOn("#ideas-code"); return; }
   iu.busy = true;
-  paintIdeas();
-  const said = (words, ref) => { iu.busy = false; iu.msg = words; iu.ref = ref || ""; if(shop && shop.shop_id === id && page === "offers"){ paintIdeas(); focusOn("#ideas-msg"); } };
+  const said = words => { iu.busy = false; iu.msg = words; if(shop && shop.shop_id === id && page === "offers"){ paintIdeas(); focusOn("#ideas-msg"); } };
   if(!menuOf(id)) await loadFile(id);
   const rows = ideaRows(id);
   if(!rows || rows.length < 2){ said("We do not have enough of your menu to suggest ideas yet."); return; }
   const request = ideasRequest(rows, mine);
-  const stop = new AbortController(), timer = setTimeout(() => stop.abort(), IDEAS_WAIT);
-  let res = null, data = null;
-  try {
-    res = await fetch("api/ideas", {method: "POST", headers: {"Content-Type": "application/json"},
-                                    body: JSON.stringify(Object.assign({code: code}, request)), signal: stop.signal});
-    data = await res.json();
-  } catch(e){ data = null; }
-  clearTimeout(timer);
-  if(res && res.ok && data && Array.isArray(data.ideas) && data.ideas.length){
-    try { localStorage.setItem(CODE_KEY, code); } catch(e){ /* the code is asked for again next time */ }
-    mine.ideas = data.ideas;
-    mine.used += 1;
-    mine.looked = {n: request.menu.length, c: request.offers.filter(o => o.competitor).length, o: request.offers.filter(o => !o.competitor).length};
-    storeIdeas();
-    iu.busy = false; iu.code = "";
-    if(shop && shop.shop_id === id && page === "offers"){ paintIdeas(); focusOn("#ideas-h"); }
-    return;
+  // "different ideas" means none of the ones on screen now either
+  request.avoid = request.avoid.concat(mine.ideas.map(i => ({type: i.type, item_ids: i.item_ids})));
+  const ideas = makeIdeas(request);
+  if(!ideas.length){ said("Those are all the ideas we have for your menu right now. Try again when your menu or the offers near you change."); return; }
+  mine.ideas = ideas;
+  mine.used += 1;
+  mine.looked = {n: request.menu.length, c: request.offers.filter(o => o.competitor).length, o: request.offers.filter(o => !o.competitor).length};
+  storeIdeas();
+  iu.busy = false;
+  if(shop && shop.shop_id === id && page === "offers"){ paintIdeas(); focusOn("#ideas-h"); }
+}
+
+/* ---------- ideas from rules ----------
+   No AI: every idea is worked out from the owner's menu, the usual price of
+   the compared items near them and the offers cafes near them run now. Each
+   rule gives its candidates best first; three ideas from different rules are
+   shown, and one already on screen or turned down is never given again. */
+const BOTTLED = /water|evian|perrier|san pellegrino|\bcoke\b|sprite|\d+\s*ml\b|bottle|\bcan\b|canned/i;
+const COFFEE_WORDS = /latte|flat white|cappuccino|americano|long black|mocha|piccolo|cortado|macchiato|white|coffee/i;
+const shortName = r => capital(r.name.replace(/\s*\(.*?\)\s*/g, " ").trim());
+const fitTitle = (t, plain) => t.length <= 40 ? t : plain;
+function makeIdeas(req){
+  const menu = req.menu, byPrice = (a, b) => a.price - b.price;
+  const kind = k => menu.filter(r => r.kind === k).sort(byPrice);
+  // bottled and canned drinks are sold as they are, never in a set
+  const drinks = kind("drink").filter(r => !BOTTLED.test(r.name + " " + r.variant)), pastries = kind("pastry"), cakes = kind("cake");
+  // a lunch needs a main, not a side: the dearer half of the savoury items
+  const savoury = kind("savoury").reverse().filter((r, i, all) => i < Math.ceil(all.length / 2));
+  // the drink a customer is most likely to pair: a coffee at a middle price
+  const coffees = drinks.filter(r => COFFEE_WORDS.test(r.name));
+  const mid = list => list.slice().sort((a, b) => Math.abs(a.price - list[list.length >> 1].price) - Math.abs(b.price - list[list.length >> 1].price));
+  const pairDrinks = mid(coffees.length ? coffees : drinks);
+  const croissantFirst = list => list.slice().sort((a, b) => /croissant/i.test(b.name) - /croissant/i.test(a.name));
+  const usual = new Map((D.price_table || []).map(r => [r.item_canonical, r.median]));
+  const above = r => { const k = nineTag(r.name, r.variant), u = k ? usual.get(k) : null; return typeof u === "number" && r.price > u ? r.price - u : 0; };
+  const bundlesNear = req.offers.filter(o => o.type === "bundle"), cutsNear = req.offers.filter(o => o.type === "price_cut");
+  const pick = list => list.find(o => o.competitor) || list[0] || null;
+  const nearWords = (list, what) => {
+    const one = pick(list);
+    if(!one) return {words: `No cafe near you runs ${what} right now, so yours would stand out.`, cafes: []};
+    return {words: `${list.length === 1 ? "One cafe" : `${list.length} cafes`} near you ${list.length === 1 ? "runs" : "run"} ${what} now, including ${one.cafe}.`, cafes: [one.cafe]};
+  };
+  const timed = (days, from, to) => ({days: days, all_day: from === null, start_hour: from, end_hour: to});
+  const rules = [];
+
+  // 1. a coffee and a pastry, sold as a set
+  const nb = nearWords(bundlesNear, "a bundle");
+  rules.push(pairDrinks.slice(0, 3).flatMap(dr => croissantFirst(pastries).slice(0, 3).map(pa => ({
+    type: "bundle", item_ids: [dr.id, pa.id], discount_percent: bundlesNear.length >= 2 ? 15 : 10,
+    title: fitTitle(`${shortName(dr)} and ${shortName(pa)} set`, "Coffee and pastry set"),
+    why: `A pastry is an easy add-on for someone who came in for a coffee. ${nb.words}`, cafes_named: nb.cafes}))));
+
+  // 2. a drink and a slice of cake, for the afternoon
+  rules.push(pairDrinks.slice(0, 2).flatMap(dr => cakes.slice(0, 3).map(ca => ({
+    type: "bundle", item_ids: [dr.id, ca.id], discount_percent: 10,
+    title: fitTitle(`Afternoon ${shortName(ca)} and ${shortName(dr)}`, "Afternoon cake and drink"),
+    why: `Cake with a drink gives an afternoon visit a reason. ${nb.words}`, cafes_named: nb.cafes}))));
+
+  // 3. a lunch set: something savoury and a drink
+  rules.push(savoury.slice(0, 3).flatMap(sv => pairDrinks.slice(0, 2).map(dr => ({
+    type: "bundle", item_ids: [sv.id, dr.id], discount_percent: 10,
+    title: fitTitle(`Lunch: ${shortName(sv)} and ${shortName(dr)}`, "Lunch set with a drink"),
+    why: "A fixed lunch set is quick to choose and brings in the weekday lunch crowd.", cafes_named: []}))));
+
+  // 4. the items priced above the usual nearby, cheaper in the quiet afternoon
+  const dear = menu.filter(r => above(r) > 0).sort((a, b) => above(b) - above(a));
+  if(dear.length) rules.push([dear.slice(0, 3), dear.slice(0, 1), dear.slice(1, 3)].filter(l => l.length).map(list => Object.assign({
+    type: "price_cut", item_ids: list.map(r => r.id), discount_percent: 10,
+    title: fitTitle(list.length === 1 ? `Quiet-hours ${shortName(list[0])}` : "Quiet-hours price cut", "Quiet-hours price cut"),
+    why: `${list.length === 1 ? "This costs" : "These cost"} more than most cafes near you charge. A cut in the quiet afternoon shows whether a lower price brings more people in, without changing your menu.`,
+    cafes_named: []}, timed("weekdays", 14, 17))));
+
+  // 5. bakes at the end of the day, so fewer are left over
+  const bakes = pastries.concat(cakes).sort((a, b) => b.price - a.price);
+  if(bakes.length) rules.push([bakes.slice(0, 4), bakes.slice(0, 2), bakes.slice(2, 6)].filter(l => l.length).map(list => Object.assign({
+    type: "price_cut", item_ids: list.map(r => r.id), discount_percent: 20,
+    title: "End-of-day bakes",
+    why: "Bakes left at closing are thrown away. A cut in the last hours sells them instead.", cafes_named: []}, timed("every day", 17, 19))));
+
+  // 6. early coffee, when cafes near you already run price cuts
+  if(cutsNear.length && coffees.length){
+    const nc = nearWords(cutsNear, "a price cut");
+    rules.push([coffees.slice(0, 2), coffees.slice(2, 4)].filter(l => l.length).map(list => Object.assign({
+      type: "price_cut", item_ids: list.map(r => r.id), discount_percent: 10,
+      title: "Early-bird coffee",
+      why: `Morning regulars decide where to go on habit and price. ${nc.words}`, cafes_named: nc.cafes}, timed("weekdays", 7, 10))));
   }
-  const error = data && typeof data.error === "string" ? data.error : "read_failed";
-  const ref = data && typeof data.ref === "string" && /^[a-z0-9_]{1,40}$/.test(data.ref) ? data.ref : "";
-  // a code that is not right is asked for again
-  if(error === "bad_code"){ try { localStorage.removeItem(CODE_KEY); } catch(e){ /* nothing was kept */ } iu.code = ""; }
-  // the daily limit and "no ideas this time" are said in the server's own words
-  const own = (error === "limit" || error === "no_ideas") && typeof data.message === "string" ? data.message : "";
-  said(own || (Object.prototype.hasOwnProperty.call(UP_SAY, error) && ["bad_code", "not_set_up", "busy"].indexOf(error) !== -1 ? UP_SAY[error] : UP_SAY.read_failed), ref);
+
+  // three ideas from different rules first, then more from the same rules if needed
+  const avoid = new Set(req.avoid.map(a => a.type + "|" + a.item_ids.slice().sort().join(",")));
+  const keyOf = i => i.type + "|" + i.item_ids.slice().sort().join(",");
+  // an idea whose sums leave nothing to offer is never shown, so it is never one of the three
+  const lists = rules.map(list => list.filter(i => !avoid.has(keyOf(i)) && new Set(i.item_ids).size === i.item_ids.length &&
+    ideaView(Object.assign({days: null, all_day: null, start_hour: null, end_hour: null}, i), menu)));
+  const out = [], seen = new Set();
+  for(let round = 0; out.length < 3 && lists.some(l => l.length > round); round += 1){
+    for(const list of lists){
+      const i = list[round];
+      if(i && !seen.has(keyOf(i)) && out.length < 3){ seen.add(keyOf(i)); out.push(Object.assign({days: null, all_day: null, start_hour: null, end_hour: null}, i)); }
+    }
+  }
+  return out;
 }
 document.addEventListener("click", e => {
   const el = e.target.closest("[data-ai]");
   if(!el || el.disabled || !shop) return;
   const act = el.dataset.ai, key = el.dataset.key;
   if(act === "get") getIdeas();
-  else if(act === "showcode"){
-    const field = byId("ideas-code"), hide = field.type === "text";
-    field.type = hide ? "password" : "text";
-    el.textContent = hide ? "Show" : "Hide";
-    el.setAttribute("aria-pressed", String(!hide));
-  }
   // an idea saved is kept as it is shown now: its items, their prices and the sums do not change later
   else if(act === "save"){
     const mine = shopIdeas(), idea = mine.ideas.find(i => ideaKey(i) === key), view = idea ? ideaView(idea, ideaRows(shop.shop_id)) : null;
@@ -3936,7 +4443,6 @@ document.addEventListener("click", e => {
   // the Saved page: take a saved idea away
   else if(act === "unsave"){ putIdea(x => x.kind === "ai_idea" && x.idea.key === key, null); paint(); }
 });
-document.addEventListener("input", e => { if(e.target && e.target.id === "ideas-code") iu.code = e.target.value; });
 
 /* ---------- start ---------- */
 // The prices are needed by every page. The new items are needed by one, so

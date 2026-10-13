@@ -1174,9 +1174,23 @@ h1,h2,h3,.lsec h2{font-family:var(--f-display); font-weight:500; letter-spacing:
 const POSTHOG_KEY = "", POSTHOG_HOST = "https://us.i.posthog.com";
 if(POSTHOG_KEY && !/^(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])$/.test(location.hostname)){
   !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  // the landing page hands its anonymous visitor id to the app in the link (?ph=), so one visit from
+  // landing to app is one person in every funnel; the id is a random one, never anything personal
+  let phFrom = null;
+  try {
+    const u = new URL(location.href), v = u.searchParams.get("ph");
+    if(v !== null){
+      if(/^[A-Za-z0-9-]{8,64}$/.test(v)) phFrom = v;
+      u.searchParams.delete("ph");
+      history.replaceState(history.state, "", u.pathname + u.search + u.hash);
+    }
+  } catch(e){ /* a fresh visitor, then */ }
+  window.PH_ID = phFrom || (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + "-" + Math.random().toString(36).slice(2));
   posthog.init(POSTHOG_KEY, {
     api_host: POSTHOG_HOST,
     persistence: "memory",
+    bootstrap: {distinctID: window.PH_ID},
+    capture_dead_clicks: true,
     person_profiles: "identified_only",
     capture_pageview: "history_change",
     capture_pageleave: true,
@@ -1184,7 +1198,8 @@ if(POSTHOG_KEY && !/^(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])$/.test(location
     capture_exceptions: true,
     capture_performance: {web_vitals: true},
     // replays never show what was typed into a field
-    session_recording: {maskAllInputs: true},
+    // the app inside the landing page's laptop is recorded into the landing page's replay
+    session_recording: {maskAllInputs: true, recordCrossOriginIframes: true},
     respect_dnt: true
   });
   posthog.register({surface: "landing"});
@@ -1552,11 +1567,14 @@ const VISIT = (() => {
    tab being hidden counts as leaving too. */
 let visibleSince = document.visibilityState === "visible" ? Date.now() : null;
 let visibleMs = 0, visitEnded = false;
+// seconds each section was the main thing on screen, sent as one section_time event per section when the visit ends
+const SECTION_SECONDS = {};
 function endVisit(){
   if(visitEnded) return;
   visitEnded = true;
   if(visibleSince !== null) visibleMs += Date.now() - visibleSince;
   track("visit_end", {seconds_visible: Math.round(visibleMs / 1000)});
+  Object.keys(SECTION_SECONDS).forEach(name => track("section_time", {section: name, seconds: SECTION_SECONDS[name]}));
 }
 document.addEventListener("visibilitychange", () => {
   if(document.visibilityState === "hidden") endVisit();
@@ -1811,6 +1829,15 @@ function landingMotion(d){
    the app. Everything that opens Counter goes through openCounter: on a wide screen it
    loads into that laptop, on a phone (too small for the laptop) it opens the app itself. */
 const COUNTER_APP = "https://app.countr.site";
+/* PostHog: every way into the app carries this visit's anonymous PostHog id (?ph=), so the app counts
+   the same visitor and a funnel can run from the landing page to a cafe found in the app */
+const phLink = url => {
+  return window.PH_ID ? url + (url.indexOf("?") === -1 ? "?" : "&") + "ph=" + encodeURIComponent(window.PH_ID) : url;
+};
+document.addEventListener("click", e => {
+  const a = e.target.closest && e.target.closest('a[href^="' + COUNTER_APP + '"]');
+  if(a && a.href.indexOf("ph=") === -1) a.href = phLink(a.href);
+}, true);
 // every link a visitor clicks into the app says from=landing; the app the page itself loads into the laptop says from=demo
 const FROM_LANDING = "src=landing&from=landing", FROM_DEMO = "src=landing&from=demo";
 const COUNTER_PREVIEW = "?shop=caffe_pralet&rivals=merci_marcel_tiong_bahru,tiong_bahru_bakery,drips_bakery_cafe,tianns&";
@@ -1822,14 +1849,14 @@ let trying = false;
 function tryCounter(place){
   if(trying) return;
   trying = true;
-  const go = () => { if(trying){ trying = false; location.href = COUNTER_APP + "/?" + FROM_LANDING; } };
+  const go = () => { if(trying){ trying = false; location.href = phLink(COUNTER_APP + "/?" + FROM_LANDING); } };
   Promise.resolve(track("landing_cta_clicked", {place: place})).then(go);
   setTimeout(go, TRY_WAIT);
 }
 
 function buildTryDemo(){
   const screen = byId("try-screen"), frame = byId("try-frame");
-  frame.src = COUNTER_APP + COUNTER_PREVIEW + FROM_DEMO;
+  frame.src = phLink(COUNTER_APP + COUNTER_PREVIEW + FROM_DEMO);
   byId("try-tab").href = COUNTER_APP + "?" + FROM_LANDING;
 
   const fit = () => { frame.style.transform = "scale(" + screen.clientWidth / 1280 + ")"; };
@@ -1844,14 +1871,14 @@ function buildTryDemo(){
   // query: "" for the sample cafe, "setup=place", "shop=<id>" or "at=a:<area>" to land on that
   openCounter = (query, place) => {
     const url = COUNTER_APP + "?" + (query ? query + "&" : "") + FROM_LANDING;
-    if(!wide()){ track("demo_opened", {place: place, phone: true}); location.href = url; return; }
-    if(query) frame.src = url;
+    if(!wide()){ track("demo_opened", {place: place, phone: true}); location.href = phLink(url); return; }
+    if(query) frame.src = phLink(url);
     start(place);
     screen.closest(".laptop").scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "center"});
   };
 
   // the sample on a phone is the app itself, at the same cafe
-  const sample = place => { if(wide()) return false; track("demo_opened", {place: place, phone: true}); location.href = COUNTER_APP + COUNTER_PREVIEW + FROM_LANDING; return true; };
+  const sample = place => { if(wide()) return false; track("demo_opened", {place: place, phone: true}); location.href = phLink(COUNTER_APP + COUNTER_PREVIEW + FROM_LANDING); return true; };
   byId("try-start").addEventListener("click", () => { if(sample("try_section")) return; start("try_section"); frame.focus(); });
   byId("demo-open").addEventListener("click", e => { e.preventDefault(); if(!sample("hero_sample")) openCounter("", "hero_sample"); });
 }
@@ -2085,6 +2112,18 @@ function buildLandingPage(d){
   }, {passive: true});
   onResize(checkSections);
   checkSections();
+  // once a second, the section filling most of the screen gets the second, while the tab is in view
+  setInterval(() => {
+    if(document.visibilityState !== "visible" || visitEnded) return;
+    const high = window.innerHeight;
+    let best = null, most = high * 0.3;
+    SECTIONS.forEach(([id, name]) => {
+      const r = byId(id).getBoundingClientRect();
+      const inView = Math.min(r.bottom, high) - Math.max(r.top, 0);
+      if(inView > most){ most = inView; best = name; }
+    });
+    if(best) SECTION_SECONDS[best] = (SECTION_SECONDS[best] || 0) + 1;
+  }, 1000);
 }
 
 

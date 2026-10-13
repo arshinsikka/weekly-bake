@@ -33,6 +33,7 @@
 <h3>Things we record while you use the site</h3>
 <ul>
   <li><b>Usage events</b>, such as which item you looked at or which button you pressed. Each is tied to a random id that lives only in that browser tab. It is never written to your device and is gone when you reload.</li>
+  <li><b>How the page is used</b>: clicks, scrolling and page loads, which we can replay to see where people get stuck. Anything typed into a field is hidden in these replays.</li>
   <li><b>Where the visit came from</b>: a short tag on our own links (for example <code>?src=newsletter</code>) and the referring site's name only, never its full address.</li>
 </ul>
 <p>We do not ask for your name, phone number or payment details. We do not use advertising trackers, and we do not buy data about you.</p>
@@ -49,6 +50,7 @@
 <p>We use a few service providers to run the site. They handle data only on our behalf:</p>
 <ul>
   <li><b>Supabase</b> stores sign-ups, uploads, suggestions and usage events.</li>
+  <li><b>PostHog</b> receives the same usage events and the page replays, so we can see how the site is used.</li>
   <li><b>Vercel</b> hosts the site.</li>
   <li><b>OneMap</b> (Singapore Land Authority) serves the map tiles, and <b>cdnjs</b> (Cloudflare) serves the map library. Your browser contacts them directly when the map loads, as with any website.</li>
 </ul>

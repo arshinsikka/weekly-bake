@@ -16,7 +16,7 @@ Nothing is kept in the browser: no cookies, no storage. A visitor is new on each
 The project key is already in `site/index.html`, `counter/index.html` and `counter-landing/index.html` (PostHog US, project 662311), so tracking starts as soon as this is deployed.
 
 1. Optional, for AI cost tracking: in Vercel, on the app's project (`counter/`), add the environment variable `POSTHOG_KEY` with the same `phc_` key.
-2. In PostHog > Settings, turn on **Session replay**, **Heatmaps** and **Error tracking**. In **Authorized URLs**, add `https://countr.site`, `https://app.countr.site` and `https://demoweeklybake.vercel.app`, so heatmaps can be opened on the live pages.
+2. In PostHog > Settings, turn on **Session replay**, **Heatmaps** and **Error tracking**. In **Authorized URLs**, add `https://countr.site` and `https://app.countr.site`, so heatmaps can be opened on the live pages.
 3. Build the dashboard and the survey with a personal API key (scopes `insight:write`, `dashboard:write`, `survey:write`), kept out of files:
    `POSTHOG_PERSONAL_API_KEY=phx_... POSTHOG_HOST=https://us.posthog.com python3 analytics/posthog_dashboard.py --launch-survey`
 

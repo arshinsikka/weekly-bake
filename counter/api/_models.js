@@ -70,7 +70,32 @@ const usageOf = data => {
   const n = v => typeof v === "number" && Number.isFinite(v) ? v : undefined;
   return u && typeof u === "object" ? {input_tokens: n(u.prompt_tokens), output_tokens: n(u.completion_tokens), cost: n(u.cost)} : {};
 };
+/* Each call is also sent to PostHog's LLM analytics as one $ai_generation: the model, tokens, cost, time and
+   whether it failed. Never the menu, the reply or any key. Off unless POSTHOG_KEY is set on the server. */
+async function reportToPostHog(model, got, seconds){
+  const key = process.env.POSTHOG_KEY;
+  if(!key) return;
+  const u = got.usage || (got.fail || {});
+  const stop = new AbortController(), timer = setTimeout(() => stop.abort(), 1500);
+  try {
+    await fetch((process.env.POSTHOG_HOST || "https://us.i.posthog.com") + "/i/v0/e/", {
+      method: "POST", headers: {"Content-Type": "application/json"}, signal: stop.signal,
+      body: JSON.stringify({api_key: key, event: "$ai_generation", distinct_id: "counter-server", properties: {
+        $ai_provider: "openrouter", $ai_model: model.id, $ai_latency: seconds,
+        $ai_input_tokens: u.input_tokens, $ai_output_tokens: u.output_tokens, $ai_total_cost_usd: u.cost,
+        $ai_is_error: !!got.fail, $ai_http_status: got.fail ? got.fail.status : 200, $ai_error: got.fail ? got.fail.stage : undefined,
+        feature: "read_menu", $process_person_profile: false}})
+    });
+  } catch(e){ /* analytics never delays or breaks a menu read beyond its short timer */ }
+  finally { clearTimeout(timer); }
+}
 export async function askModel(model, key, content, schema, allowed, fullTry, extra){
+  const started = Date.now();
+  const got = await callModel(model, key, content, schema, allowed, fullTry, extra);
+  await reportToPostHog(model, got, (Date.now() - started) / 1000);
+  return got;
+}
+async function callModel(model, key, content, schema, allowed, fullTry, extra){
   const outOfTime = fullTry ? "slow" : "timeout";
   const stop = new AbortController();
   let timedOut = false;

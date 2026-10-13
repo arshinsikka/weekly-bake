@@ -1093,7 +1093,7 @@ h1,h2,h3,.lsec h2{font-family:var(--f-display); font-weight:500; letter-spacing:
 .laptop .lid{padding:2.1% 2.1% 2.6%; background:#1C1714; border-radius:22px 22px 6px 6px; box-shadow:0 0 0 1px #3A302A inset, 0 30px 60px -28px rgba(36,21,14,.45)}
 .appscreen{position:relative; aspect-ratio:16/10; overflow:hidden; border-radius:6px; background:#F5F4F1}
 .appscreen iframe{position:absolute; top:0; left:0; width:1280px; height:800px; border:0; transform-origin:0 0; background:#F5F4F1}
-.laptop .base{position:relative; height:18px; margin:0 -7%; background:linear-gradient(#D9D3CB,#B9B1A7); border-radius:2px 2px 16px 16px}
+.laptop .base{position:relative; height:18px; margin:0 max(-7%, calc(50% - 50vw + 12px)); background:linear-gradient(#D9D3CB,#B9B1A7); border-radius:2px 2px 16px 16px}
 .laptop .base::before{content:""; position:absolute; left:50%; top:0; width:16%; height:7px; transform:translateX(-50%); background:#A69D92; border-radius:0 0 10px 10px}
 .tryshield{position:absolute; inset:0; width:100%; height:100%; background:rgba(36,21,14,.1); cursor:pointer; transition:background .2s ease}
 .tryshield:hover{background:rgba(36,21,14,.2)}
@@ -1801,10 +1801,18 @@ function landingMotion(d){
   // they start on the visitor's first tap, click or key instead of showing a Play button.
   const hv = byId("hero-video"), vid = byId("walk-video");
   const play = v => { v.muted = true; return v.play().catch(() => {}); };
-  const onFirst = () => { play(hv); if(vid.dataset.seen) play(vid); };
+  let heroOn = true;
+  const onFirst = () => { if(heroOn) play(hv); if(vid.dataset.seen) play(vid); };
   ["pointerdown", "touchend", "keydown"].forEach(e => addEventListener(e, onFirst, {once: true, passive: true}));
   play(hv);
-  if("IntersectionObserver" in window) new IntersectionObserver(f => { if(f[0].isIntersecting){ vid.dataset.seen = 1; play(vid); } else vid.pause(); }, {threshold: 0.3}).observe(vid);
+  if("IntersectionObserver" in window){
+    // only the video on screen plays, so a phone never decodes both at once
+    new IntersectionObserver(f => { heroOn = f[0].isIntersecting; if(heroOn) play(hv); else hv.pause(); }).observe(hv);
+    // a screen before the walkthrough comes into view, start loading it, so it plays at once
+    const warm = new IntersectionObserver(f => { if(f[0].isIntersecting){ vid.preload = "auto"; warm.disconnect(); } }, {rootMargin: "0px 0px 100% 0px"});
+    warm.observe(vid);
+    new IntersectionObserver(f => { if(f[0].isIntersecting){ vid.dataset.seen = 1; play(vid); } else vid.pause(); }, {threshold: 0.3}).observe(vid);
+  }
   else { vid.autoplay = true; play(vid); }
   if(still || !("IntersectionObserver" in window)) return;
   document.documentElement.classList.add("motion");
@@ -2398,6 +2406,7 @@ function bindSignup(formId, inputId, noteId, source, evt, position, spot){
 
   form.addEventListener("submit", async e => {
     e.preventDefault();
+    if(btn.disabled) return;   // one sign-up at a time, however fast the taps come
     note.hidden = true;
     const email = input.value.trim();
 

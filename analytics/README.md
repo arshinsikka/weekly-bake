@@ -13,7 +13,7 @@
 Nothing is kept in the browser: no cookies, no storage. A visitor is new on each visit, so retention is counted **by café** (`shop_id`), which is the customer anyway. Visits from the demo inside the landing page are tagged `from=demo` and left out of owner numbers.
 
 ## Turn it on (once)
-The project key is already in `site/index.html`, `counter/index.html` and `counter-landing/index.html` (PostHog US, project 662311), so tracking starts as soon as this is deployed.
+The project key is already in `site/index.html` and `counter/index.html` (PostHog US, project 662311), so tracking starts as soon as this is deployed.
 
 1. Optional, for AI cost tracking: in Vercel, on the app's project (`counter/`), add the environment variable `POSTHOG_KEY` with the same `phc_` key.
 2. In PostHog > Settings, turn on **Session replay**, **Heatmaps** and **Error tracking**. In **Authorized URLs**, add `https://countr.site` and `https://app.countr.site`, so heatmaps can be opened on the live pages.

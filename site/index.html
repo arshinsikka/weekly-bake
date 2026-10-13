@@ -883,7 +883,7 @@ h1,h2,h3,.lsec h2{font-family:var(--f-display); font-weight:500; letter-spacing:
 .wdot{color:var(--crust-lite)}
 /* v2 polish after the first screenshot audit */
 .lsec{padding-top:clamp(80px,9vw,128px); padding-bottom:clamp(80px,9vw,128px)}
-.hero .wrap{max-width:var(--maxw)}
+.hero .wrap{max-width:1320px}
 .quotes .bigquote{margin-top:clamp(72px,8vw,112px)}
 .how .steps .btn-main{justify-self:start; width:auto !important; min-width:0}
 .tk-top{display:block}
@@ -1106,7 +1106,7 @@ h1,h2,h3,.lsec h2{font-family:var(--f-display); font-weight:500; letter-spacing:
 .hero .heroside{display:block; padding:0; margin:0; min-width:0}
 .hero .heroside .laptop{width:100%; margin:0}
 .hero .laptop .base{margin:0 -2.5%}
-@media (min-width:861px){ .hero .herogrid{grid-template-columns:minmax(0,9fr) minmax(0,10fr); gap:clamp(64px,8vw,120px); align-items:center} }
+@media (min-width:861px){ .hero .herogrid{grid-template-columns:minmax(0,8fr) minmax(0,12fr); gap:clamp(40px,5vw,80px); align-items:center} }
 @media (max-width:860px){ .hero .heroside{margin-bottom:0} .hero .herogrid{gap:48px} }
 @media (max-width:640px){ .laptop{margin-top:32px} .laptop .lid{border-radius:14px 14px 4px 4px} .laptop .base{height:10px; margin:0 -3%} }
 /* the wordmark is the logo picture; its name stays in the page for screen readers */
@@ -1152,6 +1152,19 @@ h1,h2,h3,.lsec h2{font-family:var(--f-display); font-weight:500; letter-spacing:
 /* small labels in sentence case sit closer together than capitals did */
 .tk-top,.tk-done b,.bigquote cite{letter-spacing:.02em}
 .rc-sub,.rc-foot{letter-spacing:.02em; font-size:12px}
+
+/* the phone video clears the screen's rounded corner, so the app's logo is never cut */
+.phone .screen{padding-top:26px; background:#FFFDF6}
+/* the price diagram sits on a card */
+.pricebox{margin-top:28px; padding:clamp(22px,4vw,44px); border:1px solid var(--rule); border-radius:22px; background:#FFFEFA; box-shadow:0 1px 2px rgba(42,24,16,.05),0 18px 40px -22px rgba(42,24,16,.22)}
+.pricebox .pricerow{margin-top:0}
+/* find your cafe, above Try it */
+.findcafe{max-width:620px; margin:0 auto clamp(56px,8vw,96px); padding:clamp(22px,4vw,34px); border:1px solid var(--rule); border-radius:22px; background:#FFFEFA; text-align:left}
+.findcafe h3{font-family:var(--f-display); font-size:clamp(24px,3vw,30px); line-height:1.15; color:var(--espresso); font-weight:500}
+.findcafe p{margin-top:8px; color:var(--muted)}
+.findcafe .combo{margin-top:18px}
+.findcafe input{width:100%; min-height:52px; padding:0 16px; border:1px solid var(--rule); border-radius:12px; background:#fff; font:inherit; font-size:16px; color:var(--espresso)}
+.findcafe input:focus{outline:2px solid var(--tomato); outline-offset:1px}
 </style>
 <script>
 /* PostHog: funnels, session replays, heatmaps and errors, next to the Supabase events.
@@ -1276,18 +1289,29 @@ if(POSTHOG_KEY && !/^(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])$/.test(location
     <div class="wrap">
       <div class="plpills" id="pl-pills" role="group" aria-label="Item"></div>
       <h2 id="pl-head"></h2>
+      <div class="pricebox">
       <div class="pricerow">
         <div><p class="bigprice lo" id="pl-lo"></p><p class="pricelbl">cheapest</p></div>
         <div class="right"><p class="bigprice hi" id="pl-hi"></p><p class="pricelbl">most expensive</p></div>
       </div>
       <div class="dotplot" id="pl-plot" role="img"></div>
       <p class="pricenote" id="pl-note"></p>
+      </div>
     </div>
   </section>
 
   <!-- 4. try it: the live product, used right inside the laptop -->
   <section class="lsec trydemo" id="l-try">
     <div class="wrap">
+      <div class="findcafe">
+        <h3>Is your cafe on Counter?</h3>
+        <p>Type its name. If it&rsquo;s there, it opens right here, next to the cafes near it.</p>
+        <div class="combo">
+          <label class="vh" for="shop-input-1">Your cafe or area</label>
+          <input type="text" id="shop-input-1" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="shop-list-1" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" placeholder="Your cafe&rsquo;s name, e.g. Caffe Pralet">
+          <ul class="combolist" id="shop-list-1" role="listbox" aria-label="Cafes and areas" hidden></ul>
+        </div>
+      </div>
       <span class="section-kicker">Try it</span>
       <h2>Your turn.</h2>
       <p class="sublead">This is Caffe Pralet in Tiong Bahru, next to four cafes near it. Click around: open an item, try a new price, see the offers nearby.</p>
@@ -1345,12 +1369,14 @@ if(POSTHOG_KEY && !/^(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])$/.test(location
           </li>
           <li class="ticket">
             <p class="tk-top"><span>No. 03</span><span>Coffee shop team</span></p>
-            <p class="tk-ask">&ldquo;Could the items be a dropdown instead of a long row?&rdquo;</p>
-            <p class="tk-done"><b>&#10003; Served</b>Items now sit in tabs: drinks, pastries, or all of them.</p>
+            <p class="tk-ask">&ldquo;My shop is not on your list.&rdquo;</p>
+            <p class="tk-done"><b>&#10003; Served</b>Add it yourself in about a minute: your shop&rsquo;s name, postal code and a photo of the menu.</p>
           </li>
         </ol>
       </div>
     </div>
+    <blockquote class="wrap bigquote"><p>&ldquo;Before, we had to visit the cafes around us to check their prices. Now it&rsquo;s all in one place.&rdquo;</p><cite>Cafe owner, Singapore</cite></blockquote>
+    <p class="wrap chatnote">From our counter notes, Sep&ndash;Oct 2026. Shops are unnamed to respect their privacy.</p>
     <div class="wrap askblock" id="l-questions">
       <h3 class="asktitle">Asked at the counter.</h3>
       <p class="qlead">We showed this to owners before we built it. These were their questions.</p>
@@ -1381,8 +1407,6 @@ if(POSTHOG_KEY && !/^(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])$/.test(location
       </details>
     </div>
     </div>
-    <blockquote class="wrap bigquote"><p>&ldquo;We sell on quality, not price. But we still check what everyone around us charges.&rdquo;</p><cite>Bakery owner, 16 years in Tiong Bahru</cite></blockquote>
-    <p class="wrap chatnote">From our counter notes, Sep&ndash;Oct 2026. Shops are unnamed to respect their privacy.</p>
   </section>
 
   <!-- 6. the full version -->
@@ -1772,11 +1796,16 @@ function landingMotion(d){
   // the price line's clock turns this word too, so both always name one item.
 
 
-  const hv = byId("hero-video");
-  if(still){ hv.removeAttribute("autoplay"); hv.pause(); hv.controls = true; }
-  const vid = byId("walk-video");
-  if(still || !("IntersectionObserver" in window)){ vid.controls = true; return; }
-  new IntersectionObserver(f => { if(f[0].isIntersecting) vid.play().catch(() => { vid.controls = true; }); else vid.pause(); }, {threshold: 0.3}).observe(vid);
+  // both videos are silent demos and play on their own. If the browser blocks that (Low Power Mode),
+  // they start on the visitor's first tap, click or key instead of showing a Play button.
+  const hv = byId("hero-video"), vid = byId("walk-video");
+  const play = v => { v.muted = true; return v.play().catch(() => {}); };
+  const onFirst = () => { play(hv); if(vid.dataset.seen) play(vid); };
+  ["pointerdown", "touchend", "keydown"].forEach(e => addEventListener(e, onFirst, {once: true, passive: true}));
+  play(hv);
+  if("IntersectionObserver" in window) new IntersectionObserver(f => { if(f[0].isIntersecting){ vid.dataset.seen = 1; play(vid); } else vid.pause(); }, {threshold: 0.3}).observe(vid);
+  else { vid.autoplay = true; play(vid); }
+  if(still || !("IntersectionObserver" in window)) return;
   document.documentElement.classList.add("motion");
   const count = el => {
     const end = Number(el.textContent.replace(/,/g, ""));
@@ -1845,7 +1874,7 @@ function buildTryDemo(){
     if(!wide()){ track("demo_opened", {place: place, phone: true}); location.href = phLink(url); return; }
     if(query) frame.src = phLink(url);
     start(place);
-    screen.closest(".lsec").scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start"});
+    screen.closest(".laptop").scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "center"});
   };
 
   // the sample on a phone is the app itself, at the same cafe
@@ -2151,6 +2180,7 @@ const MAX_SUGGEST = 6;
 // spaces and punctuation are dropped from both sides
 const fold = t => String(t).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]/g, "");
 function buildLanding(d){
+  makeShopField(d, byId("shop-input-1"), byId("shop-list-1"), "find");
   makeShopField(d, byId("shop-input-2"), byId("shop-list-2"), "closing");
 }
 /* One field, made once for each place it stands. Both run this same code, so

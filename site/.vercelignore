@@ -8,6 +8,10 @@
 !legal.css
 !site_data.json
 !vercel.json
+# for search engines: Google Search Console's ownership file, robots and sitemap
+!google02d629282a8881b7.html
+!robots.txt
+!sitemap.xml
 # fonts, pictures and videos: each folder, then everything inside it
 !fonts
 !fonts/**

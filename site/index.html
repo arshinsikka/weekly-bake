@@ -150,20 +150,11 @@ html:not(.on-landing) .landing{
 .tickrow span::after{content:"\2022"; margin-left:44px; color:var(--tomato)}
 @keyframes tick{to{transform:translateX(-50%)}}
 @media (prefers-reduced-motion:reduce){ .tickrow{animation:none} }
-/* 4. how it works */
-.how{background:var(--cream); color:var(--body)}
+/* how it works: the steps */
 .steps{display:grid; grid-template-columns:minmax(0,1fr); gap:56px; margin-top:44px}
 .stepnum{font-family:var(--f-display); font-weight:800; font-size:72px; line-height:1; color:var(--tomato)}
 .step h3{margin-top:10px; font-weight:800; font-size:28px}
 .step > p{margin-top:8px}
-/* a small real piece of the product under each step. Decoration only. */
-.stepvis{margin-top:22px; max-width:380px; font-size:16px; line-height:1.5}
-.fakeinput{display:flex; align-items:center; min-height:48px; padding:10px 14px; background:var(--paper); border:1px solid var(--espresso); border-radius:var(--r); color:var(--espresso)}
-.fakelist{margin-top:6px; padding:6px 0; background:var(--paper); border-radius:var(--r)}
-.fakelist div{padding:7px 14px}
-.stepvis .rb-head{margin-top:0}
-.stepvis .itemrow:first-child{border-top:1px solid var(--rule)}
-.how .btn-main{margin-top:56px}
 .landing footer{background:var(--cream); color:var(--body); font-size:16px}
 /* 5. what owners said */
 .quotes{background:var(--tomato); color:#fff}
@@ -430,18 +421,6 @@ footer h3{font-family:var(--f-text); font-size:var(--s13); font-weight:600; colo
 .qpair summary::after{content:"+"; flex:none; width:32px; height:32px; border-radius:50%; display:grid; place-items:center; background:var(--butter); color:var(--espresso); font-weight:700; transition:transform .25s}
 .qpair[open] summary::after{transform:rotate(45deg)}
 .qa{align-items:start}
-/* ---------- how it works: steps beside a phone playing the walkthrough ---------- */
-.how{position:relative; overflow:hidden}
-.howgrid{display:grid; grid-template-columns:minmax(0,1fr); gap:48px; margin-top:44px; align-items:center}
-.how .steps{margin-top:0; grid-template-columns:minmax(0,1fr) !important; gap:16px}
-.how .stepvis{display:none}
-.how .step{display:grid; grid-template-columns:auto minmax(0,1fr); column-gap:18px; align-items:start; padding:24px}
-.how .step h3{margin-top:4px; font-size:22px}
-.how .step > p:not(.stepnum){grid-column:2}
-.how .step .stepnum{grid-row:span 2}
-.phonewrap{position:relative; display:flex; flex-direction:column; align-items:center; padding:20px 0}
-.phonecap{position:relative; z-index:1; margin-top:22px; font-size:14px; font-weight:500; color:var(--body)}
-.phonewrap::before{content:""; position:absolute; inset:8% 4%; border-radius:50%; background:radial-gradient(#F3D27A,transparent 70%); filter:blur(30px); opacity:.7; z-index:0}
 .phone{position:relative; z-index:1; width:min(300px,78vw); padding:11px; border-radius:50px; background:#1A1310;
   box-shadow:inset 0 0 0 2px #3B302A, inset 0 0 0 5px #0E0A08, 0 40px 80px -24px rgba(42,24,16,.55), 0 12px 24px -12px rgba(42,24,16,.4)}
 .phone::after{content:""; position:absolute; right:-3px; top:130px; width:3px; height:64px; border-radius:0 3px 3px 0; background:#2A211C}
@@ -451,8 +430,6 @@ footer h3{font-family:var(--f-text); font-size:var(--s13); font-weight:600; colo
 .phonetag.a{top:18%; left:calc(50% - 230px)}
 .phonetag.b{bottom:16%; right:calc(50% - 235px); animation-delay:-2.5s}
 .phonetag i{width:8px; height:8px; border-radius:50%; background:#3E9B5B}
-.how .btn-main{margin-top:40px}
-@media (min-width:861px){ .howgrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:64px} }
 @media (max-width:560px){ .phonetag{display:none} }
 @media (prefers-reduced-motion:reduce){ .phonetag{animation:none} }
 </style>
@@ -678,10 +655,6 @@ button.rot span::after{content:" \2197"; font-size:.7em; vertical-align:.25em; o
 .hero .herostats{gap:6px 28px}
 .hero .herostats b{font-family:var(--f-display); font-weight:800; font-size:1.3em; color:var(--espresso); margin-right:2px}
 @media (max-width:860px){ .hero .heroside{justify-content:center} .boardframe{max-width:none} }
-/* how it works: the walkthrough on a phone, tilted a touch */
-.how .phonewrap{padding:10px 0}
-.how .phone{width:clamp(240px,24vw,300px); transform:rotate(-2deg)}
-@media (prefers-reduced-motion:reduce){ .how .phone{transform:none} }
 /* owners: what they asked, pinned to a ticket rail, and what we served */
 .rail{position:relative; padding-top:22px}
 .railbar{position:absolute; top:0; left:-14px; right:-14px; height:14px; border-radius:7px; background:linear-gradient(#E9E4DB,#A39C91); box-shadow:0 6px 12px rgba(0,0,0,.35)}
@@ -767,7 +740,7 @@ h1,h2,h3,.lsec h2{font-family:var(--f-display); font-weight:500; letter-spacing:
 .landbar{background:var(--butter) !important; -webkit-backdrop-filter:none !important; backdrop-filter:none !important; border-bottom:1px solid var(--rule)}
 .landing{--card-shadow:none}
 .btn{border-radius:var(--r); font-weight:600; letter-spacing:.005em}
-.btn-main,.how .btn-main{width:auto !important; align-self:flex-start; background:var(--espresso); border-color:var(--espresso); color:var(--cream); padding:14px 26px}
+.btn-main{width:auto !important; align-self:flex-start; background:var(--espresso); border-color:var(--espresso); color:var(--cream); padding:14px 26px}
 .navlinks a{font-size:15px}
 /* hero: no glow blobs, no highlighter */
 .hero{background:var(--butter)}
@@ -835,13 +808,9 @@ h1,h2,h3,.lsec h2{font-family:var(--f-display); font-weight:500; letter-spacing:
 .chip{animation:none !important; left:16px; right:auto; bottom:16px; max-width:calc(100% - 32px); border-radius:4px; background:var(--cream); box-shadow:none; padding:10px 14px; font-size:14px}
 .chip .dot{display:none}
 .chip b{font-family:var(--f-display); font-weight:600; font-size:17px}
-/* how it works: numbered rows on rules, not cards */
-.how .steps{gap:0 !important}
-.how .step,.step{background:none; box-shadow:none; border-radius:0; padding:26px 0 !important; border-top:1px solid var(--rule)}
-.how .step:last-of-type{border-bottom:1px solid var(--rule)}
-.how .stepnum,.stepnum{width:auto; height:auto; background:none; border-radius:0; font-family:var(--f-display); font-weight:500; font-size:40px; line-height:1; color:var(--tomato); min-width:56px}
-.how .step h3{font-size:26px}
-.how .steps .btn-main{margin-top:30px}
+/* the steps: numbered, on rules, not cards */
+.step{background:none; box-shadow:none; border-radius:0; padding:26px 0 !important; border-top:1px solid var(--rule)}
+.stepnum{width:auto; height:auto; background:none; border-radius:0; font-family:var(--f-display); font-weight:500; font-size:40px; line-height:1; color:var(--tomato); min-width:56px}
 /* owners: tickets in the page's own type */
 .ticket{font-family:var(--f-text); font-size:14px; transform:rotate(calc(var(--r,0deg) * .5))}
 .tk-top{font-size:11px; letter-spacing:.08em}
@@ -886,14 +855,10 @@ h1,h2,h3,.lsec h2{font-family:var(--f-display); font-weight:500; letter-spacing:
 .lsec{padding-top:clamp(80px,9vw,128px); padding-bottom:clamp(80px,9vw,128px)}
 .hero .wrap{max-width:1320px}
 .quotes .bigquote{margin-top:clamp(72px,8vw,112px)}
-.how .steps .btn-main{justify-self:start; width:auto !important; min-width:0}
 .tk-top{display:block}
 .tk-top span{display:block; text-align:left !important}
 .tk-top span:first-child{margin-bottom:3px; color:var(--tomato)}
 .tk-ask{font-size:clamp(18px,1.45vw,21px)}
-/* the walkthrough was recorded on the old green build; until it is re-recorded,
-   shift its green toward the brand's crust so the phone sits in the palette */
-.how .phone .screen::after{content:""; position:absolute; inset:0; z-index:1; background:#6B4126; mix-blend-mode:color; pointer-events:none}
 .hero h1{font-size:clamp(44px,5.1vw,74px)}
 .priceline .dotcol.top i{background:var(--crust-lite)}
 .plan .signup .btn{width:100%}
@@ -1154,16 +1119,19 @@ h1,h2,h3,.lsec h2{font-family:var(--f-display); font-weight:500; letter-spacing:
 .tk-top,.tk-done b,.bigquote cite{letter-spacing:.02em}
 .rc-sub,.rc-foot{letter-spacing:.02em; font-size:12px}
 
-/* the phone video clears the screen's rounded corner, so the app's logo is never cut */
-.phone .screen{padding-top:26px; background:#FFFDF6}
 /* the price diagram sits on a card */
 .pricebox{margin-top:28px; padding:clamp(22px,4vw,44px); border:1px solid var(--rule); border-radius:22px; background:#FFFEFA; box-shadow:0 1px 2px rgba(42,24,16,.05),0 18px 40px -22px rgba(42,24,16,.22)}
 .pricebox .pricerow{margin-top:0}
-/* find your cafe, above Try it */
-.findcafe{max-width:620px; margin:0 auto clamp(56px,8vw,96px); padding:clamp(22px,4vw,34px); border:1px solid var(--rule); border-radius:22px; background:#FFFEFA; text-align:left}
-.findcafe h3{font-family:var(--f-display); font-size:clamp(24px,3vw,30px); line-height:1.15; color:var(--espresso); font-weight:500}
-.findcafe p{margin-top:8px; color:var(--muted)}
-.findcafe .combo{margin-top:18px}
+/* how it works and try it are one section: the three steps in a row (stacked on a phone), then the demo */
+.trydemo{position:relative}
+.trydemo .lanchor{position:absolute; top:0; left:0; scroll-margin-top:60px}
+.trydemo .steps{gap:0; margin:clamp(36px,5vw,56px) 0 clamp(40px,6vw,64px); text-align:left}
+@media (min-width:861px){ .trydemo .steps{gap:0 48px} }
+.trydemo .step:hover{transform:none; box-shadow:none}
+/* find your cafe, inside step 1 */
+.findcafe{margin-top:18px}
+.findq{font-weight:600; color:var(--espresso)}
+.findcafe .combo{margin-top:10px}
 .findcafe input{width:100%; min-height:52px; padding:0 16px; border:1px solid var(--rule); border-radius:12px; background:#fff; font:inherit; font-size:16px; color:var(--espresso)}
 .findcafe input:focus{outline:2px solid var(--tomato); outline-offset:1px}
 </style>
@@ -1248,44 +1216,7 @@ if(POSTHOG_KEY && !/^(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])$/.test(location
     </div>
   </section>
 
-  <!-- 2. how it works -->
-  <section class="lsec how" id="l-how">
-    <div class="wrap">
-      <span class="section-kicker">How it works</span>
-      <h2>Three steps. The whole market.</h2>
-      <div class="howgrid">
-      <div class="steps">
-        <div class="step">
-          <p class="stepnum">1</p>
-          <h3>Find your shop.</h3>
-          <p id="step1-line"></p>
-          <div class="stepvis" id="step1-vis" aria-hidden="true" inert></div>
-        </div>
-        <div class="step">
-          <p class="stepnum">2</p>
-          <h3>See where you stand.</h3>
-          <p>How many cafes charge less, the same or more than you. Try a new price and see what it would mean for your month.</p>
-          <div class="stepvis" id="step2-vis" aria-hidden="true" inert></div>
-        </div>
-        <div class="step">
-          <p class="stepnum">3</p>
-          <h3>Watch the neighbours.</h3>
-          <p>What the cafes you pick launch and the deals they run, in Counter and in The Weekly Bake every Monday.</p>
-          <div class="stepvis" id="step3-vis" aria-hidden="true" inert></div>
-        </div>
-        <button type="button" class="btn btn-main" id="find-bottom">Try Counter</button>
-      </div>
-      <div class="phonewrap">
-        <div class="phone"><div class="screen">
-          <video id="walk-video" src="media/counter-walkthrough.mp4" poster="media/counter-walkthrough-poster.jpg" muted loop playsinline preload="metadata" aria-label="Counter on a phone"></video>
-        </div></div>
-        <p class="phonecap">Counter on a phone</p>
-      </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 3. the price line -->
+  <!-- 2. the price line -->
   <section class="lsec priceline" id="l-price">
     <div class="wrap">
       <div class="plpills" id="pl-pills" role="group" aria-label="Item"></div>
@@ -1301,20 +1232,37 @@ if(POSTHOG_KEY && !/^(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])$/.test(location
     </div>
   </section>
 
-  <!-- 4. try it: the live product, used right inside the laptop -->
+  <!-- 3. how it works and try it: the three steps, then the live product, used right inside the laptop -->
   <section class="lsec trydemo" id="l-try">
+    <span class="lanchor" id="l-how" aria-hidden="true"></span>
     <div class="wrap">
-      <div class="findcafe">
-        <h3>Is your cafe on Counter?</h3>
-        <p>Type its name. If it&rsquo;s there, it opens right here, next to the cafes near it.</p>
-        <div class="combo">
-          <label class="vh" for="shop-input-1">Your cafe or area</label>
-          <input type="text" id="shop-input-1" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="shop-list-1" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" placeholder="Your cafe&rsquo;s name, e.g. Caffe Pralet">
-          <ul class="combolist" id="shop-list-1" role="listbox" aria-label="Cafes and areas" hidden></ul>
+      <span class="section-kicker">How it works</span>
+      <h2>Your turn.</h2>
+      <div class="steps">
+        <div class="step">
+          <p class="stepnum">1</p>
+          <h3>Find your shop.</h3>
+          <p id="step1-line"></p>
+          <div class="findcafe">
+            <p class="findq">Is your cafe on Counter?</p>
+            <div class="combo">
+              <label class="vh" for="shop-input-1">Your cafe or area</label>
+              <input type="text" id="shop-input-1" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="shop-list-1" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" placeholder="Your cafe&rsquo;s name, e.g. Caffe Pralet">
+              <ul class="combolist" id="shop-list-1" role="listbox" aria-label="Cafes and areas" hidden></ul>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <p class="stepnum">2</p>
+          <h3>See where you stand.</h3>
+          <p>How many cafes charge less, the same or more than you. Try a new price and see what it would mean for your month.</p>
+        </div>
+        <div class="step">
+          <p class="stepnum">3</p>
+          <h3>Watch the neighbours.</h3>
+          <p>What the cafes you pick launch and the deals they run, in Counter and in The Weekly Bake every Monday.</p>
         </div>
       </div>
-      <span class="section-kicker">Try it</span>
-      <h2>Your turn.</h2>
       <p class="sublead">This is Caffe Pralet in Tiong Bahru, next to four cafes near it. Click around: open an item, try a new price, see the offers nearby.</p>
       <div class="laptop">
         <div class="lid">
@@ -1329,7 +1277,7 @@ if(POSTHOG_KEY && !/^(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])$/.test(location
     </div>
   </section>
 
-  <!-- 5. what owners said and asked: real counter conversations, and what we changed after -->
+  <!-- 4. what owners said and asked: real counter conversations, and what we changed after -->
   <section class="lsec quotes" id="l-quotes">
     <div class="wrap chatgrid">
       <div class="chatcopy">
@@ -1410,7 +1358,7 @@ if(POSTHOG_KEY && !/^(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])$/.test(location
     </div>
   </section>
 
-  <!-- 6. the full version -->
+  <!-- 5. the full version -->
   <section class="lsec full" id="l-full">
     <div class="wrap">
       <span class="section-kicker">Pricing</span>
@@ -1451,7 +1399,7 @@ if(POSTHOG_KEY && !/^(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])$/.test(location
     </div>
   </section>
 
-  <!-- 7. closing: one line, one field, then a one-line footer -->
+  <!-- 6. closing: one line, one field, then a one-line footer -->
   <section class="lsec closing" id="l-closing">
       <div class="menuwall" aria-hidden="true">
         <div class="mw-col"><p class="mw-head">Coffee</p><p class="mw-row"><span>Flat white</span><i></i><b><s>5.50</s> 5.80</b></p><p class="mw-row"><span>Latte</span><i></i><b>5.90</b></p><p class="mw-row"><span>Cappuccino</span><i></i><b>5.60</b></p><p class="mw-row"><span>Long black</span><i></i><b>4.80</b></p><p class="mw-row"><span>Espresso</span><i></i><b>4.00</b></p><p class="mw-row"><span>Mocha</span><i></i><b>6.50</b></p><p class="mw-row"><span>Iced latte</span><i></i><b>6.40</b></p></div>
@@ -1665,11 +1613,17 @@ const OLD_DATA_HASHES = ["what-things-cost","whats-launching","whos-discounting"
 function routeHash(){
   const slug = (location.hash || "").replace("#", "");
   const land = document.getElementById("landing");
-  if(slug === "waitlist"){
-    const go = () => document.getElementById("l-full").scrollIntoView({behavior: "auto", block: "start"});
+  const jumpTo = id => {
+    const go = () => document.getElementById(id).scrollIntoView({behavior: "auto", block: "start"});
     go();
     requestAnimationFrame(go);
     if(document.fonts && document.fonts.ready) document.fonts.ready.then(go);
+  };
+  if(slug === "waitlist"){
+    jumpTo("l-full");
+  } else if(slug === "l-how"){
+    // how it works is now the top of Your turn
+    jumpTo("l-try");
   } else if(slug === "add-your-shop"){
     history.replaceState({}, "", location.pathname + location.search);
     track("landing_cta_clicked", {place: "add_shop_link"});
@@ -1797,15 +1751,12 @@ function landingMotion(d){
   // the price line's clock turns this word too, so both always name one item.
 
 
-  // both videos are silent demos and play on their own. If the browser blocks that (Low Power Mode),
-  // they start on the visitor's first tap, click or key instead of showing a Play button.
-  const hv = byId("hero-video"), vid = byId("walk-video");
+  // the hero video is a silent demo and plays on its own. If the browser blocks that (Low Power Mode),
+  // it starts on the visitor's first tap, click or key instead of showing a Play button.
+  const hv = byId("hero-video");
   const play = v => { v.muted = true; return v.play().catch(() => {}); };
-  const onFirst = () => { play(hv); if(vid.dataset.seen) play(vid); };
-  ["pointerdown", "touchend", "keydown"].forEach(e => addEventListener(e, onFirst, {once: true, passive: true}));
+  ["pointerdown", "touchend", "keydown"].forEach(e => addEventListener(e, () => play(hv), {once: true, passive: true}));
   play(hv);
-  if("IntersectionObserver" in window) new IntersectionObserver(f => { if(f[0].isIntersecting){ vid.dataset.seen = 1; play(vid); } else vid.pause(); }, {threshold: 0.3}).observe(vid);
-  else { vid.autoplay = true; play(vid); }
   if(still || !("IntersectionObserver" in window)) return;
   document.documentElement.classList.add("motion");
   const count = el => {
@@ -2051,29 +2002,11 @@ function buildLandingPage(d){
     plot.addEventListener("pointerleave", e => { if(e.pointerType === "mouse") mark(null); });
   }
 
-  // 4. how it works
+  // how it works: step 1's line
   byId("step1-line").textContent = `Type its name. ${fmt(cafes)} cafes and bakeries are already in, and you can add yours with a photo of your menu.`;
-  // three letters that bring up the most shops, as the field would show them
-  const all = [...SHOPS.values()].sort((a, b) => a.shop_name.localeCompare(b.shop_name));
-  // one row per brand, so three outlets of one name never fill the list
-  const brand = s => s.shop_name.replace(/\s*\([^)]*\)\s*$/, "");
-  const starts = new Map();
-  all.forEach(s => {
-    const k = fold(s.shop_name).slice(0, 3);
-    if(!starts.has(k)) starts.set(k, new Map());
-    if(!starts.get(k).has(brand(s))) starts.get(k).set(brand(s), s);
-  });
-  const best = [...starts.entries()].sort((a, b) => b[1].size - a[1].size || a[0].localeCompare(b[0]))[0];
-  byId("step1-vis").innerHTML = `<div class="fakeinput">${esc(best[0])}</div><div class="fakelist">` +
-    [...best[1].values()].slice(0, 3).map(s =>
-      `<div><span class="optname">${esc(s.shop_name)}</span><span class="optsub">${esc(s.district)}</span></div>`).join("") + `</div>`;
-  byId("step2-vis").innerHTML = `<div class="rankblock">${splitGroup("", "All cafes", rows, ex.price)}</div>`;
-  const newest = d.launches_list.filter(r => !r.is_chain)
-    .sort((a, b) => launchWhen(b).localeCompare(launchWhen(a))).slice(0, 2);
-  byId("step3-vis").innerHTML = newest.map(r => `<div class="itemrow">${newItemRow(r)}</div>`).join("");
 
   // the "Try Counter" buttons leave this page for the app at its first screen, in the same tab
-  [["find-top", "topbar"], ["find-bottom", "how"], ["find-plan", "pricing"]].forEach(([id, place]) =>
+  [["find-top", "topbar"], ["find-plan", "pricing"]].forEach(([id, place]) =>
     byId(id).addEventListener("click", () => tryCounter(place)));
 
   // 7. the full version: the dashboard tiles as they are with nobody chosen
@@ -2091,7 +2024,7 @@ function buildLandingPage(d){
   /* Each section is reported once per visit, when half of it is in view. A
      section more than two screens tall can never be half in view, so it
      counts once it fills the screen. Nothing counts while the tool is showing. */
-  const SECTIONS = [["l-hero", "hero"], ["l-how", "how"], ["l-price", "price_line"], ["l-try", "try_it"], ["l-quotes", "quotes"],
+  const SECTIONS = [["l-hero", "hero"], ["l-price", "price_line"], ["l-try", "try_it"], ["l-quotes", "quotes"],
                     ["l-full", "full_version"], ["l-closing", "closing"]];
   const seenSections = new Set();
   let queued = false;

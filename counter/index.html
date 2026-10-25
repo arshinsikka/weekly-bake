@@ -563,7 +563,21 @@ html.keys .offscreen:focus-visible + .btn{outline:2px solid var(--ink); outline-
 .ibased ul{margin-top:4px; padding-left:18px; list-style:disc}
 .ibased li{margin-top:3px; overflow-wrap:anywhere}
 .ibased a{white-space:nowrap}
+.ibased .textbtn{margin-top:2px}
+.iprice + .iapart{margin-top:2px}
 #ideas-ai{margin-top:12px}
+/* one card at a time: it fades when turned down, a slot waits for the new one, a panel asks what to change */
+.idea{transition:opacity .25s ease}
+.idea.ifade{opacity:0}
+.idea.iwork > :not(.say){opacity:.55}
+.idea:focus{outline:none}
+.idea:focus-visible{outline:2px solid var(--ink); outline-offset:4px}
+.islot{min-height:120px}
+.ichange{max-width:560px; padding:14px; border:1px solid var(--line); border-radius:12px; background:var(--bg)}
+.ichange > * + *{margin-top:10px}
+.ichange .qchoices{margin-top:0}
+.ichange .chip{min-height:40px; font-size:14px}
+@media (prefers-reduced-motion:reduce){ .idea{transition:none} }
 .idea .acts{display:flex; flex-wrap:wrap; gap:8px}
 .idea .acts .btn{min-height:36px; padding:0 14px; font-size:14px}
 .ideasacts{display:flex; flex-wrap:wrap; align-items:flex-end; gap:12px}
@@ -5254,12 +5268,12 @@ document.addEventListener("change", e => {
 const IDEAS_KEY = "counter.ideas.v2";
 const IDEAS_MIN_MENU = 5;          // a shorter menu is asked to be filled in first, and nothing is sent
 const IDEAS_MENU_MAX = 120;        // own menu rows sent, compared items first
-const IDEAS_SEND_MAX = 38000;      // characters of context; the server takes about 40 KB
+const IDEAS_SEND_MAX = 32000;      // characters of context; the server takes about 40 KB, with room for the ideas already seen
 const IDEAS_NEW_DAYS = 60;         // competitors' new items this recent
 const IDEAS_INSPIRE_MAX = 10;      // offers from cafes elsewhere
 const IDEAS_AVOID_MAX = 20;        // titles already shown or turned down, so they are not suggested again
 const IDEAS_WAIT = 65000;          // the server gives up a little before 60 seconds
-let ideasAll = {};                 // shop_id -> {key, ideas: [...], avoid: [titles]}
+let ideasAll = {};                 // shop_id -> {key, ideas: [...], avoid: [{title, what_to_do}]}
 const iu = {busy: false, state: "", ref: ""};    // state: "" | "small" (menu too short) | "failed"
 function loadIdeas(){
   let kept = null;
@@ -5269,8 +5283,11 @@ function loadIdeas(){
   } catch(e){ kept = null; }
   ideasAll = kept && typeof kept === "object" && !Array.isArray(kept) ? kept : {};
 }
+/* kept without the slots still waiting for an idea: a reload shows the cards that have one */
 function storeIdeas(){
-  try { localStorage.setItem(IDEAS_KEY, JSON.stringify(ideasAll)); } catch(e){ /* the ideas stay for this visit */ }
+  const kept = {};
+  Object.keys(ideasAll).forEach(id => { const m = ideasAll[id]; kept[id] = Object.assign({}, m, {ideas: (m.ideas || []).filter(i => i && !i.slot)}); });
+  try { localStorage.setItem(IDEAS_KEY, JSON.stringify(kept)); } catch(e){ /* the ideas stay for this visit */ }
 }
 /* what kept ideas were made from: the shop, its competitors, our data's versions and the shop's own kept menu */
 function ideasStamp(){
@@ -5284,8 +5301,10 @@ const goodIdea = i => !!i && typeof i === "object" && typeof i.key === "string" 
 function shopIdeas(){
   let mine = ideasAll[shop.shop_id];
   if(!mine || typeof mine !== "object") mine = ideasAll[shop.shop_id] = {key: "", ideas: [], avoid: []};
-  mine.avoid = (Array.isArray(mine.avoid) ? mine.avoid : []).filter(t => typeof t === "string").slice(0, IDEAS_AVOID_MAX);
-  mine.ideas = mine.key === ideasStamp() && Array.isArray(mine.ideas) ? mine.ideas.filter(goodIdea) : [];
+  // an idea turned down: {title, what_to_do}; a title alone was kept before cards could be changed one at a time
+  mine.avoid = (Array.isArray(mine.avoid) ? mine.avoid : []).map(t => typeof t === "string" ? {title: t, what_to_do: ""} : t)
+    .filter(t => t && typeof t.title === "string" && typeof t.what_to_do === "string").slice(0, IDEAS_AVOID_MAX);
+  mine.ideas = mine.key === ideasStamp() && Array.isArray(mine.ideas) ? mine.ideas.filter(i => goodIdea(i) || (i && i.slot === true)) : [];
   return mine;
 }
 
@@ -5429,59 +5448,129 @@ function textHash(s){
   for(let i = 0; i < s.length; i += 1) h = ((h * 33) ^ s.charCodeAt(i)) >>> 0;
   return h.toString(36);
 }
-function ideaFrom(i, facts){
+/* What the idea's items cost bought apart, in cents, from the menu that was sent: only when there are
+   two or more, each name is one priced row (or one row with no variant), and all are in one price list.
+   Else null, and no line is shown. The model never writes this. */
+function apartCents(names, menu){
+  if(names.length < 2) return null;
+  const rows = names.map(n => {
+    const same = menu.filter(r => r.name.toLowerCase() === n.toLowerCase());
+    const plain = same.filter(r => !r.variant);
+    return same.length === 1 ? same[0] : plain.length === 1 ? plain[0] : null;
+  });
+  if(rows.some(r => !r || typeof r.price !== "number") || new Set(rows.map(r => r.list)).size !== 1) return null;
+  return rows.reduce((t, r) => t + cents(r.price), 0);
+}
+function ideaFrom(i, built){
   if(!i || typeof i !== "object") return null;
   const words = (v, max) => typeof v === "string" ? v.trim().slice(0, max) : "";
-  const title = words(i.title, 80), what = words(i.what_to_do, 400);
+  const title = sentenceCase(words(i.title, 80)), what = words(i.what_to_do, 400);
   if(!title || !what) return null;
   const ids = Array.isArray(i.evidence_ids) ? [...new Set(i.evidence_ids.filter(x => typeof x === "string"))] : [];
   const price = typeof i.suggested_price === "number" && isFinite(i.suggested_price) && i.suggested_price > 0 ? Math.round(i.suggested_price * 100) / 100 : null;
+  const items = Array.isArray(i.items) ? [...new Set(i.items.filter(x => typeof x === "string" && x.trim() !== "").map(x => x.trim()))].slice(0, 6) : [];
   return {key: "i" + textHash(title + "|" + what), title: title, what_to_do: what, why: words(i.why, 300),
-          items: Array.isArray(i.items) ? i.items.filter(x => typeof x === "string" && x.trim() !== "").map(x => x.trim()).slice(0, 6) : [],
-          suggested_price: price,
-          based_on: ids.filter(x => facts.has(x)).map(x => facts.get(x))};      // an id we did not give is left out
+          items: items, suggested_price: price, apart_cents: apartCents(items, built.ctx.own_menu),
+          based_on: ids.filter(x => built.facts.has(x)).map(x => built.facts.get(x))};      // an id we did not give is left out
 }
+const IDEAS_BASED_SHOWN = 3;      // "Based on" lines shown before "Show N more"
+const basedOpen = new Set();      // ideas whose "Based on" lines are all shown, this visit
 /* the lines of one idea, the same on Offers and on Saved */
 function ideaLines(v){
   const head = `<p class="ihead"><span class="ititle">${esc(v.title)}</span></p>`;
   // an idea saved before the ideas were written by AI keeps its title and its reason
   if(typeof v.what_to_do !== "string") return head + (v.why ? `<p class="iwhy">${esc(v.why)}</p>` : "");
   // "Checked 19 Sep. See the offer", as the cafes' rows say it elsewhere in Counter
-  const based = (v.based_on || []).map(f => `<li>${esc(f.text)}` +
+  const lines = (v.based_on || []), open = basedOpen.has(v.key), more = lines.length - IDEAS_BASED_SHOWN;
+  const based = lines.map((f, n) => `<li${n >= IDEAS_BASED_SHOWN && !open ? " hidden" : ""}>${esc(f.text)}` +
     (f.date || webLink(f.source) ? ` <span class="muted">${f.date ? esc(capital(f.date)) + "." : ""}` +
       (webLink(f.source) ? ` <a href="${esc(f.source)}" target="_blank" rel="noopener">${esc(f.link || "See the source")}</a>` : "") + `</span>` : "") + `</li>`).join("");
   return head + `<p class="iwhat">${esc(v.what_to_do)}</p>` +
-    (v.suggested_price != null ? `<p class="iprice">Suggested price: <strong>${money(v.suggested_price)}</strong></p>` : "") +
+    (v.suggested_price != null ? `<p class="iprice">Suggested price: <strong>${money(v.suggested_price)}</strong></p>` +
+      (Number.isFinite(v.apart_cents) ? `<p class="iapart muted">Usually ${money(v.apart_cents / 100)} if bought separately.</p>` : "") : "") +
     (v.why ? `<p class="iwhy"><span class="lbl">Why:</span> ${esc(v.why)}</p>` : "") +
-    (based ? `<div class="ibased"><p class="lbl">Based on</p><ul>${based}</ul></div>` : "");
+    (based ? `<div class="ibased"><p class="lbl">Based on</p><ul>${based}</ul>` +
+      (more > 0 ? `<button type="button" class="textbtn inline" data-ai="more" data-key="${esc(v.key)}" aria-expanded="${open}">` +
+        `${open ? "Show fewer" : `Show ${more} more`}</button>` : "") + `</div>` : "");
 }
 const savedAi = key => shopSaves().ideas.find(e => e.kind === "ai_idea" && e.idea.key === key);
 
+/* ----- one card at a time: a new idea in place of one turned down, or one idea changed -----
+   cu: the card being worked on now. A slot is a place in the list with no idea in it yet: it is shown,
+   never kept in the browser's storage. */
+const cu = {panel: "", busy: "", errKey: "", err: ""};
+const CHANGE_CHIPS = ["Make it cheaper", "Use different items", "Not a discount"];
+const narrowIdeas = () => matchMedia("(max-width:640px)").matches;      // the same width the page lays out for phones
+const slotOf = mine => mine.ideas.find(i => i && i.slot);
+function cardHtml(v){
+  if(v.slot){
+    return `<li class="idea islot" data-key="${esc(v.key)}" tabindex="-1">` + (v.failed
+      ? `<p class="say" role="alert">Could not find another idea right now.</p>` +
+        `<div class="acts"><button type="button" class="btn" data-ai="again" data-key="${esc(v.key)}">Try again</button></div>`
+      : `<p class="say" role="status">Finding another idea...</p>`) + `</li>`;
+  }
+  const busy = !!cu.busy || iu.busy, mineNow = cu.busy === v.key, open = cu.panel === v.key && !mineNow;
+  const off = busy ? " disabled" : "";
+  return `<li class="idea${mineNow ? " iwork" : ""}" data-key="${esc(v.key)}" tabindex="-1">` + ideaLines(v) +
+    `<div class="acts">` + saveBtn(`data-ai="save" data-key="${esc(v.key)}"`, !!savedAi(v.key), "Save", v.title) +
+    `<button type="button" class="btn quiet" data-ai="drop" data-key="${esc(v.key)}" aria-label="Not for me: ${esc(v.title)}"${off}>Not for me</button>` +
+    `<button type="button" class="btn quiet" data-ai="change" data-key="${esc(v.key)}" aria-expanded="${open}" aria-controls="chg-${esc(v.key)}" ` +
+      `aria-label="Change this: ${esc(v.title)}"${off}>Change this</button></div>` +
+    (open ? `<div class="ichange" id="chg-${esc(v.key)}" role="group" aria-label="Change this idea">` +
+      `<div class="qchoices">` + CHANGE_CHIPS.map(c => `<button type="button" class="chip" data-ai="chip" data-key="${esc(v.key)}">${esc(c)}</button>`).join("") + `</div>` +
+      // on a phone the whole hint does not fit in the box: its first words become a label above it
+      (narrowIdeas() ? `<div class="field mini ichange-field"><label for="chg-in-${esc(v.key)}">Tell Counter what to change</label>` +
+          `<input type="text" id="chg-in-${esc(v.key)}" maxlength="200" autocomplete="off" placeholder="e.g. for the afternoon crowd"></div>`
+        : `<div class="field ichange-field"><input type="text" id="chg-in-${esc(v.key)}" maxlength="200" autocomplete="off" ` +
+          `aria-label="What to change" placeholder="Tell Counter what to change, e.g. for the afternoon crowd"></div>`) +
+      `<div class="acts"><button type="button" class="btn" data-ai="update" data-key="${esc(v.key)}">Update</button>` +
+      `<button type="button" class="btn quiet" data-ai="cancel" data-key="${esc(v.key)}">Cancel</button></div></div>` : "") +
+    (mineNow ? `<p class="say" role="status">Updating this idea...</p>` : "") +
+    (cu.errKey === v.key && !mineNow ? `<p class="say" role="alert">${esc(cu.err)}</p>` : "") + `</li>`;
+}
+
 let ideasShown = "";             // the ideas on screen last counted
 function paintIdeas(){
-  const box = byId("ideaspage"), mine = shopIdeas(), ideas = iu.busy ? [] : mine.ideas;
+  const box = byId("ideaspage"), mine = shopIdeas(), ideas = iu.busy ? [] : mine.ideas, real = mine.ideas.filter(i => !i.slot);
   const shownKey = shop.shop_id + "|" + ideas.map(i => i.key).join(",");
-  if(ideas.length && shownKey !== ideasShown){ ideasShown = shownKey; track("ideas_shown", {n: ideas.length}); }
+  if(real.length && !iu.busy && shownKey !== ideasShown){ ideasShown = shownKey; track("ideas_shown", {n: real.length}); }
   const say = iu.busy ? "Reading your menu and your competitors'..." : iu.state === "failed" ? "Ideas are not available right now."
     : iu.state === "small" ? "Add your full menu to get ideas." : "";
   const button = iu.state === "small" && !iu.busy
     ? `<button type="button" class="btn" id="ideas-update" data-nav="${esc(updateHome())}">Update my menu</button>`
-    : `<button type="button" class="btn" id="ideas-get" data-ai="get"${iu.busy ? " disabled" : ""}>${ICON.ai}` +
+    : `<button type="button" class="btn" id="ideas-get" data-ai="get"${iu.busy || cu.busy || (slotOf(mine) && !slotOf(mine).failed) ? " disabled" : ""}>${ICON.ai}` +
       `${iu.state === "failed" ? "Try again" : mine.ideas.length ? "Refresh ideas" : "Get ideas for my shop"}</button>`;
   box.innerHTML =
     `<h2 id="ideas-h" tabindex="-1">Ideas for your shop</h2>` +
     `<p class="muted" id="ideas-says">Three things you could try this month, from your menu, your prices and what your competitors are doing.</p>` +
-    (ideas.length ? `<ul class="idealist" id="ideas-list">` + ideas.map(v =>
-      `<li class="idea" data-key="${esc(v.key)}">` + ideaLines(v) +
-      `<div class="acts">` + saveBtn(`data-ai="save" data-key="${esc(v.key)}"`, !!savedAi(v.key), "Save", v.title) +
-      `<button type="button" class="btn quiet" data-ai="drop" data-key="${esc(v.key)}" aria-label="Not for me: ${esc(v.title)}">Not for me</button></div></li>`).join("") + `</ul>` : "") +
+    (ideas.length ? `<ul class="idealist" id="ideas-list">` + ideas.map(cardHtml).join("") + `</ul>` : "") +
     `<p class="say" id="ideas-msg" role="${iu.busy ? "status" : "alert"}" tabindex="-1">${say}</p>` +
     `<p class="hint" id="ideas-ref">${iu.state === "failed" && iu.ref ? `Error code: ${esc(refWords(iu.ref))}` : ""}</p>` +
     `<div class="ideasacts">${button}</div>` +
     `<p class="hint" id="ideas-ai">Written by AI from your menu and your competitors'. Check before you change anything.</p>`;
 }
+/* one ask of api/ideas: {ideas, ref}, or {ideas: [], ref} when it failed */
+async function askIdeas(payload){
+  const stop = new AbortController(), timer = setTimeout(() => stop.abort(), IDEAS_WAIT);
+  let res = null, data = null;
+  try {
+    res = await fetch("api/ideas", {method: "POST", headers: {"Content-Type": "application/json"},
+                                    body: JSON.stringify(payload), signal: stop.signal});
+    data = await res.json();
+  } catch(e){ data = null; }
+  clearTimeout(timer);
+  return {ok: !!(res && res.ok && data && Array.isArray(data.ideas)), ideas: data && Array.isArray(data.ideas) ? data.ideas : [],
+          ref: data && typeof data.ref === "string" && /^[a-z0-9_]{1,40}$/.test(data.ref) ? data.ref : ""};
+}
+/* the ideas the owner has seen now or turned down: never to be suggested again */
+const seenIdeas = mine => mine.ideas.filter(i => !i.slot).map(i => ({title: i.title, what_to_do: i.what_to_do})).concat(mine.avoid).slice(0, IDEAS_AVOID_MAX);
+/* the card's place in the list, kept across a repaint; focus goes there without scrolling */
+function focusCard(key){
+  const el = [...document.querySelectorAll("#ideas-list > li")].find(li => li.dataset.key === key);
+  if(el) el.focus({preventScroll: true});
+}
 async function getIdeas(){
-  if(iu.busy) return;
+  if(iu.busy || cu.busy) return;
   const id = shop.shop_id, mine = shopIdeas();
   const here = () => shop && shop.shop_id === id && page === "offers";
   // focus moves without scrolling: the owner is looking at the card, and on a phone a scrolled heading sits under the top bar
@@ -5492,29 +5581,58 @@ async function getIdeas(){
     const el = document.querySelector(focus);
     if(el) el.focus({preventScroll: true});
   };
-  iu.busy = true; iu.state = ""; iu.ref = "";
+  iu.busy = true; iu.state = ""; iu.ref = ""; cu.panel = ""; cu.errKey = ""; cu.err = "";
   paintIdeas();
   let built = null;
   try { built = await ideasContext(); } catch(e){ console.error(e); built = null; }
   if(!built){ done("failed", "", "#ideas-msg"); return; }
   // a menu too short to work with is not sent
   if(built.size < IDEAS_MIN_MENU){ track("ideas_asked", {ok: false, small: true}); done("small", "", "#ideas-msg"); return; }
-  built.ctx.already_suggested = mine.ideas.map(i => i.title).concat(mine.avoid).slice(0, IDEAS_AVOID_MAX);
-  const stop = new AbortController(), timer = setTimeout(() => stop.abort(), IDEAS_WAIT);
-  let res = null, data = null;
-  try {
-    res = await fetch("api/ideas", {method: "POST", headers: {"Content-Type": "application/json"},
-                                    body: JSON.stringify({context: built.ctx}), signal: stop.signal});
-    data = await res.json();
-  } catch(e){ data = null; }
-  clearTimeout(timer);
-  const ideas = res && res.ok && data && Array.isArray(data.ideas) ? data.ideas.map(i => ideaFrom(i, built.facts)).filter(Boolean).slice(0, 3) : [];
+  built.ctx.already_suggested = seenIdeas(mine).map(i => i.title);
+  const got = await askIdeas({context: built.ctx});
+  const ideas = got.ok ? got.ideas.map(i => ideaFrom(i, built)).filter(Boolean).slice(0, 3) : [];
   track("ideas_asked", {ok: ideas.length > 0, n: ideas.length});      // counts only
-  if(!ideas.length){ done("failed", data && typeof data.ref === "string" && /^[a-z0-9_]{1,40}$/.test(data.ref) ? data.ref : "", "#ideas-msg"); return; }
+  if(!ideas.length){ done("failed", got.ref, "#ideas-msg"); return; }
   const kept = ideasAll[id] && typeof ideasAll[id] === "object" ? ideasAll[id] : (ideasAll[id] = {avoid: []});
   kept.key = ideasStamp(); kept.ideas = ideas;
   storeIdeas();
   done("", "", "#ideas-h");
+}
+/* One card: "replace" a slot with a new idea, or "change" an idea as the owner asked. Only that card is
+   rewritten; a failure stays in that card. */
+async function cardIdea(kind, key, request){
+  if(iu.busy || cu.busy) return;
+  const id = shop.shop_id, mine = shopIdeas(), at = mine.ideas.findIndex(i => i.key === key);
+  if(at === -1) return;
+  const old = mine.ideas[at];
+  const here = () => shop && shop.shop_id === id && page === "offers";
+  cu.busy = key; cu.panel = ""; cu.errKey = ""; cu.err = "";
+  if(kind === "replace") mine.ideas[at] = Object.assign({}, old, {failed: false});
+  paintIdeas();
+  let built = null;
+  try { built = await ideasContext(); } catch(e){ console.error(e); built = null; }
+  let got = {ok: false, ideas: []};
+  if(built){
+    const payload = {context: built.ctx, mode: "one", shown: seenIdeas(mine)};
+    if(kind === "change") payload.change = {idea: {title: old.title, what_to_do: old.what_to_do, why: old.why, items: old.items,
+                                                    suggested_price: old.suggested_price}, request: request};
+    got = await askIdeas(payload);
+  }
+  const idea = got.ok ? got.ideas.map(i => ideaFrom(i, built)).filter(Boolean)[0] : null;
+  track("idea_card", {kind: kind, ok: !!idea});      // counts only
+  cu.busy = "";
+  const now = shopIdeas(), place = now.ideas.findIndex(i => i.key === key);
+  if(idea && place !== -1 && !now.ideas.some(i => i.key === idea.key)){
+    // the changed version is a new card; the one before it is kept in Saved if it was saved, and is not suggested again
+    if(kind === "change") now.avoid = [{title: old.title, what_to_do: old.what_to_do}].concat(now.avoid).slice(0, IDEAS_AVOID_MAX);
+    now.ideas[place] = idea;
+    storeIdeas();
+    if(here()){ paintIdeas(); focusCard(idea.key); }
+    return;
+  }
+  if(place !== -1 && kind === "replace") now.ideas[place] = Object.assign({}, now.ideas[place], {failed: true});
+  if(kind === "change"){ cu.errKey = key; cu.err = "Could not change this idea right now. Try again in a minute."; cu.panel = key; }
+  if(here()){ paintIdeas(); focusCard(key); }
 }
 document.addEventListener("click", e => {
   const el = e.target.closest("[data-ai]");
@@ -5523,25 +5641,65 @@ document.addEventListener("click", e => {
   if(act === "get") getIdeas();
   // an idea saved is kept as it is shown now
   else if(act === "save"){
-    const idea = shopIdeas().ideas.find(i => i.key === key);
+    const idea = shopIdeas().ideas.find(i => i.key === key && !i.slot);
     if(!idea) return;
     putIdea(x => x.kind === "ai_idea" && x.idea.key === key, savedAi(key) ? null : {kind: "ai_idea", idea: idea, at: stamp()});
     paint();
     const again = [...document.querySelectorAll('[data-ai="save"]')].find(b => b.dataset.key === key);
     if(again) again.focus();
   }
-  // "Not for me": the idea goes, and its title is sent along next time as one not to suggest again
+  // "Not for me": the card fades, a slot takes its place and one new idea is asked for. The idea turned down
+  // is sent along every time from now on, so it never comes back.
   else if(act === "drop"){
-    const mine = shopIdeas(), idea = mine.ideas.find(i => i.key === key);
-    if(!idea) return;
-    mine.ideas = mine.ideas.filter(i => i !== idea);
-    mine.avoid = [idea.title].concat(mine.avoid.filter(t => t !== idea.title)).slice(0, IDEAS_AVOID_MAX);
-    storeIdeas();
+    const mine = shopIdeas(), at = mine.ideas.findIndex(i => i.key === key && !i.slot);
+    if(at === -1 || iu.busy || cu.busy) return;
+    const idea = mine.ideas[at], slot = {slot: true, key: "s" + textHash(idea.key + "|" + stamp()), failed: false};
+    mine.avoid = [{title: idea.title, what_to_do: idea.what_to_do}].concat(mine.avoid.filter(t => t.title !== idea.title)).slice(0, IDEAS_AVOID_MAX);
+    if(cu.panel === key) cu.panel = "";
+    const card = el.closest("li.idea");
+    if(card) card.classList.add("ifade");
+    const swap = () => {
+      const now = shopIdeas(), place = now.ideas.findIndex(i => i.key === key);
+      if(place === -1) return;
+      now.ideas[place] = slot;
+      storeIdeas();
+      cardIdea("replace", slot.key);
+    };
+    if(card && !matchMedia("(prefers-reduced-motion: reduce)").matches) setTimeout(swap, 250); else swap();
+  }
+  else if(act === "again") cardIdea("replace", key);
+  // "Change this": a small panel under the card
+  else if(act === "change"){
+    cu.panel = cu.panel === key ? "" : key; cu.errKey = ""; cu.err = "";
     paintIdeas();
-    focusOn("#ideas-list .btn, #ideas-get, #ideas-h");
+    if(cu.panel) focusOn(`#chg-in-${key}`); else focusCard(key);
+  }
+  else if(act === "cancel"){ cu.panel = ""; cu.errKey = ""; cu.err = ""; paintIdeas(); focusCard(key); }
+  else if(act === "chip") cardIdea("change", key, el.textContent.trim());
+  else if(act === "update"){
+    const box = byId(`chg-in-${key}`), words = box ? box.value.trim() : "";
+    if(!words){ if(box) box.focus(); return; }
+    cardIdea("change", key, words.slice(0, 200));
+  }
+  // "Show 2 more": the rest of an idea's "Based on" lines, here and on Saved
+  else if(act === "more"){
+    if(basedOpen.has(key)) basedOpen.delete(key); else basedOpen.add(key);
+    const box = el.closest(".ibased"), open = basedOpen.has(key);
+    if(!box) return;
+    const rows = [...box.querySelectorAll("li")];
+    rows.forEach((li, n) => { if(n >= IDEAS_BASED_SHOWN) li.hidden = !open; });
+    el.setAttribute("aria-expanded", String(open));
+    el.textContent = open ? "Show fewer" : `Show ${rows.length - IDEAS_BASED_SHOWN} more`;
   }
   // the Saved page: take a saved idea away
   else if(act === "unsave"){ putIdea(x => x.kind === "ai_idea" && x.idea.key === key, null); paint(); }
+});
+// Enter in the "what to change" box is the same as Update
+document.addEventListener("keydown", e => {
+  if(e.key !== "Enter" || !e.target || !e.target.id || !e.target.id.startsWith("chg-in-")) return;
+  e.preventDefault();
+  const btn = document.querySelector(`[data-ai="update"][data-key="${CSS.escape(e.target.id.slice(7))}"]`);
+  if(btn) btn.click();
 });
 
 /* ---------- start ---------- */

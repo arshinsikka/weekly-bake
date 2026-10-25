@@ -3,8 +3,9 @@
    competitors charge, offer and added lately, and offers elsewhere. Each fact
    in it has a short id. A Gemini model, through OpenRouter, writes 3 ideas the
    shop could try this month and names the ids of the facts behind each; the
-   page shows its own sentence for each id, never the model's. Nothing is
-   stored. One line is logged for each try, and it never holds the key, a
+   page shows its own sentence for each id, never the model's. With mode
+   "one" it writes a single idea instead: a new one in place of one turned
+   down, or one the owner asked to change. Nothing is stored. One line is logged for each try, and it never holds the key, a
    header or anything of the menu. */
 import { MODELS, askChain, askModel, isBusy, isLimit } from "./_models.js";
 
@@ -16,6 +17,7 @@ const MAX_BODY = 40000;          // characters
 const MAX_MENU = 150;            // own menu rows
 const IDEAS = 3;
 const TITLE_MAX = 80, WHAT_MAX = 400, WHY_MAX = 300, ITEMS_MAX = 6, IDS_MAX = 8;
+const SHOWN_MAX = 30, REQUEST_MAX = 200;
 const PRICE_MIN = 0.1, PRICE_MAX = 999;
 // The platform stops this function at 60 seconds (vercel.json). All the tries
 // together are given a little less, so the reply below is sent before that.
@@ -31,7 +33,11 @@ const SYSTEM = [
   "When there is little or nothing about competitors, work from the menu itself: what pairs well, gaps in the range, items that could carry a set or an offer, and its price points. Offers from elsewhere can still help.",
   "Be specific (which items, what price) and practical for a small team. Write in plain, friendly English, and keep it short.",
   "Prices are as printed on menus, before service charge and GST, and each belongs to one list: dine-in, takeaway or online. When you mention a current price, use the one given.",
-  "For each idea, list the ids of the facts that inspired it. Leave out ideas the owner has already seen in already_suggested."
+  "For each idea, list the ids of the facts that inspired it. Leave out ideas the owner has already seen in already_suggested.",
+  "Where it makes sense, mix the kinds of ideas rather than giving three of the same kind.",
+  "Use British spelling.",
+  "Sometimes you are asked for one new idea instead of three; make it different from the ideas already shown or turned down.",
+  "Sometimes the owner asks you to change one idea. Keep what still fits, change what they asked for, and keep it practical for this cafe."
 ].join(" ");
 
 const SCHEMA = {
@@ -55,8 +61,17 @@ const SCHEMA = {
   },
   required: ["ideas"]
 };
-const ASK = "Here is the cafe's data as JSON. Reply with 3 ideas: title (at most 8 words), what_to_do (1 to 2 sentences), " +
-  "why (1 sentence), items (names from own_menu), suggested_price (a number, or null) and evidence_ids.\n\n";
+const SHAPE = "title (at most 8 words), what_to_do (1 to 2 sentences), why (1 sentence), items (names from own_menu), " +
+  "suggested_price (a number, or null) and evidence_ids";
+const ASK = `Here is the cafe's data as JSON. Reply with 3 ideas: ${SHAPE}.\n\n`;
+/* mode "one": one new idea, or one idea changed as the owner asked, never one already shown or turned down */
+function askOneText(context, shown, change){
+  const seen = shown.length ? "\n\nIdeas already shown or turned down:\n" + shown.map(i => `- ${i.title}: ${i.what_to_do}`).join("\n") : "";
+  const ask = change
+    ? `Change this one idea as the owner asks, and reply with it as 1 idea: ${SHAPE}.\nThe idea: ${JSON.stringify(change.idea)}\nWhat the owner asks: ${JSON.stringify(change.request)}`
+    : `Reply with 1 new idea: ${SHAPE}.`;
+  return `Here is the cafe's data as JSON. ${ask}${seen}\n\n${JSON.stringify(context)}`;
+}
 
 const MESSAGES = {
   method: "Send a POST request.",
@@ -106,9 +121,25 @@ function cleanIdea(i, names, ids){
   };
 }
 
-/* One ask of one model, and the reply checked for the ideas' shape. */
-async function askOne(model, context, key, allowed, fullTry){
-  const messages = [{role: "system", content: SYSTEM}, {role: "user", content: [{type: "text", text: ASK + JSON.stringify(context)}]}];
+/* mode "one": the ideas already shown or turned down, and the idea to change with the owner's request.
+   Gives {shown, change} or null when they are not usable. */
+function oneOk(body){
+  const shown = body.shown === undefined ? [] : body.shown;
+  if(!Array.isArray(shown) || shown.length > SHOWN_MAX) return null;
+  const list = shown.map(i => i && typeof i === "object" ? {title: text(i.title, TITLE_MAX), what_to_do: text(i.what_to_do, WHAT_MAX)} : null);
+  if(list.some(i => !i || !i.title)) return null;
+  if(body.change === undefined || body.change === null) return {shown: list, change: null};
+  const c = body.change, idea = c && typeof c === "object" ? c.idea : null, request = c ? text(c.request, REQUEST_MAX) : "";
+  if(!idea || typeof idea !== "object" || !text(idea.title, TITLE_MAX) || !request) return null;
+  return {shown: list, change: {request: request, idea: {title: text(idea.title, TITLE_MAX), what_to_do: text(idea.what_to_do, WHAT_MAX),
+    why: text(idea.why, WHY_MAX), items: (Array.isArray(idea.items) ? idea.items : []).map(x => text(x, 200)).filter(Boolean).slice(0, ITEMS_MAX),
+    suggested_price: typeof idea.suggested_price === "number" && Number.isFinite(idea.suggested_price) ? idea.suggested_price : null}}};
+}
+
+/* One ask of one model, and the reply checked for the ideas' shape. one: {shown, change} for mode "one". */
+async function askOne(model, context, key, allowed, fullTry, one){
+  const words = one ? askOneText(context, one.shown, one.change) : ASK + JSON.stringify(context);
+  const messages = [{role: "system", content: SYSTEM}, {role: "user", content: [{type: "text", text: words}]}];
   // the system message goes in through extra, which takes the place of the one user message askModel sends
   const got = await askModel(model, key, messages[1].content, SCHEMA, allowed, fullTry, {messages: messages}, "ideas");
   if(got.fail) return got;
@@ -131,9 +162,14 @@ export default {
     try { body = JSON.parse(raw); } catch(e){ body = null; }
     if(!body || typeof body !== "object" || !contextOk(body.context)) return fail(400, "bad_request");
     const context = body.context;
+    // mode "one": a single idea; anything else is the 3 ideas, as before
+    const one = body.mode === "one" ? oneOk(body) : null;
+    if(body.mode !== undefined && body.mode !== "one") return fail(400, "bad_request");
+    if(body.mode === "one" && !one) return fail(400, "bad_request");
+    const wanted = one ? 1 : IDEAS;
 
-    const sizes = {menu: context.own_menu.length, chars: raw.length};
-    const asked = await askChain(TIME, (model, allowed, fullTry) => askOne(model, context, key, allowed, fullTry),
+    const sizes = Object.assign({menu: context.own_menu.length, chars: raw.length}, one ? {mode: one.change ? "change" : "one"} : {});
+    const asked = await askChain(TIME, (model, allowed, fullTry) => askOne(model, context, key, allowed, fullTry, one),
       (failed, model, tryNumber, tryMs) => console.error(JSON.stringify(Object.assign({}, failed, {model: model.id, try: tryNumber, ms: tryMs}, sizes))), CHAIN);
     const got = asked.got;
     if(got.fail){
@@ -144,7 +180,7 @@ export default {
 
     const names = new Map(context.own_menu.map(r => [r.name.trim().toLowerCase(), r.name.trim()]));
     const ids = idsIn(context, new Set());
-    const ideas = got.ideas.map(i => cleanIdea(i, names, ids)).filter(Boolean).slice(0, IDEAS);
+    const ideas = got.ideas.map(i => cleanIdea(i, names, ids)).filter(Boolean).slice(0, wanted);
     console.log(JSON.stringify(Object.assign({model: asked.model.id, ms: asked.ms, ideas: ideas.length, dropped: got.ideas.length - ideas.length}, sizes,
                                              asked.tries > 1 ? {tries: asked.tries} : {})));
     if(!ideas.length) return reply(502, {error: "failed", message: MESSAGES.failed, ref: "no_ideas"});

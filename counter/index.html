@@ -276,6 +276,12 @@ html.keys .offscreen:focus-visible + .btn{outline:2px solid var(--ink); outline-
 .sumblock > p{margin-top:4px}
 .sumblock .sum-look{color:var(--ink)}
 .sum-switch, #ck-status{font-size:14px; color:var(--muted)}
+/* "Which prices are these?": three choices after the read, the small print's choice marked */
+.sum-q{margin-top:12px}
+.sum-qh{font-weight:600; color:var(--ink)}
+.qchoices{display:flex; flex-wrap:wrap; gap:8px; margin-top:8px}
+.sum-note{margin-top:8px; font-size:14px; color:var(--muted)}
+.basis-switch{display:flex; flex-wrap:wrap; gap:4px 16px; margin-top:4px}
 .textbtn.inline{min-height:32px; padding:0 2px; color:var(--ink); font-weight:600; text-decoration:underline; text-underline-offset:2px}
 /* the check screens: one bar of chips that stays at the top, as short as it can be */
 #snap.checking{padding-bottom:120px}
@@ -1158,7 +1164,7 @@ let wantOpen = null;          // an item the Saved page asked the next page to o
 const priceRow = key => D.price_table.find(r => r.item_canonical === key) || {};
 const itemName = key => priceRow(key).display_name || key;
 const mine = key => D.named_prices[key].find(r => r.shop_id === shop.shop_id);
-const realPrice = key => printedPrice(mine(key));     // the printed price, before any charges our data added
+const realPrice = key => { const p = ownPrices(key)[chanOf(key)]; return p == null ? null : p; };   // the shop's printed price in the list being compared, or null
 const cur = key => trial.has(key) ? trial.get(key) / 100 : realPrice(key);
 const changed = key => trial.has(key) && trial.get(key) !== cents(realPrice(key));
 const kindOf = (p, v) => cents(p) > cents(v) ? "more" : cents(p) < cents(v) ? "less" : "same";
@@ -1228,7 +1234,7 @@ const shortVerdict = t => t.replace(/ cafes$/, "");
    one of the others. */
 /* the whole menu in one line, at the real prices: how many items cost more than most cafes, less, or about the usual */
 function pricesSummary(){
-  const said = myItems.map(k => compare(k, realPrice(k))).filter(c => c.enough);
+  const said = myItems.map(k => compare(k, realPrice(k))).filter(c => c.enough && c.verdict);
   if(!said.length) return "";
   const more = said.filter(c => /^(Much )?[Mm]ore expensive/.test(c.verdict)).length, less = said.filter(c => /^Cheaper/.test(c.verdict)).length;
   const usual = said.length - more - less, one = n => n === 1;
@@ -1256,10 +1262,46 @@ function chargeWords(r){
   return sc && gst ? "Plus service charge and GST" : sc ? "Plus service charge" : gst ? "Plus GST" : "";
 }
 const viewChan = new Map();       // item -> the channel the reader switched it to, for the open shop
-function homeChannel(k){
+/* The open shop's own printed prices for an item, by price list: {dine_in: 6.5, takeaway: 6, online_order: 7.2}.
+   Its record in our data gives the price in its own list. Its other lists come from menu_dates.json: the
+   rows the compare rule (nineTag) says are this item, the newest price in each list, the cheapest row,
+   as our data picks a shop's price. A price from the owner's own saved menu is the only one: it is theirs. */
+const ownCache = new Map();       // shop_id -> item -> {list: price}, from menu_dates.json
+function ownFromDates(id){
+  if(ownCache.has(id)) return ownCache.get(id);
+  const d = datesFor(id), out = {};
+  if(!d) return out;              // not cached: the file may still come
+  Object.keys(d).forEach(key => {
+    if(key === "_shop" || !Array.isArray(d[key])) return;
+    const parts = key.split("|"), tag = nineTag(parts[0], parts[1] || "");
+    if(!tag) return;
+    CHANNELS.forEach(list => {
+      const e = d[key].find(x => Array.isArray(x) && x[1] === list && typeof x[0] === "number");   // newest first
+      if(!e) return;
+      const mine = out[tag] || (out[tag] = {});
+      if(mine[list] == null || e[0] < mine[list]) mine[list] = e[0];
+    });
+  });
+  ownCache.set(id, out);
+  return out;
+}
+function ownPrices(k){
   const rec = (D.named_prices[k] || []).find(r => r.shop_id === shop.shop_id), menu = menuOf(shop.shop_id);
-  if(rec && rec.price_basis !== "own_menu" && channelOf(rec.price_basis)) return channelOf(rec.price_basis);
-  return (rec && rec.channel) || (menu && menu.channel) || "in_store";
+  if(rec && rec.price_basis === "own_menu"){
+    // a menu saved before build 4 says "in_store" or "online": online is the online list, the other is not one list
+    const said = rec.channel || (menu && menu.channel) || "";
+    return {[said === "online" ? "online_order" : channelOf(said) || "dine_in"]: rec.price};
+  }
+  const out = Object.assign({}, ownFromDates(shop.shop_id)[k] || {});
+  if(rec && channelOf(rec.price_basis)) out[rec.price_basis] = printedPrice(rec);   // our data's own record wins in its list
+  return out;
+}
+/* the list compared by default: of the lists the shop has its own price in, the one with the most other cafes */
+function homeChannel(k){
+  const lists = Object.keys(ownPrices(k)).filter(l => channelOf(l));
+  if(!lists.length) return "dine_in";
+  const rec = (D.named_prices[k] || []).find(r => r.shop_id === shop.shop_id);
+  return lists.sort((a, b) => pricesIn(k, b).length - pricesIn(k, a).length || (b === (rec && rec.price_basis)) - (a === (rec && rec.price_basis)))[0];
 }
 const chanOf = k => viewChan.get(k) || homeChannel(k);
 /* the other cafes' prices for an item in one channel, each at its printed price */
@@ -1279,11 +1321,12 @@ function compare(key, v){
           low: prices.length ? Math.min(...prices) : null, high: prices.length ? Math.max(...prices) : null,
           verdict: enough && v != null ? verdictOf(v, usual, less, more, others.length) : ""};
 }
-/* "Compared with 66 cafes' in-cafe menu prices, before service charge and GST.", and the switch to the other channel */
+/* "Compared with 6 cafes' takeaway prices, before service charge and GST.", and a switch to each other list with 5 prices or more */
+const BASIS_WORDS = {dine_in: "dine-in menu", takeaway: "takeaway", online_order: "online"};
 function basisHtml(k, c){
-  const other = c.channel === "online" ? "in_store" : "online", n = pricesIn(k, other).length;
-  return `<p class="muted small" id="d-basis">Compared with ${c.n} ${c.n === 1 ? "cafe's" : "cafes'"} ${c.channel === "online" ? "online" : "in-cafe menu"} prices, before service charge and GST.` +
-    (n >= MIN_OTHERS ? ` <button type="button" class="textbtn inline" data-act="chan" data-ch="${other}">Show ${other === "online" ? "online" : "in-cafe"} prices instead</button>` : "") + `</p>`;
+  const others = CHANNELS.filter(ch => ch !== c.channel && pricesIn(k, ch).length >= MIN_OTHERS);
+  return `<p class="muted small" id="d-basis">Compared with ${c.n} ${c.n === 1 ? "cafe's" : "cafes'"} ${BASIS_WORDS[c.channel]} prices, before service charge and GST.</p>` +
+    (others.length ? `<p class="basis-switch">` + others.map(ch => `<button type="button" class="textbtn inline" data-act="chan" data-ch="${ch}">Show ${CHANNEL_WORDS[ch]} prices</button>`).join("") + `</p>` : "");
 }
 
 /* "34% charge more than you", or "7 of 22 cafes charge more than you" */
@@ -1582,13 +1625,13 @@ function hiddenHtml(){
 function rowHtml(k){
   const v = cur(k), c = compare(k, v), open = k === openItem;
   const tag = changed(k) ? `Trying ${money(v)}. Real price ${money(realPrice(k))}` : "";
-  const words = c.enough ? c.verdict : "Not enough cafes to compare";
+  const words = v == null ? `No ${CHANNEL_WORDS[c.channel]} price of yours on file` : c.enough ? c.verdict : "Not enough cafes to compare";
   const usual = words === verdictOf(0, null, 0, 0, 0);
   return `<li><div class="row${open ? " open" : ""}" data-row="${esc(k)}"${open ? "" : ` data-act="open" data-item="${esc(k)}"`}>` +
     `<span class="what"><span class="item">${esc(itemName(k))}</span>` +
     `<span class="verdict${usual ? " usual" : ""}" data-verdict>${esc(shortVerdict(words))}</span>` +
     (tag ? `<span class="tag">${tag}</span>` : "") + (savedTest(k) ? SAVED_TAG : "") + `</span>` +
-    `<span class="price">${money(v)}</span>` +
+    `<span class="price">${v == null ? "" : money(v)}</span>` +
     (open ? `<span class="now">Showing now</span>`
           : `<button type="button" class="btn go" data-go="${esc(k)}" aria-label="Compare ${esc(itemName(k))}">Compare</button>`) +
     `</div></li>`;
@@ -2092,7 +2135,7 @@ function paintPricesTop(){
     `<button type="button" class="btn" data-act="close">${ICON.close}Close</button>`;
 
   // the shop's own price is its printed one: what is added on top is said under it
-  const listed = chargeWords(rec) && rec.listed_price != null ? `<p class="muted small" id="d-charges">${chargeWords(rec)}.</p>` : "";
+  const listed = chargeWords(rec) && rec.listed_price != null && rec.price_basis === c.channel ? `<p class="muted small" id="d-charges">${chargeWords(rec)}.</p>` : "";
   // a price that comes from the owner's own menu says so, with the day it was saved
   const own = rec.price_basis === "own_menu" && dayMonth(rec.observed_date)
     ? `<p class="muted small" id="d-own">Updated by you on ${dayMonth(rec.observed_date)}.</p>` : "";
@@ -2108,6 +2151,7 @@ function paintPricesTop(){
       (changed(k) ? " " + saveBtn(`data-act="savetest"`, !!savedTest(k) && savedTest(k).cents === trial.get(k), "Save this test", itemName(k)) +
                     ` <button type="button" class="btn quiet" data-act="realask" data-item="${esc(k)}" data-cents="${trial.get(k)}">Make this my real price</button>` +
                     (ask && ask.item === k ? askHtml() : "") : "")
+    : real == null ? `<p id="d-noown">No ${CHANNEL_WORDS[c.channel]} price of yours on file.</p>`
     : `<div class="d-price"><span class="bigprice" id="d-big">${money(v)}</span>` +
       `<button type="button" class="btn primary" data-act="try">Try a different price</button></div>` + own + listed;
 
@@ -2325,7 +2369,7 @@ function paintCafes(){
     (own ? `<p class="say" id="ir-say" role="status" tabindex="-1">${esc(ir.say)}</p>` : "") +
     `<ul class="cafes" id="cafes">` + rows.map(r => {
       if(!r.rec) return `<li data-cafe><div class="what"><p class="name">${esc(r.name)}</p></div>` +
-                        `<div class="side2"><p class="muted small">No ${c.channel === "online" ? "online" : "in-cafe"} price on file</p></div></li>`;
+                        `<div class="side2"><p class="muted small">No ${CHANNEL_WORDS[c.channel]} price on file</p></div></li>`;
       const when = dayMonth(r.rec.observed_date), plus = chargeWords(r.rec);
       return `<li data-cafe${r.extra ? ` data-extra="${esc(r.id)}"` : ""}><div class="what"><p class="name">${esc(r.name)}` +
         (r.rival ? `<span class="tag">Your competitor</span>` : "") + (r.extra ? `<span class="tag">For this item only</span>` : "") + `</p>` +
@@ -2586,6 +2630,7 @@ document.addEventListener("click", e => {
   // "Show online prices instead": this item is compared with the other channel's prices, until switched back
   else if(act === "chan" && k && CHANNELS.indexOf(el.dataset.ch) !== -1){
     if(el.dataset.ch === homeChannel(k)) viewChan.delete(k); else viewChan.set(k, el.dataset.ch);
+    trial.delete(k);
     paint(true);
     focusOn(`[data-act="chan"]`);
   }
@@ -3280,7 +3325,7 @@ const UP_SAY = {
   postal_failed: "We could not look up the postal code. Try again.",
   name_needed: "Type your shop's name."
 };
-const up = {files: [], busy: false, adding: false, channel: ""};   // channel: "in_store" or "online", asked before a read
+const up = {files: [], busy: false, adding: false};
 let ed = null;                // the menu being checked: its rows, and which row is each compared item
 let myMenu = null;            // the saved menu, as it is written to the browser
 let menuLost = false;         // true when the browser would not keep it
@@ -3348,9 +3393,8 @@ function upSay(id, words){
 }
 function paintUpState(){
   const btn = byId("up-read");
-  if(btn) btn.disabled = up.busy || up.adding || !up.files.length || !up.channel;
+  if(btn) btn.disabled = up.busy || up.adding || !up.files.length;
   upSay("up-status", up.busy ? "Reading your menu. This usually takes under a minute. A long menu can take up to three minutes." : "");
-  upSay("up-needch", up.files.length && !up.channel ? SN_SAY.need_channel : "");
 }
 function paintFiles(){
   const list = byId("up-list");
@@ -3365,7 +3409,7 @@ function paintMenuScreen(){
   byId("upload-body").innerHTML =
     `<h1 tabindex="-1">Your menu</h1>` +
     `<p class="sub">Add photos of your menu, or one PDF. We read the items and prices for you.</p>` +
-    `<div class="up">` + channelHtml("up", up.channel) +
+    `<div class="up">` +
     `<div class="choose"><input class="offscreen" type="file" id="up-file" accept="image/jpeg,image/png,image/webp,application/pdf" multiple>` +
       `<label class="btn" for="up-file">Choose photos or a PDF</label>` +
       `<p class="hint">JPG, PNG or WebP photos, up to 6. Or one PDF up to 3 MB.</p></div>` +
@@ -3375,7 +3419,6 @@ function paintMenuScreen(){
     `<p class="say" id="up-msg" role="alert" tabindex="-1"></p>` +
     `<p class="hint" id="up-ref"></p>` +
     `<p class="say" id="up-status" role="status"></p>` +
-    `<p class="hint" id="up-needch"></p>` +
     `<div class="upacts"><button type="button" class="btn primary" id="up-read" data-up="read" disabled>${ICON.ai}Read my menu</button>` +
       `<button type="button" class="btn" data-nav="${esc(upAddr(target ? "update" : "place"))}">Back</button></div></div>`;
   paintFiles();
@@ -3566,10 +3609,10 @@ async function pdfPhotos(file){
 /* the last few reads, kept in this browser by a hash of their files */
 const READS_KEY = "counter.reads.v1", READS_MAX = 5;
 function readsKept(){ try { const k = JSON.parse(localStorage.getItem(READS_KEY) || "{}"); return k && typeof k === "object" ? k : {}; } catch(e){ return {}; } }
-function keepRead(hash, items){
+function keepRead(hash, items, note){
   if(!hash) return;
   const k = readsKept();
-  k[hash] = {at: Date.now(), items: items};
+  k[hash] = {at: Date.now(), items: items, note: note || null};
   const newest = Object.keys(k).sort((a, b) => k[b].at - k[a].at).slice(0, READS_MAX);
   try { localStorage.setItem(READS_KEY, JSON.stringify(Object.fromEntries(newest.map(h => [h, k[h]])))); } catch(e){ /* read again next time */ }
 }
@@ -3596,9 +3639,9 @@ async function sendMenu(){
   // the same files read before in this browser are not paid for twice
   const hash = await filesHash(files);
   const before = readsKept()[hash];
-  if(before && Array.isArray(before.items)){ track("menu_read", {how: "cache", ok: true}); return {items: before.items}; }
+  if(before && Array.isArray(before.items)){ track("menu_read", {how: "cache", ok: true}); return {items: before.items, note: before.note || null}; }
   const got = await askReader(files);
-  if(got.items) keepRead(hash, got.items);
+  if(got.items) keepRead(hash, got.items, got.note);
   return got;
 }
 /* the one request to /api/read-menu: files as [{mime, data}]. Gives {items}, or the name of what went wrong.
@@ -3617,7 +3660,7 @@ async function askReader(files){
     const items = data.items.filter(r => r && typeof r.name === "string" && r.name.trim() !== "");
     if(data.not_a_menu || !items.length){ track("menu_read", {how: "ai", ok: false}); return {error: "not_a_menu"}; }
     track("menu_read", {how: "ai", ok: true});
-    return {items: items};
+    return {items: items, note: data.price_note && typeof data.price_note === "object" ? data.price_note : null};
   }
   track("menu_read", {how: "ai", ok: false});
   const error = data && Object.prototype.hasOwnProperty.call(UP_SAY, data.error) ? data.error : res.status === 413 ? "too_large" : "read_failed";
@@ -3626,7 +3669,7 @@ async function askReader(files){
           ref: data && typeof data.ref === "string" && /^[a-z0-9_]{1,40}$/.test(data.ref) ? data.ref : ""};
 }
 async function readMenu(){
-  if(up.busy || up.adding || !up.channel) return;
+  if(up.busy || up.adding) return;
   const id = targetId(), next = upAddr("check");
   up.busy = true;
   upSay("up-msg", "");
@@ -3641,7 +3684,8 @@ async function readMenu(){
     ed = fromRead(got.items);
     ed.ai = !got.pdf;                          // a PDF read in the browser never went to the AI
     ed.owner = id;
-    ed.channel = up.channel;                   // where the menu is from: only same-channel prices are compared
+    ed.note = got.note || null;                // what the small print says about the prices
+    ed.channel = listFromNote(ed.note);        // the price list it points to, or none until the owner says
     await loadDates();                         // the known prices, before the check screen draws its summary
     history.pushState(null, "", next);
     route();
@@ -3742,6 +3786,8 @@ function shownRows(){
 }
 /* Check your menu, for a menu read now for a listed shop: each row's status against the prices we know
    in the same channel, by row id (classifyRows, the diner's rule). null when there is nothing to compare with. */
+/* a menu read now, for a listed shop we hold prices for: it gets the summary and the question */
+const ckCan = () => !!ed && !!ed.read && targetId() !== MY_ID && SHOPS.has(targetId()) && !!knownFor(targetId());
 function ckStatus(){
   const id = targetId();
   if(!ed || !ed.read || id === MY_ID || !SHOPS.has(id) || CHANNELS.indexOf(ed.channel) === -1) return null;
@@ -3775,7 +3821,7 @@ function paintCounts(keepBar){
     // a listed shop's menu that was not read just now is the one we hold: no AI wrote it here
     (target && target.shop_id !== MY_ID && !ed.read ? `<p id="ck-read">This is the menu we hold for your shop. Fix anything that is wrong.</p>` : "") +
     `<p id="ck-status">${ed.read && ed.ai ? ICON.ai : ""}${n === 1 ? "1 item" : `${n} items`}, ${m} compared</p>` +
-    (st ? summaryHtml(counts, ed.channel, target.shop_name, named.length, knownFor(target.shop_id), "ck")
+    (ckCan() ? summaryHtml(counts, ed.channel, target.shop_name, named.length, knownFor(target.shop_id), "ck", ed.note)
         : k ? `<p class="sum-look" id="ck-look">${k === 1 ? "1 needs a look." : `${k} need a look.`}</p>` : "");
   if(keepBar) return;
   const searching = fold(ed.find) !== "";
@@ -3822,7 +3868,7 @@ function paintMenuList(){
   box.innerHTML = heads.map(h => {
     const mine = rows.filter(r => r.section === h);
     if(!mine.length) return "";
-    return `<section class="cgroup"><div class="ghead static"><span class="gname"><span class="gtitle">${esc(h || NO_HEAD)}</span></span>` +
+    return `<section class="cgroup"><div class="ghead static"><span class="gname"><span class="gtitle">${esc(sentenceCase(h) || NO_HEAD)}</span></span>` +
       `<span class="gcount">${mine.length}</span></div><ul class="crows">${mine.map(r => ckRowHtml(r, st)).join("")}</ul></section>`;
   }).join("");
 }
@@ -4510,10 +4556,12 @@ function paintShareNote(){
    (menu_dates.json, written by make_menu_dates.py: for each name and variant,
    the printed prices before charges, each with its price_basis and day).
 
-   Like with like only. A cafe sets its in-cafe prices (dine_in, takeaway) and
-   its online prices (online_order) apart on purpose, so a menu read "in the
-   cafe" is compared only with in-cafe prices, and one read "online" only with
-   online prices. No price is ever estimated or turned into another channel's.
+   Like with like only: one exact price list. A cafe sets its dine-in,
+   takeaway and online prices apart on purpose (a dine-in menu is often
+   printed before service charge and GST, takeaway is not), so a menu is
+   compared only with known prices of the list it is: dine_in, takeaway or
+   online_order. The reader's small print can pick it, and the person can
+   always change it. No price is ever estimated or turned into another list's.
    A price with no known basis is never compared.
 
    Names and variants are compared as words: lower case, "&" as "and",
@@ -4526,16 +4574,38 @@ function paintShareNote(){
 
    A row meets a known item in this order: the same name and variant; else
    the same name, when each side has only one row for it; else a name that
-   shares most of its words (a loose match). Then, within the same channel:
-     same:      within 5 cents of any known price (dine-in and takeaway can both exist)
+   shares most of its words (a loose match). Then, within the same list:
+     same:      within 5 cents of a known price in that list
      changed:   matches none of them, and the match was not a loose one; the closest known price is shown
      loose:     a loose match more than 5 cents off: neither new nor changed
-     nocompare: the item is known only in the other channel, or only with no basis
-     new:       the item is unknown in every channel
+     nocompare: the item is known only in other lists, or only with no basis ("new to us" for this list)
+     new:       the item is unknown in every list
    Nothing is ever called removed: a photo may show only part of a menu. */
-const CHANNELS = ["in_store", "online"];
-const CHANNEL_WORDS = {in_store: "in-cafe", online: "online"};
-const channelOf = basis => basis === "online_order" ? "online" : basis === "dine_in" || basis === "takeaway" ? "in_store" : "";
+const CHANNELS = ["dine_in", "takeaway", "online_order"];          // the three price lists, the same names as price_basis
+const CHANNEL_WORDS = {dine_in: "dine-in", takeaway: "takeaway", online_order: "online"};
+const CHANNEL_CHOICES = {dine_in: "Dine-in", takeaway: "Takeaway", online_order: "Online ordering or delivery"};
+const channelOf = basis => CHANNELS.indexOf(basis) !== -1 ? basis : "";
+/* the list a menu's small print points to: before charges is dine-in; "takeaway" is takeaway; else none */
+const listFromNote = n => !n ? "" : n.excludes_gst || n.service_charge ? "dine_in" : n.says_takeaway ? "takeaway" : n.says_dine_in ? "dine_in" : "";
+function noteWords(n){
+  const list = listFromNote(n);
+  return list === "dine_in" && (n.excludes_gst || n.service_charge) ? "This menu says prices are before service charge and GST, so we compare it with dine-in prices."
+    : list === "takeaway" ? "This menu says these are takeaway prices, so we compare it with takeaway prices."
+    : list === "dine_in" ? "This menu says these are dine-in prices, so we compare it with dine-in prices." : "";
+}
+/* a menu section's name in sentence case. A short word in capitals stays when it looks like an
+   acronym (BBQ): in a heading that is not all capitals, or a word with no vowel. A word in mixed case stays (McDonald). */
+function sentenceCase(s){
+  const raw = String(s || "").trim(), allCaps = !/\p{Ll}/u.test(raw);
+  const out = raw.split(/(\s+)/).map(w => {
+    const letters = w.replace(/[^\p{L}]/gu, "");
+    if(!letters) return w;
+    if(letters === letters.toUpperCase() && letters.length <= 3 && (!allCaps || !/[AEIOU]/.test(letters))) return w;
+    if(/\p{Ll}/u.test(letters) && /\p{Lu}/u.test(letters.slice(1))) return w;
+    return w.toLowerCase();
+  }).join("");
+  return out.charAt(0).toUpperCase() + out.slice(1);
+}
 const DIFF_SYN = new Map([["lrg", "large"], ["lg", "large"], ["sm", "small"], ["med", "medium"], ["reg", "regular"]]);
 const SIZE_TEMP = new Set(["hot", "iced", "cold", "regular", "small", "medium", "large", "8oz", "12oz", "16oz"]);
 const PLAIN_VARIANT = new Set(["hot", "regular", "single", "unspecified"]);
@@ -4644,16 +4714,20 @@ const changeLine = c => `${diffName(c)}: ${money(c.before)} ${onDay(c.before_dat
    act: the data attribute the switch answers to ("sn" for the diner, "ck" for the owner). */
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 const NEW_TO_US = "new to us";    // a price with nothing of the same channel to compare with
-function summaryHtml(counts, channel, cafe, total, known, act){
+function summaryHtml(counts, channel, cafe, total, known, act, note){
   const k = counts.check + counts.changed, restSame = counts.fresh === 0 && counts.other === 0;
   const look = k ? `Only the ${plural(k, "marked item needs", "marked items need")} a look.${restSame ? " The rest match our last check." : ""}`
                  : restSame ? "Nothing needs a look. Everything matches our last check." : "Nothing needs a look.";
-  const other = channel === "online" ? "in_store" : "online";
-  const switcher = `<p class="sum-switch" id="sum-switch">Compared with ${CHANNEL_WORDS[channel]} prices. ` +
-    `<button type="button" class="textbtn inline" data-${act}="chan" data-to="${other}">Switch to ${CHANNEL_WORDS[other]}</button></p>`;
+  // which list these prices are: the small print's choice is marked, and a press counts everything again
+  const said = note && listFromNote(note) === channel ? noteWords(note) : "";
+  const switcher = `<div class="sum-q" id="sum-q"><p class="sum-qh" id="sum-qh">Which prices are these?</p>` +
+    `<div class="qchoices" role="group" aria-labelledby="sum-qh">` + CHANNELS.map(c =>
+      `<button type="button" class="chip" data-${act}="chan" data-to="${c}" aria-pressed="${c === channel}">${CHANNEL_CHOICES[c]}</button>`).join("") + `</div>` +
+    (said ? `<p class="sum-note" id="sum-note">${said}</p>` : "") +
+    (!channel ? `<p class="sum-note" id="sum-pick">Choose one, and we compare these with our last check.</p>` : "") + `</div>`;
   // many rows with nothing to compare in this channel: say plainly that they become our first
   const none = !known || !known.list.some(o => o.prices.some(e => channelOf(e.b) === channel));
-  const first = counts.nocompare >= 3 && counts.nocompare * 5 >= total
+  const first = channel && counts.nocompare >= 3 && counts.nocompare * 5 >= total
     ? `<p class="sum-first" id="sum-first">` + (none ? `We have no ${CHANNEL_WORDS[channel]} prices from ${esc(cafe)} yet, so these become our first.`
                                                      : `We have no ${CHANNEL_WORDS[channel]} price yet for ${counts.nocompare} of these, so they become our first.`) + `</p>` : "";
   return `<p class="sum-look">${look}</p>` + switcher + first;
@@ -4674,7 +4748,7 @@ const SN_SAY = {
   too_many: "Use up to 6 photos.",
   need_row: "Keep at least one item with a name.",
   send_failed: "We could not send that. Please try again in a moment.",
-  need_channel: "Choose where this menu is from."
+  need_channel: "Choose which prices these are."
 };
 const UNDO_WAIT = 6000;           // milliseconds the "Undo" line stays after a row is removed
 /* what is held belongs to one cafe: another cafe starts afresh */
@@ -4736,19 +4810,12 @@ function paintSnapMissing(){
     `<p class="sub">This cafe is not on Counter yet, so we cannot take its menu today.</p>` +
     `<div class="up"><div class="upacts"><button type="button" class="btn" data-nav="${esc(snapAddr())}">Pick another cafe</button></div></div>`;
 }
-/* "Where is this menu from?": one required choice before any menu is read, for the owner and the diner alike */
-const channelHtml = (prefix, chosen) => `<fieldset class="channel" id="${prefix}-channel"><legend class="ask">Where is this menu from?</legend>` +
-  `<div class="tiles chtiles">` +
-  `<button type="button" class="tile" data-ch="in_store" aria-pressed="${chosen === "in_store"}"><span class="t1">In the cafe</span>` +
-    `<span class="t2">Menu board, printed menu or counter</span></button>` +
-  `<button type="button" class="tile" data-ch="online" aria-pressed="${chosen === "online"}"><span class="t1">Online</span>` +
-    `<span class="t2">Website, ordering page or delivery app</span></button></div></fieldset>`;
-/* screen 2: where the menu is from, then photos, from the camera or the phone's pictures */
+/* screen 2: photos, from the camera or the phone's pictures. Which prices they are is asked after the read. */
 function paintSnapPhotos(s){
   byId("snap-body").innerHTML =
     `<h1 tabindex="-1">Snap the menu</h1>` +
     `<p class="sub"><b>${esc(s.shop_name)}</b>, ${esc(s.district)}. Take a photo or a screenshot of the menu. Up to 6 photos.</p>` +
-    `<div class="up">` + channelHtml("sn", sn.channel) +
+    `<div class="up">` +
     `<div class="upacts">` +
       `<input class="offscreen" type="file" id="sn-cam" accept="image/*" capture="environment">` +
       `<label class="btn" for="sn-cam">Take a photo</label>` +
@@ -4760,7 +4827,6 @@ function paintSnapPhotos(s){
     `<p class="say" id="sn-msg" role="alert" tabindex="-1">${esc(sn.msg)}</p>` +
     `<p class="hint" id="sn-ref">${sn.ref ? `Error code: ${esc(refWords(sn.ref))}` : ""}</p>` +
     `<p class="say" id="sn-status" role="status"></p>` +
-    `<p class="hint" id="sn-needch"></p>` +
     `<div class="upacts"><button type="button" class="btn primary" id="sn-read" data-sn="read" disabled>${ICON.ai}Read the menu</button>` +
       `<button type="button" class="btn" data-nav="${esc(snapAddr({at: "a:" + s.district}))}">Back</button></div></div>`;
   paintSnapFiles();
@@ -4776,9 +4842,8 @@ function paintSnapFiles(){
 }
 function paintSnapState(){
   const btn = byId("sn-read");
-  if(btn) btn.disabled = sn.busy || sn.adding || !sn.files.length || !sn.channel;
+  if(btn) btn.disabled = sn.busy || sn.adding || !sn.files.length;
   upSay("sn-status", sn.busy ? "Reading the menu. This usually takes under a minute." : sn.adding ? "Getting the photos ready." : "");
-  upSay("sn-needch", sn.files.length && !sn.channel ? SN_SAY.need_channel : "");
 }
 /* photos only, 6 at most, each made smaller the same way as the owner's */
 async function snapAdd(chosen){
@@ -4801,7 +4866,7 @@ async function snapAdd(chosen){
   paintSnapFiles();
 }
 async function snapRead(){
-  if(sn.busy || sn.adding || !sn.files.length || !sn.channel) return;
+  if(sn.busy || sn.adding || !sn.files.length) return;
   const id = sn.cafe;
   sn.busy = true; sn.msg = ""; sn.ref = "";
   upSay("sn-msg", ""); upSay("sn-ref", ""); upSay("sn-filemsg", "");
@@ -4826,7 +4891,7 @@ async function snapRead(){
               section: typeof r.section === "string" ? r.section.trim() : "", price: price, kind: rowKind(r.kind),
               unsure: r.unsure === true || price === "", looked: false, removed: false};
     });
-    Object.assign(sn, {read: sn.rows.length, done: false, diff: null, known: knownFor(id), open: null, find: "", searchOpen: false, fold: new Map(), okSecs: new Set()});
+    Object.assign(sn, {read: sn.rows.length, done: false, diff: null, known: knownFor(id), note: got.note || null, channel: listFromNote(got.note), open: null, find: "", searchOpen: false, fold: new Map(), okSecs: new Set()});
     history.pushState(null, "", snapAddr({cafe: id, step: "check"}));
     route();
     return;
@@ -4873,7 +4938,7 @@ function snapGroups(state){
     .map(g => ({key: g[0], name: g[1], chip: g[2], items: state.filter(x => x.group === g[0])}));
   const secs = [];
   state.forEach(x => { if(x.group.indexOf("s:") === 0 && secs.indexOf(x.group) === -1) secs.push(x.group); });
-  return fixed.concat(secs.map(k => ({key: k, name: k.slice(2), items: state.filter(x => x.group === k), section: true}))).filter(g => g.items.length);
+  return fixed.concat(secs.map(k => ({key: k, name: sentenceCase(k.slice(2)), items: state.filter(x => x.group === k), section: true}))).filter(g => g.items.length);
 }
 const matchFind = r => { const q = fold(sn.find); return !q || fold(r.name).indexOf(q) !== -1 || fold(r.variant).indexOf(q) !== -1; };
 function snapRowHtml(x){
@@ -4896,8 +4961,9 @@ function snapRowHtml(x){
 }
 const needsLookGroup = g => g === "check" || g === "changed";
 function secState(items){
+  if(!sn.channel) return "";
   const other = items.filter(x => x.s.status !== "same").length;
-  return other === 0 ? "All match our last check" : `${items.length - other} match, ${other} ${NEW_TO_US}`;
+  return other === 0 ? "All match our last check" : other === items.length ? `${other} ${NEW_TO_US}` : `${items.length - other} match, ${other} ${NEW_TO_US}`;
 }
 /* ----- the pieces both check screens share: a group's header, the search chip and the search field ----- */
 /* one header for every group: its name (and a short state under it), its count at the right, and a chevron that folds it */
@@ -4930,7 +4996,7 @@ function paintSnapList(keepBar){
   const s = SHOPS.get(sn.cafe), box = byId("sn-groups");
   if(!s || !box) return;
   const state = snapState(), groups = snapGroups(state), counts = snapCounts(state), searching = fold(sn.find) !== "";
-  byId("sn-sum").innerHTML = sn.known ? summaryHtml(counts, sn.channel, s.shop_name, state.length, sn.known, "sn")
+  byId("sn-sum").innerHTML = sn.known ? summaryHtml(counts, sn.channel, s.shop_name, state.length, sn.known, "sn", sn.note)
     : `<p class="sum-look" id="sn-noload">We could not load our prices for this cafe, so nothing is compared yet. You can still check and send these.</p>`;
   if(!keepBar) byId("sn-chipbar").innerHTML = sn.searchOpen ? searchRow("sn", sn.find)
     : `<div class="chips" id="sn-chips" aria-label="Groups">` + searchChip("sn") + groups.map((g, i) => `<button type="button" class="chip" data-sn="chip" data-g="${i}">` +
@@ -5068,18 +5134,6 @@ function paintSnapThanks(s){
       `</ul></section>` : "") +
     `<div class="up"><div class="upacts"><button type="button" class="btn primary" data-nav="${esc(snapAddr())}">Snap another cafe</button></div></div>`;
 }
-/* where the menu is from: the diner's and the owner's question */
-document.addEventListener("click", e => {
-  const el = e.target.closest("[data-ch]");
-  if(!el) return;
-  const ch = el.dataset.ch;
-  if(CHANNELS.indexOf(ch) === -1) return;
-  if(screen === "snap"){ sn.channel = ch; }
-  else if(screen === "menu"){ up.channel = ch; }
-  else return;
-  el.closest(".chtiles").querySelectorAll("[data-ch]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.ch === ch)));
-  if(screen === "snap") paintSnapState(); else paintUpState();
-});
 document.addEventListener("click", e => {
   const el = e.target.closest("[data-sn]");
   if(!el || el.disabled || screen !== "snap") return;
@@ -5485,7 +5539,8 @@ Promise.all([
     if(!r.ok) throw new Error("site_data.json " + r.status);
     return r.json();
   }),
-  fetch("counter_data.json").then(r => r.ok ? r.json() : null).catch(() => null)
+  fetch("counter_data.json").then(r => r.ok ? r.json() : null).catch(() => null),
+  loadDates()                     // the owner's prices in their other lists, for My prices; never fails
 ]).then(both => {
   D = both[0];
   C = both[1] && Array.isArray(both[1].launches) ? both[1] : null;

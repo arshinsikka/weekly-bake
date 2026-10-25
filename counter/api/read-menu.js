@@ -41,7 +41,12 @@ const INSTRUCTION = [
   "pastry: croissants, danishes, buns, tarts, cookies, scones, bread and other bakes that are not a cake and not savoury.",
   "other: anything that is none of these.",
   "If a price cannot be read with confidence, set price to null and unsure to true. Never guess a price.",
-  "If the files are not a menu, return no rows and set not_a_menu to true."
+  "If the files are not a menu, return no rows and set not_a_menu to true.",
+  "price_note: what the menu's small print says about its prices, only from what is printed. Never guess.",
+  "excludes_gst: true when it says prices are before GST, for example \"PRICES W/O GST\", \"prices exclude GST\" or \"++\".",
+  "service_charge: true when it says a service charge is added.",
+  "says_dine_in: true when it says these are dine-in prices. says_takeaway: true when it says these are takeaway prices.",
+  "text: the small print about prices, quoted as printed, up to 200 characters, or an empty string."
 ].join("\n");
 
 const SCHEMA = {
@@ -62,10 +67,29 @@ const SCHEMA = {
         },
         required: ["name", "section", "variant", "price", "unsure", "kind"]
       }
+    },
+    // what the small print says about the prices: before GST, a service charge, dine-in or takeaway
+    price_note: {
+      type: "object",
+      properties: {
+        excludes_gst: {type: "boolean"},
+        service_charge: {type: "boolean"},
+        says_dine_in: {type: "boolean"},
+        says_takeaway: {type: "boolean"},
+        text: {type: "string"}
+      },
+      required: ["excludes_gst", "service_charge", "says_dine_in", "says_takeaway", "text"]
     }
   },
-  required: ["not_a_menu", "items"]
+  required: ["not_a_menu", "items", "price_note"]
 };
+const MAX_NOTE = 200;
+/* the small print as the model gave it -> only true or false, and at most 200 characters of text */
+function cleanNote(n){
+  if(!n || typeof n !== "object") return null;
+  return {excludes_gst: n.excludes_gst === true, service_charge: n.service_charge === true, says_dine_in: n.says_dine_in === true,
+          says_takeaway: n.says_takeaway === true, text: text(n.text, MAX_NOTE)};
+}
 
 const MESSAGES = {
   method: "Send a POST request.",
@@ -171,7 +195,8 @@ export default {
     return reply(200, {
       not_a_menu: got.menu.not_a_menu,
       items: items,
-      dropped: rows.length - items.length
+      dropped: rows.length - items.length,
+      price_note: cleanNote(got.menu.price_note)
     });
   }
 };

@@ -14,7 +14,7 @@ sale), the same rule as build_counter_data.py's counts(). A row with no
 price_basis is kept with basis "": Counter never compares it.
 
 Counter's What changed compares a menu that was just read only with prices of
-the same channel: in the cafe (dine_in, takeaway) or online (online_order).
+the same price list: dine_in, takeaway or online_order.
 
 Input, read only: menu_items_all.csv. Output: counter/menu_dates.json.
 No network calls. Prints counts only.

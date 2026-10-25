@@ -18,6 +18,7 @@ const MAX_MENU = 150;            // own menu rows
 const IDEAS = 3;
 const TITLE_MAX = 80, WHAT_MAX = 400, WHY_MAX = 300, ITEMS_MAX = 6, IDS_MAX = 8;
 const SHOWN_MAX = 30, REQUEST_MAX = 200;
+const KINDS = ["set", "offer", "price_change", "new_item"];     // what an idea is: the page shows "Usually $X" for a set only
 const PRICE_MIN = 0.1, PRICE_MAX = 999;
 // The platform stops this function at 60 seconds (vercel.json). All the tries
 // together are given a little less, so the reply below is sent before that.
@@ -48,6 +49,7 @@ const SCHEMA = {
       items: {
         type: "object",
         properties: {
+          kind: {type: "string", enum: KINDS},
           title: {type: "string"},
           what_to_do: {type: "string"},
           why: {type: "string"},
@@ -55,13 +57,13 @@ const SCHEMA = {
           suggested_price: {type: ["number", "null"]},
           evidence_ids: {type: "array", items: {type: "string"}}
         },
-        required: ["title", "what_to_do", "why", "items", "suggested_price", "evidence_ids"]
+        required: ["kind", "title", "what_to_do", "why", "items", "suggested_price", "evidence_ids"]
       }
     }
   },
   required: ["ideas"]
 };
-const SHAPE = "title (at most 8 words), what_to_do (1 to 2 sentences), why (1 sentence), items (names from own_menu), " +
+const SHAPE = "kind (set, offer, price_change or new_item), title (at most 8 words), what_to_do (1 to 2 sentences), why (1 sentence), items (names from own_menu), " +
   "suggested_price (a number, or null) and evidence_ids";
 const ASK = `Here is the cafe's data as JSON. Reply with 3 ideas: ${SHAPE}.\n\n`;
 /* mode "one": one new idea, or one idea changed as the owner asked, never one already shown or turned down */
@@ -112,6 +114,7 @@ function cleanIdea(i, names, ids){
   const items = (Array.isArray(i.items) ? i.items : []).map(x => names.get(text(x, 200).toLowerCase())).filter(Boolean);
   const p = i.suggested_price;
   return {
+    kind: KINDS.indexOf(i.kind) !== -1 ? i.kind : null,
     title: title,
     what_to_do: what,
     why: text(i.why, WHY_MAX),

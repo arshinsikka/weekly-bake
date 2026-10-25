@@ -570,8 +570,9 @@ html.keys .offscreen:focus-visible + .btn{outline:2px solid var(--ink); outline-
 .idea{transition:opacity .25s ease}
 .idea.ifade{opacity:0}
 .idea.iwork > :not(.say){opacity:.55}
-.idea:focus{outline:none}
-.idea:focus-visible{outline:2px solid var(--ink); outline-offset:4px}
+/* the heading, the message and a card get focus only from the page, for screen readers: Tab never lands
+   there, so they show no outline, even after keys were used */
+#ideas-h:focus-visible, #ideas-msg:focus-visible, #ideaspage .idea:focus-visible{outline:none}
 .islot{min-height:120px}
 .ichange{max-width:560px; padding:14px; border:1px solid var(--line); border-radius:12px; background:var(--bg)}
 .ichange > * + *{margin-top:10px}
@@ -4613,6 +4614,9 @@ function sentenceCase(s){
   const out = raw.split(/(\s+)/).map(w => {
     const letters = w.replace(/[^\p{L}]/gu, "");
     if(!letters) return w;
+    // a joined word whose parts are each just capitalised (Dine-In, Take-Away) is lower-cased like any other
+    const parts = w.split("-").map(x => x.replace(/[^\p{L}]/gu, ""));
+    if(parts.length > 1 && parts.every(x => /^\p{Lu}\p{Ll}+$/u.test(x))) return w.toLowerCase();
     if(letters === letters.toUpperCase() && letters.length <= 3 && (!allCaps || !/[AEIOU]/.test(letters))) return w;
     if(/\p{Ll}/u.test(letters) && /\p{Lu}/u.test(letters.slice(1))) return w;
     return w.toLowerCase();
@@ -5345,6 +5349,22 @@ function ideaMenu(id){
   const later = r => { const t = nineTag(r.name, r.variant); return t && myItems.indexOf(t) !== -1 ? 0 : 1; };
   return rows.map((r, i) => ({r: r, i: i})).sort((a, b) => later(a.r) - later(b.r) || a.i - b.i).map(x => x.r);
 }
+/* The menu row behind a compared price, when it is not simply the item: "Pistachio Kouign Amann" for
+   kouign-amann. My prices' price for an item is the cheapest row the compare rule (nineTag) tags as it,
+   newest in its list; this finds that row again. "" when the row is the item itself, or cannot be told. */
+function rowBehind(k, v, list){
+  const item = new Set(menuWords(itemName(k)));
+  const plain = (name, variant) => diffCanon(name, variant).words.every(w => item.has(w));
+  const kept = menuOf(shop.shop_id), mine = kept && kept.compared ? kept.compared[k] : null;
+  if(mine) return plain(mine.name, mine.variant || "") ? "" : mine.name;
+  const d = datesFor(shop.shop_id) || {}, want = cents(v);
+  const keys = Object.keys(d).filter(key => key !== "_shop" && Array.isArray(d[key]) && nineTag(key.split("|")[0], key.split("|")[1] || "") === k &&
+    d[key].some(e => Array.isArray(e) && e[1] === list && typeof e[0] === "number" && cents(e[0]) === want &&
+                     e === d[key].find(x => Array.isArray(x) && x[1] === list)));      // the newest price in that list
+  if(!keys.length || keys.some(key => plain(key.split("|")[0], key.split("|")[1] || ""))) return "";
+  const r = (fileRows[shop.shop_id] || []).find(x => diffKey(x.name, x.variant) === keys[0]);
+  return r ? r.name.trim() : capital(keys[0].split("|")[0]);
+}
 /* what the menu itself says: how many of each kind and their prices, and whether it has a set */
 function menuFacts(menu){
   const out = [];
@@ -5382,11 +5402,12 @@ async function ideasContext(){
     if(!c.enough) return;
     const days = c.others.map(r => r.observed_date).filter(Boolean).sort(), last = days[days.length - 1];
     const when = !days.length ? "" : days[0] === last ? checkedOn(last) : `checked ${dayMonth(days[0])} to ${dayMonth(last)}`;
+    const row = rowBehind(k, v, c.channel);
     const text = `${c.less === c.n ? `All ${c.n} cafes charge` : `${c.less} of ${c.n} cafes ${c.less === 1 ? "charges" : "charge"}`} less than your ` +
-      `${CHANNEL_WORDS[c.channel]} ${ideaItem(k)} at ${money(v)}` +
+      `${CHANNEL_WORDS[c.channel]} ${ideaItem(k)}${row ? ` (${row})` : ""} at ${money(v)}` +
       (c.more ? `, and ${c.more} ${c.more === 1 ? "charges" : "charge"} more` : c.less < c.n ? ", and none charge more" : "") +
       (c.usual != null ? ` (usual ${money(c.usual)})` : "") + ".";
-    ctx.comparison.push({id: fact(text, "", when), item: itemName(k), your_price: v, list: c.channel, cafes_compared: c.n,
+    ctx.comparison.push({id: fact(text, "", when), item: itemName(k), ...(row ? {menu_row: row} : {}), your_price: v, list: c.channel, cafes_compared: c.n,
       share_charging_less: Math.round(100 * c.less / c.n) / 100, share_charging_more: Math.round(100 * c.more / c.n) / 100, usual_price: c.usual});
   });
   if(!ctx.comparison.length) ctx.notes.comparison = "none of the items we compare has enough prices for this shop";
@@ -5461,6 +5482,7 @@ function apartCents(names, menu){
   if(rows.some(r => !r || typeof r.price !== "number") || new Set(rows.map(r => r.list)).size !== 1) return null;
   return rows.reduce((t, r) => t + cents(r.price), 0);
 }
+const IDEA_KINDS_OF = ["set", "offer", "price_change", "new_item"];     // the kinds the model gives an idea
 function ideaFrom(i, built){
   if(!i || typeof i !== "object") return null;
   const words = (v, max) => typeof v === "string" ? v.trim().slice(0, max) : "";
@@ -5469,8 +5491,10 @@ function ideaFrom(i, built){
   const ids = Array.isArray(i.evidence_ids) ? [...new Set(i.evidence_ids.filter(x => typeof x === "string"))] : [];
   const price = typeof i.suggested_price === "number" && isFinite(i.suggested_price) && i.suggested_price > 0 ? Math.round(i.suggested_price * 100) / 100 : null;
   const items = Array.isArray(i.items) ? [...new Set(i.items.filter(x => typeof x === "string" && x.trim() !== "").map(x => x.trim()))].slice(0, 6) : [];
-  return {key: "i" + textHash(title + "|" + what), title: title, what_to_do: what, why: words(i.why, 300),
-          items: items, suggested_price: price, apart_cents: apartCents(items, built.ctx.own_menu),
+  const kind = IDEA_KINDS_OF.indexOf(i.kind) !== -1 ? i.kind : "";
+  return {key: "i" + textHash(title + "|" + what), kind: kind, title: title, what_to_do: what, why: words(i.why, 300),
+          // "Usually $X if bought separately" belongs to a set only
+          items: items, suggested_price: price, apart_cents: kind === "set" ? apartCents(items, built.ctx.own_menu) : null,
           based_on: ids.filter(x => built.facts.has(x)).map(x => built.facts.get(x))};      // an id we did not give is left out
 }
 const IDEAS_BASED_SHOWN = 3;      // "Based on" lines shown before "Show N more"
@@ -5487,7 +5511,7 @@ function ideaLines(v){
       (webLink(f.source) ? ` <a href="${esc(f.source)}" target="_blank" rel="noopener">${esc(f.link || "See the source")}</a>` : "") + `</span>` : "") + `</li>`).join("");
   return head + `<p class="iwhat">${esc(v.what_to_do)}</p>` +
     (v.suggested_price != null ? `<p class="iprice">Suggested price: <strong>${money(v.suggested_price)}</strong></p>` +
-      (Number.isFinite(v.apart_cents) ? `<p class="iapart muted">Usually ${money(v.apart_cents / 100)} if bought separately.</p>` : "") : "") +
+      (v.kind === "set" && Number.isFinite(v.apart_cents) ? `<p class="iapart muted">Usually ${money(v.apart_cents / 100)} if bought separately.</p>` : "") : "") +
     (v.why ? `<p class="iwhy"><span class="lbl">Why:</span> ${esc(v.why)}</p>` : "") +
     (based ? `<div class="ibased"><p class="lbl">Based on</p><ul>${based}</ul>` +
       (more > 0 ? `<button type="button" class="textbtn inline" data-ai="more" data-key="${esc(v.key)}" aria-expanded="${open}">` +

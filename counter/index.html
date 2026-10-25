@@ -262,22 +262,98 @@ html.keys .offscreen:focus-visible + .btn{outline:2px solid var(--ink); outline-
 /* Check your menu: the choice to share the prices with Counter, on its own line above the buttons */
 .sharebox{flex:1 1 100%; display:flex; align-items:flex-start; gap:8px; font-size:14px; color:var(--ink); cursor:pointer}
 .sharebox input{flex:none; width:18px; height:18px; margin:1px 0 0; accent-color:var(--ink); cursor:pointer}
-/* What changed: the prices that differ from the menu we hold, one line each */
-.diffbox{max-width:640px; margin-top:16px}
-.diffbox h2{font-size:20px; margin-bottom:6px}
+/* the biggest changes on the thank-you card: one line each */
 .difflist li{padding:8px 0; border-top:1px solid var(--rule); color:var(--ink)}
 .difflist li:first-child{border-top:0}
 .difflist li.same{color:var(--muted)}
-/* Help keep prices fresh: the rows a diner checks, one card each, the name on its own line on a phone */
-.snaprows{max-width:720px}
-.snaprows li{display:grid; grid-template-columns:minmax(0, 1fr) 104px; gap:8px 10px; align-items:end; padding:12px 0; border-top:1px solid var(--rule)}
-.snaprows li .sn-name{grid-column:1 / -1}
-.snaprows .field input{min-height:40px}
-.snaprows .textbtn{justify-self:start; min-height:40px}
-@media (min-width:641px){
-  .snaprows li{grid-template-columns:minmax(0, 2fr) minmax(0, 1fr) 104px auto}
-  .snaprows li .sn-name{grid-column:auto}
-}
+/* "Where is this menu from?": two large choices, side by side even on a phone */
+.channel{border:0; margin:0; padding:0; min-width:0}
+.channel legend{padding:0}
+.chtiles{grid-template-columns:repeat(2, minmax(0, 1fr))}
+.chtiles .tile{min-height:88px}
+/* the summary over a checked menu, for the diner and the owner */
+.readh{font-size:26px}
+.sumblock > p{margin-top:4px}
+.sumblock .sum-look{color:var(--ink)}
+.sum-switch, #ck-status{font-size:14px; color:var(--muted)}
+.textbtn.inline{min-height:32px; padding:0 2px; color:var(--ink); font-weight:600; text-decoration:underline; text-underline-offset:2px}
+/* the check screens: one bar of chips that stays at the top, as short as it can be */
+#snap.checking{padding-bottom:120px}
+.chipbar{position:sticky; top:0; z-index:4; margin:14px -24px 0; padding:8px 24px; background:var(--bg); border-bottom:1px solid var(--line)}
+.chips{display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; padding-right:32px;
+  -webkit-mask-image:linear-gradient(90deg, #000 85%, transparent); mask-image:linear-gradient(90deg, #000 85%, transparent)}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none; display:inline-flex; align-items:center; gap:4px; min-height:44px; padding:0 14px; border:1px solid var(--line); border-radius:999px;
+  background:var(--panel); color:var(--ink); font-size:14px; font-weight:600; white-space:nowrap; cursor:pointer}
+.chip:hover{border-color:var(--ink)}
+.chip[aria-current="true"], .chip[aria-pressed="true"]{background:var(--ink); border-color:var(--ink); color:#fff}
+.chip .ic{width:14px; height:14px; stroke-width:2.5}
+.chip.icon{width:44px; padding:0; justify-content:center}
+.chip.icon .ic{width:18px; height:18px; stroke-width:2}
+/* the search, open in the bar */
+.searchrow2{display:flex; align-items:center; gap:8px}
+.searchfield{position:relative; flex:1; min-width:0}
+.searchfield > .ic{position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--muted); pointer-events:none}
+.searchfield input{width:100%; min-height:44px; padding:0 44px 0 38px; border:1px solid var(--ink); border-radius:999px; background:var(--panel); color:var(--ink); font:inherit}
+.searchfield input::-webkit-search-cancel-button{-webkit-appearance:none; display:none}
+.clearin{position:absolute; right:2px; top:50%; transform:translateY(-50%); width:40px; height:40px; border:0; border-radius:50%; background:none; color:var(--muted);
+  display:inline-flex; align-items:center; justify-content:center; cursor:pointer}
+.clearin:hover{color:var(--ink)}
+.searchrow2 .btn{min-height:44px; flex:none}
+#sn-nomatch, #ck-none{margin-top:18px; color:var(--ink)}
+/* every group the same: a header row with its name, its count at the right and a chevron, then its rows. No boxes. */
+.cgroup{margin-top:6px}
+.ghead{width:100%; display:flex; align-items:center; gap:10px; min-height:52px; padding:10px 4px; border:0; border-bottom:1px solid var(--line);
+  background:none; text-align:left; color:var(--ink); cursor:pointer}
+.ghead.static{cursor:default; min-height:44px}
+.ghead .gname{flex:1; min-width:0; display:flex; flex-direction:column; gap:1px}
+.ghead .gtitle{display:flex; align-items:center; gap:6px; font:500 19px/1.2 var(--f-display); overflow-wrap:anywhere}
+.ghead .gtitle .ic{width:15px; height:15px; stroke-width:2.5}
+.ghead .gsub{font-size:13px; color:var(--muted)}
+.ghead .gcount{flex:none; font-size:14px; font-weight:600; color:var(--muted); font-variant-numeric:tabular-nums}
+.ghead .chev{flex:none; width:18px; height:18px; color:var(--muted); transition:transform 150ms ease-out}
+.ghead[aria-expanded="false"] .chev{transform:rotate(-90deg)}
+@media (prefers-reduced-motion:reduce){ .ghead .chev{transition:none} }
+.crow{border-bottom:1px solid var(--rule)}
+.crow-btn{width:100%; display:flex; align-items:center; gap:12px; min-height:52px; padding:8px 4px; border:0; background:none; text-align:left; color:var(--body); cursor:pointer}
+.crow-btn:hover{background:var(--picked)}
+.cw{flex:1; min-width:0; display:flex; flex-direction:column; align-items:flex-start; gap:2px}
+.cn{color:var(--ink); font-weight:600; overflow-wrap:anywhere}
+.cv{font-size:13px; color:var(--muted)}
+.cmarks{display:flex; flex-wrap:wrap; align-items:center; gap:4px 8px; margin-top:2px}
+.cmark{font-size:12px; font-weight:600; color:var(--muted)}
+.cp{flex:none; display:flex; align-items:baseline; gap:6px; color:var(--ink); font-weight:600; font-variant-numeric:tabular-nums}
+.cwas{color:var(--muted); font-weight:400}
+.crow.changed .cnow{color:var(--rust)}
+.crow.open{padding:12px 8px 14px; background:var(--picked)}
+.cedit > * + *{margin-top:10px}
+.cedit2{display:grid; grid-template-columns:minmax(0, 1fr) 110px; gap:10px}
+.cedit .field input{min-height:44px}
+.ckselect{width:100%; min-height:44px; padding:0 10px; border:1px solid var(--line); border-radius:var(--r); background:var(--panel); color:var(--ink); font:inherit}
+.okbtn{margin:10px 0 6px}
+/* the bottom bar: its buttons fill the width */
+.savebar .barin{flex:1 1 100%; max-width:992px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; gap:8px 10px}
+.barin .barleft{flex:4 1 0; min-width:0}
+.barin .barright{flex:6 1 0; min-width:0}
+.barin .barback{flex:35 1 0; min-width:0}
+.barin .barsave{flex:65 1 0; min-width:0; padding:0 10px; font-size:14px; white-space:normal; line-height:1.2}
+.barin .btn{min-height:48px}
+.barin .btn .ic{width:16px; height:16px}
+.barin .btn:disabled{opacity:1; color:var(--muted); background:var(--bg)}
+/* the thank-you: three counts side by side, then short lists */
+.tnums{display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:10px; margin-top:20px; max-width:560px}
+.tnum{display:flex; flex-direction:column; align-items:flex-start; gap:2px; padding:14px; background:var(--panel); border:1px solid var(--line); border-radius:var(--r-panel)}
+.tbig{font:500 34px/1 var(--f-display); color:var(--ink); font-variant-numeric:tabular-nums}
+.tword{font-size:13px; font-weight:600; color:var(--muted)}
+.tsec{margin-top:26px; max-width:560px}
+.tsec h2{font-size:19px; margin-bottom:4px}
+.nearlist li{display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid var(--rule)}
+.nearlist .btn{flex:none; min-height:44px}
+@media (max-width:640px){ .chipbar{margin:14px -16px 0; padding:8px 16px} }
+/* Check your menu: a comfortable column on a laptop, the list and the compared items side by side */
+#upload.check{width:100%; max-width:1040px}     /* full width: in the phone's column layout auto margins would shrink it to its widest row */
+@media (min-width:900px){ #upload.check .ckcols{grid-template-columns:minmax(0, 1fr) 300px; gap:28px; margin-top:4px} }
+@media (max-width:899px){ .app .chipbar{top:60px} }
 .field.mini label{font-size:13px; margin-bottom:4px}
 .field input:disabled{background:var(--bg)}
 .field input[aria-invalid="true"]{border:2px solid var(--ink)}
@@ -960,6 +1036,8 @@ const ICON = {
   minus: `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg>`,
   plus: `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>`,
   tick: `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>`,
+  search: `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg>`,
+  chev: `<svg class="ic chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>`,
   menu: `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>`,
   heart: `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5S4 15.2 4 9.4a4.4 4.4 0 0 1 8-2.5 4.4 4.4 0 0 1 8 2.5c0 5.8-8 11.1-8 11.1z"/></svg>`,
   // the AI's mark: one sparkle, always beside words
@@ -1080,7 +1158,7 @@ let wantOpen = null;          // an item the Saved page asked the next page to o
 const priceRow = key => D.price_table.find(r => r.item_canonical === key) || {};
 const itemName = key => priceRow(key).display_name || key;
 const mine = key => D.named_prices[key].find(r => r.shop_id === shop.shop_id);
-const realPrice = key => mine(key).price;
+const realPrice = key => printedPrice(mine(key));     // the printed price, before any charges our data added
 const cur = key => trial.has(key) ? trial.get(key) / 100 : realPrice(key);
 const changed = key => trial.has(key) && trial.get(key) !== cents(realPrice(key));
 const kindOf = (p, v) => cents(p) > cents(v) ? "more" : cents(p) < cents(v) ? "less" : "same";
@@ -1160,13 +1238,52 @@ function pricesSummary(){
   if(parts.length === 1) return more ? `All ${said.length} of your items cost more than most cafes charge.` : less ? `All ${said.length} of your items cost less than most cafes charge.` : `All ${said.length} of your items are about the usual price.`;
   return `Of your ${said.length} items, ` + parts.slice(0, -1).join(", ") + " and " + parts[parts.length - 1] + ".";
 }
+/* ---------- like with like ----------
+   My prices compares the open shop's price only with prices of the same
+   channel: in the cafe (dine_in, takeaway) or online (online_order). The
+   shop's channel for an item is its own record's price_basis, or for a price
+   from its own menu the channel it chose when uploading; in the cafe when
+   neither says. The reader can switch one item to the other channel.
+
+   Every price is the one printed on the menu, before charges: where our data
+   added service charge or GST to a price (its charges and listed_price), the
+   listed price is used and the cafe's row says what is added on top. No price
+   is ever estimated or turned into another channel's. */
+const printedPrice = r => !r ? null : (r.charges || []).length && typeof r.listed_price === "number" ? r.listed_price : r.price;
+/* "Plus service charge and GST": what a cafe adds on top of its printed price */
+function chargeWords(r){
+  const said = (r && r.charges || []).join(" ").toLowerCase(), sc = /service/.test(said), gst = /gst/.test(said);
+  return sc && gst ? "Plus service charge and GST" : sc ? "Plus service charge" : gst ? "Plus GST" : "";
+}
+const viewChan = new Map();       // item -> the channel the reader switched it to, for the open shop
+function homeChannel(k){
+  const rec = (D.named_prices[k] || []).find(r => r.shop_id === shop.shop_id), menu = menuOf(shop.shop_id);
+  if(rec && rec.price_basis !== "own_menu" && channelOf(rec.price_basis)) return channelOf(rec.price_basis);
+  return (rec && rec.channel) || (menu && menu.channel) || "in_store";
+}
+const chanOf = k => viewChan.get(k) || homeChannel(k);
+/* the other cafes' prices for an item in one channel, each at its printed price */
+const pricesIn = (k, ch) => (D.named_prices[k] || []).filter(r => r.shop_id !== shop.shop_id && channelOf(r.price_basis) === ch)
+  .map(r => Object.assign({}, r, {price: printedPrice(r), all_in: r.price}));
+const middle = list => {
+  const s = list.slice().sort((a, b) => a - b), n = s.length;
+  return n ? Math.round(100 * (n % 2 ? s[(n - 1) / 2] : (s[n / 2 - 1] + s[n / 2]) / 2)) / 100 : null;
+};
 function compare(key, v){
-  const others = D.named_prices[key].filter(r => r.shop_id !== shop.shop_id);
+  const channel = chanOf(key), others = pricesIn(key, channel), usual = middle(others.map(r => r.price));
   // with no price to compare with, no cafe charges less or more
   const less = v == null ? 0 : others.filter(r => r.price < v).length, more = v == null ? 0 : others.filter(r => r.price > v).length;
   const enough = others.length >= MIN_OTHERS;
-  return {others: others, n: others.length, less: less, more: more, enough: enough,
-          verdict: enough && v != null ? verdictOf(v, priceRow(key).median, less, more, others.length) : ""};
+  const prices = others.map(r => r.price);
+  return {others: others, n: others.length, less: less, more: more, enough: enough, channel: channel, usual: usual,
+          low: prices.length ? Math.min(...prices) : null, high: prices.length ? Math.max(...prices) : null,
+          verdict: enough && v != null ? verdictOf(v, usual, less, more, others.length) : ""};
+}
+/* "Compared with 66 cafes' in-cafe menu prices, before service charge and GST.", and the switch to the other channel */
+function basisHtml(k, c){
+  const other = c.channel === "online" ? "in_store" : "online", n = pricesIn(k, other).length;
+  return `<p class="muted small" id="d-basis">Compared with ${c.n} ${c.n === 1 ? "cafe's" : "cafes'"} ${c.channel === "online" ? "online" : "in-cafe menu"} prices, before service charge and GST.` +
+    (n >= MIN_OTHERS ? ` <button type="button" class="textbtn inline" data-act="chan" data-ch="${other}">Show ${other === "online" ? "online" : "in-cafe"} prices instead</button>` : "") + `</p>`;
 }
 
 /* "34% charge more than you", or "7 of 22 cafes charge more than you" */
@@ -1228,7 +1345,7 @@ function show(name){
   byId("steps").hidden = (upload && !!target) || name === "snap";
   const flow = upload || (name === "choose" && !!chooser && chooser.shop.shop_id === MY_ID && !chooser.edit);
   byId("upload").hidden = !upload;
-  byId("upload").className = name === "check" ? "stage wide check" : "stage";
+  byId("upload").className = name === "check" ? "stage check" : "stage";
   byId("ck-bar").hidden = name !== "check";
   byId("step-m").hidden = byId("step-c").hidden = !flow;
   byId("step-2-num").textContent = flow ? "4" : "2";
@@ -1298,7 +1415,7 @@ function openShop(s, ids, q){
   // a new shop, a new page, or a return from set-up starts the page afresh.
   // A change to the hidden items alone leaves the open tab and item be.
   const entering = screen !== "prices" || lastShop !== s.shop_id || page !== nextPage;
-  if(lastShop !== s.shop_id){ trial.clear(); test.clear(); compared = false; }
+  if(lastShop !== s.shop_id){ trial.clear(); test.clear(); viewChan.clear(); compared = false; }
   lastShop = s.shop_id;
   page = nextPage;
   if(entering) track("page_viewed", {page: page});
@@ -1438,7 +1555,7 @@ function paintList(){
 /* A row for an item the shop does not sell: who sells it and what cafes
    charge, the button that opens it, and the one that hides it. */
 function missingRowHtml(k){
-  const open = k === openItem, row = priceRow(k), name = esc(itemName(k));
+  const open = k === openItem, row = compare(k, null), name = esc(itemName(k));     // the range in this shop's channel, before charges
   return `<li><div class="row miss${open ? " open" : ""}" data-row="${esc(k)}"${open ? "" : ` data-act="open" data-item="${esc(k)}"`}>` +
     `<span class="what"><span class="item">${name}</span>` +
     `<span class="verdict usual" data-sell>${sellWords(k, "this")}</span>` +
@@ -1922,7 +2039,7 @@ function paintSaved(){
       `<li data-key="${esc(e.idea.key)}"><div class="words idea">${ideaLines(e.idea)}</div>` +
       acts(`<button type="button" class="btn quiet" data-ai="unsave" data-key="${esc(e.idea.key)}" aria-label="Remove: ${esc(e.idea.title)}">Remove</button>`) + `</li>`).join("") + `</ul>`;
     if(lacking.length) html += `<h3>Items I do not sell</h3><ul class="savedrows" id="saved-missing">` + lacking.map(e => {
-      const row = priceRow(e.item), name = itemName(e.item), known = D.named_prices[e.item];
+      const row = compare(e.item, null), name = itemName(e.item), known = D.named_prices[e.item];
       return `<li data-item="${esc(e.item)}"><div class="words"><p class="name">${esc(name)}</p>` +
         (row.low != null ? `<p data-range>Cafes charge ${money(row.low)} to ${money(row.high)}</p>` : "") +
         (e.cents != null ? `<p data-tried>Price you tried ${money(e.cents / 100)}</p>` +
@@ -1966,7 +2083,7 @@ const askHtml = () => `<div class="band" id="real-ask" role="alert" tabindex="-1
   `<button type="button" class="btn" data-act="realno">Keep my price</button></div>`;
 /* the top of the right panel on My prices: the item, the verdict, the price, the chart's words */
 function paintPricesTop(){
-  const k = openItem, rec = mine(k), real = rec.price, v = cur(k), trying = trial.has(k);
+  const k = openItem, rec = mine(k), real = realPrice(k), v = cur(k), trying = trial.has(k);
   const c = compare(k, v);
 
   byId("d-head").innerHTML =
@@ -1974,8 +2091,8 @@ function paintPricesTop(){
     (trying ? `<span class="tag">Trying a different price</span>` : "") + `</div>` +
     `<button type="button" class="btn" data-act="close">${ICON.close}Close</button>`;
 
-  const listed = rec.listed_price != null && (rec.charges || []).length
-    ? `<p class="muted small">Listed ${money(rec.listed_price)}. Includes ${esc(rec.charges.join(" and "))}.</p>` : "";
+  // the shop's own price is its printed one: what is added on top is said under it
+  const listed = chargeWords(rec) && rec.listed_price != null ? `<p class="muted small" id="d-charges">${chargeWords(rec)}.</p>` : "";
   // a price that comes from the owner's own menu says so, with the day it was saved
   const own = rec.price_basis === "own_menu" && dayMonth(rec.observed_date)
     ? `<p class="muted small" id="d-own">Updated by you on ${dayMonth(rec.observed_date)}.</p>` : "";
@@ -2007,7 +2124,9 @@ function paintPricesTop(){
       `<li class="says">${dot("less")}<span>${shareLine(c.less, c.n, "less", would)}</span></li>` +
       (would ? `<li class="real">${realLine(compare(k, real))}</li>` : "") +
     `</ul>` +
-    `<p class="count muted small" id="d-count">${c.n} cafes</p>`;
+    "";
+  // how many cafes, which prices, and the switch: one line under the chart
+  byId("d-compare").innerHTML += basisHtml(k, c);
 }
 /* ----- what a price is worth in a month -----
    The owner says how many they sell a day; the line is the sum only: the
@@ -2048,7 +2167,7 @@ document.addEventListener("input", e => {
 /* the same place for an item the shop does not sell: who sells it, a price to
    test, and what the cafes that sell it charge */
 function paintMissingTop(){
-  const k = openItem, v = priceNow(k), c = compare(k, v), usual = priceRow(k).median;
+  const k = openItem, v = priceNow(k), c = compare(k, v), usual = c.usual;
 
   byId("d-head").innerHTML =
     `<div class="title"><p class="label" id="d-name" tabindex="-1">${esc(itemName(k))}</p></div>` +
@@ -2085,7 +2204,9 @@ function paintMissingTop(){
       : `<li class="says">${dot("more")}<span>${shareLine(c.more, c.n, "more", true)}</span></li>` +
         `<li class="says">${dot("less")}<span>${shareLine(c.less, c.n, "less", true)}</span></li>`) +
     `</ul>` +
-    `<p class="count muted small" id="d-count">${c.n} cafes</p>`;
+    "";
+  // how many cafes, which prices, and the switch: one line under the chart
+  byId("d-compare").innerHTML += basisHtml(k, c);
 }
 
 /* ---------- the dot chart ----------
@@ -2151,7 +2272,7 @@ function drawChart(){
 
   // Under the line: this shop's price, the lowest and the highest. The usual
   // price is added only where its label has room.
-  const usual = priceRow(k).median;
+  const usual = c.usual;             // the middle of the prices shown: the same channel, before charges
   const wanted = (v == null ? [] : [{p: v, text: money(v), must: true, mine: true}])
     .concat([{p: lo, text: money(lo), must: true}, {p: hi, text: money(hi), must: true}]);
   if(usual != null && usual >= lo && usual <= hi) wanted.push({p: usual, text: `Usual ${money(usual)}`, must: false});
@@ -2183,14 +2304,15 @@ function drawChart(){
 /* ---------- list view ---------- */
 function paintCafes(){
   const k = openItem, v = priceNow(k);     // with no price, a row shows no difference
-  const priced = new Map(D.named_prices[k].map(r => [r.shop_id, r]));
+  // the cafes with a price in the channel being compared, at their printed prices
+  const c = compare(k, v), priced = new Map(c.others.map(r => [r.shop_id, r]));
   const isRival = id => rivals.some(o => o.shop_id === id);
   // cafes the owner added for this item alone, on My prices
   const own = page === "prices", extra = own ? itemRivals(k) : [];
   const byPrice = (a, b) => b.rec.price - a.rec.price || a.name.localeCompare(b.name);
   let rows;
   if(showAll){
-    rows = D.named_prices[k].filter(r => r.shop_id !== shop.shop_id)
+    rows = c.others
       .map(r => ({name: r.shop_name, rec: r, rival: isRival(r.shop_id), extra: extra.indexOf(r.shop_id) !== -1, id: r.shop_id})).sort(byPrice);
   } else {
     const all = rivals.map(o => ({name: o.shop_name, rec: priced.get(o.shop_id) || null, rival: false}))
@@ -2203,10 +2325,11 @@ function paintCafes(){
     (own ? `<p class="say" id="ir-say" role="status" tabindex="-1">${esc(ir.say)}</p>` : "") +
     `<ul class="cafes" id="cafes">` + rows.map(r => {
       if(!r.rec) return `<li data-cafe><div class="what"><p class="name">${esc(r.name)}</p></div>` +
-                        `<div class="side2"><p class="muted small">No price on file</p></div></li>`;
-      const when = dayMonth(r.rec.observed_date);
+                        `<div class="side2"><p class="muted small">No ${c.channel === "online" ? "online" : "in-cafe"} price on file</p></div></li>`;
+      const when = dayMonth(r.rec.observed_date), plus = chargeWords(r.rec);
       return `<li data-cafe${r.extra ? ` data-extra="${esc(r.id)}"` : ""}><div class="what"><p class="name">${esc(r.name)}` +
         (r.rival ? `<span class="tag">Your competitor</span>` : "") + (r.extra ? `<span class="tag">For this item only</span>` : "") + `</p>` +
+        (plus ? `<p class="sub" data-charges>${plus}</p>` : "") +
         `<p class="sub">${when ? `Checked ${when}. ` : ""}${menuLink(r.rec)}</p></div>` +
         `<div class="side2"><p class="price">${money(r.rec.price)}</p>` +
         (v == null ? "" : `<p class="says">${dot(kindOf(r.rec.price, v))}<span>${diffWords(r.rec.price, v)}</span></p>`) +
@@ -2358,7 +2481,8 @@ function drawMap(fit){
       `<span class="pop-name">${esc(shop.shop_name)}</span>` + (plain ? "" : `<span class="pop-price">${money(v)}</span>`) +
       `<span class="pop-line">Your shop</span>`, {offset: [0, -PIN_TOP], maxWidth: 260}).addTo(pins);
   }
-  const rows = D.named_prices[k].filter(r => r.lat != null && r.lng != null && r.shop_id !== shop.shop_id);
+  // the cafes with a price in the channel being compared, at their printed prices
+  const rows = compare(k, v).others.filter(r => r.lat != null && r.lng != null);
   const offs = fanOffsets(rows, pinned ? shop : null), added = itemRivals(k);
   rows.forEach(r => {
     // a cafe added for this item alone is drawn as a competitor here
@@ -2458,7 +2582,13 @@ document.addEventListener("click", e => {
   else if(act === "open"){ openItem = el.dataset.item; closed = false; ir.open = false; ir.find = ""; ir.say = ""; paint(true); focusOn("#d-name"); }
   else if(act === "close"){ openItem = null; closed = true; paint(); focusOn(`[data-go="${k}"]`); }
   // a price to try: the shop's own on My prices, the usual price for an item it does not sell
-  else if(act === "try"){ bag.set(k, cents(miss ? priceRow(k).median : realPrice(k))); paint(); focusOn(`[data-act="plus"]`); }
+  else if(act === "try"){ bag.set(k, cents(miss ? compare(k, null).usual : realPrice(k))); paint(); focusOn(`[data-act="plus"]`); }
+  // "Show online prices instead": this item is compared with the other channel's prices, until switched back
+  else if(act === "chan" && k && CHANNELS.indexOf(el.dataset.ch) !== -1){
+    if(el.dataset.ch === homeChannel(k)) viewChan.delete(k); else viewChan.set(k, el.dataset.ch);
+    paint(true);
+    focusOn(`[data-act="chan"]`);
+  }
   else if(act === "plus" || act === "minus"){
     bag.set(k, Math.max(FLOOR, bag.get(k) + (act === "plus" ? STEP : -STEP)));
     paint();
@@ -3150,7 +3280,7 @@ const UP_SAY = {
   postal_failed: "We could not look up the postal code. Try again.",
   name_needed: "Type your shop's name."
 };
-const up = {files: [], busy: false, adding: false};
+const up = {files: [], busy: false, adding: false, channel: ""};   // channel: "in_store" or "online", asked before a read
 let ed = null;                // the menu being checked: its rows, and which row is each compared item
 let myMenu = null;            // the saved menu, as it is written to the browser
 let menuLost = false;         // true when the browser would not keep it
@@ -3218,8 +3348,9 @@ function upSay(id, words){
 }
 function paintUpState(){
   const btn = byId("up-read");
-  if(btn) btn.disabled = up.busy || up.adding || !up.files.length;
+  if(btn) btn.disabled = up.busy || up.adding || !up.files.length || !up.channel;
   upSay("up-status", up.busy ? "Reading your menu. This usually takes under a minute. A long menu can take up to three minutes." : "");
+  upSay("up-needch", up.files.length && !up.channel ? SN_SAY.need_channel : "");
 }
 function paintFiles(){
   const list = byId("up-list");
@@ -3234,7 +3365,7 @@ function paintMenuScreen(){
   byId("upload-body").innerHTML =
     `<h1 tabindex="-1">Your menu</h1>` +
     `<p class="sub">Add photos of your menu, or one PDF. We read the items and prices for you.</p>` +
-    `<div class="up">` +
+    `<div class="up">` + channelHtml("up", up.channel) +
     `<div class="choose"><input class="offscreen" type="file" id="up-file" accept="image/jpeg,image/png,image/webp,application/pdf" multiple>` +
       `<label class="btn" for="up-file">Choose photos or a PDF</label>` +
       `<p class="hint">JPG, PNG or WebP photos, up to 6. Or one PDF up to 3 MB.</p></div>` +
@@ -3244,6 +3375,7 @@ function paintMenuScreen(){
     `<p class="say" id="up-msg" role="alert" tabindex="-1"></p>` +
     `<p class="hint" id="up-ref"></p>` +
     `<p class="say" id="up-status" role="status"></p>` +
+    `<p class="hint" id="up-needch"></p>` +
     `<div class="upacts"><button type="button" class="btn primary" id="up-read" data-up="read" disabled>${ICON.ai}Read my menu</button>` +
       `<button type="button" class="btn" data-nav="${esc(upAddr(target ? "update" : "place"))}">Back</button></div></div>`;
   paintFiles();
@@ -3494,7 +3626,7 @@ async function askReader(files){
           ref: data && typeof data.ref === "string" && /^[a-z0-9_]{1,40}$/.test(data.ref) ? data.ref : ""};
 }
 async function readMenu(){
-  if(up.busy || up.adding) return;
+  if(up.busy || up.adding || !up.channel) return;
   const id = targetId(), next = upAddr("check");
   up.busy = true;
   upSay("up-msg", "");
@@ -3509,6 +3641,8 @@ async function readMenu(){
     ed = fromRead(got.items);
     ed.ai = !got.pdf;                          // a PDF read in the browser never went to the AI
     ed.owner = id;
+    ed.channel = up.channel;                   // where the menu is from: only same-channel prices are compared
+    await loadDates();                         // the known prices, before the check screen draws its summary
     history.pushState(null, "", next);
     route();
     return;
@@ -3536,7 +3670,7 @@ function setMatch(key, id){
   comparedKeys().forEach(k => { if(ed.pick[k] === id) ed.pick[k] = null; });
   if(key) ed.pick[key] = id;
 }
-const freshView = () => ({tab: "all", find: "", look: false, open: null, box: null});
+const freshView = () => ({tab: "all", find: "", look: false, only: "", searchOpen: false, open: null, box: null});
 function fromRead(items){
   const rows = items.map((r, i) => {
     const price = readPrice(r.price);
@@ -3589,7 +3723,8 @@ function fromSaved(menu){
     const r = c ? rows.find(x => x.name === c.name && x.variant === String(c.variant || "") && priceCents(x.price) === c.cents) : null;
     pick[k] = r ? r.id : null;
   });
-  return Object.assign({rows: rows, pick: pick, next: rows.length + 1}, freshView());
+  // the channel the menu was read from stays with it when it is checked and saved again
+  return Object.assign({rows: rows, pick: pick, next: rows.length + 1, channel: menu.channel || ""}, freshView());
 }
 /* a row asks for a look when it was read unsure or without a price, until the
    owner has typed in it and it has a price */
@@ -3601,10 +3736,23 @@ const nameOr = r => capital(r.name.trim()) || "new item";
 const rowWords = r => capital(r.name.trim()) + (r.variant ? `, ${r.variant}` : "") + (priceCents(r.price) !== null ? ` ${money(priceCents(r.price) / 100)}` : "");
 /* the rows the tab, the search and the filter leave. Text in the search looks in every kind. */
 function shownRows(){
-  const q = fold(ed.find);
+  const q = fold(ed.find), st = ed.only ? ckStatus() : null;
   return ed.rows.filter(r => (q ? fold(r.name).indexOf(q) !== -1 || fold(r.variant).indexOf(q) !== -1 : ed.tab === "all" || r.kind === ed.tab) &&
-                             (!ed.look || needsLook(r)));
+                             (!ed.look || needsLook(r)) && (!st || ckGroup(r, st) === ed.only));
 }
+/* Check your menu, for a menu read now for a listed shop: each row's status against the prices we know
+   in the same channel, by row id (classifyRows, the diner's rule). null when there is nothing to compare with. */
+function ckStatus(){
+  const id = targetId();
+  if(!ed || !ed.read || id === MY_ID || !SHOPS.has(id) || CHANNELS.indexOf(ed.channel) === -1) return null;
+  const known = knownFor(id);
+  if(!known) return null;
+  const rows = ed.rows.filter(r => r.name.trim() !== ""), res = classifyRows(known, rows, ed.channel), out = new Map();
+  rows.forEach((r, i) => out.set(r.id, res[i]));
+  return out;
+}
+/* the one group a row counts in, as on the diner's screen: a row that needs a look first */
+const ckGroup = (r, st) => { const s = st.get(r.id); return !s ? "" : needsLook(r) ? "check" : s.status === "changed" ? "changed" : s.status === "new" ? "new" : s.status; };
 const announce = words => upSay("ck-live", words);
 /* how many cafes in the data have a price for a compared item, and the tag that says so */
 const cafesWith = key => (D.named_prices[key] || []).length;
@@ -3612,57 +3760,71 @@ const cafesWords = key => cafesWith(key) < MIN_OTHERS ? "Too few cafes to compar
 const CHECK_TAG = `<span class="tag">Please check</span>`;
 
 /* the lines under the heading, the tabs, the filter button and the bar's words: every count on the page */
-function paintCounts(){
+/* the summary, and the one bar of chips: the search, the three filters and the kinds, each with its count. keepBar: the search field is being typed in */
+function paintCounts(keepBar){
   const n = ed.rows.length, m = matchCount(), k = lookCount();
   if(!k) ed.look = false;
+  // the same summary as the diner's: what needs a look against the prices we know in this menu's channel
+  const st = ckStatus(), named = ed.rows.filter(r => r.name.trim() !== "");
+  const grp = st ? named.map(r => ({g: ckGroup(r, st), s: st.get(r.id).status})) : [];
+  const nOf = g => grp.filter(x => x.g === g).length;
+  const counts = {changed: nOf("changed"), fresh: nOf("new"), check: nOf("check"), same: nOf("same"), other: nOf("nocompare") + nOf("loose"),
+                  nocompare: grp.filter(x => x.s === "nocompare").length};
+  if(ed.only && !counts[ed.only === "new" ? "fresh" : ed.only]) ed.only = "";
   byId("ck-top").innerHTML =
     // a listed shop's menu that was not read just now is the one we hold: no AI wrote it here
-    `<p id="ck-read">` + (target && target.shop_id !== MY_ID && !ed.read ? "This is the menu we hold for your shop. Fix anything that is wrong."
-                                                                        : `${ed.ai ? ICON.ai : ""}We read ${n === 1 ? "1 item" : `${n} items`} from your menu.`) + `</p>` +
-    `<p id="ck-can">${m === 0 ? "None of them can be compared with other cafes yet." : `${m} of them can be compared with other cafes today.`}</p>` +
-    (k ? `<p id="ck-look">${k === 1 ? "1 needs a look." : `${k} need a look.`}</p>` : "");
+    (target && target.shop_id !== MY_ID && !ed.read ? `<p id="ck-read">This is the menu we hold for your shop. Fix anything that is wrong.</p>` : "") +
+    `<p id="ck-status">${ed.read && ed.ai ? ICON.ai : ""}${n === 1 ? "1 item" : `${n} items`}, ${m} compared</p>` +
+    (st ? summaryHtml(counts, ed.channel, target.shop_name, named.length, knownFor(target.shop_id), "ck")
+        : k ? `<p class="sum-look" id="ck-look">${k === 1 ? "1 needs a look." : `${k} need a look.`}</p>` : "");
+  if(keepBar) return;
   const searching = fold(ed.find) !== "";
   const tabs = [["all", "All", n]].concat(NEW_TYPES.map(t => [t[0], t[1], ed.rows.filter(r => r.kind === t[0]).length]).filter(t => t[2] > 0));
-  byId("ck-tabs").innerHTML = tabs.map(t =>
-    `<button type="button" role="tab" data-ck="tab" data-tab="${t[0]}" aria-selected="${searching ? t[0] === "all" : t[0] === ed.tab}">${t[1]} (${t[2]})</button>`).join("");
-  byId("ck-lookbox").innerHTML = k ? `<button type="button" class="btn toggle" data-ck="look" aria-pressed="${ed.look}">Needs a look (${k})</button>` : "";
-  upSay("ck-status", `${n === 1 ? "1 item" : `${n} items`}, ${m} compared`);
-  paintCheckDiff();
+  const chip = (attrs, on, words) => `<button type="button" class="chip" ${attrs} aria-pressed="${on}">${words}</button>`;
+  byId("ck-chipbar").innerHTML = ed.searchOpen ? searchRow("ck", ed.find) : `<div class="chips" id="ck-chips" aria-label="Filters and kinds">` + searchChip("ck") +
+    (k ? chip(`data-ck="look"`, ed.look, `Needs a look (${k})`) : "") +
+    (counts.changed ? chip(`data-ck="only" data-only="changed"`, ed.only === "changed", `Changed (${counts.changed})`) : "") +
+    (counts.fresh ? chip(`data-ck="only" data-only="new"`, ed.only === "new", `New (${counts.fresh})`) : "") +
+    tabs.map(t => chip(`data-ck="tab" data-tab="${t[0]}"`, searching ? t[0] === "all" : t[0] === ed.tab, `${t[1]} (${t[2]})`)).join("") + `</div>`;
+}
+/* the owner's menu: one line for each item, under the menu's own headings. A press opens the row in place. */
+function ckRowHtml(r, st){
+  const key = matchOf(r.id), name = esc(nameOr(r)), s = st ? st.get(r.id) : null, keys = comparedKeys();
+  if(ed.open === r.id) return `<li class="crow open" data-row="${r.id}"><div class="cedit">` +
+    `<div class="field mini"><label for="ck-n-${r.id}">Item</label><input id="ck-n-${r.id}" type="text" autocomplete="off" maxlength="200" data-name="${r.id}" value="${esc(capital(r.name))}"></div>` +
+    `<div class="cedit2"><div class="field mini"><label for="ck-v-${r.id}">Size or note</label><input id="ck-v-${r.id}" type="text" autocomplete="off" maxlength="200" data-variant="${r.id}" value="${esc(r.variant)}"></div>` +
+    `<div class="field mini"><label for="ck-p-${r.id}">Price</label><input id="ck-p-${r.id}" type="text" inputmode="decimal" autocomplete="off" data-price="${r.id}" value="${esc(r.price)}"` +
+      `${badPrice(r.price) ? ` aria-invalid="true"` : ""}></div></div>` +
+    // a row the owner added says which kind it is; a row that was read already has one
+    (r.added ? `<div class="field mini"><label for="ck-k-${r.id}">Category</label><select id="ck-k-${r.id}" class="ckselect" data-kind="${r.id}">` + NEW_TYPES.map(t =>
+      `<option value="${t[0]}"${t[0] === r.kind ? " selected" : ""}>${t[1]}</option>`).join("") + `</select></div>` : "") +
+    `<div class="field mini"><label for="ck-ctl">Compared with</label><select id="ck-ctl" class="ckselect" data-ctl="${r.id}">` +
+      keys.map(k => `<option value="${esc(k)}"${k === key ? " selected" : ""}>${esc(itemName(k))}</option>`).join("") +
+      `<option value=""${key ? "" : " selected"}>Do not compare this item</option></select>` +
+      (key ? `<p class="hint">${cafesWords(key)}.</p>` : "") + `</div>` +
+    `<span class="tagbox" data-tag="${r.id}"${needsLook(r) ? "" : " hidden"}>${CHECK_TAG}</span>` +
+    `<div class="upacts"><button type="button" class="btn primary" data-ck="rowdone" data-id="${r.id}">Done</button>` +
+    `<button type="button" class="btn quiet" data-ck="droprow" data-id="${r.id}" aria-label="Remove ${name}">Remove</button></div></div></li>`;
+  const was = s && s.status === "changed" ? s.was : null, c = priceCents(r.price);
+  const marks = (needsLook(r) ? CHECK_TAG : "") + (s && s.status === "new" ? `<span class="tag" data-new="${r.id}">New</span>` : "") +
+    (key ? `<span class="cmark" data-cmp="${r.id}" title="${esc(itemName(key))}: ${cafesWords(key)}">Compared</span>` : "");
+  return `<li class="crow${was ? " changed" : ""}" data-row="${r.id}"><button type="button" class="crow-btn" data-ck="open" data-id="${r.id}" aria-expanded="false">` +
+    `<span class="cw"><span class="cn">${name}</span>` + (r.variant ? `<span class="cv">${esc(r.variant)}</span>` : "") +
+    (was ? `<span class="cv" data-was="${r.id}">was ${money(was.p)} ${onDay(was.d)}</span>` : "") + (marks ? `<span class="cmarks">${marks}</span>` : "") + `</span>` +
+    `<span class="cp">${was ? `<s class="cwas">${money(was.p)}</s>` : ""}<span class="cnow">${c === null ? "No price" : money(c / 100)}</span></span></button></li>`;
 }
 function paintMenuList(){
-  const rows = shownRows(), box = byId("ck-list");
+  const rows = shownRows(), box = byId("ck-list"), st = ckStatus();
   if(!rows.length){ box.innerHTML = `<p id="ck-none">No items match.</p>`; return; }
   // the menu's own headings, in the order they were read
   const heads = [];
   ed.rows.forEach(r => { if(heads.indexOf(r.section) === -1) heads.push(r.section); });
-  const keys = comparedKeys();
-  box.innerHTML = `<table class="mtable"><thead><tr><th scope="col">Item</th><th scope="col" class="c-note">Note</th>` +
-    `<th scope="col" class="c-price">Price</th><th scope="col" class="c-rm"><span class="offscreen">Remove</span></th></tr></thead><tbody>` +
-    heads.map(h => {
-      const mine = rows.filter(r => r.section === h);
-      if(!mine.length) return "";
-      return `<tr class="ghead"><th colspan="4" scope="colgroup">${esc(h || NO_HEAD)}</th></tr>` + mine.map(r => {
-        const key = matchOf(r.id), name = esc(nameOr(r)), bad = badPrice(r.price), open = ed.open === r.id;
-        return `<tr class="mrow" data-row="${r.id}"><td class="c-name"><div class="namecell">` +
-          `<input type="text" autocomplete="off" maxlength="200" data-name="${r.id}" value="${esc(capital(r.name))}" aria-label="Item name: ${name}"` +
-            `${r.name.trim() === "" ? ` class="open"` : ""}>` +
-          // a row the owner added says which kind it is; a row that was read already has one
-          (r.added ? `<label class="kindpick">Category<select data-kind="${r.id}">` + NEW_TYPES.map(t =>
-            `<option value="${t[0]}"${t[0] === r.kind ? " selected" : ""}>${t[1]}</option>`).join("") + `</select></label>` : "") +
-          `<span class="tagbox" data-tag="${r.id}"${needsLook(r) ? "" : " hidden"}>${CHECK_TAG}</span>` +
-          (key ? `<span class="tag cmp" title="${esc(itemName(key))}: ${cafesWords(key)}">${cafesWords(key)}</span>` +
-                 `<button type="button" class="btn quiet" data-ck="change" data-id="${r.id}" aria-expanded="${open}" ` +
-                 `aria-label="Change what ${name} is compared with">Change</button>` : "") + `</div></td>` +
-          `<td class="note" title="${esc(r.variant)}">${esc(r.variant)}</td>` +
-          `<td class="c-price"><input type="text" inputmode="decimal" autocomplete="off" data-price="${r.id}" value="${esc(r.price)}" ` +
-            `aria-label="Price of ${name}"${bad ? ` aria-invalid="true"` : ""}${priceCents(r.price) === null ? ` class="open"` : ""}></td>` +
-          `<td class="c-rm"><button type="button" class="textbtn" data-ck="droprow" data-id="${r.id}" aria-label="Remove ${name}">Remove</button></td></tr>` +
-          (open ? `<tr class="mctl"><td colspan="4"><div class="ctl"><label for="ck-ctl">Compare ${name} with</label>` +
-            `<select id="ck-ctl" data-ctl="${r.id}">` + keys.map(k => `<option value="${esc(k)}"${k === key ? " selected" : ""}>${esc(itemName(k))}</option>`).join("") +
-            `<option value=""${key ? "" : " selected"}>Do not compare this item</option></select>` +
-            `<button type="button" class="btn" data-ck="ctldone" data-id="${r.id}">Done</button></div></td></tr>` : "");
-      }).join("");
-    }).join("") + `</tbody></table>`;
+  box.innerHTML = heads.map(h => {
+    const mine = rows.filter(r => r.section === h);
+    if(!mine.length) return "";
+    return `<section class="cgroup"><div class="ghead static"><span class="gname"><span class="gtitle">${esc(h || NO_HEAD)}</span></span>` +
+      `<span class="gcount">${mine.length}</span></div><ul class="crows">${mine.map(r => ckRowHtml(r, st)).join("")}</ul></section>`;
+  }).join("");
 }
 function paintBox(){
   const keys = comparedKeys(), found = keys.filter(k => picked(k)), lacking = keys.filter(k => !picked(k));
@@ -3707,38 +3869,33 @@ function markRow(r){
 /* bring one row into view: the search, the filter and the tab give way when they hide it */
 function reveal(id){
   const there = () => shownRows().some(r => r.id === id);
-  if(!there()){ ed.find = ""; ed.look = false; byId("ck-find").value = ""; }
+  if(!there()){ ed.find = ""; ed.look = false; ed.only = ""; ed.searchOpen = false; }
   if(!there()) ed.tab = "all";
 }
 function goToRow(id, focusSel){
   paintCounts();
   paintMenuList();
-  const row = document.querySelector(`.mrow[data-row="${id}"]`);
+  const row = document.querySelector(`#ck-list [data-row="${id}"]`);
   if(row) row.scrollIntoView({block: "center"});
   focusOn(focusSel);
 }
 function paintCheck(){
   byId("upload-body").innerHTML =
-    `<h1 tabindex="-1">Check your menu</h1><div id="ck-top"></div><div id="ck-diff"></div>` +
-    `<div class="ckcols"><section class="panel" id="ck-menu" aria-labelledby="ck-h-menu">` +
-      `<div id="ck-tools"><div class="ckhead"><h2 id="ck-h-menu">Your menu</h2>` +
-        `<div class="tabs" role="tablist" aria-label="Kinds of item" id="ck-tabs"></div></div>` +
-        `<div class="findline"><label for="ck-find">Find an item</label>` +
-          `<input id="ck-find" type="text" autocomplete="off" spellcheck="false" value="${esc(ed.find)}">` +
-          `<button type="button" class="btn" data-ck="clearfind">Clear</button><span id="ck-lookbox"></span></div></div>` +
-      `<p class="offscreen" id="ck-live" role="status"></p>` +
+    `<h1 tabindex="-1">Check your menu</h1><div class="sumblock" id="ck-top"></div>` +
+    `<div class="chipbar" id="ck-chipbar"></div>` +
+    `<p class="offscreen" id="ck-live" role="status"></p>` +
+    `<div class="ckcols"><section id="ck-menu" aria-label="Your menu">` +
       `<div id="ck-list"></div>` +
       `<button type="button" class="btn" id="ck-add" data-ck="addrow">Add an item</button></section>` +
     `<aside class="panel" id="ck-box" aria-labelledby="ck-h-box"></aside></div>`;
-  byId("ck-bar").innerHTML =
+  byId("ck-bar").innerHTML = `<div class="barin">` +
     `<p class="say" id="ck-msg" role="alert" tabindex="-1"></p>` +
     // only for a menu read in this visit, ticked unless the owner unticks it: the checked rows also go to Counter when
     // the menu is saved. A menu we already hold, checked again, has no box and sends nothing.
     (ed.read ? `<label class="sharebox" for="ck-share"><input type="checkbox" id="ck-share"${ed.share === false ? "" : " checked"}>` +
-      `<span>Share these prices with Counter, so prices stay fresh for every cafe. We never keep your photos.</span></label>` : "") +
-    `<button type="button" class="btn" data-nav="${esc(upAddr(target && !ed.read ? "update" : "menu"))}">Back</button>` +
-    `<span class="status" id="ck-status" role="status"></span>` +
-    `<button type="button" class="btn primary" data-ck="save">This is right. Save my menu</button>`;
+      `<span>Share these prices with Counter. Photos are never kept.</span></label>` : "") +
+    `<button type="button" class="btn barback" data-nav="${esc(upAddr(target && !ed.read ? "update" : "menu"))}">Back</button>` +
+    `<button type="button" class="btn primary barsave" data-ck="save">This is right. Save my menu</button></div>`;
   paintCounts();
   paintMenuList();
   paintBox();
@@ -3756,12 +3913,12 @@ function saveMenu(){
     return;
   }
   // what goes to Counter, taken before the page moves on: the shop and the checked rows
-  const share = ed.read === true && ed.share !== false, sendRows = rowsToSend(ed.rows), id = targetId();
+  const share = ed.read === true && ed.share !== false, sendRows = rowsToSend(ed.rows, ed.channel), id = targetId(), channel = ed.channel;
   const sendShop = id === MY_ID ? {id: myShop && myShop.postal ? "new:" + myShop.postal : "new", name: myShop ? myShop.shop_name : ""}
                                 : {id: id, name: target ? target.shop_name : ""};
   keepMenu(targetId(), menuOfEd(ed));
   // the menu is kept on this device first; sending never holds the owner up
-  if(share && sendRows.length) shareOwnerMenu(id, sendShop, sendRows);
+  if(share && sendRows.length) shareOwnerMenu(id, sendShop, sendRows, channel);
   // what was not saved is not kept either: a row left without a name goes, and the view starts afresh
   ed.rows = ed.rows.filter(r => r.name.trim() !== "");
   Object.assign(ed, freshView());
@@ -3778,7 +3935,7 @@ function menuOfEd(e){
   return {saved_at: stamp(),
           rows: e.rows.filter(r => r.name.trim() !== "").map(r => Object.assign(
             {name: r.name.trim(), section: r.section, variant: r.variant, cents: priceCents(r.price), kind: r.kind}, r.fid ? {id: r.fid} : {})),
-          compared: compared};
+          compared: compared, channel: e.channel || ""};      // where the menu was read from: in_store, online, or not said
 }
 /* keep a menu: the owner's own shop under its own key, a listed shop under the key for every listed shop */
 function keepMenu(id, menu){
@@ -3835,7 +3992,7 @@ function setOwn(id){
     if(old ? now === cents(old.price) : now === null) return;
     ownOn.was[k] = all;
     const rec = now === null ? null : {shop_id: id, shop_name: s.shop_name, district: s.district, address: s.address, lat: s.lat, lng: s.lng,
-      price: now / 100, price_basis: "own_menu", observed_date: day, source_url: null, listed_price: null, charges: []};
+      price: now / 100, price_basis: "own_menu", channel: menu.channel || "", observed_date: day, source_url: null, listed_price: null, charges: []};
     D.named_prices[k] = old ? all.map(r => r === old ? rec : r).filter(Boolean) : all.concat(rec);
   });
 }
@@ -3930,7 +4087,7 @@ function setMine(on){
                 address: myShop.address, lat: myShop.lat, lng: myShop.lng};
   const keys = Object.keys(myMenu.compared).filter(k => D.named_prices[k] && myMenu.compared[k] && Number.isFinite(myMenu.compared[k].cents));
   keys.forEach(k => D.named_prices[k].push(Object.assign({}, base, {
-    price: myMenu.compared[k].cents / 100, price_basis: "own_menu", observed_date: localDay(myMenu.saved_at),
+    price: myMenu.compared[k].cents / 100, price_basis: "own_menu", channel: myMenu.channel || "", observed_date: localDay(myMenu.saved_at),
     source_url: null, listed_price: null, charges: []})));
   SHOPS.set(MY_ID, Object.assign({}, base, {street: myShop.street, price_count: keys.length, items: keys}));
 }
@@ -4141,19 +4298,50 @@ document.addEventListener("click", e => {
   if(!el || el.disabled || !ed || screen !== "check") return;
   const act = el.dataset.ck, id = Number(el.dataset.id), key = el.dataset.key;
   if(act === "tab"){
-    ed.tab = el.dataset.tab; ed.find = ""; ed.open = null; byId("ck-find").value = "";
+    ed.tab = el.dataset.tab; ed.find = ""; ed.open = null;
     paintCounts(); paintMenuList(); announce(shownWords());
-    focusOn(`#ck-tabs [aria-selected="true"]`);
+    focusOn(`[data-ck="tab"][aria-pressed="true"]`);
   }
+  // the search: the chip opens it in the bar; the button inside the field clears it; Close shuts it and clears it
+  else if(act === "openfind"){ ed.searchOpen = true; ed.open = null; paintCounts(); focusOn("#ck-find"); }
+  else if(act === "closefind"){ ed.searchOpen = false; ed.find = ""; paintCounts(); paintMenuList(); announce(shownWords()); focusOn(`[data-ck="openfind"]`); }
   else if(act === "clearfind"){
-    ed.find = ""; byId("ck-find").value = "";
-    paintCounts(); paintMenuList(); announce(shownWords());
+    ed.find = "";
+    const f = byId("ck-find");
+    if(f) f.value = "";
+    paintCounts(true); paintMenuList(); upClear("ck"); announce(shownWords());
     focusOn("#ck-find");
   }
+  // compare with the other channel's prices: the summary and the marks are worked out again, nothing is read again
+  else if(act === "chan" && CHANNELS.indexOf(el.dataset.to) !== -1){
+    ed.channel = el.dataset.to;
+    paintCounts(); paintMenuList();
+    focusOn(`[data-ck="chan"]`);
+  }
+  // a row opens in place, one at a time; Done closes it
+  else if(act === "open"){
+    ed.open = id;
+    paintMenuList();
+    const row = document.querySelector(`#ck-list [data-row="${id}"]`);
+    if(row) row.scrollIntoView({block: "nearest"});
+    focusOn(`[data-price="${id}"]`);
+  }
+  else if(act === "rowdone"){
+    ed.open = null;
+    paintCounts(); paintMenuList();
+    focusOn(`#ck-list [data-ck="open"][data-id="${id}"], #ck-add`);
+  }
   else if(act === "look"){
-    ed.look = !ed.look; ed.open = null;
+    ed.look = !ed.look; ed.only = ""; ed.open = null;
     paintCounts(); paintMenuList(); announce(shownWords());
     focusOn(`[data-ck="look"], #ck-find`);
+  }
+  // "Changed" or "New": only the rows that changed against the prices we know, or are new to us
+  else if(act === "only"){
+    const want = el.dataset.only;
+    ed.only = ed.only === want ? "" : want; ed.look = false; ed.open = null;
+    paintCounts(); paintMenuList(); announce(shownWords());
+    focusOn(`[data-ck="only"][data-only="${want}"], #ck-find`);
   }
   else if(act === "change"){
     ed.open = ed.open === id ? null : id;
@@ -4178,10 +4366,13 @@ document.addEventListener("click", e => {
   else if(act === "addrow"){
     const row = {id: ed.next, name: "", section: ADDED_HEAD, variant: "", price: "", kind: ed.tab === "all" || fold(ed.find) ? OTHER_KIND : ed.tab,
                  flag: false, looked: false, added: true};
-    ed.next += 1; ed.find = ""; ed.look = false; byId("ck-find").value = "";
+    ed.next += 1; ed.find = ""; ed.look = false; ed.only = ""; ed.searchOpen = false;
     ed.rows.push(row);
+    ed.open = row.id;                          // the new row opens, ready to be typed in
     paintCounts(); paintMenuList();
     focusOn(`[data-name="${row.id}"]`);
+    const added = document.querySelector(`#ck-list [data-row="${row.id}"]`);
+    if(added) added.scrollIntoView({block: "center"});
   }
   // "Change" in the box: to the row itself, with its control open
   else if(act === "boxchange"){
@@ -4219,11 +4410,12 @@ document.addEventListener("input", e => {
   if(!ed || screen !== "check" || !el.dataset) return;
   if(el.id === "ck-find"){
     ed.find = el.value; ed.open = null;
-    paintCounts(); paintMenuList();
+    paintCounts(true); paintMenuList(); upClear("ck");
     announce(shownWords());
     return;
   }
-  // a name or a price is kept exactly as it is typed
+  // a name, a size or note, or a price is kept exactly as it is typed
+  if(el.dataset.variant){ const v = edRow(el.dataset.variant); if(v) v.variant = el.value; return; }
   const r = el.dataset.price ? edRow(el.dataset.price) : el.dataset.name ? edRow(el.dataset.name) : null;
   if(!r) return;
   if(el.dataset.name) r.name = el.value; else r.price = el.value;
@@ -4265,18 +4457,21 @@ document.addEventListener("change", e => {
 
 /* ---------- sending a menu to Counter ----------
    One row in Supabase's menu_submissions for each menu sent: the shop, who
-   sent it ("owner" or "diner"), the checked rows (name, variant, price, kind),
-   what changed against the menu we hold, and this site's host name. The table
-   takes new rows only and gives nothing back. Photos and PDFs are never sent
-   here: they went to /api/read-menu once and were let go. */
+   sent it ("owner" or "diner"), the checked rows (name, variant, price, kind
+   and the channel the menu came from), what changed against the prices we
+   hold, and this site's host name. The table takes new rows only and gives
+   nothing back. Photos and PDFs are never sent here: they went to
+   /api/read-menu once and were let go. */
 const SUBMIT_MAX = 500;           // rows in one submission: the table's own limit
 const SUBMIT_WAIT = 15000;        // milliseconds before the page stops waiting
 const SHARE_FAIL = "Could not send to Counter. Your menu is still saved on this device.";
 let shareNote = "";               // that line, while it is the news on the page that is showing
-/* rows being checked -> the rows that are sent: named rows only, a price as a number or null */
-const rowsToSend = rows => rows.filter(r => String(r.name || "").trim() !== "").slice(0, SUBMIT_MAX).map(r => {
-  const c = priceCents(r.price);
-  return {name: r.name.trim(), variant: String(r.variant || "").trim(), price: c === null ? null : c / 100, kind: rowKind(r.kind)};
+/* a row's price in cents: typed text, or a number already sent */
+const rowCents = r => typeof r.price === "number" ? (Number.isFinite(r.price) ? Math.round(r.price * 100) : null) : priceCents(r.price);
+/* rows being checked -> the rows that are sent: named rows only, a price as a number or null, and the menu's channel */
+const rowsToSend = (rows, channel) => rows.filter(r => String(r.name || "").trim() !== "").slice(0, SUBMIT_MAX).map(r => {
+  const c = rowCents(r);
+  return {name: r.name.trim(), variant: String(r.variant || "").trim(), price: c === null ? null : c / 100, kind: rowKind(r.kind), channel: channel || ""};
 });
 /* one submission. Gives true when the table took it. */
 async function submitMenu(sender, shopId, shopName, rows, changes){
@@ -4295,9 +4490,9 @@ async function submitMenu(sender, shopId, shopName, rows, changes){
 }
 /* the owner's menu, sent after it is kept on this device. A failure says so in
    one quiet line, on the page that is showing by then. */
-async function shareOwnerMenu(id, s, rows){
+async function shareOwnerMenu(id, s, rows, channel){
   shareNote = "";
-  const changes = await diffMenu(id, rows).catch(() => null);
+  const changes = await diffMenu(id, rows, channel).catch(() => null);
   if(await submitMenu("owner", s.id, s.name, rows, changes)) return;
   shareNote = SHARE_FAIL;
   if(screen === "choose" && chooser) paintChooser();
@@ -4311,25 +4506,36 @@ function paintShareNote(){
 }
 
 /* ---------- what changed ----------
-   A menu that was just read, against the menu file we hold for that shop
-   (menus/<shop_id>.json, loaded once by loadFile). Nothing is ever called
-   removed: a photo may show only part of a menu. The result is what is saved
-   as "changes".
+   A menu that was just read, against every price we know for that shop
+   (menu_dates.json, written by make_menu_dates.py: for each name and variant,
+   the printed prices before charges, each with its price_basis and day).
+
+   Like with like only. A cafe sets its in-cafe prices (dine_in, takeaway) and
+   its online prices (online_order) apart on purpose, so a menu read "in the
+   cafe" is compared only with in-cafe prices, and one read "online" only with
+   online prices. No price is ever estimated or turned into another channel's.
+   A price with no known basis is never compared.
 
    Names and variants are compared as words: lower case, "&" as "and",
    punctuation and brackets taken out, a plain plural ending in s made single,
    and size and temperature words (hot, iced, regular, large, 12oz ...) moved
    from the name to the variant. Words our menu files leave out of a variant
    (hot, regular, single, unspecified) are left out on both sides. These rules
-   are the same as in make_menu_dates.py, which writes menu_dates.json with
-   the same keys: keep the two the same.
+   are the same as in make_menu_dates.py, which writes the keys: keep the two
+   the same.
 
-   A row then meets a row we hold in this order: the same name and variant;
-   else the same name, when each menu has only one price for it; else a name
-   that shares most of its words. Only the first two can be a price change (5
-   cents or more apart). A loose match is "the same" when the prices are
-   within 5 cents and is otherwise left out. A row that meets nothing is new. */
-const DIFF_SHOWN = 8;             // lines of each kind before "And N more"
+   A row meets a known item in this order: the same name and variant; else
+   the same name, when each side has only one row for it; else a name that
+   shares most of its words (a loose match). Then, within the same channel:
+     same:      within 5 cents of any known price (dine-in and takeaway can both exist)
+     changed:   matches none of them, and the match was not a loose one; the closest known price is shown
+     loose:     a loose match more than 5 cents off: neither new nor changed
+     nocompare: the item is known only in the other channel, or only with no basis
+     new:       the item is unknown in every channel
+   Nothing is ever called removed: a photo may show only part of a menu. */
+const CHANNELS = ["in_store", "online"];
+const CHANNEL_WORDS = {in_store: "in-cafe", online: "online"};
+const channelOf = basis => basis === "online_order" ? "online" : basis === "dine_in" || basis === "takeaway" ? "in_store" : "";
 const DIFF_SYN = new Map([["lrg", "large"], ["lg", "large"], ["sm", "small"], ["med", "medium"], ["reg", "regular"]]);
 const SIZE_TEMP = new Set(["hot", "iced", "cold", "regular", "small", "medium", "large", "8oz", "12oz", "16oz"]);
 const PLAIN_VARIANT = new Set(["hot", "regular", "single", "unspecified"]);
@@ -4352,46 +4558,6 @@ function diffCanon(name, variant){
   return {name: words.join(" "), words: words, variant: v.join(" ")};
 }
 const diffKey = (name, variant) => { const c = diffCanon(name, variant); return c.name + "|" + c.variant; };
-/* held: our rows; rows: the new menu's; dates: menu_dates.json for this shop, or null */
-function diffRows(held, rows, dates){
-  const ours = held.map(h => ({h: h, c: diffCanon(h.name, h.variant)}));
-  const byKey = new Map(), byName = new Map();
-  ours.forEach(o => {
-    const k = o.c.name + "|" + o.c.variant, had = byKey.get(k);
-    if(!had || (had.h.price == null && o.h.price != null)) byKey.set(k, o);
-    byName.set(o.c.name, (byName.get(o.c.name) || []).concat(o));
-  });
-  // the new menu: each name and variant once (a row read twice is counted once), and how many rows each name has
-  const seen = new Set(), list = [], names = new Map();
-  rows.forEach(r => {
-    const c = diffCanon(r.name, r.variant), k = c.name + "|" + c.variant;
-    if(!c.name || seen.has(k)) return;
-    seen.add(k);
-    list.push({r: r, c: c, k: k});
-    names.set(c.name, (names.get(c.name) || 0) + 1);
-  });
-  const dayOf = o => dates ? dates[o.c.name + "|" + o.c.variant] || dates._shop || "" : "";
-  const out = {priceChanges: [], newItems: [], matchedSame: 0};
-  list.forEach(n => {
-    const r = n.r, same = byName.get(n.c.name);
-    let was = byKey.get(n.k) || (same && same.length === 1 && names.get(n.c.name) === 1 ? same[0] : null), sure = !!was;
-    if(!was){
-      const mine = new Set(n.c.words);
-      const near = ours.filter(o => {
-        const theirs = new Set(o.c.words), shared = [...mine].filter(w => theirs.has(w)).length;
-        return shared / Math.max(mine.size, theirs.size) >= LOOSE || (shared >= 2 && (shared === mine.size || shared === theirs.size));
-      });
-      const gap = o => o.h.price == null || r.price == null ? Infinity : Math.abs(o.h.price - r.price);
-      if(near.length) was = near.reduce((a, b) => gap(b) < gap(a) ? b : a);
-    }
-    if(!was){ out.newItems.push({name: r.name, variant: r.variant, price: r.price}); return; }
-    if(was.h.price == null || r.price == null) return;
-    const before = Math.round(was.h.price * 100), after = Math.round(r.price * 100);
-    if(Math.abs(after - before) < 5) out.matchedSame += 1;
-    else if(sure) out.priceChanges.push({name: r.name, variant: r.variant, before: before / 100, after: after / 100, before_date: dayOf(was)});
-  });
-  return out;
-}
 /* counter/menu_dates.json, asked for once: undefined until it has been, then the file or null */
 let menuDates;
 let datesAsk = null;
@@ -4401,71 +4567,129 @@ function loadDates(){
   return datesAsk;
 }
 const datesFor = id => menuDates && menuDates[id] && typeof menuDates[id] === "object" ? menuDates[id] : null;
-/* null for a shop we hold no menu for: its panel is hidden */
-async function diffMenu(shopId, newRows){
-  if(!shopId || shopId === MY_ID || !SHOPS.has(shopId)) return null;
-  await Promise.all([loadFile(shopId), loadDates()]);
-  const held = fileRows[shopId];
-  return held && held.length ? diffRows(held, newRows, datesFor(shopId)) : null;
+/* one shop's known items, ready to match: built once from menu_dates.json */
+const knownCache = new Map();
+function knownFor(id){
+  const d = datesFor(id);
+  if(!d) return null;
+  if(knownCache.has(id)) return knownCache.get(id);
+  const list = Object.keys(d).filter(k => k !== "_shop" && Array.isArray(d[k])).map(k => {
+    const name = k.split("|")[0];
+    return {key: k, name: name, words: name.split(" ").filter(Boolean),
+            prices: d[k].filter(e => Array.isArray(e) && typeof e[0] === "number").map(e => ({p: e[0], b: String(e[1] || ""), d: String(e[2] || "")}))};
+  });
+  const byKey = new Map(list.map(o => [o.key, o])), byName = new Map();
+  list.forEach(o => byName.set(o.name, (byName.get(o.name) || []).concat(o)));
+  const known = {list: list, byKey: byKey, byName: byName, day: String(d._shop || "")};
+  knownCache.set(id, known);
+  return known;
+}
+/* each row's place against what we know, in the rows' order: {status, was} */
+function classifyRows(known, rows, channel){
+  const canon = rows.map(r => diffCanon(r.name, r.variant)), names = new Map();
+  canon.forEach(c => { if(c.name) names.set(c.name, (names.get(c.name) || 0) + 1); });
+  return rows.map((r, i) => {
+    const c = canon[i], cents = rowCents(r);
+    if(!c.name) return {status: "none"};
+    const same = known.byName.get(c.name);
+    let item = known.byKey.get(c.name + "|" + c.variant) || (same && same.length === 1 && names.get(c.name) === 1 ? same[0] : null);
+    const loose = !item;
+    if(!item){
+      const mine = new Set(c.words);
+      const near = known.list.filter(o => {
+        const theirs = new Set(o.words), shared = [...mine].filter(w => theirs.has(w)).length;
+        return shared / Math.max(mine.size, theirs.size) >= LOOSE || (shared >= 2 && (shared === mine.size || shared === theirs.size));
+      });
+      // of the loose matches, the one with a same-channel price closest to this row's
+      const gap = o => { const g = o.prices.filter(e => channelOf(e.b) === channel).map(e => cents === null ? 0 : Math.abs(Math.round(e.p * 100) - cents)); return g.length ? Math.min(...g) : Infinity; };
+      if(near.length) item = near.reduce((a, b) => gap(b) < gap(a) ? b : a);
+    }
+    if(!item) return {status: "new"};
+    const group = item.prices.filter(e => channelOf(e.b) === channel);
+    if(!group.length) return {status: "nocompare"};
+    if(cents === null) return {status: "unpriced"};
+    const was = group.reduce((a, b) => Math.abs(Math.round(b.p * 100) - cents) < Math.abs(Math.round(a.p * 100) - cents) ? b : a);
+    if(Math.abs(Math.round(was.p * 100) - cents) < 5) return {status: "same", was: was};
+    return loose ? {status: "loose"} : {status: "changed", was: was};
+  });
+}
+/* the changes object that is saved with a submission */
+function changesOf(rows, results, channel){
+  const out = {channel: channel, priceChanges: [], newItems: [], matchedSame: 0, noComparable: 0, looseIgnored: 0};
+  rows.forEach((r, i) => {
+    const s = results[i], c = rowCents(r), price = c === null ? null : c / 100;
+    if(s.status === "changed") out.priceChanges.push({name: r.name, variant: r.variant, before: s.was.p, after: price, before_date: s.was.d, before_basis: s.was.b});
+    else if(s.status === "new") out.newItems.push({name: r.name, variant: r.variant, price: price});
+    else if(s.status === "same") out.matchedSame += 1;
+    else if(s.status === "nocompare") out.noComparable += 1;
+    else if(s.status === "loose") out.looseIgnored += 1;
+  });
+  return out;
+}
+/* null for a shop we know nothing for, or a menu with no channel */
+async function diffMenu(shopId, rows, channel){
+  if(!shopId || shopId === MY_ID || !SHOPS.has(shopId) || CHANNELS.indexOf(channel) === -1) return null;
+  await loadDates();
+  const known = knownFor(shopId);
+  return known ? changesOf(rows, classifyRows(known, rows, channel), channel) : null;
 }
 const diffName = r => capital(String(r.name).trim()) + (r.variant ? `, ${r.variant}` : "");
-const moreLine = (n, one, many) => n > 0 ? `<li class="same">And ${n} more ${n === 1 ? one : many}.</li>` : "";
-/* "on 4 Oct" from the row's own day, else the shop's last day; "at our last check" with neither */
+/* "on 4 Oct" from the known price's own day; "at our last check" without one */
 const onDay = day => dayMonth(day) ? `on ${dayMonth(day)}` : "at our last check";
-function diffHtml(id, diff, key){
-  if(!diff) return "";
-  const shopDay = dayMonth((datesFor(id) || {})._shop || "");
-  const ch = diff.priceChanges, fresh = diff.newItems, same = diff.matchedSame;
-  const lines = !ch.length && !fresh.length ? `<li>Same as our last check${shopDay ? ` on ${shopDay}` : ""}.</li>` :
-    ch.slice(0, DIFF_SHOWN).map(c => `<li>${esc(diffName(c))}: ${money(c.before)} ${onDay(c.before_date)}, now ${money(c.after)}.</li>`).join("") +
-    moreLine(ch.length - DIFF_SHOWN, "price change", "price changes") +
-    fresh.slice(0, DIFF_SHOWN).map(r => `<li>New on this menu: ${esc(diffName(r))}${r.price == null ? "" : `, ${money(r.price)}`}.</li>`).join("") +
-    moreLine(fresh.length - DIFF_SHOWN, "new item", "new items") +
-    (same ? `<li class="same">${same} ${ch.length ? "other " : ""}${same === 1 ? "price is" : "prices are"} the same as our last check.</li>` : "");
-  return `<section class="panel diffbox" id="${key}-diffbox" aria-labelledby="${key}-diff-h">` +
-    `<h2 id="${key}-diff-h">What changed</h2><ul class="difflist">${lines}</ul></section>`;
-}
-/* Check your menu: the panel once rows are read, for a shop we hold a menu for */
-function paintCheckDiff(){
-  const box = byId("ck-diff");
-  if(!box) return;
-  const id = targetId();
-  if(!ed || !ed.read || id === MY_ID || !SHOPS.has(id)){ box.innerHTML = ""; return; }
-  if(fileRows[id] === undefined || menuDates === undefined){
-    box.innerHTML = "";
-    Promise.all([loadFile(id), loadDates()]).then(() => {
-      if(screen === "check" && targetId() === id && fileRows[id] !== undefined && menuDates !== undefined) paintCheckDiff();
-    });
-    return;
-  }
-  box.innerHTML = fileRows[id] && fileRows[id].length ? diffHtml(id, diffRows(fileRows[id], rowsToSend(ed.rows), datesFor(id)), "ck") : "";
+const changeLine = c => `${diffName(c)}: ${money(c.before)} ${onDay(c.before_date)}, now ${money(c.after)}.`;
+
+/* ---------- the summary over a checked menu: the same words for the owner and the diner ----------
+   counts: {changed, fresh, check, same, other, nocompare}. The chips carry the counts; the summary says
+   what needs a look, which prices the menu was compared with, and the way to switch to the other channel.
+   act: the data attribute the switch answers to ("sn" for the diner, "ck" for the owner). */
+const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+const NEW_TO_US = "new to us";    // a price with nothing of the same channel to compare with
+function summaryHtml(counts, channel, cafe, total, known, act){
+  const k = counts.check + counts.changed, restSame = counts.fresh === 0 && counts.other === 0;
+  const look = k ? `Only the ${plural(k, "marked item needs", "marked items need")} a look.${restSame ? " The rest match our last check." : ""}`
+                 : restSame ? "Nothing needs a look. Everything matches our last check." : "Nothing needs a look.";
+  const other = channel === "online" ? "in_store" : "online";
+  const switcher = `<p class="sum-switch" id="sum-switch">Compared with ${CHANNEL_WORDS[channel]} prices. ` +
+    `<button type="button" class="textbtn inline" data-${act}="chan" data-to="${other}">Switch to ${CHANNEL_WORDS[other]}</button></p>`;
+  // many rows with nothing to compare in this channel: say plainly that they become our first
+  const none = !known || !known.list.some(o => o.prices.some(e => channelOf(e.b) === channel));
+  const first = counts.nocompare >= 3 && counts.nocompare * 5 >= total
+    ? `<p class="sum-first" id="sum-first">` + (none ? `We have no ${CHANNEL_WORDS[channel]} prices from ${esc(cafe)} yet, so these become our first.`
+                                                     : `We have no ${CHANNEL_WORDS[channel]} price yet for ${counts.nocompare} of these, so they become our first.`) + `</p>` : "";
+  return `<p class="sum-look">${look}</p>` + switcher + first;
 }
 
 /* ---------- Help keep prices fresh ----------
-   Opened with ?snap: someone at a listed cafe takes photos of its menu, checks
-   the prices read from them and sends them to Counter. The screens are in the
-   address (?snap=1, &at= while picking, &cafe= for the cafe, &step=check or
-   done); the photos and rows live in memory only. Nothing here writes to the
-   browser's storage, so an owner's shop and menu on this device are never
-   touched. */
-const sn = {cafe: "", files: [], adding: false, busy: false, sending: false, rows: [], read: 0, diff: null, done: false, msg: "", ref: ""};
+   Opened with ?snap: someone at a listed cafe takes photos of its menu, says
+   where the menu is (in the cafe or online), checks the prices read from them
+   and sends them to Counter. The screens are in the address (?snap=1, &at=
+   while picking, &cafe= for the cafe, &step=check or done); the photos and
+   rows live in memory only. Nothing here writes to the browser's storage, so
+   an owner's shop and menu on this device are never touched. */
+const sn = {cafe: "", files: [], adding: false, busy: false, sending: false, rows: [], read: 0, diff: null, done: false, msg: "", ref: "", channel: "",
+            known: null, open: null, find: "", searchOpen: false, fold: new Map(), okSecs: new Set(), undo: null};
 let snapSeen = false;             // snap_opened is counted once a visit
 const snapAddr = parts => address(Object.assign({snap: "1"}, parts || {}));
 const SN_SAY = {
   too_many: "Use up to 6 photos.",
   need_row: "Keep at least one item with a name.",
-  send_failed: "We could not send that. Please try again in a moment."
+  send_failed: "We could not send that. Please try again in a moment.",
+  need_channel: "Choose where this menu is from."
 };
+const UNDO_WAIT = 6000;           // milliseconds the "Undo" line stays after a row is removed
 /* what is held belongs to one cafe: another cafe starts afresh */
 function snapFor(id){
   if(sn.cafe === id) return;
-  Object.assign(sn, {cafe: id, files: [], adding: false, busy: false, sending: false, rows: [], read: 0, diff: null, done: false, msg: "", ref: ""});
+  if(sn.undo) clearTimeout(sn.undo.timer);
+  Object.assign(sn, {cafe: id, files: [], adding: false, busy: false, sending: false, rows: [], read: 0, diff: null, done: false, msg: "", ref: "", channel: "",
+                     known: null, open: null, find: "", searchOpen: false, fold: new Map(), okSecs: new Set(), undo: null, sentRows: 0});
 }
 function showSnap(q){
   shop = null;
   if(!snapSeen){ snapSeen = true; track("snap_opened", {}); }
   const s = SHOPS.get(q.get("cafe")) || null, step = q.get("step") || "";
   let title = "Help keep prices fresh";
+  byId("snap").classList.remove("checking");
   if(q.get("missing")){ snapFor(""); paintSnapMissing(); title = "Not listed yet"; }
   else if(!s){ snapFor(""); paintSnapPick(q); }
   else {
@@ -4512,12 +4736,20 @@ function paintSnapMissing(){
     `<p class="sub">This cafe is not on Counter yet, so we cannot take its menu today.</p>` +
     `<div class="up"><div class="upacts"><button type="button" class="btn" data-nav="${esc(snapAddr())}">Pick another cafe</button></div></div>`;
 }
-/* screen 2: photos, from the camera or the phone's pictures */
+/* "Where is this menu from?": one required choice before any menu is read, for the owner and the diner alike */
+const channelHtml = (prefix, chosen) => `<fieldset class="channel" id="${prefix}-channel"><legend class="ask">Where is this menu from?</legend>` +
+  `<div class="tiles chtiles">` +
+  `<button type="button" class="tile" data-ch="in_store" aria-pressed="${chosen === "in_store"}"><span class="t1">In the cafe</span>` +
+    `<span class="t2">Menu board, printed menu or counter</span></button>` +
+  `<button type="button" class="tile" data-ch="online" aria-pressed="${chosen === "online"}"><span class="t1">Online</span>` +
+    `<span class="t2">Website, ordering page or delivery app</span></button></div></fieldset>`;
+/* screen 2: where the menu is from, then photos, from the camera or the phone's pictures */
 function paintSnapPhotos(s){
   byId("snap-body").innerHTML =
     `<h1 tabindex="-1">Snap the menu</h1>` +
-    `<p class="sub"><b>${esc(s.shop_name)}</b>, ${esc(s.district)}. Take a photo of the menu board or the printed menu. Up to 6 photos.</p>` +
-    `<div class="up"><div class="upacts">` +
+    `<p class="sub"><b>${esc(s.shop_name)}</b>, ${esc(s.district)}. Take a photo or a screenshot of the menu. Up to 6 photos.</p>` +
+    `<div class="up">` + channelHtml("sn", sn.channel) +
+    `<div class="upacts">` +
       `<input class="offscreen" type="file" id="sn-cam" accept="image/*" capture="environment">` +
       `<label class="btn" for="sn-cam">Take a photo</label>` +
       `<input class="offscreen" type="file" id="sn-pick" accept="image/*" multiple>` +
@@ -4528,6 +4760,7 @@ function paintSnapPhotos(s){
     `<p class="say" id="sn-msg" role="alert" tabindex="-1">${esc(sn.msg)}</p>` +
     `<p class="hint" id="sn-ref">${sn.ref ? `Error code: ${esc(refWords(sn.ref))}` : ""}</p>` +
     `<p class="say" id="sn-status" role="status"></p>` +
+    `<p class="hint" id="sn-needch"></p>` +
     `<div class="upacts"><button type="button" class="btn primary" id="sn-read" data-sn="read" disabled>${ICON.ai}Read the menu</button>` +
       `<button type="button" class="btn" data-nav="${esc(snapAddr({at: "a:" + s.district}))}">Back</button></div></div>`;
   paintSnapFiles();
@@ -4543,8 +4776,9 @@ function paintSnapFiles(){
 }
 function paintSnapState(){
   const btn = byId("sn-read");
-  if(btn) btn.disabled = sn.busy || sn.adding || !sn.files.length;
+  if(btn) btn.disabled = sn.busy || sn.adding || !sn.files.length || !sn.channel;
   upSay("sn-status", sn.busy ? "Reading the menu. This usually takes under a minute." : sn.adding ? "Getting the photos ready." : "");
+  upSay("sn-needch", sn.files.length && !sn.channel ? SN_SAY.need_channel : "");
 }
 /* photos only, 6 at most, each made smaller the same way as the owner's */
 async function snapAdd(chosen){
@@ -4567,7 +4801,7 @@ async function snapAdd(chosen){
   paintSnapFiles();
 }
 async function snapRead(){
-  if(sn.busy || sn.adding || !sn.files.length) return;
+  if(sn.busy || sn.adding || !sn.files.length || !sn.channel) return;
   const id = sn.cafe;
   sn.busy = true; sn.msg = ""; sn.ref = "";
   upSay("sn-msg", ""); upSay("sn-ref", ""); upSay("sn-filemsg", "");
@@ -4581,13 +4815,18 @@ async function snapRead(){
       got = await askReader(files);
     }
   } catch(e){ got = {error: "read_failed"}; }
+  if(got.items) await loadDates();           // the known prices, before the rows are shown
   if(sn.cafe !== id) return;
   sn.busy = false;
   if(got.items){
     sn.files = [];                             // the photos are not kept after the read
-    sn.rows = got.items.map((r, i) => ({id: i + 1, name: r.name.trim(), variant: typeof r.variant === "string" ? r.variant.trim() : "",
-                                       price: readPrice(r.price), kind: rowKind(r.kind)}));
-    sn.read = sn.rows.length; sn.done = false; sn.diff = null;
+    sn.rows = got.items.map((r, i) => {
+      const price = readPrice(r.price);
+      return {id: i + 1, name: r.name.trim(), variant: typeof r.variant === "string" ? r.variant.trim() : "",
+              section: typeof r.section === "string" ? r.section.trim() : "", price: price, kind: rowKind(r.kind),
+              unsure: r.unsure === true || price === "", looked: false, removed: false};
+    });
+    Object.assign(sn, {read: sn.rows.length, done: false, diff: null, known: knownFor(id), open: null, find: "", searchOpen: false, fold: new Map(), okSecs: new Set()});
     history.pushState(null, "", snapAddr({cafe: id, step: "check"}));
     route();
     return;
@@ -4600,61 +4839,252 @@ async function snapRead(){
   upSay("sn-ref", sn.ref ? `Error code: ${refWords(sn.ref)}` : "");
   focusOn("#sn-msg");
 }
-/* screen 3: each row's name, note and price, and a way to take it out. Nothing is matched to the compared items. */
-const snapRowHtml = r => `<li data-row="${r.id}">` +
-  `<div class="field mini sn-name"><label for="sn-n-${r.id}">Item</label>` +
-    `<input id="sn-n-${r.id}" type="text" autocomplete="off" maxlength="200" data-snn="${r.id}" value="${esc(r.name)}"></div>` +
-  `<div class="field mini"><label for="sn-v-${r.id}">Note</label>` +
-    `<input id="sn-v-${r.id}" type="text" autocomplete="off" maxlength="200" data-snv="${r.id}" value="${esc(r.variant)}"></div>` +
-  `<div class="field mini"><label for="sn-p-${r.id}">Price</label>` +
-    `<input id="sn-p-${r.id}" type="text" inputmode="decimal" autocomplete="off" data-snp="${r.id}" value="${esc(r.price)}"${badPrice(r.price) ? ` aria-invalid="true"` : ""}></div>` +
-  `<button type="button" class="textbtn" data-sn="droprow" data-id="${r.id}" aria-label="Remove ${esc(capital(r.name) || "this item")}">Remove</button></li>`;
+
+/* ----- screen 3: Check the prices -----
+   A summary, a bar of chips that stays at the top, a search, then the rows in
+   groups: To check (rows the reader was unsure of, or that have no price),
+   Changed, New on this menu, then the menu's own sections, each folded with
+   its count. Each row is one line that opens in place to be edited. A bar at
+   the foot holds "Next to check" and "Send". */
+const liveRows = () => sn.rows.filter(r => !r.removed && r.name.trim() !== "");
+/* each live row with its status and the group it shows in */
+function snapState(){
+  const rows = liveRows();
+  // our prices did not load: nothing is compared, and nothing is called new or changed
+  const res = sn.known ? classifyRows(sn.known, rows, sn.channel) : rows.map(() => ({status: "nocompare"}));
+  return rows.map((r, i) => {
+    const s = res[i];
+    const group = r.unsure || rowCents(r) === null || s.status === "unpriced" ? "check"
+      : s.status === "changed" ? "changed" : s.status === "new" ? "new" : "s:" + (r.section || NEW_TYPES.find(t => t[0] === r.kind)[1]);
+    return {r: r, s: s, group: group};
+  });
+}
+const needsSnapLook = x => (x.group === "check" || x.group === "changed") && !x.r.looked;
+function snapCounts(state){
+  const n = g => state.filter(x => x.s.status === g).length;
+  return {changed: state.filter(x => x.group === "changed").length, fresh: state.filter(x => x.group === "new").length,
+          check: state.filter(x => x.group === "check").length, same: state.filter(x => x.group !== "check" && x.s.status === "same").length,
+          other: state.filter(x => x.group !== "check" && (x.s.status === "nocompare" || x.s.status === "loose")).length,
+          nocompare: n("nocompare")};
+}
+/* the groups in their order, each with its rows; sections in the order the menu has them */
+function snapGroups(state){
+  const fixed = [["check", "To check", "To check"], ["changed", "Changed", "Changed"], ["new", "New on this menu", "New"]]
+    .map(g => ({key: g[0], name: g[1], chip: g[2], items: state.filter(x => x.group === g[0])}));
+  const secs = [];
+  state.forEach(x => { if(x.group.indexOf("s:") === 0 && secs.indexOf(x.group) === -1) secs.push(x.group); });
+  return fixed.concat(secs.map(k => ({key: k, name: k.slice(2), items: state.filter(x => x.group === k), section: true}))).filter(g => g.items.length);
+}
+const matchFind = r => { const q = fold(sn.find); return !q || fold(r.name).indexOf(q) !== -1 || fold(r.variant).indexOf(q) !== -1; };
+function snapRowHtml(x){
+  const r = x.r, open = sn.open === r.id, c = rowCents(r), name = esc(capital(r.name) || "This item");
+  if(open) return `<li class="crow open" data-row="${r.id}"><div class="cedit">` +
+    `<div class="field mini"><label for="sn-n-${r.id}">Item</label><input id="sn-n-${r.id}" type="text" autocomplete="off" maxlength="200" data-snn="${r.id}" value="${esc(r.name)}"></div>` +
+    `<div class="cedit2"><div class="field mini"><label for="sn-v-${r.id}">Size or note</label><input id="sn-v-${r.id}" type="text" autocomplete="off" maxlength="200" data-snv="${r.id}" value="${esc(r.variant)}"></div>` +
+    `<div class="field mini"><label for="sn-p-${r.id}">Price</label><input id="sn-p-${r.id}" type="text" inputmode="decimal" autocomplete="off" data-snp="${r.id}" value="${esc(r.price)}"${badPrice(r.price) ? ` aria-invalid="true"` : ""}></div></div>` +
+    `<p class="say" id="sn-rowmsg" role="alert"></p>` +
+    `<div class="upacts"><button type="button" class="btn primary" data-sn="done" data-id="${r.id}">Done</button>` +
+    `<button type="button" class="btn quiet" data-sn="remove" data-id="${r.id}" aria-label="Remove ${name}">Remove</button></div></div></li>`;
+  const was = x.s.status === "changed" ? x.s.was : null;
+  const under = (r.variant ? `<span class="cv">${esc(r.variant)}</span>` : "") +
+    (was ? `<span class="cv">was ${money(was.p)} ${onDay(was.d)}</span>` : "") +
+    (x.group === "check" ? `<span class="tag">Please check</span>` : "");
+  return `<li class="crow${was ? " changed" : ""}" data-row="${r.id}"><button type="button" class="crow-btn" data-sn="open" data-id="${r.id}" aria-expanded="false">` +
+    `<span class="cw"><span class="cn">${name}</span>${under}</span>` +
+    `<span class="cp">${was ? `<s class="cwas">${money(was.p)}</s>` : ""}<span class="cnow">${c === null ? "No price" : money(c / 100)}</span></span>` +
+    (r.looked && needsLookGroup(x.group) ? `<span class="offscreen">Checked</span>` : "") + `</button></li>`;
+}
+const needsLookGroup = g => g === "check" || g === "changed";
+function secState(items){
+  const other = items.filter(x => x.s.status !== "same").length;
+  return other === 0 ? "All match our last check" : `${items.length - other} match, ${other} ${NEW_TO_US}`;
+}
+/* ----- the pieces both check screens share: a group's header, the search chip and the search field ----- */
+/* one header for every group: its name (and a short state under it), its count at the right, and a chevron that folds it */
+const groupHead = (attr, i, name, count, open, sub, ticked) =>
+  `<button type="button" class="ghead" data-${attr}="fold" data-g="${i}" aria-expanded="${open}">` +
+  `<span class="gname"><span class="gtitle">${ticked ? ICON.tick : ""}${esc(name)}</span>${sub ? `<span class="gsub">${esc(sub)}</span>` : ""}</span>` +
+  `<span class="gcount">${count}</span>${ICON.chev}</button>`;
+const searchChip = attr => `<button type="button" class="chip icon" data-${attr}="openfind" aria-label="Find an item">${ICON.search}</button>`;
+/* the search, open in the bar: a clear button inside the field, and Close, which also clears it */
+const searchRow = (attr, value) => `<div class="searchrow2"><div class="searchfield">${ICON.search}` +
+  `<label for="${attr}-find" class="offscreen">Find an item</label>` +
+  `<input id="${attr}-find" type="search" autocomplete="off" spellcheck="false" placeholder="Find an item" value="${esc(value)}">` +
+  `<button type="button" class="clearin" id="${attr}-clearin" data-${attr}="clearfind" aria-label="Clear the search"${value ? "" : " hidden"}>${ICON.close}</button></div>` +
+  `<button type="button" class="btn quiet" data-${attr}="closefind">Close</button></div>`;
+/* a group starts open, except a menu section; searching opens every group */
+const snapOpen = g => sn.fold.has(g.key) ? sn.fold.get(g.key) : !g.section;
 function paintSnapCheck(s){
-  const n = sn.read;
+  byId("snap").classList.add("checking");
   byId("snap-body").innerHTML =
-    `<h1 tabindex="-1">Check the prices</h1>` +
-    `<p class="sub" id="sn-count">${ICON.ai}We read ${n === 1 ? "1 item" : `${n} items`} from the menu at <b>${esc(s.shop_name)}</b>. Fix anything that is wrong, or remove it.</p>` +
-    `<ul class="snaprows" id="sn-rows">` + sn.rows.map(snapRowHtml).join("") + `</ul>` +
-    `<div class="up"><p class="say" id="sn-msg" role="alert" tabindex="-1"></p>` +
-    `<div class="upacts"><button type="button" class="btn primary" id="sn-send" data-sn="send">Send to Counter</button>` +
-      `<button type="button" class="btn" data-nav="${esc(snapAddr({cafe: s.shop_id}))}">Back</button></div></div>`;
+    `<div class="sumblock" id="sn-sumblock"><h1 class="readh" tabindex="-1">${plural(sn.read, "price", "prices")} read from ${esc(s.shop_name)}.</h1><div id="sn-sum"></div></div>` +
+    `<div class="chipbar" id="sn-chipbar"></div>` +
+    `<div id="sn-groups"></div>` +
+    `<div class="savebar" id="sn-foot"><div class="barin"><p class="say" id="sn-msg" role="alert" tabindex="-1"></p>` +
+      `<button type="button" class="btn barleft" id="sn-next" data-sn="next">Next to check</button>` +
+      `<button type="button" class="btn primary barright" id="sn-send" data-sn="send">Send</button></div></div>`;
+  paintSnapList();
+}
+/* everything below the heading: drawn again after each change. keepBar: the search field is being typed in, so the bar stays as it is */
+function paintSnapList(keepBar){
+  const s = SHOPS.get(sn.cafe), box = byId("sn-groups");
+  if(!s || !box) return;
+  const state = snapState(), groups = snapGroups(state), counts = snapCounts(state), searching = fold(sn.find) !== "";
+  byId("sn-sum").innerHTML = sn.known ? summaryHtml(counts, sn.channel, s.shop_name, state.length, sn.known, "sn")
+    : `<p class="sum-look" id="sn-noload">We could not load our prices for this cafe, so nothing is compared yet. You can still check and send these.</p>`;
+  if(!keepBar) byId("sn-chipbar").innerHTML = sn.searchOpen ? searchRow("sn", sn.find)
+    : `<div class="chips" id="sn-chips" aria-label="Groups">` + searchChip("sn") + groups.map((g, i) => `<button type="button" class="chip" data-sn="chip" data-g="${i}">` +
+        (g.section && sn.okSecs.has(g.key) ? ICON.tick : "") + `${esc(g.chip || g.name)} (${g.items.length})</button>`).join("") + `</div>`;
+  let shown = 0;
+  box.innerHTML = groups.map((g, i) => {
+    const items = g.items.filter(x => matchFind(x.r));
+    if(searching && !items.length) return "";
+    shown += items.length;
+    const open = searching || snapOpen(g);
+    return `<section class="cgroup" id="sn-g${i}" data-g="${i}" aria-label="${esc(g.name)}">` +
+      groupHead("sn", i, g.name, g.items.length, open, g.section ? secState(g.items) : "", g.section && sn.okSecs.has(g.key)) +
+      (open ? `<ul class="crows">${items.map(snapRowHtml).join("")}</ul>` +
+              (g.section && !searching ? `<button type="button" class="btn quiet okbtn" data-sn="ok" data-g="${i}">Looks right</button>` : "") : "") + `</section>`;
+  }).join("") + (searching && !shown ? `<p id="sn-nomatch">No items match.</p>` : "");
+  const left = state.filter(needsSnapLook).length, next = byId("sn-next"), send = byId("sn-send");
+  next.disabled = left === 0;
+  next.innerHTML = left ? "Next to check" : `${ICON.tick}All checked`;
+  send.textContent = `Send ${plural(state.length, "price", "prices")}`;
+  send.disabled = sn.sending || state.length === 0;
+  spySnap();
+}
+/* the chip of the group under the bar is marked, and slid into sight. A chip just tapped stays marked
+   until the reader scrolls on their own: a short list cannot always bring its group to the top. */
+let spyHold = null;               // {g, until}: the tapped chip, and the time the page's own scroll to it is over
+function spySnap(){
+  const bar = byId("sn-chipbar"), chips = byId("sn-chips");
+  if(!bar || !chips || screen !== "snap") return;
+  const line = bar.getBoundingClientRect().bottom + 8;
+  let at = null;
+  document.querySelectorAll("#sn-groups .cgroup").forEach(g => { if(g.getBoundingClientRect().top <= line) at = g.dataset.g; });
+  if(at === null){ const first = document.querySelector("#sn-groups .cgroup"); at = first ? first.dataset.g : null; }
+  if(spyHold && byId("sn-g" + spyHold.g)) at = spyHold.g;
+  chips.querySelectorAll(".chip").forEach(c => {
+    const on = c.dataset.g === at;
+    if(on) c.setAttribute("aria-current", "true"); else c.removeAttribute("aria-current");
+    if(on && (c.offsetLeft < chips.scrollLeft || c.offsetLeft + c.offsetWidth > chips.scrollLeft + chips.clientWidth)) chips.scrollLeft = c.offsetLeft - 16;
+  });
+}
+let spyFrame = 0;
+window.addEventListener("scroll", () => {
+  if(spyHold && Date.now() > spyHold.until) spyHold = null;      // the reader's own scroll: the bar follows the page again
+  cancelAnimationFrame(spyFrame); spyFrame = requestAnimationFrame(spySnap);
+}, {passive: true});
+/* a group's top, just under the bar */
+function scrollToGroup(i){
+  const g = byId("sn-g" + i), bar = byId("sn-chipbar");
+  if(!g || !bar) return;
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  window.scrollTo({top: g.getBoundingClientRect().top + window.scrollY - bar.offsetHeight - 8, behavior: still ? "auto" : "smooth"});
+}
+function openSnapRow(id){
+  sn.open = id;
+  paintSnapList();
+  const row = document.querySelector(`#sn-groups [data-row="${id}"]`);
+  if(row) row.scrollIntoView({block: "center"});
+  focusOn(`[data-snp="${id}"]`);
+}
+/* Done: the row's price must be a price, or empty */
+function doneSnapRow(id){
+  const r = sn.rows.find(x => x.id === id);
+  if(!r) return;
+  if(badPrice(r.price)){ upSay("sn-rowmsg", UP_SAY.price_form); focusOn(`[data-snp="${id}"]`); return; }
+  r.looked = true;
+  if(rowCents(r) !== null) r.unsure = false;   // a row with a price the reader checked is no longer to check
+  sn.open = null;
+  paintSnapList();
+  focusOn(`#sn-groups [data-sn="open"][data-id="${id}"], #sn-next`);
+}
+function removeSnapRow(id){
+  const r = sn.rows.find(x => x.id === id);
+  if(!r) return;
+  r.removed = true;
+  sn.open = null;
+  if(sn.undo) clearTimeout(sn.undo.timer);
+  sn.undo = {id: id, timer: setTimeout(() => { sn.undo = null; paintSnapUndo(); }, UNDO_WAIT)};
+  paintSnapList();
+  paintSnapUndo();
+  focusOn(`#sn-undo, #sn-next`);
+}
+function paintSnapUndo(){
+  const msg = byId("sn-msg");
+  if(!msg) return;
+  const r = sn.undo ? sn.rows.find(x => x.id === sn.undo.id) : null;
+  msg.innerHTML = r ? `<span>${esc(capital(r.name) || "The item")} removed.</span> <button type="button" class="textbtn" id="sn-undo" data-sn="undo">Undo</button>` : "";
 }
 async function snapSend(){
   if(sn.sending) return;
   const id = sn.cafe, s = SHOPS.get(id);
   if(!s) return;
-  const named = sn.rows.filter(r => r.name.trim() !== ""), bad = named.find(r => badPrice(r.price));
+  const named = liveRows(), bad = named.find(r => badPrice(r.price));
   if(!named.length){ upSay("sn-msg", SN_SAY.need_row); focusOn("#sn-msg"); return; }
-  if(bad){ upSay("sn-msg", UP_SAY.price_form); focusOn(`[data-snp="${bad.id}"]`); return; }
-  const rows = rowsToSend(named);
+  if(bad){ openSnapRow(bad.id); upSay("sn-rowmsg", UP_SAY.price_form); return; }
+  const rows = rowsToSend(named, sn.channel);
   sn.sending = true;
   upSay("sn-msg", "");
   const btn = byId("sn-send");
   if(btn){ btn.disabled = true; btn.textContent = "Sending"; }
-  const changes = await diffMenu(id, rows).catch(() => null);
+  const changes = await diffMenu(id, rows, sn.channel).catch(() => null);
   const ok = await submitMenu("diner", s.shop_id, s.shop_name, rows, changes);
   sn.sending = false;
   if(sn.cafe !== id) return;
   if(!ok){
-    const again = byId("sn-send");
-    if(again){ again.disabled = false; again.textContent = "Send to Counter"; }
+    paintSnapList();
     upSay("sn-msg", SN_SAY.send_failed);
     focusOn("#sn-msg");
     return;
   }
-  sn.done = true; sn.diff = changes; sn.rows = [];
+  if(sn.undo){ clearTimeout(sn.undo.timer); sn.undo = null; }
+  sn.done = true; sn.diff = changes; sn.sentRows = rows.length; sn.rows = [];
   history.pushState(null, "", snapAddr({cafe: id, step: "done"}));
   route();
 }
+/* the thank-you: three counts, the biggest changes when there are any, and the cafes nearby that were checked longest ago */
+const NEARBY = 3;                 // the nearest cafes, ordered by their last check, oldest first
+function nearbyStale(s){
+  const near = nearestFirst(s, [...SHOPS.values()].filter(o => o.shop_id !== s.shop_id && o.shop_id !== MY_ID && o.lat != null)).slice(0, NEARBY);
+  const day = o => String((datesFor(o.shop_id) || {})._shop || "");
+  return near.sort((a, b) => day(a).localeCompare(day(b)) || farFrom(s, a) - farFrom(s, b)).map(o => ({o: o, day: day(o), away: awayWords(farFrom(s, o))}));
+}
 function paintSnapThanks(s){
-  byId("snap-body").innerHTML = `<h1 tabindex="-1">Thank you.</h1><p class="sub">We check every menu before it goes live.</p>` +
-    diffHtml(s.shop_id, sn.diff, "sn") +
+  const d = sn.diff;
+  const top = d ? d.priceChanges.slice().sort((a, b) => Math.abs(b.after - b.before) - Math.abs(a.after - a.before)).slice(0, 3) : [];
+  const num = (n, word, id) => `<div class="tnum" id="${id}"><span class="tbig">${n}</span><span class="tword">${word}</span></div>`;
+  const near = nearbyStale(s);
+  byId("snap-body").innerHTML = `<h1 tabindex="-1">Thank you.</h1><p class="sub" id="sn-thanks-line">We check every menu before it goes live.</p>` +
+    (d ? `<div class="tnums" id="sn-nums">` + num(d.priceChanges.length, "changed", "sn-n-changed") + num(d.newItems.length, "new", "sn-n-new") +
+           num(d.matchedSame, "the same", "sn-n-same") + `</div>`
+       : `<p class="sub" id="sn-sentonly">Sent: ${plural(sn.sentRows || 0, "price", "prices")}.</p>`) +
+    (top.length ? `<section class="tsec"><h2>Biggest changes</h2><ul class="difflist" id="sn-top">${top.map(c => `<li>${esc(changeLine(c))}</li>`).join("")}</ul></section>` : "") +
+    (near.length ? `<section class="tsec"><h2>Cafes nearby we have not checked in a while</h2><ul class="nearlist" id="sn-near">` + near.map(x =>
+      `<li><span class="cw"><span class="cn">${esc(x.o.shop_name)}</span>` +
+      `<span class="cv">${x.away ? `${x.away === "0 m" ? "Under 50 m" : x.away} away. ` : ""}${dayMonth(x.day) ? `Last checked ${dayMonth(x.day)}` : "Not checked yet"}</span></span>` +
+      `<button type="button" class="btn" data-nav="${esc(snapAddr({cafe: x.o.shop_id}))}" aria-label="Snap it: ${esc(x.o.shop_name)}">Snap it</button></li>`).join("") +
+      `</ul></section>` : "") +
     `<div class="up"><div class="upacts"><button type="button" class="btn primary" data-nav="${esc(snapAddr())}">Snap another cafe</button></div></div>`;
 }
+/* where the menu is from: the diner's and the owner's question */
+document.addEventListener("click", e => {
+  const el = e.target.closest("[data-ch]");
+  if(!el) return;
+  const ch = el.dataset.ch;
+  if(CHANNELS.indexOf(ch) === -1) return;
+  if(screen === "snap"){ sn.channel = ch; }
+  else if(screen === "menu"){ up.channel = ch; }
+  else return;
+  el.closest(".chtiles").querySelectorAll("[data-ch]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.ch === ch)));
+  if(screen === "snap") paintSnapState(); else paintUpState();
+});
 document.addEventListener("click", e => {
   const el = e.target.closest("[data-sn]");
   if(!el || el.disabled || screen !== "snap") return;
-  const act = el.dataset.sn;
+  const act = el.dataset.sn, id = Number(el.dataset.id), gi = el.dataset.g;
+  const groups = () => snapGroups(snapState());
   if(act === "read") snapRead();
   else if(act === "send") snapSend();
   else if(act === "dropfile"){
@@ -4663,17 +5093,75 @@ document.addEventListener("click", e => {
     paintSnapFiles();
     focusOn(`#sn-list [data-sn="dropfile"], label[for="sn-pick"]`);
   }
-  // the row goes from the list in place, so every other field keeps what was typed and where the cursor is
-  else if(act === "droprow"){
-    const id = Number(el.dataset.id), li = el.closest("li"), next = li && (li.nextElementSibling || li.previousElementSibling);
-    sn.rows = sn.rows.filter(r => r.id !== id);
-    if(li) li.remove();
-    if(next) focusOn(`#sn-rows [data-row="${next.dataset.row}"] [data-sn="droprow"]`); else focusOn("#sn-send");
+  else if(act === "open"){ if(sn.open !== null) doneSnapRow(sn.open); if(sn.open === null) openSnapRow(id); }
+  else if(act === "done") doneSnapRow(id);
+  else if(act === "remove") removeSnapRow(id);
+  else if(act === "undo" && sn.undo){
+    const r = sn.rows.find(x => x.id === sn.undo.id);
+    clearTimeout(sn.undo.timer); sn.undo = null;
+    if(r) r.removed = false;
+    paintSnapList(); paintSnapUndo();
+    focusOn(`#sn-groups [data-sn="open"][data-id="${r ? r.id : 0}"], #sn-next`);
+  }
+  else if(act === "chip"){
+    const g = groups()[Number(gi)];
+    if(g) sn.fold.set(g.key, true);
+    spyHold = {g: String(gi), until: Date.now() + 900};
+    paintSnapList();
+    scrollToGroup(gi);
+  }
+  // any group's header folds it or opens it
+  else if(act === "fold"){
+    const g = groups()[Number(gi)];
+    if(!g || fold(sn.find)) return;
+    sn.fold.set(g.key, !snapOpen(g));
+    paintSnapList();
+    focusOn(`#sn-g${gi} .ghead`);
+  }
+  // "Looks right": the section folds, its rows count as looked at, and its chip gets a tick
+  else if(act === "ok"){
+    const g = groups()[Number(gi)];
+    if(!g) return;
+    sn.okSecs.add(g.key); sn.fold.set(g.key, false);
+    g.items.forEach(x => { x.r.looked = true; });
+    paintSnapList();
+    focusOn(`#sn-g${gi} .ghead`);
+  }
+  // compare with the other channel's prices: everything is counted again, nothing is read again
+  else if(act === "chan" && CHANNELS.indexOf(el.dataset.to) !== -1){
+    sn.channel = el.dataset.to;
+    paintSnapList();
+    focusOn(`[data-sn="chan"]`);
+  }
+  // the search: the chip opens it in the bar, Close shuts it and clears it
+  else if(act === "openfind"){ sn.searchOpen = true; sn.open = null; paintSnapList(); focusOn("#sn-find"); }
+  else if(act === "closefind"){ sn.searchOpen = false; sn.find = ""; paintSnapList(); focusOn(`[data-sn="openfind"]`); }
+  else if(act === "next"){
+    if(sn.open !== null) doneSnapRow(sn.open);
+    if(sn.open !== null) return;
+    const x = snapState().filter(needsSnapLook);
+    // in the order they show: To check, then Changed
+    const first = x.find(y => y.group === "check") || x[0];
+    if(first) openSnapRow(first.r.id);
+  }
+  else if(act === "clearfind"){
+    sn.find = "";
+    const f = byId("sn-find");
+    if(f) f.value = "";
+    paintSnapList(true);
+    upClear("sn");
+    focusOn("#sn-find");
   }
 });
+/* the clear button inside a search field shows only while there is something to clear */
+function upClear(attr){
+  const btn = byId(attr + "-clearin"), f = byId(attr + "-find");
+  if(btn && f) btn.hidden = f.value === "";
+}
 document.addEventListener("input", e => {
   const el = e.target;
   if(screen !== "snap" || !el || !el.dataset) return;
+  if(el.id === "sn-find"){ sn.find = el.value; sn.open = null; paintSnapList(true); upClear("sn"); return; }
   const id = el.dataset.snn || el.dataset.snv || el.dataset.snp;
   const r = id ? sn.rows.find(x => String(x.id) === id) : null;
   if(!r) return;
@@ -4683,6 +5171,11 @@ document.addEventListener("input", e => {
     r.price = el.value;
     if(badPrice(r.price)) el.setAttribute("aria-invalid", "true"); else el.removeAttribute("aria-invalid");
   }
+});
+document.addEventListener("keydown", e => {
+  if(screen !== "snap" || e.key !== "Enter" || !e.target || !e.target.closest || !e.target.closest(".cedit")) return;
+  e.preventDefault();
+  if(sn.open !== null) doneSnapRow(sn.open);
 });
 document.addEventListener("change", e => {
   const el = e.target;

@@ -1,11 +1,20 @@
 #!/usr/bin/env python3
-"""Write counter/menu_dates.json: the day each menu row was last checked.
+"""Write counter/menu_dates.json: every price we know for each menu row, with its channel and day.
 
 For each shop_id in menu_items_all.csv, a map from a row's key (its name and
 variant, normalised exactly as Counter's diffKey() does in counter/index.html)
-to the latest observed_date of that key, plus "_shop": the latest
-observed_date of any row of that shop. Counter's What changed panel uses it to
-say when a price was last checked.
+to a short list of [price, price_basis, observed_date], one for each price and
+basis we have recorded, newest first. "_shop" is the latest observed_date of
+any row of that shop.
+
+The price is the one printed on the menu, before any service charge or GST:
+where our data added charges, the printed price is the "listed: <price>" in the
+row's price_note. Only rows our live site counts are used (an exact price, on
+sale), the same rule as build_counter_data.py's counts(). A row with no
+price_basis is kept with basis "": Counter never compares it.
+
+Counter's What changed compares a menu that was just read only with prices of
+the same channel: in the cafe (dine_in, takeaway) or online (online_order).
 
 Input, read only: menu_items_all.csv. Output: counter/menu_dates.json.
 No network calls. Prints counts only.
@@ -79,18 +88,56 @@ def variant_of(r):
     return ", ".join(p.replace("_", " ") for p in parts)
 
 
+# copied from build_counter_data.py (which copies build_site_data.py): the rows the live site counts
+NOT_COUNTED = ("menu: no", "seasonal: by name", "service charge rate unknown")
+
+def counts(row):
+    note = row.get("price_note", "")
+    if any(mark in note for mark in NOT_COUNTED):
+        return False
+    return (row["price_confidence"] == "exact"
+            and (note.startswith("availability: available") or "availability:" not in note))
+
+
+LISTED = re.compile(r"listed:\s*([0-9]+(?:\.[0-9]+)?)")
+
+def printed_price(r):
+    """The price as the menu prints it: the listed price where charges were added, else the recorded price."""
+    m = LISTED.search(r.get("price_note", ""))
+    raw = m.group(1) if m else r["price_sgd"].strip()
+    try:
+        return round(float(raw), 2)
+    except ValueError:
+        return None
+
+
 def main():
-    dates = {}
+    dates, per_basis, from_listed, skipped = {}, {}, 0, 0
     with SOURCE.open(encoding="utf-8", newline="") as fh:
         for r in csv.DictReader(fh):
             day = r["observed_date"].strip()
             if not day:
                 continue
             shop = dates.setdefault(r["shop_id"], {"_shop": ""})
-            k = diff_key(r["menu_wording"], variant_of(r))
-            if k != "|":
-                shop[k] = max(shop.get(k, ""), day)
             shop["_shop"] = max(shop["_shop"], day)
+            price = printed_price(r)
+            k = diff_key(r["menu_wording"], variant_of(r))
+            if k == "|" or price is None or not counts(r):
+                skipped += 1
+                continue
+            basis = r["price_basis"].strip()
+            from_listed += bool(LISTED.search(r.get("price_note", "")))
+            per_basis[basis or "(no basis)"] = per_basis.get(basis or "(no basis)", 0) + 1
+            known = shop.setdefault(k, [])
+            same = next((e for e in known if e[0] == price and e[1] == basis), None)
+            if same:
+                same[2] = max(same[2], day)
+            else:
+                known.append([price, basis, day])
+    for shop in dates.values():
+        for k, known in shop.items():
+            if k != "_shop":
+                known.sort(key=lambda e: (e[2], e[1], e[0]), reverse=True)
     OUT.write_text(json.dumps(dates, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n", encoding="utf-8")
 
     rows = dated = 0
@@ -101,9 +148,15 @@ def main():
             rows += 1
             dated += diff_key(r["name"], r["variant"]) in shop
     keys = sum(len(v) - 1 for v in dates.values())
+    prices = sum(len(e) for v in dates.values() for k, e in v.items() if k != "_shop")
     print(f"shops: {len(dates)}")
     print(f"keys: {keys}")
-    print(f"menus/*.json rows with their own date: {dated} of {rows}")
+    print(f"known prices (price, basis, day): {prices}")
+    print(f"rows used, by basis: {dict(sorted(per_basis.items()))}")
+    print(f"rows with no basis: {per_basis.get('(no basis)', 0)}")
+    print(f"rows whose printed price came from 'listed:' (charges taken off): {from_listed}")
+    print(f"rows left out (not counted by the live site, no price or no name): {skipped}")
+    print(f"menus/*.json rows with a known price: {dated} of {rows}")
     print(f"written: {OUT.relative_to(FOLDER)} ({OUT.stat().st_size} bytes)")
 
 

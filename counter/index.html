@@ -809,6 +809,58 @@ html.keys .offscreen:focus-visible + .btn{outline:2px solid var(--ink); outline-
 }
 </style>
 <script>
+/* The price test: each visitor sees Counter's full plan at S$20 or S$40 a month, 50/50, and keeps it.
+   Kept in one cookie, ctr_price, on .countr.site, so www and app share it for 180 days, and in this
+   site's local storage as a fallback (the only store on preview and local hosts, where that cookie
+   cannot be set). ?price=20 or ?price=40 forces a price for this browser and marks it forced,
+   and so does ?src=pitch, which is always S$20
+   (ctr_price_forced=1), so it can be left out of the results. The same code is in site/index.html
+   and counter/index.html: keep the two the same. It runs before the page paints, so no price flashes. */
+(function(){
+  var KEY = "ctr_price", FORCED = "ctr_price_forced", DAYS = 180;
+  var ok = function(v){ return v === "20" || v === "40"; };
+  var shared = /(^|\.)countr\.site$/.test(location.hostname);
+  function cookie(name, value){
+    if(value === undefined){
+      var m = document.cookie.match(new RegExp("(?:^|; )" + name + "=([^;]*)"));
+      return m ? decodeURIComponent(m[1]) : null;
+    }
+    if(!shared) return null;
+    try {
+      document.cookie = name + "=" + value + "; domain=.countr.site; path=/; max-age=" + DAYS * 86400 + "; SameSite=Lax" +
+        (location.protocol === "https:" ? "; Secure" : "");
+    } catch(e){ /* the local copy is kept */ }
+    return null;
+  }
+  function stored(name, value){
+    try {
+      if(value === undefined) return localStorage.getItem(name);
+      localStorage.setItem(name, value);
+    } catch(e){ /* a private window: the cookie, or this page alone */ }
+    return null;
+  }
+  var asked = null;
+  try {
+    var query = new URLSearchParams(location.search);
+    // the pitch deck's QR code (?src=pitch) says S$20: always S$20, and forced, so it never counts
+    asked = query.get("src") === "pitch" ? "20" : query.get("price");
+  } catch(e){ asked = null; }
+  var price, forced;
+  if(ok(asked)){ price = asked; forced = true; }
+  else {
+    var had = cookie(KEY), kept = stored(KEY);
+    price = ok(had) ? had : ok(kept) ? kept : null;
+    forced = price !== null && (cookie(FORCED) === "1" || stored(FORCED) === "1");
+    if(price === null){ price = Math.random() < 0.5 ? "20" : "40"; forced = false; }
+  }
+  cookie(KEY, price); stored(KEY, price);
+  if(forced){ cookie(FORCED, "1"); stored(FORCED, "1"); }
+  window.CTR_PRICE = {variant: price, forced: forced};
+  // the page's CSS shows the price that matches this attribute and hides the other
+  document.documentElement.setAttribute("data-price", price);
+})();
+</script>
+<script>
 /* PostHog: funnels, session replays, heatmaps and errors, next to the Supabase events.
    Every track() call is also sent here, under the same name and properties.
    Nothing is kept in the browser (persistence: memory), so the "no cookies, no storage" promise still holds.
@@ -845,6 +897,9 @@ if(POSTHOG_KEY && !/^(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])$/.test(location
     respect_dnt: true
   });
   posthog.register({surface: "app"});
+  // the price test: on every event, and on the person (the app shows no price, but its events count for each price)
+  posthog.register({price_variant: window.CTR_PRICE.variant, price_forced: window.CTR_PRICE.forced});
+  posthog.setPersonProperties({price_variant: window.CTR_PRICE.variant, price_forced: window.CTR_PRICE.forced});
 }
 </script>
 </head>

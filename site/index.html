@@ -820,6 +820,8 @@ h1,h2,h3,.lsec h2{font-family:var(--f-display); font-weight:500; letter-spacing:
 .bigquote cite{font-family:var(--f-text); font-weight:500; letter-spacing:.08em; color:var(--gold)}
 .pillars b{font-family:var(--f-text)}
 /* pricing */
+/* the price test: only the price that matches html[data-price] shows; S$20 when no script ran */
+html:not([data-price="40"]) .pv40, html[data-price="40"] .pv20{display:none}
 .plan{border-radius:10px; box-shadow:none; border:1px solid var(--rule); background:var(--paper)}
 .plan .price{font-family:var(--f-display); font-weight:500}
 .plan .btn{border-radius:var(--r)}
@@ -1136,6 +1138,58 @@ h1,h2,h3,.lsec h2{font-family:var(--f-display); font-weight:500; letter-spacing:
 .findcafe input:focus{outline:2px solid var(--tomato); outline-offset:1px}
 </style>
 <script>
+/* The price test: each visitor sees Counter's full plan at S$20 or S$40 a month, 50/50, and keeps it.
+   Kept in one cookie, ctr_price, on .countr.site, so www and app share it for 180 days, and in this
+   site's local storage as a fallback (the only store on preview and local hosts, where that cookie
+   cannot be set). ?price=20 or ?price=40 forces a price for this browser and marks it forced,
+   and so does ?src=pitch, which is always S$20
+   (ctr_price_forced=1), so it can be left out of the results. The same code is in site/index.html
+   and counter/index.html: keep the two the same. It runs before the page paints, so no price flashes. */
+(function(){
+  var KEY = "ctr_price", FORCED = "ctr_price_forced", DAYS = 180;
+  var ok = function(v){ return v === "20" || v === "40"; };
+  var shared = /(^|\.)countr\.site$/.test(location.hostname);
+  function cookie(name, value){
+    if(value === undefined){
+      var m = document.cookie.match(new RegExp("(?:^|; )" + name + "=([^;]*)"));
+      return m ? decodeURIComponent(m[1]) : null;
+    }
+    if(!shared) return null;
+    try {
+      document.cookie = name + "=" + value + "; domain=.countr.site; path=/; max-age=" + DAYS * 86400 + "; SameSite=Lax" +
+        (location.protocol === "https:" ? "; Secure" : "");
+    } catch(e){ /* the local copy is kept */ }
+    return null;
+  }
+  function stored(name, value){
+    try {
+      if(value === undefined) return localStorage.getItem(name);
+      localStorage.setItem(name, value);
+    } catch(e){ /* a private window: the cookie, or this page alone */ }
+    return null;
+  }
+  var asked = null;
+  try {
+    var query = new URLSearchParams(location.search);
+    // the pitch deck's QR code (?src=pitch) says S$20: always S$20, and forced, so it never counts
+    asked = query.get("src") === "pitch" ? "20" : query.get("price");
+  } catch(e){ asked = null; }
+  var price, forced;
+  if(ok(asked)){ price = asked; forced = true; }
+  else {
+    var had = cookie(KEY), kept = stored(KEY);
+    price = ok(had) ? had : ok(kept) ? kept : null;
+    forced = price !== null && (cookie(FORCED) === "1" || stored(FORCED) === "1");
+    if(price === null){ price = Math.random() < 0.5 ? "20" : "40"; forced = false; }
+  }
+  cookie(KEY, price); stored(KEY, price);
+  if(forced){ cookie(FORCED, "1"); stored(FORCED, "1"); }
+  window.CTR_PRICE = {variant: price, forced: forced};
+  // the page's CSS shows the price that matches this attribute and hides the other
+  document.documentElement.setAttribute("data-price", price);
+})();
+</script>
+<script>
 /* PostHog: funnels, session replays, heatmaps and errors, next to the Supabase events.
    Every track() call is also sent here, under the same name and properties.
    Nothing is kept in the browser (persistence: memory), so the "no cookies, no storage" promise still holds.
@@ -1172,6 +1226,9 @@ if(POSTHOG_KEY && !/^(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])$/.test(location
     respect_dnt: true
   });
   posthog.register({surface: "landing"});
+  // the price test: on every event, and on the person
+  posthog.register({price_variant: window.CTR_PRICE.variant, price_forced: window.CTR_PRICE.forced});
+  posthog.setPersonProperties({price_variant: window.CTR_PRICE.variant, price_forced: window.CTR_PRICE.forced});
 }
 </script>
 </head>
@@ -1339,7 +1396,7 @@ if(POSTHOG_KEY && !/^(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])$/.test(location
         <div><p>There is no catch. Counter is free while we start out: find your shop, pick your competitors and use every page, from your prices to their new items and offers. The Weekly Bake is free too.</p></div>
       </details>
       <details class="qpair">
-        <summary><h3>&ldquo;So what is the S$20 a month for?&rdquo;</h3></summary>
+        <summary><h3 data-pricespot="faq">&ldquo;So what is the <span class="pv pv20">S$20</span><span class="pv pv40">S$40</span> a month for?&rdquo;</h3></summary>
         <div><p>For what we build next: more items to compare, a message the morning a competitor changes a price, and your prices and theirs over time. You pay nothing today. Join the waitlist and we email you when it starts.</p></div>
       </details>
       <details class="qpair">
@@ -1363,7 +1420,7 @@ if(POSTHOG_KEY && !/^(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])$/.test(location
     <div class="wrap">
       <span class="section-kicker">Pricing</span>
       <h2>Start free. Go full when you're ready.</h2>
-      <p class="sublead">Less than one flat white a week.</p>
+      <p class="sublead"><span class="pv pv20">Less than one flat white a week.</span><span class="pv pv40">Less than two flat whites a week.</span></p>
       <div class="plans">
         <div class="plan">
           <h3>Free</h3>
@@ -1379,7 +1436,7 @@ if(POSTHOG_KEY && !/^(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])$/.test(location
         <div class="plan pro">
           <span class="badge">Waitlist open</span>
           <h3>Full</h3>
-          <p class="price">S$20<small>/ month</small></p>
+          <p class="price" data-pricespot="pricing"><span class="pv pv20">S$20</span><span class="pv pv40">S$40</span><small>/ month</small></p>
           <ul class="fulllist">
             <li>Everything in Free</li>
             <li>More items to compare, not only coffee and pastries</li>
@@ -2316,6 +2373,33 @@ function buildFooter(d){
 }
 
 /* ---------- forms ---------- */
+/* the price test: the price this visitor sees (set in the head) */
+const priceProps = () => window.CTR_PRICE ? {price_variant: window.CTR_PRICE.variant, price_forced: window.CTR_PRICE.forced} : {};
+/* One signup row, with the price this visitor saw. Until the columns are added in Supabase the insert
+   fails on them; it is then sent once more without them, so no signup is ever lost. */
+async function saveSignup(email, source){
+  const send = row => fetch(SUPABASE_URL + "/rest/v1/signups", {method: "POST", headers: SB_HEADERS, body: JSON.stringify(row)});
+  const res = await send(Object.assign({email: email, source: source}, priceProps()));
+  if(res.ok || !window.CTR_PRICE) return res;
+  let words = "";
+  try { words = await res.text(); } catch(e){ words = ""; }
+  return /price_variant|price_forced/.test(words) ? send({email: email, source: source}) : res;
+}
+/* waitlist_price_seen: once a session, the first time a price is at least half on screen */
+function watchPriceSeen(){
+  const KEY = "ctr_price_seen";
+  try { if(sessionStorage.getItem(KEY)) return; } catch(e){ /* counted once for this page, then */ }
+  const spots = [...document.querySelectorAll("[data-pricespot]")];
+  if(!spots.length || !window.CTR_PRICE || !("IntersectionObserver" in window)) return;
+  const seen = new IntersectionObserver(list => {
+    const hit = list.find(x => x.isIntersecting);
+    if(!hit) return;
+    seen.disconnect();
+    try { sessionStorage.setItem(KEY, "1"); } catch(e){ /* see above */ }
+    track("waitlist_price_seen", Object.assign({spot: hit.target.dataset.pricespot}, priceProps()));
+  }, {threshold: 0.5});
+  spots.forEach(el => seen.observe(el));
+}
 const SIGNUP_DONE = {
   newsletter_hero:    "You are on the list for The Weekly Bake. Your first email comes this week.",
   waitlist:           "You are on the waitlist. We will email you before we start."
@@ -2347,11 +2431,7 @@ function bindSignup(formId, inputId, noteId, source, evt, position, spot){
     btn.textContent = "Sending";
 
     try{
-      const res = await fetch(SUPABASE_URL + "/rest/v1/signups", {
-        method: "POST",
-        headers: SB_HEADERS,
-        body: JSON.stringify({email: email, source: source})
-      });
+      const res = await saveSignup(email, source);
       if(!res.ok) throw new Error("HTTP " + res.status);
 
       // the form goes away so the confirmation is the only thing left to read
@@ -2361,7 +2441,7 @@ function bindSignup(formId, inputId, noteId, source, evt, position, spot){
       form.replaceWith(done);
       note.hidden = true;
       // spot says which form on the page it was; only the waitlist forms give one
-      track(evt, spot ? {position: position || source, spot: spot} : {position: position || source});
+      track(evt, Object.assign(spot ? {position: position || source, spot: spot} : {position: position || source}, priceProps()));
     }catch(err){
       // whatever they typed stays in the field
       btn.disabled = false;
@@ -2374,6 +2454,7 @@ function bindSignup(formId, inputId, noteId, source, evt, position, spot){
 }
 
 function wireForms(){
+  watchPriceSeen();
   // the landing page's forms: the same rows, told apart only in analytics
   bindSignup("land-wait-form", "land-wait-email", "land-wait-note", "waitlist", "waitlist_submitted", "landing", "pricing");
   // the hero's waitlist form sends what the pricing card's does; spot tells the two apart

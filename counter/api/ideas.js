@@ -54,16 +54,19 @@ const SCHEMA = {
           what_to_do: {type: "string"},
           why: {type: "string"},
           items: {type: "array", items: {type: "string"}},
+          alternatives: {type: "array", items: {type: "string"}},
           suggested_price: {type: ["number", "null"]},
           evidence_ids: {type: "array", items: {type: "string"}}
         },
-        required: ["kind", "title", "what_to_do", "why", "items", "suggested_price", "evidence_ids"]
+        required: ["kind", "title", "what_to_do", "why", "items", "alternatives", "suggested_price", "evidence_ids"]
       }
     }
   },
   required: ["ideas"]
 };
-const SHAPE = "kind (set, offer, price_change or new_item), title (at most 8 words), what_to_do (1 to 2 sentences), why (1 sentence), items (names from own_menu), " +
+const SHAPE = "kind (set, offer, price_change or new_item), title (at most 8 words), what_to_do (1 to 2 sentences), why (1 sentence), " +
+  "items (what goes into one set or offer, one of each, names from own_menu), " +
+  "alternatives (names from own_menu a customer can swap in for one of the items, or an empty list), " +
   "suggested_price (a number, or null) and evidence_ids";
 const ASK = `Here is the cafe's data as JSON. Reply with 3 ideas: ${SHAPE}.\n\n`;
 /* mode "one": one new idea, or one idea changed as the owner asked, never one already shown or turned down */
@@ -111,14 +114,16 @@ function cleanIdea(i, names, ids){
   if(!i || typeof i !== "object") return null;
   const title = text(i.title, TITLE_MAX), what = text(i.what_to_do, WHAT_MAX);
   if(!title || !what) return null;
-  const items = (Array.isArray(i.items) ? i.items : []).map(x => names.get(text(x, 200).toLowerCase())).filter(Boolean);
+  const onMenu = list => [...new Set((Array.isArray(list) ? list : []).map(x => names.get(text(x, 200).toLowerCase())).filter(Boolean))];
+  const items = onMenu(i.items), alternatives = onMenu(i.alternatives).filter(x => items.indexOf(x) === -1);
   const p = i.suggested_price;
   return {
     kind: KINDS.indexOf(i.kind) !== -1 ? i.kind : null,
     title: title,
     what_to_do: what,
     why: text(i.why, WHY_MAX),
-    items: [...new Set(items)].slice(0, ITEMS_MAX),
+    items: items.slice(0, ITEMS_MAX),
+    alternatives: alternatives.slice(0, ITEMS_MAX),
     suggested_price: typeof p === "number" && Number.isFinite(p) && p >= PRICE_MIN && p <= PRICE_MAX ? Math.round(p * 100) / 100 : null,
     evidence_ids: [...new Set((Array.isArray(i.evidence_ids) ? i.evidence_ids : []).filter(x => typeof x === "string" && ids.has(x)))].slice(0, IDS_MAX)
   };

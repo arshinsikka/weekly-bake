@@ -5490,15 +5490,27 @@ function ideaFrom(i, built){
   if(!title || !what) return null;
   const ids = Array.isArray(i.evidence_ids) ? [...new Set(i.evidence_ids.filter(x => typeof x === "string"))] : [];
   const price = typeof i.suggested_price === "number" && isFinite(i.suggested_price) && i.suggested_price > 0 ? Math.round(i.suggested_price * 100) / 100 : null;
-  const items = Array.isArray(i.items) ? [...new Set(i.items.filter(x => typeof x === "string" && x.trim() !== "").map(x => x.trim()))].slice(0, 6) : [];
+  const names = list => Array.isArray(list) ? [...new Set(list.filter(x => typeof x === "string" && x.trim() !== "").map(x => x.trim()))].slice(0, 6) : [];
+  // items: one of each in the set or offer; alternatives: what a customer can swap in, never added to the sum
+  const items = names(i.items), alternatives = names(i.alternatives).filter(x => items.indexOf(x) === -1);
   const kind = IDEA_KINDS_OF.indexOf(i.kind) !== -1 ? i.kind : "";
   return {key: "i" + textHash(title + "|" + what), kind: kind, title: title, what_to_do: what, why: words(i.why, 300),
           // "Usually $X if bought separately" belongs to a set only
-          items: items, suggested_price: price, apart_cents: kind === "set" ? apartCents(items, built.ctx.own_menu) : null,
+          items: items, alternatives: alternatives, suggested_price: price,
+          apart_cents: kind === "set" ? apartCents(items, built.ctx.own_menu) : null,
           based_on: ids.filter(x => built.facts.has(x)).map(x => built.facts.get(x))};      // an id we did not give is left out
 }
 const IDEAS_BASED_SHOWN = 3;      // "Based on" lines shown before "Show N more"
 const basedOpen = new Set();      // ideas whose "Based on" lines are all shown, this visit
+/* An idea kept from before alternatives were asked for: when what_to_do offers one item "or" another
+   ("a Flat White or Long Black"), its items may hold a swap, so its sum cannot be trusted. */
+const reWords = t => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+function swapsUnknown(v){
+  if(Array.isArray(v.alternatives)) return false;
+  const items = Array.isArray(v.items) ? v.items : [];
+  return items.some(a => items.some(b => a !== b &&
+    new RegExp(`${reWords(a)}\\s+or\\s+(?:(?:a|an|the|regular|large|small|iced|hot)\\s+)?${reWords(b)}`, "i").test(v.what_to_do || "")));
+}
 /* the lines of one idea, the same on Offers and on Saved */
 function ideaLines(v){
   const head = `<p class="ihead"><span class="ititle">${esc(v.title)}</span></p>`;
@@ -5511,7 +5523,7 @@ function ideaLines(v){
       (webLink(f.source) ? ` <a href="${esc(f.source)}" target="_blank" rel="noopener">${esc(f.link || "See the source")}</a>` : "") + `</span>` : "") + `</li>`).join("");
   return head + `<p class="iwhat">${esc(v.what_to_do)}</p>` +
     (v.suggested_price != null ? `<p class="iprice">Suggested price: <strong>${money(v.suggested_price)}</strong></p>` +
-      (v.kind === "set" && Number.isFinite(v.apart_cents) ? `<p class="iapart muted">Usually ${money(v.apart_cents / 100)} if bought separately.</p>` : "") : "") +
+      (v.kind === "set" && Number.isFinite(v.apart_cents) && !swapsUnknown(v) ? `<p class="iapart muted">Usually ${money(v.apart_cents / 100)} if bought separately.</p>` : "") : "") +
     (v.why ? `<p class="iwhy"><span class="lbl">Why:</span> ${esc(v.why)}</p>` : "") +
     (based ? `<div class="ibased"><p class="lbl">Based on</p><ul>${based}</ul>` +
       (more > 0 ? `<button type="button" class="textbtn inline" data-ai="more" data-key="${esc(v.key)}" aria-expanded="${open}">` +
@@ -5638,7 +5650,7 @@ async function cardIdea(kind, key, request){
   let got = {ok: false, ideas: []};
   if(built){
     const payload = {context: built.ctx, mode: "one", shown: seenIdeas(mine)};
-    if(kind === "change") payload.change = {idea: {title: old.title, what_to_do: old.what_to_do, why: old.why, items: old.items,
+    if(kind === "change") payload.change = {idea: {title: old.title, what_to_do: old.what_to_do, why: old.why, items: old.items, alternatives: old.alternatives || [],
                                                     suggested_price: old.suggested_price}, request: request};
     got = await askIdeas(payload);
   }

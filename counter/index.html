@@ -556,14 +556,14 @@ html.keys .offscreen:focus-visible + .btn{outline:2px solid var(--ink); outline-
 .idea > * + *{margin-top:8px}
 .ihead{display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px}
 .ititle{font-weight:700; color:var(--ink)}
-.ilines{max-width:520px}
-.ilines li{display:flex; justify-content:space-between; gap:16px; padding:3px 0}
-.ilines li span:first-child{min-width:0; overflow-wrap:anywhere}
-.ilines .num{flex:none; text-align:right; font-variant-numeric:tabular-nums; color:var(--ink)}
-.ilines .sum{margin-top:4px; padding-top:6px; border-top:1px solid var(--rule)}
-.ilines .set{font-weight:600; color:var(--ink)}
-.isaves{color:var(--ink)}
-.iwhy .lbl{font-weight:600; color:var(--ink)}
+.iwhat, .iprice{color:var(--ink); max-width:68ch}
+.iwhy{max-width:68ch}
+.iwhy .lbl, .ibased .lbl{font-weight:600; color:var(--ink)}
+.ibased{max-width:68ch; font-size:14px}
+.ibased ul{margin-top:4px; padding-left:18px; list-style:disc}
+.ibased li{margin-top:3px; overflow-wrap:anywhere}
+.ibased a{white-space:nowrap}
+#ideas-ai{margin-top:12px}
 .idea .acts{display:flex; flex-wrap:wrap; gap:8px}
 .idea .acts .btn{min-height:36px; padding:0 14px; font-size:14px}
 .ideasacts{display:flex; flex-wrap:wrap; align-items:flex-end; gap:12px}
@@ -1285,13 +1285,12 @@ function ownFromDates(id){
   ownCache.set(id, out);
   return out;
 }
+/* a kept menu's channel as a price list. A menu saved before build 4 says "in_store" or "online":
+   online is the online list, the other is not one list, so dine-in as when nothing is said */
+const listOfSaid = said => said === "online" ? "online_order" : channelOf(said) || "dine_in";
 function ownPrices(k){
   const rec = (D.named_prices[k] || []).find(r => r.shop_id === shop.shop_id), menu = menuOf(shop.shop_id);
-  if(rec && rec.price_basis === "own_menu"){
-    // a menu saved before build 4 says "in_store" or "online": online is the online list, the other is not one list
-    const said = rec.channel || (menu && menu.channel) || "";
-    return {[said === "online" ? "online_order" : channelOf(said) || "dine_in"]: rec.price};
-  }
+  if(rec && rec.price_basis === "own_menu") return {[listOfSaid(rec.channel || (menu && menu.channel) || "")]: rec.price};
   const out = Object.assign({}, ownFromDates(shop.shop_id)[k] || {});
   if(rec && channelOf(rec.price_basis)) out[rec.price_basis] = printedPrice(rec);   // our data's own record wins in its list
   return out;
@@ -1465,7 +1464,7 @@ function openShop(s, ids, q){
   setShop(s, ids, q);
 
   if(entering){
-    iu.msg = ""; iu.ref = ""; ask = null; sell = null; flash = ""; shareNote = ""; alertFresh = null; ir.open = false; ir.find = ""; ir.say = "";
+    iu.state = ""; iu.ref = ""; ask = null; sell = null; flash = ""; shareNote = ""; alertFresh = null; ir.open = false; ir.find = ""; ir.say = "";
     view = "list"; showAll = false; showHidden = false; closed = false;
     // New items starts on the competitors' items when there are any
     newTab = "all"; chainsOn = false; foldNew(); onlyMine = page === "offers" ? anyMineOffer() : anyMine();
@@ -5240,289 +5239,303 @@ document.addEventListener("change", e => {
 });
 
 /* ---------- Ideas for your shop ----------
-   At the top of Offers. The owner asks, and AI writes 3 ideas from the
-   owner's own menu and what cafes near them offer: which items, what discount,
-   and the words. Every price on the page is worked out here, from the owner's
-   real prices at the moment of drawing. An idea is a bundle (2 or 3 items for
-   one set price) or a price cut (1 to 4 items, lower, on set days and hours).
-   The last set, how many were asked for today and the ideas not wanted are
-   kept in this browser only, for each shop. */
-const IDEAS_KEY = "counter.ideas.v1";
-const AVOID_MAX = 30;             // ideas not wanted, newest kept
-const IDEA_TYPES = {bundle: "Bundle", price_cut: "Price cut"};
-const IDEA_DAYS = {"weekdays": "Weekdays", "weekends": "Weekends", "every day": "Every day"};
-let ideasAll = {};                // shop_id -> {date, used, ideas, avoid, looked}
-const iu = {busy: false, loading: false, msg: "", ref: ""};
+   At the top of Offers. The owner asks, and an AI model (Gemini, through
+   api/ideas) writes 3 ideas the shop could try this month: a set, an offer,
+   a price change or a new item. The page sends it one context: the shop's own
+   menu, how its prices compare (the same numbers My prices shows), what its
+   competitors charge, offer and added lately, and offers elsewhere. A shop
+   with no competitors, or only a menu, still gets ideas from its menu.
+
+   Every fact in the context has an id, and the page keeps a sentence for each
+   id, written here from our data. The model only names ids: the "Based on"
+   lines under an idea are always our sentences, never the model's words. The
+   last answer is kept in this browser for each shop, competitor set, data
+   version and kept menu. */
+const IDEAS_KEY = "counter.ideas.v2";
+const IDEAS_MIN_MENU = 5;          // a shorter menu is asked to be filled in first, and nothing is sent
+const IDEAS_MENU_MAX = 120;        // own menu rows sent, compared items first
+const IDEAS_SEND_MAX = 38000;      // characters of context; the server takes about 40 KB
+const IDEAS_NEW_DAYS = 60;         // competitors' new items this recent
+const IDEAS_INSPIRE_MAX = 10;      // offers from cafes elsewhere
+const IDEAS_AVOID_MAX = 20;        // titles already shown or turned down, so they are not suggested again
+const IDEAS_WAIT = 65000;          // the server gives up a little before 60 seconds
+let ideasAll = {};                 // shop_id -> {key, ideas: [...], avoid: [titles]}
+const iu = {busy: false, state: "", ref: ""};    // state: "" | "small" (menu too short) | "failed"
 function loadIdeas(){
   let kept = null;
-  try { kept = JSON.parse(localStorage.getItem(IDEAS_KEY) || "{}"); } catch(e){ kept = null; }
+  try {
+    kept = JSON.parse(localStorage.getItem(IDEAS_KEY) || "{}");
+    localStorage.removeItem("counter.ideas.v1");      // ideas from the old rules
+  } catch(e){ kept = null; }
   ideasAll = kept && typeof kept === "object" && !Array.isArray(kept) ? kept : {};
 }
 function storeIdeas(){
   try { localStorage.setItem(IDEAS_KEY, JSON.stringify(ideasAll)); } catch(e){ /* the ideas stay for this visit */ }
 }
-/* this shop's ideas, cleaned, with the day's count started afresh on a new day */
+/* what kept ideas were made from: the shop, its competitors, our data's versions and the shop's own kept menu */
+function ideasStamp(){
+  const menu = menuOf(shop.shop_id);
+  return [shop.shop_id, rivals.map(o => o.shop_id).sort().join(","), D.meta ? D.meta.generated_at : "",
+          C && C.meta ? C.meta.generated_at : "", menu ? menu.saved_at : ""].join("|");
+}
+const goodIdea = i => !!i && typeof i === "object" && typeof i.key === "string" && typeof i.title === "string" &&
+  typeof i.what_to_do === "string" && Array.isArray(i.based_on);
+/* this shop's kept ideas: none when they were made from other competitors, other data or another menu */
 function shopIdeas(){
   let mine = ideasAll[shop.shop_id];
-  if(!mine || typeof mine !== "object") mine = ideasAll[shop.shop_id] = {date: "", used: 0, ideas: [], avoid: []};
-  const today = localToday();
-  if(mine.date !== today){ mine.date = today; mine.used = 0; }
-  mine.used = Number.isInteger(mine.used) && mine.used > 0 ? mine.used : 0;
-  const good = e => e && typeof e === "object" && IDEA_TYPES[e.type] && Array.isArray(e.item_ids) && e.item_ids.every(i => typeof i === "string");
-  mine.ideas = (Array.isArray(mine.ideas) ? mine.ideas : []).filter(e => good(e) && typeof e.title === "string" && typeof e.why === "string" && Number.isInteger(e.discount_percent));
-  mine.avoid = (Array.isArray(mine.avoid) ? mine.avoid : []).filter(good).slice(0, AVOID_MAX);
+  if(!mine || typeof mine !== "object") mine = ideasAll[shop.shop_id] = {key: "", ideas: [], avoid: []};
+  mine.avoid = (Array.isArray(mine.avoid) ? mine.avoid : []).filter(t => typeof t === "string").slice(0, IDEAS_AVOID_MAX);
+  mine.ideas = mine.key === ideasStamp() && Array.isArray(mine.ideas) ? mine.ideas.filter(goodIdea) : [];
   return mine;
 }
-const ideaKey = idea => idea.type + "|" + idea.item_ids.slice().sort().join(",") + "|" + idea.discount_percent;
 
-/* ----- the menu the ideas are made from ----- */
-/* a short id for a row of an uploaded menu, from its name and note, so it stays the same while they do */
-function rowId(text, taken){
-  let h = 5381;
-  for(let i = 0; i < text.length; i += 1) h = ((h * 33) ^ text.charCodeAt(i)) >>> 0;
-  let id = "u" + h.toString(36), n = 1;
-  while(taken.has(id)){ n += 1; id = "u" + h.toString(36) + n; }
-  taken.add(id);
-  return id;
-}
-/* a menu kept in this browser: its rows that have a price. A row that came from our menu file keeps that id. */
-function uploadedRows(menu){
-  const taken = new Set(menu.rows.map(r => r && r.id).filter(i => typeof i === "string" && i !== ""));
-  const given = new Set();
-  return menu.rows.filter(r => r && typeof r.name === "string" && Number.isFinite(r.cents) && r.cents > 0).map(r => {
-    const own = typeof r.id === "string" && r.id !== "" && !given.has(r.id);
-    if(own) given.add(r.id);
-    return {id: own ? r.id : rowId(r.name + "|" + (r.variant || ""), taken), name: r.name, variant: r.variant || "", price: r.cents / 100, kind: rowKind(r.kind)};
-  });
-}
-/* The menu ideas are made from: the one the shop keeps in this browser, or for
-   a listed shop with no changes its menu file. Undefined while that file has
-   not been asked for, null when it could not be loaded. */
-function ideaRows(id){
+/* ----- the context: the shop's menu, its prices, its competitors and offers elsewhere ----- */
+/* "Croissant, plain" -> "plain croissant"; "Flat white" -> "flat white" */
+const ideaItem = k => { const n = itemName(k), p = n.split(", "); return (p.length === 2 ? `${p[1]} ${p[0]}` : n).toLowerCase(); };
+const checkedOn = day => dayMonth(day) ? `checked ${dayMonth(day)}` : "";
+const webLink = u => typeof u === "string" && /^https?:\/\//i.test(u) ? u : "";
+const IDEA_KINDS = {drink: ["drink", "drinks"], pastry: ["pastry", "pastries"], cake: ["cake", "cakes"], savoury: ["savoury item", "savoury items"]};
+const SET_WORDS = /\b(set|sets|combo|combos|bundle|bundles|meal deal)\b/i;
+/* The shop's own menu, compared items first: [{name, variant, price, list, kind, section}].
+   A menu kept in this browser (uploaded, or changed here) is the owner's: its prices, in the list it was
+   read for, as ownPrices reads it. Else our menu file's rows, each at the printed price before charges
+   that menu_dates.json holds for it (the file My prices reads): in the list My prices compares that item
+   in, else the shop's main list, else any list we have. A row with no printed price and list is left out. */
+function ideaMenu(id){
   const kept = menuOf(id);
-  if(kept) return uploadedRows(kept);
-  return fileRows[id] ? fileRows[id].filter(r => r.price !== null && r.price > 0) : fileRows[id];
+  let rows = [];
+  if(kept){
+    const list = listOfSaid(kept.channel);
+    rows = kept.rows.filter(r => r && typeof r.name === "string" && r.name.trim() !== "" && Number.isFinite(r.cents) && r.cents > 0)
+      .map(r => ({name: r.name.trim(), variant: r.variant || "", price: r.cents / 100, list: list, kind: rowKind(r.kind),
+                  section: r.section && r.section !== FILE_HEAD ? sentenceCase(r.section) : ""}));
+  } else {
+    const d = datesFor(id) || {}, seen = new Set(), count = {};
+    Object.keys(d).forEach(k => { if(Array.isArray(d[k])) new Set(d[k].map(e => e && e[1])).forEach(l => { count[l] = (count[l] || 0) + 1; }); });
+    const main = CHANNELS.slice().sort((a, b) => (count[b] || 0) - (count[a] || 0))[0];
+    (fileRows[id] || []).forEach(r => {
+      const key = diffKey(r.name, r.variant);
+      const known = Array.isArray(d[key]) ? d[key].filter(e => Array.isArray(e) && typeof e[0] === "number" && channelOf(e[1])) : [];
+      if(!known.length || seen.has(key)) return;
+      seen.add(key);
+      const tag = nineTag(r.name, r.variant), want = tag && myItems.indexOf(tag) !== -1 ? chanOf(tag) : main;
+      const e = known.find(x => x[1] === want) || known.find(x => x[1] === main) || known[0];   // newest first in each list
+      rows.push({name: r.name.trim(), variant: r.variant || "", price: e[0], list: e[1], kind: r.kind, section: ""});
+    });
+  }
+  const later = r => { const t = nineTag(r.name, r.variant); return t && myItems.indexOf(t) !== -1 ? 0 : 1; };
+  return rows.map((r, i) => ({r: r, i: i})).sort((a, b) => later(a.r) - later(b.r) || a.i - b.i).map(x => x.r);
+}
+/* what the menu itself says: how many of each kind and their prices, and whether it has a set */
+function menuFacts(menu){
+  const out = [];
+  Object.keys(IDEA_KINDS).forEach(k => {
+    const ps = menu.filter(r => r.kind === k).map(r => r.price).sort((a, b) => a - b), w = IDEA_KINDS[k];
+    out.push(ps.length > 1 ? `We have ${ps.length} ${w[1]} on your menu, from ${money(ps[0])} to ${money(ps[ps.length - 1])}.`
+      : ps.length ? `We have 1 ${w[0]} on your menu, at ${money(ps[0])}.` : `We found no ${w[1]} on your menu.`);
+  });
+  const sets = menu.filter(r => SET_WORDS.test(r.name + " " + r.variant));
+  out.push(sets.length ? `Your menu has ${sets.length === 1 ? "1 set" : `${sets.length} sets`}, such as ${sets[0].name}.` : "We found no set or combo on your menu.");
+  return out;
+}
+/* {ctx, facts, size}: what is sent, our sentence for each fact id, and how many menu items there are */
+async function ideasContext(){
+  const id = shop.shop_id, today = localToday();
+  if(!menuOf(id)) await loadFile(id);
+  await loadDates();
+  const facts = new Map();
+  const fact = (text, source, when, label) => {
+    const k = "e" + (facts.size + 1);
+    facts.set(k, {text: text, source: webLink(source), date: when || "", link: label || "See the source"});
+    return k;
+  };
+  const menu = ideaMenu(id);
+  const ctx = {shop: {name: shop.shop_name, area: shop.district || ""}, notes: {}};
+  ctx.own_menu = menu.slice(0, IDEAS_MENU_MAX).map(r => Object.assign({name: r.name}, r.variant ? {variant: r.variant} : {},
+    {price: r.price, list: r.list, kind: r.kind}, r.section ? {section: r.section} : {}));
+  ctx.menu_facts = menuFacts(menu).map(t => ({id: fact(t, "", ""), text: t}));
+
+  // how its prices compare: compare() and realPrice(), the numbers My prices shows
+  const cmp = new Map();
+  myItems.forEach(k => { const v = realPrice(k); if(v != null) cmp.set(k, {v: v, c: compare(k, v)}); });
+  ctx.comparison = [];
+  cmp.forEach(({v, c}, k) => {
+    if(!c.enough) return;
+    const days = c.others.map(r => r.observed_date).filter(Boolean).sort(), last = days[days.length - 1];
+    const when = !days.length ? "" : days[0] === last ? checkedOn(last) : `checked ${dayMonth(days[0])} to ${dayMonth(last)}`;
+    const text = `${c.less === c.n ? `All ${c.n} cafes charge` : `${c.less} of ${c.n} cafes ${c.less === 1 ? "charges" : "charge"}`} less than your ` +
+      `${CHANNEL_WORDS[c.channel]} ${ideaItem(k)} at ${money(v)}` +
+      (c.more ? `, and ${c.more} ${c.more === 1 ? "charges" : "charge"} more` : c.less < c.n ? ", and none charge more" : "") +
+      (c.usual != null ? ` (usual ${money(c.usual)})` : "") + ".";
+    ctx.comparison.push({id: fact(text, "", when), item: itemName(k), your_price: v, list: c.channel, cafes_compared: c.n,
+      share_charging_less: Math.round(100 * c.less / c.n) / 100, share_charging_more: Math.round(100 * c.more / c.n) / 100, usual_price: c.usual});
+  });
+  if(!ctx.comparison.length) ctx.notes.comparison = "none of the items we compare has enough prices for this shop";
+
+  // compared items its competitors sell and it does not: the Items I do not sell list
+  ctx.gaps = visMissing().filter(k => sellers(k) > 0).map(k => ({
+    id: fact(`${sellers(k)} of your ${rivals.length} competitors sell a ${ideaItem(k)}; we did not find one on your menu.`, "", ""),
+    item: itemName(k), competitors_selling: sellers(k)}));
+
+  // its competitors: their printed prices in the same list, their offers now, their items added lately
+  const from = daysBefore(today, IDEAS_NEW_DAYS);
+  const lacking = visMissing().map(k => [k, compare(k, null)]);
+  ctx.competitors = rivals.map(o => {
+    const theirs = r => (r.shop_ids || []).indexOf(o.shop_id) !== -1, km = farFrom(shop, o);
+    const prices = [...cmp].map(([k, x]) => [k, x.c]).concat(lacking).map(([k, c]) => {
+      const r = c.others.find(x => x.shop_id === o.shop_id);
+      return r ? {id: fact(`${o.shop_name} charges ${money(r.price)} for a ${CHANNEL_WORDS[c.channel]} ${ideaItem(k)}.`, r.source_url, checkedOn(r.observed_date), "See their menu"),
+                  item: itemName(k), price: r.price, list: c.channel} : null;
+    }).filter(Boolean);
+    const offers = offersLoaded() ? C.offers.filter(r => runningNow(r, today) && theirs(r)).map(r => ({
+      id: fact(`${r.brand_name} runs “${r.offer_text}”.`, r.source_url, checkedOn(r.observed_date), "See the offer"),
+      text: r.offer_text, type: r.promo_type, checked: r.observed_date || ""})) : [];
+    const had = new Set();
+    const fresh = C ? C.launches.filter(theirs).map(r => Object.assign({}, r, {on: r.first_seen || (r.launch_month ? r.launch_month + "-01" : "")}))
+      .filter(r => r.on >= from && r.on <= today && !had.has(r.item_name) && had.add(r.item_name)).map(r => ({
+        id: fact(`${r.shop} added ${r.item_name}${typeof r.price === "number" ? ` at ${money(r.price)}` : ""}.`, r.source_url,
+                 r.first_seen ? `first seen ${dayMonth(r.first_seen)}` : "", "See their site"),
+        name: r.item_name, price: typeof r.price === "number" ? r.price : null, first_seen: r.on})) : [];
+    return {name: o.shop_name, distance_m: isFinite(km) ? Math.round(km * 1000) : null, prices: prices, offers: offers, new_items: fresh};
+  });
+  if(!rivals.length) ctx.notes.competitors = "none chosen";
+  else {
+    if(!ctx.competitors.some(o => o.offers.length)) ctx.notes.competitor_offers = "none on file";
+    if(!ctx.competitors.some(o => o.new_items.length)) ctx.notes.competitor_new_items = `none in the last ${IDEAS_NEW_DAYS} days`;
+  }
+
+  // inspiration: bundles first, then price cuts, from independent cafes first, never this shop's or its competitors'
+  const near = new Set(rivals.map(o => o.shop_id).concat(id));
+  ctx.inspiration = (offersLoaded() ? C.offers : [])
+    .filter(r => runningNow(r, today) && (r.promo_type === "bundle" || r.promo_type === "price_cut") && !(r.shop_ids || []).some(x => near.has(x)))
+    .sort((a, b) => (b.promo_type === "bundle") - (a.promo_type === "bundle") || !!a.is_chain - !!b.is_chain)
+    .slice(0, IDEAS_INSPIRE_MAX).map(r => ({
+      id: fact(`Elsewhere in Singapore, ${r.brand_name}${r.district ? ` (${r.district})` : ""} runs “${r.offer_text}”.`, r.source_url, checkedOn(r.observed_date), "See the offer"),
+      cafe: r.brand_name, area: r.district || "elsewhere in Singapore", type: r.promo_type, text: r.offer_text}));
+  if(!ctx.inspiration.length) ctx.notes.inspiration = "none on file";
+  if(menu.length > ctx.own_menu.length) ctx.notes.own_menu = `the first ${ctx.own_menu.length} of ${menu.length} items`;
+
+  // a long menu is cut, the last rows first, until the whole context fits
+  while(JSON.stringify(ctx).length > IDEAS_SEND_MAX && ctx.own_menu.length > IDEAS_MIN_MENU){
+    ctx.own_menu = ctx.own_menu.slice(0, ctx.own_menu.length - 10);
+    ctx.notes.own_menu = `the first ${ctx.own_menu.length} of ${menu.length} items`;
+  }
+  return {ctx: ctx, facts: facts, size: menu.length};
 }
 
-/* ----- the sums: whole cents. A set price goes to the nearest 10 cents, with a half going up.
-   A cut price goes down to the 10 cents, so the percent that is stated is always met or beaten. ----- */
-const offTo10 = (c, percent) => Math.floor((c * (100 - percent) + 500) / 1000) * 10;
-const cutTo10 = (c, percent) => Math.floor(c * (100 - percent) / 1000) * 10;
-const hourWords = h => h === 12 ? "12pm" : h < 12 ? `${h}am` : `${h - 12}pm`;
-/* an item's name starts with a capital on screen; the text that is kept is not changed */
-const itemWords = r => capital(r.name + (r.variant ? `, ${r.variant}` : ""));
-/* An idea with everything worked out from the menu as it is now, as it is shown and as it is saved.
-   Null when an item is no longer on the menu, or the sums leave nothing to offer. */
-function ideaView(idea, rows){
-  const items = idea.item_ids.map(id => (rows || []).find(r => r.id === id));
-  if(!items.length || items.some(r => !r)) return null;
-  const d = idea.discount_percent;
-  const view = {key: ideaKey(idea), type: idea.type, title: idea.title, why: idea.why, discount_percent: d,
-                items: items.map(r => ({name: r.name, variant: r.variant, cents: cents(r.price)}))};
-  if(idea.type === "bundle"){
-    view.apart_cents = view.items.reduce((t, r) => t + r.cents, 0);
-    view.set_cents = offTo10(view.apart_cents, d);
-    if(view.set_cents <= 0 || view.set_cents >= view.apart_cents) return null;
-    view.saves_cents = view.apart_cents - view.set_cents;
-    view.saves_percent = Math.round(100 * view.saves_cents / view.apart_cents);
-  } else {
-    view.items.forEach(r => { r.new_cents = cutTo10(r.cents, d); });
-    if(view.items.some(r => r.new_cents <= 0 || r.new_cents >= r.cents)) return null;
-    view.when = `${IDEA_DAYS[idea.days] || ""}, ${idea.all_day ? "all day" : `${hourWords(idea.start_hour)} to ${hourWords(idea.end_hour)}`}`;
-  }
-  return view;
+/* ----- an idea as the model gave it -> an idea the page shows, with our sentences ----- */
+function textHash(s){
+  let h = 5381;
+  for(let i = 0; i < s.length; i += 1) h = ((h * 33) ^ s.charCodeAt(i)) >>> 0;
+  return h.toString(36);
 }
-const dollars = c => money(c / 100);
+function ideaFrom(i, facts){
+  if(!i || typeof i !== "object") return null;
+  const words = (v, max) => typeof v === "string" ? v.trim().slice(0, max) : "";
+  const title = words(i.title, 80), what = words(i.what_to_do, 400);
+  if(!title || !what) return null;
+  const ids = Array.isArray(i.evidence_ids) ? [...new Set(i.evidence_ids.filter(x => typeof x === "string"))] : [];
+  const price = typeof i.suggested_price === "number" && isFinite(i.suggested_price) && i.suggested_price > 0 ? Math.round(i.suggested_price * 100) / 100 : null;
+  return {key: "i" + textHash(title + "|" + what), title: title, what_to_do: what, why: words(i.why, 300),
+          items: Array.isArray(i.items) ? i.items.filter(x => typeof x === "string" && x.trim() !== "").map(x => x.trim()).slice(0, 6) : [],
+          suggested_price: price,
+          based_on: ids.filter(x => facts.has(x)).map(x => facts.get(x))};      // an id we did not give is left out
+}
 /* the lines of one idea, the same on Offers and on Saved */
 function ideaLines(v){
-  const head = `<p class="ihead"><span class="tag">${IDEA_TYPES[v.type]}</span><span class="ititle">${esc(v.title)}</span></p>`;
-  const row = (words, value, cls) => `<li${cls ? ` class="${cls}"` : ""}><span>${words}</span><span class="num">${value}</span></li>`;
-  const body = v.type === "bundle"
-    ? `<ul class="ilines">` + v.items.map(r => row(esc(itemWords(r)), dollars(r.cents))).join("") +
-        row("Bought apart", dollars(v.apart_cents), "sum") + row("Suggested set price", `<strong>${dollars(v.set_cents)}</strong>`, "set") + `</ul>` +
-      `<p class="isaves">Saves the customer ${dollars(v.saves_cents)}, about ${v.saves_percent}%.</p>`
-    : `<ul class="ilines">` + v.items.map(r => row(esc(itemWords(r)), `${dollars(r.cents)} to ${dollars(r.new_cents)}`)).join("") +
-        row("When", esc(v.when), "sum") + `</ul>` +
-      `<p class="isaves">${v.discount_percent}% off these items.</p>`;
-  // an idea that came with no reason has no "Why:" line
-  return head + body + (v.why ? `<p class="iwhy"><span class="lbl">Why:</span> ${esc(v.why)}</p>` : "");
+  const head = `<p class="ihead"><span class="ititle">${esc(v.title)}</span></p>`;
+  // an idea saved before the ideas were written by AI keeps its title and its reason
+  if(typeof v.what_to_do !== "string") return head + (v.why ? `<p class="iwhy">${esc(v.why)}</p>` : "");
+  // "Checked 19 Sep. See the offer", as the cafes' rows say it elsewhere in Counter
+  const based = (v.based_on || []).map(f => `<li>${esc(f.text)}` +
+    (f.date || webLink(f.source) ? ` <span class="muted">${f.date ? esc(capital(f.date)) + "." : ""}` +
+      (webLink(f.source) ? ` <a href="${esc(f.source)}" target="_blank" rel="noopener">${esc(f.link || "See the source")}</a>` : "") + `</span>` : "") + `</li>`).join("");
+  return head + `<p class="iwhat">${esc(v.what_to_do)}</p>` +
+    (v.suggested_price != null ? `<p class="iprice">Suggested price: <strong>${money(v.suggested_price)}</strong></p>` : "") +
+    (v.why ? `<p class="iwhy"><span class="lbl">Why:</span> ${esc(v.why)}</p>` : "") +
+    (based ? `<div class="ibased"><p class="lbl">Based on</p><ul>${based}</ul></div>` : "");
 }
 const savedAi = key => shopSaves().ideas.find(e => e.kind === "ai_idea" && e.idea.key === key);
 
 let ideasShown = "";             // the ideas on screen last counted
 function paintIdeas(){
-  const box = byId("ideaspage"), mine = shopIdeas(), rows = ideaRows(shop.shop_id);
-  // ideas kept from before need the menu to be drawn: it is asked for once, and the section is drawn again
-  if(mine.ideas.length && rows === undefined && !iu.loading){
-    iu.loading = true;
-    const id = shop.shop_id;
-    loadFile(id).then(() => { iu.loading = false; if(shop && shop.shop_id === id && page === "offers") paintIdeas(); });
-  }
-  const views = mine.ideas.map(i => ideaView(i, rows)).filter(Boolean);
-  const first = !mine.ideas.length;
-  const shownKey = shop.shop_id + "|" + views.map(v => v.key).join(",");
-  if(views.length && shownKey !== ideasShown){ ideasShown = shownKey; track("ideas_shown", {n: views.length}); }
-  const looked = mine.looked && views.length ? mine.looked : null;
-  const count = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+  const box = byId("ideaspage"), mine = shopIdeas(), ideas = iu.busy ? [] : mine.ideas;
+  const shownKey = shop.shop_id + "|" + ideas.map(i => i.key).join(",");
+  if(ideas.length && shownKey !== ideasShown){ ideasShown = shownKey; track("ideas_shown", {n: ideas.length}); }
+  const say = iu.busy ? "Reading your menu and your competitors'..." : iu.state === "failed" ? "Ideas are not available right now."
+    : iu.state === "small" ? "Add your full menu to get ideas." : "";
+  const button = iu.state === "small" && !iu.busy
+    ? `<button type="button" class="btn" id="ideas-update" data-nav="${esc(updateHome())}">Update my menu</button>`
+    : `<button type="button" class="btn" id="ideas-get" data-ai="get"${iu.busy ? " disabled" : ""}>${ICON.ai}` +
+      `${iu.state === "failed" ? "Try again" : mine.ideas.length ? "Refresh ideas" : "Get ideas for my shop"}</button>`;
   box.innerHTML =
     `<h2 id="ideas-h" tabindex="-1">Ideas for your shop</h2>` +
-    `<p class="muted" id="ideas-says">Made from your menu, the usual prices near you and the offers cafes near you run now. Check them before you use them.</p>` +
-    (looked ? `<p class="muted small" id="ideas-looked">Looked at: your menu (${count(looked.n, "item", "items")}), ` +
-      `${count(looked.c, "offer", "offers")} from your competitors, ${count(looked.o, "offer", "offers")} from other cafes.</p>` : "") +
-    (views.length ? `<ul class="idealist" id="ideas-list">` + views.map(v =>
+    `<p class="muted" id="ideas-says">Three things you could try this month, from your menu, your prices and what your competitors are doing.</p>` +
+    (ideas.length ? `<ul class="idealist" id="ideas-list">` + ideas.map(v =>
       `<li class="idea" data-key="${esc(v.key)}">` + ideaLines(v) +
       `<div class="acts">` + saveBtn(`data-ai="save" data-key="${esc(v.key)}"`, !!savedAi(v.key), "Save", v.title) +
       `<button type="button" class="btn quiet" data-ai="drop" data-key="${esc(v.key)}" aria-label="Not for me: ${esc(v.title)}">Not for me</button></div></li>`).join("") + `</ul>` : "") +
-    `<p class="say" id="ideas-msg" role="alert" tabindex="-1">${esc(iu.msg)}</p>` +
-    `<p class="hint" id="ideas-ref">${iu.ref ? `Error code: ${esc(refWords(iu.ref))}` : ""}</p>` +
-    `<div class="ideasacts">` +
-      `<button type="button" class="btn" id="ideas-get" data-ai="get"${iu.busy ? " disabled" : ""}>${first ? "Get ideas for my shop" : "Give me different ideas"}</button></div>`;
-}
-/* what goes with the menu: the offers running now, the competitors' new items, the usual prices */
-function ideasRequest(rows, mine){
-  const today = localToday(), seen = new Set();
-  const offers = offersLoaded() ? C.offers.filter(r => runningNow(r, today))
-    .map((r, i) => ({id: "o" + (i + 1), cafe: r.brand_name, text: r.offer_text, type: r.promo_type, competitor: isMine(r)})) : [];
-  const fresh = C ? C.launches.filter(isMine).filter(r => { const k = newKey(r.shop, r.item_name); if(seen.has(k)) return false; seen.add(k); return true; })
-    .map(r => ({cafe: r.shop, name: r.item_name, price: r.price})) : [];
-  return {shop_name: shop.shop_name, menu: rows.map(r => ({id: r.id, name: r.name, variant: r.variant, price: r.price, kind: r.kind})),
-          offers: offers, new_items: fresh,
-          market: D.price_table.filter(r => typeof r.median === "number").map(r => ({item: r.display_name, usual_price: r.median})),
-          avoid: mine.avoid.slice(0, AVOID_MAX)};
+    `<p class="say" id="ideas-msg" role="${iu.busy ? "status" : "alert"}" tabindex="-1">${say}</p>` +
+    `<p class="hint" id="ideas-ref">${iu.state === "failed" && iu.ref ? `Error code: ${esc(refWords(iu.ref))}` : ""}</p>` +
+    `<div class="ideasacts">${button}</div>` +
+    `<p class="hint" id="ideas-ai">Written by AI from your menu and your competitors'. Check before you change anything.</p>`;
 }
 async function getIdeas(){
   if(iu.busy) return;
   const id = shop.shop_id, mine = shopIdeas();
-  iu.msg = ""; iu.ref = "";
-  iu.busy = true;
-  const said = words => { iu.busy = false; iu.msg = words; if(shop && shop.shop_id === id && page === "offers"){ paintIdeas(); focusOn("#ideas-msg"); } };
-  if(!menuOf(id)) await loadFile(id);
-  const rows = ideaRows(id);
-  if(!rows || rows.length < 2){ said("We do not have enough of your menu to suggest ideas yet."); return; }
-  const request = ideasRequest(rows, mine);
-  // "different ideas" means none of the ones on screen now either
-  request.avoid = request.avoid.concat(mine.ideas.map(i => ({type: i.type, item_ids: i.item_ids})));
-  const ideas = makeIdeas(request);
-  if(!ideas.length){ said("Those are all the ideas we have for your menu right now. Try again when your menu or the offers near you change."); return; }
-  mine.ideas = ideas;
-  mine.used += 1;
-  mine.looked = {n: request.menu.length, c: request.offers.filter(o => o.competitor).length, o: request.offers.filter(o => !o.competitor).length};
-  storeIdeas();
-  iu.busy = false;
-  if(shop && shop.shop_id === id && page === "offers"){ paintIdeas(); focusOn("#ideas-h"); }
-}
-
-/* ---------- ideas from rules ----------
-   No AI: every idea is worked out from the owner's menu, the usual price of
-   the compared items near them and the offers cafes near them run now. Each
-   rule gives its candidates best first; three ideas from different rules are
-   shown, and one already on screen or turned down is never given again. */
-const BOTTLED = /water|evian|perrier|san pellegrino|\bcoke\b|sprite|\d+\s*ml\b|bottle|\bcan\b|canned/i;
-const COFFEE_WORDS = /latte|flat white|cappuccino|americano|long black|mocha|piccolo|cortado|macchiato|white|coffee/i;
-const shortName = r => capital(r.name.replace(/\s*\(.*?\)\s*/g, " ").trim());
-const fitTitle = (t, plain) => t.length <= 40 ? t : plain;
-function makeIdeas(req){
-  const menu = req.menu, byPrice = (a, b) => a.price - b.price;
-  const kind = k => menu.filter(r => r.kind === k).sort(byPrice);
-  // bottled and canned drinks are sold as they are, never in a set
-  const drinks = kind("drink").filter(r => !BOTTLED.test(r.name + " " + r.variant)), pastries = kind("pastry"), cakes = kind("cake");
-  // a lunch needs a main, not a side: the dearer half of the savoury items
-  const savoury = kind("savoury").reverse().filter((r, i, all) => i < Math.ceil(all.length / 2));
-  // the drink a customer is most likely to pair: a coffee at a middle price
-  const coffees = drinks.filter(r => COFFEE_WORDS.test(r.name));
-  const mid = list => list.slice().sort((a, b) => Math.abs(a.price - list[list.length >> 1].price) - Math.abs(b.price - list[list.length >> 1].price));
-  const pairDrinks = mid(coffees.length ? coffees : drinks);
-  const croissantFirst = list => list.slice().sort((a, b) => /croissant/i.test(b.name) - /croissant/i.test(a.name));
-  const usual = new Map((D.price_table || []).map(r => [r.item_canonical, r.median]));
-  const above = r => { const k = nineTag(r.name, r.variant), u = k ? usual.get(k) : null; return typeof u === "number" && r.price > u ? r.price - u : 0; };
-  const bundlesNear = req.offers.filter(o => o.type === "bundle"), cutsNear = req.offers.filter(o => o.type === "price_cut");
-  const pick = list => list.find(o => o.competitor) || list[0] || null;
-  const nearWords = (list, what) => {
-    const one = pick(list);
-    if(!one) return {words: `No cafe near you runs ${what} right now, so yours would stand out.`, cafes: []};
-    return {words: `${list.length === 1 ? "One cafe" : `${list.length} cafes`} near you ${list.length === 1 ? "runs" : "run"} ${what} now, including ${one.cafe}.`, cafes: [one.cafe]};
+  const here = () => shop && shop.shop_id === id && page === "offers";
+  // focus moves without scrolling: the owner is looking at the card, and on a phone a scrolled heading sits under the top bar
+  const done = (state, ref, focus) => {
+    iu.busy = false; iu.state = state; iu.ref = ref || "";
+    if(!here()) return;
+    paintIdeas();
+    const el = document.querySelector(focus);
+    if(el) el.focus({preventScroll: true});
   };
-  const timed = (days, from, to) => ({days: days, all_day: from === null, start_hour: from, end_hour: to});
-  const rules = [];
-
-  // 1. a coffee and a pastry, sold as a set
-  const nb = nearWords(bundlesNear, "a bundle");
-  rules.push(pairDrinks.slice(0, 3).flatMap(dr => croissantFirst(pastries).slice(0, 3).map(pa => ({
-    type: "bundle", item_ids: [dr.id, pa.id], discount_percent: bundlesNear.length >= 2 ? 15 : 10,
-    title: fitTitle(`${shortName(dr)} and ${shortName(pa)} set`, "Coffee and pastry set"),
-    why: `A pastry is an easy add-on for someone who came in for a coffee. ${nb.words}`, cafes_named: nb.cafes}))));
-
-  // 2. a drink and a slice of cake, for the afternoon
-  rules.push(pairDrinks.slice(0, 2).flatMap(dr => cakes.slice(0, 3).map(ca => ({
-    type: "bundle", item_ids: [dr.id, ca.id], discount_percent: 10,
-    title: fitTitle(`Afternoon ${shortName(ca)} and ${shortName(dr)}`, "Afternoon cake and drink"),
-    why: `Cake with a drink gives an afternoon visit a reason. ${nb.words}`, cafes_named: nb.cafes}))));
-
-  // 3. a lunch set: something savoury and a drink
-  rules.push(savoury.slice(0, 3).flatMap(sv => pairDrinks.slice(0, 2).map(dr => ({
-    type: "bundle", item_ids: [sv.id, dr.id], discount_percent: 10,
-    title: fitTitle(`Lunch: ${shortName(sv)} and ${shortName(dr)}`, "Lunch set with a drink"),
-    why: "A fixed lunch set is quick to choose and brings in the weekday lunch crowd.", cafes_named: []}))));
-
-  // 4. the items priced above the usual nearby, cheaper in the quiet afternoon
-  const dear = menu.filter(r => above(r) > 0).sort((a, b) => above(b) - above(a));
-  if(dear.length) rules.push([dear.slice(0, 3), dear.slice(0, 1), dear.slice(1, 3)].filter(l => l.length).map(list => Object.assign({
-    type: "price_cut", item_ids: list.map(r => r.id), discount_percent: 10,
-    title: fitTitle(list.length === 1 ? `Quiet-hours ${shortName(list[0])}` : "Quiet-hours price cut", "Quiet-hours price cut"),
-    why: `${list.length === 1 ? "This costs" : "These cost"} more than most cafes near you charge. A cut in the quiet afternoon shows whether a lower price brings more people in, without changing your menu.`,
-    cafes_named: []}, timed("weekdays", 14, 17))));
-
-  // 5. bakes at the end of the day, so fewer are left over
-  const bakes = pastries.concat(cakes).sort((a, b) => b.price - a.price);
-  if(bakes.length) rules.push([bakes.slice(0, 4), bakes.slice(0, 2), bakes.slice(2, 6)].filter(l => l.length).map(list => Object.assign({
-    type: "price_cut", item_ids: list.map(r => r.id), discount_percent: 20,
-    title: "End-of-day bakes",
-    why: "Bakes left at closing are thrown away. A cut in the last hours sells them instead.", cafes_named: []}, timed("every day", 17, 19))));
-
-  // 6. early coffee, when cafes near you already run price cuts
-  if(cutsNear.length && coffees.length){
-    const nc = nearWords(cutsNear, "a price cut");
-    rules.push([coffees.slice(0, 2), coffees.slice(2, 4)].filter(l => l.length).map(list => Object.assign({
-      type: "price_cut", item_ids: list.map(r => r.id), discount_percent: 10,
-      title: "Early-bird coffee",
-      why: `Morning regulars decide where to go on habit and price. ${nc.words}`, cafes_named: nc.cafes}, timed("weekdays", 7, 10))));
-  }
-
-  // three ideas from different rules first, then more from the same rules if needed
-  const avoid = new Set(req.avoid.map(a => a.type + "|" + a.item_ids.slice().sort().join(",")));
-  const keyOf = i => i.type + "|" + i.item_ids.slice().sort().join(",");
-  // an idea whose sums leave nothing to offer is never shown, so it is never one of the three
-  const lists = rules.map(list => list.filter(i => !avoid.has(keyOf(i)) && new Set(i.item_ids).size === i.item_ids.length &&
-    ideaView(Object.assign({days: null, all_day: null, start_hour: null, end_hour: null}, i), menu)));
-  const out = [], seen = new Set();
-  for(let round = 0; out.length < 3 && lists.some(l => l.length > round); round += 1){
-    for(const list of lists){
-      const i = list[round];
-      if(i && !seen.has(keyOf(i)) && out.length < 3){ seen.add(keyOf(i)); out.push(Object.assign({days: null, all_day: null, start_hour: null, end_hour: null}, i)); }
-    }
-  }
-  return out;
+  iu.busy = true; iu.state = ""; iu.ref = "";
+  paintIdeas();
+  let built = null;
+  try { built = await ideasContext(); } catch(e){ console.error(e); built = null; }
+  if(!built){ done("failed", "", "#ideas-msg"); return; }
+  // a menu too short to work with is not sent
+  if(built.size < IDEAS_MIN_MENU){ track("ideas_asked", {ok: false, small: true}); done("small", "", "#ideas-msg"); return; }
+  built.ctx.already_suggested = mine.ideas.map(i => i.title).concat(mine.avoid).slice(0, IDEAS_AVOID_MAX);
+  const stop = new AbortController(), timer = setTimeout(() => stop.abort(), IDEAS_WAIT);
+  let res = null, data = null;
+  try {
+    res = await fetch("api/ideas", {method: "POST", headers: {"Content-Type": "application/json"},
+                                    body: JSON.stringify({context: built.ctx}), signal: stop.signal});
+    data = await res.json();
+  } catch(e){ data = null; }
+  clearTimeout(timer);
+  const ideas = res && res.ok && data && Array.isArray(data.ideas) ? data.ideas.map(i => ideaFrom(i, built.facts)).filter(Boolean).slice(0, 3) : [];
+  track("ideas_asked", {ok: ideas.length > 0, n: ideas.length});      // counts only
+  if(!ideas.length){ done("failed", data && typeof data.ref === "string" && /^[a-z0-9_]{1,40}$/.test(data.ref) ? data.ref : "", "#ideas-msg"); return; }
+  const kept = ideasAll[id] && typeof ideasAll[id] === "object" ? ideasAll[id] : (ideasAll[id] = {avoid: []});
+  kept.key = ideasStamp(); kept.ideas = ideas;
+  storeIdeas();
+  done("", "", "#ideas-h");
 }
 document.addEventListener("click", e => {
   const el = e.target.closest("[data-ai]");
   if(!el || el.disabled || !shop) return;
   const act = el.dataset.ai, key = el.dataset.key;
   if(act === "get") getIdeas();
-  // an idea saved is kept as it is shown now: its items, their prices and the sums do not change later
+  // an idea saved is kept as it is shown now
   else if(act === "save"){
-    const mine = shopIdeas(), idea = mine.ideas.find(i => ideaKey(i) === key), view = idea ? ideaView(idea, ideaRows(shop.shop_id)) : null;
-    if(!view) return;
-    putIdea(x => x.kind === "ai_idea" && x.idea.key === key, savedAi(key) ? null : {kind: "ai_idea", idea: view, at: stamp()});
+    const idea = shopIdeas().ideas.find(i => i.key === key);
+    if(!idea) return;
+    putIdea(x => x.kind === "ai_idea" && x.idea.key === key, savedAi(key) ? null : {kind: "ai_idea", idea: idea, at: stamp()});
     paint();
     const again = [...document.querySelectorAll('[data-ai="save"]')].find(b => b.dataset.key === key);
     if(again) again.focus();
   }
-  // "Not for me": the idea goes, and is sent along as one not to repeat
+  // "Not for me": the idea goes, and its title is sent along next time as one not to suggest again
   else if(act === "drop"){
-    const mine = shopIdeas(), idea = mine.ideas.find(i => ideaKey(i) === key);
+    const mine = shopIdeas(), idea = mine.ideas.find(i => i.key === key);
     if(!idea) return;
     mine.ideas = mine.ideas.filter(i => i !== idea);
-    mine.avoid = [{type: idea.type, item_ids: idea.item_ids.slice()}].concat(mine.avoid).slice(0, AVOID_MAX);
+    mine.avoid = [idea.title].concat(mine.avoid.filter(t => t !== idea.title)).slice(0, IDEAS_AVOID_MAX);
     storeIdeas();
     paintIdeas();
     focusOn("#ideas-list .btn, #ideas-get, #ideas-h");

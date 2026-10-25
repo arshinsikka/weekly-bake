@@ -34,13 +34,15 @@ export const isBusy = f => !!f && (f.stage === "slow" || (f.stage === "ai_http" 
          the same model is asked again, and the least time that must be left for a new try to start.
    askOnce(model, allowedMs, fullTry): one call; gives {fail: {stage, ...}} or anything else for a reply that could be read.
    onFail(fail, model, tryNumber, ms): called for each try that failed, for the log.
+   models: the models to ask, in order; MODELS when not given.
    Gives {got, model, tries, ms}: the last answer, the model that gave it, how many tries were made, and the time taken. */
-export async function askChain(rule, askOnce, onFail){
+export async function askChain(rule, askOnce, onFail, models){
+  const list = Array.isArray(models) && models.length ? models : MODELS;
   const began = Date.now(), left = () => rule.overallMs - (Date.now() - began);
-  let got = null, model = MODELS[0], tries = 0;
+  let got = null, model = list[0], tries = 0;
   const done = () => ({got: got, model: model, tries: tries, ms: Date.now() - began});
-  for(let i = 0; i < MODELS.length; i += 1){
-    model = MODELS[i];
+  for(let i = 0; i < list.length; i += 1){
+    model = list[i];
     for(let round = 0; round < 2; round += 1){
       const from = Date.now(), time = left();
       got = await askOnce(model, Math.min(time, rule.tryMs), time > rule.tryMs);
@@ -53,7 +55,7 @@ export async function askChain(rule, askOnce, onFail){
       if(left() - rule.waitMs < rule.needsMs) return done();
       await new Promise(ok => setTimeout(ok, rule.waitMs));
     }
-    if(i + 1 < MODELS.length && left() < rule.needsMs) return done();
+    if(i + 1 < list.length && left() < rule.needsMs) return done();
   }
   return done();
 }
@@ -72,7 +74,7 @@ const usageOf = data => {
 };
 /* Each call is also sent to PostHog's LLM analytics as one $ai_generation: the model, tokens, cost, time and
    whether it failed. Never the menu, the reply or any key. Off unless POSTHOG_KEY is set on the server. */
-async function reportToPostHog(model, got, seconds){
+async function reportToPostHog(model, got, seconds, feature){
   const key = process.env.POSTHOG_KEY;
   if(!key) return;
   const u = got.usage || (got.fail || {});
@@ -84,15 +86,16 @@ async function reportToPostHog(model, got, seconds){
         $ai_provider: "openrouter", $ai_model: model.id, $ai_latency: seconds,
         $ai_input_tokens: u.input_tokens, $ai_output_tokens: u.output_tokens, $ai_total_cost_usd: u.cost,
         $ai_is_error: !!got.fail, $ai_http_status: got.fail ? got.fail.status : 200, $ai_error: got.fail ? got.fail.stage : undefined,
-        feature: "read_menu", $process_person_profile: false}})
+        feature: feature || "read_menu", $process_person_profile: false}})
     });
   } catch(e){ /* analytics never delays or breaks a menu read beyond its short timer */ }
   finally { clearTimeout(timer); }
 }
-export async function askModel(model, key, content, schema, allowed, fullTry, extra){
+/* feature: the name PostHog files the call under, "read_menu" when not given */
+export async function askModel(model, key, content, schema, allowed, fullTry, extra, feature){
   const started = Date.now();
   const got = await callModel(model, key, content, schema, allowed, fullTry, extra);
-  await reportToPostHog(model, got, (Date.now() - started) / 1000);
+  await reportToPostHog(model, got, (Date.now() - started) / 1000, feature);
   return got;
 }
 async function callModel(model, key, content, schema, allowed, fullTry, extra){

@@ -3,6 +3,9 @@
   "functions": {
     "api/read-menu.js": {
       "maxDuration": 180
+    },
+    "api/ideas.js": {
+      "maxDuration": 60
     }
   },
   "headers": [
